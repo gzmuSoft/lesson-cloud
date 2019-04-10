@@ -19,7 +19,7 @@
         <dependency>
             <groupId>cn.edu.gamu</groupId>
             <artifactId>lesson-cloud-repository</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version> ${lesson.cloud.version}</version>
         </dependency>
     </dependencies>
 
