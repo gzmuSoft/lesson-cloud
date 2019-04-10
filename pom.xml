@@ -72,11 +72,11 @@
 
     <repositories>
         <!--学校私服-->
-        <repository>
-            <id>cn.edu.gzmu</id>
-            <name>gzmu-maven</name>
-            <url>http://10.100.0.11:5741/repository/maven-public/</url>
-        </repository>
+<!--        <repository>-->
+<!--            <id>cn.edu.gzmu</id>-->
+<!--            <name>gzmu-maven</name>-->
+<!--            <url>http://10.100.0.11:5741/repository/maven-public/</url>-->
+<!--        </repository>-->
         <!--阿里云主仓库，代理了maven central和jcenter仓库-->
         <repository>
             <id>aliyun</id>
