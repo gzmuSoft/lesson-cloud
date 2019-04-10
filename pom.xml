@@ -23,21 +23,26 @@
     <name>lesson-cloud</name>
     <description>云课程——智能在线考试平台</description>
 
-    <repositories>
-        <repository>
-            <id>cn.edu.gzmu</id>
-            <name>gzmu-maven</name>
-            <url>http://10.100.0.11:5741/repository/maven-public/</url>
-        </repository>
-        <repository>
-            <id>aliyunmaven</id>
-            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
-
     <properties>
-        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <spring.boot.version>2.1.4.RELEASE</spring.boot.version>
+        <lesson.cloud.version>0.0.1-SNAPSHOT</lesson.cloud.version>
+        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -64,5 +69,52 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <!--学校私服-->
+        <repository>
+            <id>cn.edu.gzmu</id>
+            <name>gzmu-maven</name>
+            <url>http://10.100.0.11:5741/repository/maven-public/</url>
+        </repository>
+        <!--阿里云主仓库，代理了maven central和jcenter仓库-->
+        <repository>
+            <id>aliyun</id>
+            <name>aliyun</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <!--阿里云代理Spring 官方仓库-->
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://maven.aliyun.com/repository/spring</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <!--阿里云代理Spring 插件仓库-->
+        <pluginRepository>
+            <id>spring-plugin</id>
+            <name>spring-plugin</name>
+            <url>https://maven.aliyun.com/repository/spring-plugin</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>

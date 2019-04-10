@@ -10,6 +10,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>lesson-cloud-core</artifactId>
-
+    <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>cn.edu.gamu</groupId>-->
+<!--            <artifactId>lesson-cloud-auth</artifactId>-->
+<!--            <version>${lesson.cloud.version}</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>cn.edu.gamu</groupId>
+            <artifactId>lesson-cloud-repository</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>

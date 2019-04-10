@@ -1,0 +1,51 @@
+package cn.edu.gzmu.model.entity;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * single_sel
+ *
+ * @author echo
+ * @version 1.0
+ * @date 2019-4-10 14:11:00
+ */
+@Data
+@Entity
+@Table(name = "single_sel")
+@EqualsAndHashCode(callSuper = true)
+public class SingleSel extends cn.edu.gzmu.model.BaseEntity {
+
+    /**
+     * 难度系数，介于0~1之间
+     */
+    private java.lang.Float difficultRate;
+
+    /**
+     * 参考答案对应的选项在此题选项列表中的顺序
+     */
+    private java.lang.Short answer;
+
+    /**
+     * 答案解析
+     */
+    private java.lang.String explanation;
+
+    /**
+     * 课程编号
+     */
+    private java.lang.Long courseId;
+
+    /**
+     * 章节编号
+     */
+    private java.lang.Long sectionId;
+
+    /**
+     * 知识点编号
+     */
+    private java.lang.Long knowledgeId;
+}

@@ -1,0 +1,22 @@
+gzmu:
+  generate:
+    version: 1.0
+    database:
+      url: jdbc:mysql://127.0.0.1:3306/lesson-cloud
+      username: root
+      password: 123456
+      driver: com.mysql.cj.jdbc.Driver
+      catalog: lesson-cloud
+      base-field: id, name, spell, sort, create_user_name, create_time, last_update_user_name, last_update_time, remark, is_enable
+    entity:
+      package-name: cn.edu.gzmu.model.entity
+      base-entity: cn.edu.gzmu.model.BaseEntity
+      module-name: lesson-cloud-model
+    repository:
+      package-name: cn.edu.gzmu.repository.entity
+      base-repository: cn.edu.gzmu.repository.BaseRepository
+      module-name: lesson-cloud-repository
+    controller:
+      package-name: cn.edu.gzmu.controller
+      base-controller: cn.edu.gzmu.controller.BaseController
+      module-name: lesson-cloud-core
