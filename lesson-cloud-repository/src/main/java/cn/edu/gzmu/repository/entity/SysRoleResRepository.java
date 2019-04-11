@@ -1,15 +1,18 @@
 package cn.edu.gzmu.repository.entity;
 
+import cn.edu.gzmu.model.entity.SysRoleRes;
+import cn.edu.gzmu.repository.BaseRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 
 /**
- * sys_role_res Repository
+ * SysRoleRes Repository
  *
  * @author echo
  * @version 1.0
- * @date 2019-4-10 14:11:04
+ * @date 2019-4-11 17:24:42
  */
 @RepositoryRestResource
-public interface SysRoleResRepository extends cn.edu.gzmu.repository.BaseRepository<cn.edu.gzmu.model.entity.SysRoleRes, Long> {
+public interface SysRoleResRepository extends BaseRepository<SysRoleRes, Long> {
+
 }

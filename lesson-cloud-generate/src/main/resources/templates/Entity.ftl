@@ -1,8 +1,14 @@
 package ${package_name};
 
+import ${base_entity};
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Where;
 
+
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -14,10 +20,13 @@ import javax.persistence.Table;
  * @date ${.now?datetime}
  */
 @Data
-@Entity
+@Cacheable
 @Table(name = "${table_name}")
+@Entity(name = "${table_name}")
+@Where(clause = "${where_clause}")
 @EqualsAndHashCode(callSuper = true)
-public class ${class_name} extends ${base_entity} {
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE )
+public class ${class_name} extends BaseEntity {
 <#list columns as column>
 
     /**

@@ -1,8 +1,14 @@
 package cn.edu.gzmu.model.entity;
 
+import cn.edu.gzmu.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Where;
 
+
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -11,13 +17,16 @@ import javax.persistence.Table;
  *
  * @author echo
  * @version 1.0
- * @date 2019-4-10 14:10:59
+ * @date 2019-4-11 17:24:40
  */
 @Data
-@Entity
+@Cacheable
 @Table(name = "section")
+@Entity(name = "section")
+@Where(clause = "is_enable = 1")
 @EqualsAndHashCode(callSuper = true)
-public class Section extends cn.edu.gzmu.model.BaseEntity {
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE )
+public class Section extends BaseEntity {
 
     /**
      * 内容简介
@@ -37,5 +46,5 @@ public class Section extends cn.edu.gzmu.model.BaseEntity {
     /**
      * 类型，0：章，1：节
      */
-    private java.lang.Boolean type;
+    private java.lang.Byte type;
 }

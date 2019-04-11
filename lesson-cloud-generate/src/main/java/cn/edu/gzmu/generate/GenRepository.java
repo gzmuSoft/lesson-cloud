@@ -3,6 +3,7 @@ package cn.edu.gzmu.generate;
 import cn.edu.gzmu.generate.config.GenConfig;
 import cn.edu.gzmu.generate.config.GenEntityConfig;
 import cn.edu.gzmu.generate.config.GenRepositoryConfig;
+import cn.edu.gzmu.generate.util.ColumnClass;
 import cn.edu.gzmu.generate.util.GenDatabaseUtil;
 import cn.edu.gzmu.generate.util.GenUtil;
 import freemarker.template.Configuration;
@@ -20,6 +21,7 @@ import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 资源生成
@@ -58,21 +60,28 @@ public class GenRepository implements ApplicationRunner {
         data.put("package_name", genRepositoryConfig.getPackageName());
         data.put("base_repository", genRepositoryConfig.getBaseRepository());
         data.put("now_version", genConfig.getVersion());
-        File dir = new File(GenUtil.generateDir(genRepositoryConfig.getModuleName(), genRepositoryConfig.getPackageName()));
-        if (!dir.exists()) {
-            log.info("Package not exists.Now start create...The create result is {}", dir.mkdirs());
-        }
+        GenUtil.createDir(GenUtil.generateDir(genRepositoryConfig.getModuleName(), genRepositoryConfig.getPackageName()));
         FileWriter fileWriter;
         for (String table : tables) {
-            data.put("entity_class", genEntityConfig.getPackageName() + "." + GenUtil.underlineToHump(table, true));
+            String entityClassName = GenUtil.underlineToHump(table, true);
+            data.put("entity_path", genEntityConfig.getPackageName() + "." + entityClassName);
             data.put("table_name", table);
-            data.put("class_name", GenUtil.underlineToHump(table, true));
+            data.put("class_name", entityClassName);
             fileWriter = new FileWriter(GenUtil.generateDir(genRepositoryConfig.getModuleName(), genRepositoryConfig.getPackageName())
                     + GenUtil.underlineToHump(table, true) + "Repository" + GenUtil.SUFFIX);
             entityTemplate.process(data, fileWriter);
             log.info("Table {} Repository generate succeed!", table);
         }
         log.info("Repository generate succeed!");
+        List<ColumnClass> columns = genDatabaseUtil.getColumns().stream().peek(columnClass -> columnClass.setTableName(
+                GenUtil.underlineToHump(columnClass.getTableName()))).collect(Collectors.toList());
+        entityTemplate = configuration.getTemplate("rest-messages.ftl");
+        data = new HashMap<>(1);
+        data.put("columns", columns);
+        fileWriter = new FileWriter(GenUtil.dirPathContact(GenUtil.getParentPath(), genRepositoryConfig.getModuleName(),
+                "src", "main", "resources", "rest-messages.properties"));
+        entityTemplate.process(data, fileWriter);
+        log.info("rest-messages.properties generate succeed!");
     }
 
 

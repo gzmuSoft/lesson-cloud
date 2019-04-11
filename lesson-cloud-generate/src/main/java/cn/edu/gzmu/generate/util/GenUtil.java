@@ -26,7 +26,7 @@ public class GenUtil {
         MYSQL_TO_JAVA.put("FLOAT", "java.lang.Float");
         MYSQL_TO_JAVA.put("TINYINT", "java.lang.Integer");
         MYSQL_TO_JAVA.put("INT", "java.lang.Integer");
-        MYSQL_TO_JAVA.put("BINARY", "java.lang.byte");
+        MYSQL_TO_JAVA.put("BINARY", "java.lang.Byte");
         MYSQL_TO_JAVA.put("SMALLINT", "java.lang.Short");
         MYSQL_TO_JAVA.put("BIT", "java.lang.Boolean");
     }
@@ -114,12 +114,23 @@ public class GenUtil {
     /**
      * 代码生成目录
      *
-     * @param moduleName 模块名
+     * @param moduleName  模块名
      * @param packageName 包名
      * @return 目录
      */
     public static String generateDir(String moduleName, String packageName) {
-        return GenUtil.dirPathContact(GenUtil.getParentPath() + moduleName, "src", "main", "java",
+        return dirPathContact(getParentPath() + moduleName, "src", "main", "java",
                 packageName.replaceAll("\\.", File.separator));
+    }
+
+    /**
+     * 下划线转驼峰并简单添加复数
+     *
+     * @param name 名称
+     * @return 结果
+     */
+    public static String toPlural(String name) {
+        String result = underlineToHump(name);
+        return result.endsWith("s") ? result + "es" : result + "s";
     }
 }

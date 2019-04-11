@@ -1,8 +1,14 @@
 package cn.edu.gzmu.model.entity;
 
+import cn.edu.gzmu.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Where;
 
+
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -11,13 +17,16 @@ import javax.persistence.Table;
  *
  * @author echo
  * @version 1.0
- * @date 2019-4-10 14:11:01
+ * @date 2019-4-11 17:24:41
  */
 @Data
-@Entity
+@Cacheable
 @Table(name = "sys_res")
+@Entity(name = "sys_res")
+@Where(clause = "is_enable = 1")
 @EqualsAndHashCode(callSuper = true)
-public class SysRes extends cn.edu.gzmu.model.BaseEntity {
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE )
+public class SysRes extends BaseEntity {
 
     /**
      * 父权限资源编号

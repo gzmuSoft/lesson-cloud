@@ -1,15 +1,18 @@
 package cn.edu.gzmu.repository.entity;
 
+import cn.edu.gzmu.model.entity.SingleSel;
+import cn.edu.gzmu.repository.BaseRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 
 /**
- * single_sel Repository
+ * SingleSel Repository
  *
  * @author echo
  * @version 1.0
- * @date 2019-4-10 14:11:03
+ * @date 2019-4-11 17:24:42
  */
 @RepositoryRestResource
-public interface SingleSelRepository extends cn.edu.gzmu.repository.BaseRepository<cn.edu.gzmu.model.entity.SingleSel, Long> {
+public interface SingleSelRepository extends BaseRepository<SingleSel, Long> {
+
 }

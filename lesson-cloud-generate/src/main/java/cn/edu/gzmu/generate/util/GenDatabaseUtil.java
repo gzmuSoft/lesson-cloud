@@ -66,7 +66,7 @@ public class GenDatabaseUtil {
         List<ColumnClass> columns = new ArrayList<>();
         for (String table : getTables()) {
             try (ResultSet resultSet = getMetaData().getColumns(genDatabaseConfig.getCatalog(), null, table, "%")) {
-                columns.addAll(getColumns(resultSet, table));
+                columns.addAll(getColumns(resultSet, table, false));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -82,7 +82,7 @@ public class GenDatabaseUtil {
      */
     public List<ColumnClass> getColumns(String tableName) {
         try (ResultSet resultSet = getMetaData().getColumns(genDatabaseConfig.getCatalog(), null, tableName, "%")) {
-            return getColumns(resultSet, tableName);
+            return getColumns(resultSet, tableName, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,13 +94,14 @@ public class GenDatabaseUtil {
      *
      * @param resultSet 结果集
      * @param tableName 表名
+     * @param exclude 是否排除公共字段
      * @throws SQLException 异常
      */
-    private List<ColumnClass> getColumns(ResultSet resultSet, String tableName) throws SQLException {
+    private List<ColumnClass> getColumns(ResultSet resultSet, String tableName, boolean exclude) throws SQLException {
         List<ColumnClass> columns = new ArrayList<>();
         while (resultSet.next()) {
             String columnName = resultSet.getString("COLUMN_NAME");
-            if (hasBaseField(columnName)) {
+            if (exclude && hasBaseField(columnName)) {
                 continue;
             }
             columns.add(new ColumnClass(

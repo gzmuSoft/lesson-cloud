@@ -27,4 +27,8 @@ public class GenEntityConfig {
      * 模块名
      */
     private String moduleName;
+    /**
+     * where 条件
+     */
+    private String whereClause;
 }
