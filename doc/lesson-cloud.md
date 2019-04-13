@@ -235,8 +235,18 @@ q
 	- 如果还不行，请删除用户家目录下的隐藏的 `.m2` 文件夹。
 	- 如果再不行，烧柱香拜拜佛吧=-=
 3. 然后左上角 `File -> Project Structure...` 配置一下 jdk 版本路径以及版本即可。![](https://resources.echocow.cn/file/2019/4/12/%E6%B7%B1%E5%BA%A6%E6%88%AA%E5%9B%BE_sun-awt-X11-XFramePeer_20190412161030.png)
-4. 修改数据库配置 `/lesson-cloud/lesson-cloud-core/src/main/resources/application-dev.yml`
-5. 启动：`cn.edu.gzmu.Application.main` ，浏览器打开 http://127.0.0.1:8080 查看 HAL Broewer 是否启动即可。
+4. 修改数据库配置和 redis 配置 `/lesson-cloud/lesson-cloud-core/src/main/resources/application-dev.yml`
+5. 启动数据库和 redis。
+6. 运行：`cn.edu.gzmu.Application.main` ，浏览器打开 http://127.0.0.1:8080 查看 HAL Broewer 是否启动即可。
+
+![](https://resources.echocow.cn/file/2019/4/13/%E6%B7%B1%E5%BA%A6%E6%88%AA%E5%9B%BE_%E9%80%89%E6%8B%A9%E5%8C%BA%E5%9F%9F_20190413112042.png)
+
+![](https://resources.echocow.cn/file/2019/4/13/%E6%B7%B1%E5%BA%A6%E6%88%AA%E5%9B%BE_%E9%80%89%E6%8B%A9%E5%8C%BA%E5%9F%9F_20190413112054.png)
+
+![](https://resources.echocow.cn/file/2019/4/13/%E6%B7%B1%E5%BA%A6%E6%88%AA%E5%9B%BE_%E9%80%89%E6%8B%A9%E5%8C%BA%E5%9F%9F_20190413112103.png)
+
+![](https://resources.echocow.cn/file/2019/4/13/%E6%B7%B1%E5%BA%A6%E6%88%AA%E5%9B%BE_%E9%80%89%E6%8B%A9%E5%8C%BA%E5%9F%9F_20190413112117.png)
+
 
 ### 模块
 项目模块化开发，各模块作用如下
