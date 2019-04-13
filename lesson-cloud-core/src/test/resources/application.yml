@@ -1,0 +1,7 @@
+spring:
+  profiles:
+    active: test
+  data:
+    redis:
+      repositories:
+        enabled: false
