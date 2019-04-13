@@ -43,6 +43,7 @@ public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<
     @Modifying
     @RestResource(exported = false)
     @Transactional(rollbackOn = Exception.class)
+    @SuppressWarnings("all")
     @Query(value = "delete from #{#entityName} where id = :id", nativeQuery = true)
     void deleteExistById(@Param("id") ID id);
 
@@ -53,6 +54,7 @@ public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<
      * @param id id
      */
     @Override
-    @RestResource(exported = false)
-    void deleteById(ID id);
+    default void deleteById(ID id){
+        deleteExistById(id);
+    }
 }
