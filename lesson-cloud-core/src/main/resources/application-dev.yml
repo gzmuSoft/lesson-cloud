@@ -36,3 +36,8 @@ spring:
   redis:
     host: 127.0.0.1
     password:
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
