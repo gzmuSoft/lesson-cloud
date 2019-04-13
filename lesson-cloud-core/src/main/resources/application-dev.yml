@@ -3,10 +3,31 @@ server:
 
 spring:
   datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://10.102.42.203:3306/lesson-cloud
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      filters: stat,wall
+      initial-size: 5
+      max-active: 20
+      max-pool-prepared-statement-per-connection-size: 20
+      max-wait: 60000
+      min-evictable-idle-time-millis: 30000
+      min-idle: 5
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      use-global-data-source-stat: true
+      validation-query: select 'x'
+      stat-view-servlet:
+        enabled: true
+        login-password: 123456
+        login-username: admin
+        url-pattern: /druid/*
+
   jpa:
     show-sql: true
     properties:
