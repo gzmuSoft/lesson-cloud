@@ -51,7 +51,7 @@ public class GenDatabaseUtil {
             }
             resultSet.close();
         } catch (Exception e) {
-            log.error("Please check your database config! {}", e.getMessage());
+            log.error("Please check your database conf! {}", e.getMessage());
             e.printStackTrace();
         }
         return tables;

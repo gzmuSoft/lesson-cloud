@@ -1,0 +1,27 @@
+# 配置参见 https://github.com/redisson/redisson/wiki/2.-%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95
+
+# 单节点设置，其余模式待测试
+singleServerConfig:
+  idleConnectionTimeout: 10000
+  pingTimeout: 1000
+  connectTimeout: 1000
+  timeout: 1000
+  retryAttempts: 1
+  retryInterval: 1000
+  # 原来为 reconnectionTimeout 需要替换
+  reconnectionTimeout: 3000
+  # 原来为 failedAttempts 需要替换
+  failedAttempts: 5
+  password: null
+  subscriptionsPerConnection: 5
+  clientName: null
+  address: "redis://127.0.0.1:6379"
+  subscriptionConnectionMinimumIdleSize: 1
+  subscriptionConnectionPoolSize: 25
+  connectionMinimumIdleSize: 5
+  connectionPoolSize: 100
+  database: 0
+threads: 0
+# Codec
+codec: !<org.redisson.codec.SnappyCodec> {}
+eventLoopGroup: null

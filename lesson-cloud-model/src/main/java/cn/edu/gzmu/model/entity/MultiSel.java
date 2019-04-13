@@ -17,7 +17,7 @@ import javax.persistence.Table;
  *
  * @author echo
  * @version 1.0
- * @date 2019-4-11 17:24:40
+ * @date 2019-4-12 20:32:45
  */
 @Data
 @Cacheable
@@ -25,7 +25,7 @@ import javax.persistence.Table;
 @Entity(name = "multi_sel")
 @Where(clause = "is_enable = 1")
 @EqualsAndHashCode(callSuper = true)
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE )
+@Cache(region = "multi_sel", usage = CacheConcurrencyStrategy.READ_WRITE )
 public class MultiSel extends BaseEntity {
 
     /**

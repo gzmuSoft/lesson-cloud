@@ -25,7 +25,7 @@ import javax.persistence.Table;
 @Entity(name = "${table_name}")
 @Where(clause = "${where_clause}")
 @EqualsAndHashCode(callSuper = true)
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE )
+@Cache(region = "${table_name}", usage = CacheConcurrencyStrategy.READ_WRITE )
 public class ${class_name} extends BaseEntity {
 <#list columns as column>
 

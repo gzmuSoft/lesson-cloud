@@ -17,7 +17,7 @@ import javax.persistence.Table;
  *
  * @author echo
  * @version 1.0
- * @date 2019-4-11 17:24:41
+ * @date 2019-4-12 20:32:45
  */
 @Data
 @Cacheable
@@ -25,7 +25,7 @@ import javax.persistence.Table;
 @Entity(name = "sys_res")
 @Where(clause = "is_enable = 1")
 @EqualsAndHashCode(callSuper = true)
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE )
+@Cache(region = "sys_res", usage = CacheConcurrencyStrategy.READ_WRITE )
 public class SysRes extends BaseEntity {
 
     /**
