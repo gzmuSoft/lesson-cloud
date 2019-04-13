@@ -9,28 +9,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
-#    properties:
-#      redisson-config: classpath:conf/redisson.yaml
-#      redis:
-#        expiryInSeconds:
-#          default: 120
-#          hibernate:
-#            common: 0
-#            account: 1200
-#      hibernate:
-#        generate_statistics: true
-#        javax:
-#          cache:
-#            missing_cache_strategy: create
-#        cache:
-#          format_sql: true
-#          use_second_level_cache: true
-#          use_query_cache: true
-#          region:
-#            factory_class: org.hibernate.cache.redis.hibernate52.SingletonRedisRegionFactory
-#          region_prefix: lesson_cloud_
-#          use_structured_entries: true
-#          provider_configuration_file_resource_path: classpath:conf/hibernate-redis.properties
   redis:
     host: 127.0.0.1
     password:

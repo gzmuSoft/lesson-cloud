@@ -8,10 +8,6 @@ singleServerConfig:
   timeout: 1000
   retryAttempts: 1
   retryInterval: 1000
-  # 原来为 reconnectionTimeout 需要替换
-  reconnectionTimeout: 3000
-  # 原来为 failedAttempts 需要替换
-  failedAttempts: 5
   password: null
   subscriptionsPerConnection: 5
   clientName: null
