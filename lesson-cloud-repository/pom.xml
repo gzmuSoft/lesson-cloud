@@ -2,29 +2,34 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!--关联父级pom-->
     <parent>
         <artifactId>lesson-cloud</artifactId>
         <groupId>cn.edu.gamu</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
+    <!--项目基本信息-->
+    <modelVersion>4.0.0</modelVersion>
     <artifactId>lesson-cloud-repository</artifactId>
 
+    <!--相关依赖-->
     <dependencies>
+        <!--引入lesson-cloud-model模块依赖-->
         <dependency>
             <groupId>cn.edu.gamu</groupId>
             <artifactId>lesson-cloud-model</artifactId>
             <version>${lesson.cloud.version}</version>
         </dependency>
+        <!--Restful接口支持依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
+        <!--集成HAL-browser,它是基于hal+json的media type的API浏览器-->
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-rest-hal-browser</artifactId>
         </dependency>
     </dependencies>
-
 </project>

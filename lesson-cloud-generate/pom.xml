@@ -2,33 +2,39 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!--关联父级pom-->
     <parent>
         <artifactId>lesson-cloud</artifactId>
         <groupId>cn.edu.gamu</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
+    <!--项目基本信息-->
+    <modelVersion>4.0.0</modelVersion>
     <artifactId>lesson-cloud-generate</artifactId>
 
+    <!--相关依赖-->
     <dependencies>
+        <!--mysql数据库连接驱动依赖-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+        <!--配置文件引入依赖-->
         <dependency>
             <groupId> org.springframework.boot </groupId>
             <artifactId> spring-boot-configuration-processor </artifactId>
             <optional> true </optional>
         </dependency>
+        <!--lombok自动构建库依赖-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+        <!--FreeMarker模板引擎依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
     </dependencies>
-
 </project>

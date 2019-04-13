@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @date 2019-4-11 14:50:46
  */
 public class BaseController<E extends BaseEntity, R extends BaseRepository, ID> {
-
+//
 //    @Autowired
 //    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 //    private R baseRepository;
-
+//
 //    /**
 //     * 真正的删除资源
 //     *
@@ -32,7 +32,7 @@ public class BaseController<E extends BaseEntity, R extends BaseRepository, ID> 
 //     * @return 结果
 //     */
 //    @SuppressWarnings("unchecked")
-//    @DeleteMapping("/search/{id}")
+//    @DeleteMapping("/search/{/id}")
 //    @ResponseBody
 //    public HttpEntity<?> deleteResource(@PathVariable ID id) {
 //        baseRepository.deleteExistById(id);

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 实体类生成
+ * Entity实体类生成
  *
  * @author echo
  * @version 1.0

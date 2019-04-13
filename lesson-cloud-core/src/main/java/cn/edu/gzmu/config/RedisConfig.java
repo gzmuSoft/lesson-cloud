@@ -17,6 +17,8 @@ import org.springframework.core.io.Resource;
 import java.io.IOException;
 
 /**
+ * 缓存配置类(读取model模块的yaml配置文件)
+ *
  * @author echo
  * @version 1.0
  * @date 19-4-12 09:50

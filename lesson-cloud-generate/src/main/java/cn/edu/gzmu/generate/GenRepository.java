@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 资源生成
+ * Repository资源生成
  *
  * @author echo
  * @version 1.0

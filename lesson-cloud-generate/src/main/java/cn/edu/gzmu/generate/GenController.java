@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 资源生成
+ * Controller资源生成
  *
  * @author echo
  * @version 1.0
