@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <packaging>pom</packaging>
+    <!--父级pom文件springboot2.1.4-->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <!--关联子项目-->
     <modules>
         <module>lesson-cloud-model</module>
         <module>lesson-cloud-auth</module>
@@ -11,18 +18,17 @@
         <module>lesson-cloud-common</module>
         <module>lesson-cloud-repository</module>
     </modules>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.4.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
+
+    <!--项目基本信息-->
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
     <groupId>cn.edu.gamu</groupId>
     <artifactId>lesson-cloud</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>lesson-cloud</name>
     <description>云课程——智能在线考试平台</description>
 
+    <!--pom基本配置-->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -32,8 +38,31 @@
         <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
     </properties>
 
+    <!--相关依赖-->
+    <dependencies>
+        <!--springboot核心依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <!--springboot测试依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--开发环境工具依赖,包括热部署等-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+
+    <!--依赖管理-->
     <dependencyManagement>
         <dependencies>
+            <!--springboot及springcloud核心依赖-->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -44,23 +73,7 @@
         </dependencies>
     </dependencyManagement>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
+    <!--项目部署-->
     <build>
         <plugins>
             <plugin>
@@ -75,13 +88,14 @@
         </plugins>
     </build>
 
+    <!--远程依赖库-->
     <repositories>
         <!--学校私服-->
-        <!--        <repository>-->
-        <!--            <id>cn.edu.gzmu</id>-->
-        <!--            <name>gzmu-maven</name>-->
-        <!--            <url>http://10.100.0.11:5741/repository/maven-public/</url>-->
-        <!--        </repository>-->
+        <repository>
+            <id>cn.edu.gzmu</id>
+            <name>gzmu-maven</name>
+            <url>http://10.100.0.11:5741/repository/maven-public/</url>
+        </repository>
         <!--阿里云主仓库，代理了maven central和jcenter仓库-->
         <repository>
             <id>aliyun</id>
@@ -107,6 +121,8 @@
             </snapshots>
         </repository>
     </repositories>
+
+    <!--远程插件库-->
     <pluginRepositories>
         <!--阿里云代理Spring 插件仓库-->
         <pluginRepository>
@@ -121,5 +137,4 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-
 </project>
