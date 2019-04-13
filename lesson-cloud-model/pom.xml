@@ -38,18 +38,18 @@
             <version>${hibernate.version}</version>
         </dependency>
 
-        <!--hibernate基于redis的驻内存数据网格依赖-->
+        <!--redis java 客户端 hibernate 5.3+ 版本支持-->
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson-hibernate-53</artifactId>
-            <version>3.10.6</version>
+            <version>${redisson.version}</version>
         </dependency>
 
-        <!--spring驻内存数据网格依赖-->
+        <!--redisson 对 spring data cache 支持-->
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-data-21</artifactId>
-            <version>3.10.6</version>
+            <version>${redisson.version}</version>
         </dependency>
 
         <!--redis缓存-->
