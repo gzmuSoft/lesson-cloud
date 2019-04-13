@@ -5,25 +5,3 @@ spring:
     redis:
       repositories:
         enabled: false
-#  jpa:
-#    properties:
-#      redisson-config: redisson.yaml
-#      redis:
-#        expiryInSeconds:
-#          default: 120
-#          hibernate:
-#            common: 0
-#            account: 1200
-#      hibernate:
-#        generate_statistics: true
-#        javax:
-#          cache:
-#            missing_cache_strategy: create
-#        cache:
-#          format_sql: true
-#          use_second_level_cache: true
-#          use_query_cache: true
-#          region:
-#            factory_class: org.redisson.hibernate.RedissonRegionFactory
-#          region_prefix: lesson_cloud_
-#          use_structured_entries: true
