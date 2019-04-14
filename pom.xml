@@ -35,7 +35,8 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <spring.boot.version>2.1.4.RELEASE</spring.boot.version>
         <lesson.cloud.version>0.0.1-SNAPSHOT</lesson.cloud.version>
-        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+        <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
+        <spring.io.platform.version>Cairo-SR8</spring.io.platform.version>
         <hibernate.version>5.4.2.Final</hibernate.version>
         <redisson.version>3.10.6</redisson.version>
         <druid.version>1.1.16</druid.version>
@@ -70,6 +71,13 @@
     <!--依赖管理-->
     <dependencyManagement>
         <dependencies>
+<!--            <dependency>-->
+<!--                <groupId>io.spring.platform</groupId>-->
+<!--                <artifactId>platform-bom</artifactId>-->
+<!--                <version>${spring.io.platform.version}</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
             <!--springboot及springcloud核心依赖-->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -80,7 +88,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <!--项目部署-->
     <build>
         <plugins>
@@ -93,17 +100,27 @@
                     <fork>true</fork>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
     <!--远程依赖库-->
     <repositories>
         <!--学校私服-->
-        <repository>
-            <id>cn.edu.gzmu</id>
-            <name>gzmu-maven</name>
-            <url>http://10.100.0.11:5741/repository/maven-public/</url>
-        </repository>
+        <!--<repository>-->
+        <!--    <id>cn.edu.gzmu</id>-->
+        <!--    <name>gzmu-maven</name>-->
+        <!--    <url>http://10.100.0.11:5741/repository/maven-public/</url>-->
+        <!--</repository>-->
         <!--阿里云主仓库，代理了maven central和jcenter仓库-->
         <repository>
             <id>aliyun</id>

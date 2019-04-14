@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.File;
-
 import static org.junit.Assert.*;
 
 @SpringBootTest
@@ -21,7 +19,7 @@ public class GenDatabaseConfigTest {
     @Test
     public void getConfig() {
         assertAllNotNull(
-                genDatabaseConfig, genDatabaseConfig.getDriver(), genDatabaseConfig.getUsername(),
+                genDatabaseConfig, genDatabaseConfig.getDriverClassName(), genDatabaseConfig.getUsername(),
                 genDatabaseConfig.getUrl(), genDatabaseConfig.getPassword(), genDatabaseConfig.getPrefix(),
                 genDatabaseConfig.getBaseField()
         );

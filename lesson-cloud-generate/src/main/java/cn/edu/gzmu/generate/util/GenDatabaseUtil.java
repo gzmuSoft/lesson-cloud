@@ -31,7 +31,7 @@ public class GenDatabaseUtil {
      * @throws Exception 异常
      */
     private DatabaseMetaData getMetaData() throws Exception {
-        Class.forName(genDatabaseConfig.getDriver());
+        Class.forName(genDatabaseConfig.getDriverClassName());
         return DriverManager.getConnection(genDatabaseConfig.getUrl(),
                 genDatabaseConfig.getUsername(), genDatabaseConfig.getPassword()).getMetaData();
     }

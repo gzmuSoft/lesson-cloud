@@ -33,7 +33,7 @@ public class GenDatabaseConfig {
     /**
      * 驱动
      */
-    private String driver;
+    private String driverClassName;
     /**
      * 表前缀
      */

@@ -18,8 +18,8 @@
         <!--引入lesson-cloud-repository模块依赖-->
         <dependency>
             <groupId>cn.edu.gzmu</groupId>
-            <artifactId>lesson-cloud-repository</artifactId>
-            <version> ${lesson.cloud.version}</version>
+            <artifactId>lesson-cloud-auth</artifactId>
+            <version>${lesson.cloud.version}</version>
         </dependency>
         <!--cache组件依赖,配合redis使用-->
         <dependency>

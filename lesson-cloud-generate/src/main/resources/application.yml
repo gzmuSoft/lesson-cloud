@@ -5,7 +5,7 @@ gzmu:
       url: jdbc:mysql://10.102.42.203:3306/lesson-cloud
       username: root
       password: 123456
-      driver: com.mysql.cj.jdbc.Driver
+      driver-class-name: com.mysql.cj.jdbc.Driver
       catalog: lesson-cloud
       base-field: id, name, spell, sort, create_user_name, create_time, last_update_user_name, last_update_time, remark, is_enable, create_time, modify_time, create_user, modify_user
     entity:

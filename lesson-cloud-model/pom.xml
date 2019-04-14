@@ -25,14 +25,12 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-
         <!--hibernate核心依赖-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
-
         <!--redis java 客户端 hibernate 5.3+ 版本支持-->
         <dependency>
             <groupId>org.redisson</groupId>
