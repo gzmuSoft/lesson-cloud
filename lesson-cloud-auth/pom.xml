@@ -5,7 +5,7 @@
     <!--关联父级pom-->
     <parent>
         <artifactId>lesson-cloud</artifactId>
-        <groupId>cn.edu.gamu</groupId>
+        <groupId>cn.edu.gzmu</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -16,11 +16,20 @@
 
     <!--相关依赖-->
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <!--oauth2自动配置依赖-->
         <dependency>
             <groupId>org.springframework.security.oauth.boot</groupId>
             <artifactId>spring-security-oauth2-autoconfigure</artifactId>
             <version>${spring.boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
         <!--security核心依赖-->
         <dependency>

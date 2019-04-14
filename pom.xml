@@ -22,7 +22,7 @@
     <!--项目基本信息-->
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
-    <groupId>cn.edu.gamu</groupId>
+    <groupId>cn.edu.gzmu</groupId>
     <artifactId>lesson-cloud</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>lesson-cloud</name>
@@ -99,11 +99,11 @@
     <!--远程依赖库-->
     <repositories>
         <!--学校私服-->
-        <!--<repository>-->
-        <!--    <id>cn.edu.gzmu</id>-->
-        <!--    <name>gzmu-maven</name>-->
-        <!--    <url>http://10.100.0.11:5741/repository/maven-public/</url>-->
-        <!--</repository>-->
+        <repository>
+            <id>cn.edu.gzmu</id>
+            <name>gzmu-maven</name>
+            <url>http://10.100.0.11:5741/repository/maven-public/</url>
+        </repository>
         <!--阿里云主仓库，代理了maven central和jcenter仓库-->
         <repository>
             <id>aliyun</id>

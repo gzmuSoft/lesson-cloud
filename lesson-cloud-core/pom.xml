@@ -5,7 +5,7 @@
     <!--关联父级pom-->
     <parent>
         <artifactId>lesson-cloud</artifactId>
-        <groupId>cn.edu.gamu</groupId>
+        <groupId>cn.edu.gzmu</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -17,7 +17,7 @@
     <dependencies>
         <!--引入lesson-cloud-repository模块依赖-->
         <dependency>
-            <groupId>cn.edu.gamu</groupId>
+            <groupId>cn.edu.gzmu</groupId>
             <artifactId>lesson-cloud-repository</artifactId>
             <version> ${lesson.cloud.version}</version>
         </dependency>
