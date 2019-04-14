@@ -15,11 +15,6 @@
 
     <!--相关依赖-->
     <dependencies>
-        <!--lombok自动构建库依赖-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
         <!--jpa数据持久化依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

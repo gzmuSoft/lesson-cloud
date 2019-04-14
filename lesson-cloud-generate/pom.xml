@@ -26,11 +26,6 @@
             <artifactId> spring-boot-configuration-processor </artifactId>
             <optional> true </optional>
         </dependency>
-        <!--lombok自动构建库依赖-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
         <!--FreeMarker模板引擎依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
