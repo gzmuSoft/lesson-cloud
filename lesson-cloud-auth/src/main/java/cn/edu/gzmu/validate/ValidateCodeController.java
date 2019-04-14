@@ -1,5 +1,6 @@
 package cn.edu.gzmu.validate;
 
+import cn.edu.gzmu.constant.SecurityConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,12 +20,12 @@ import java.util.Map;
 public class ValidateCodeController {
 
     @Autowired
-    private Map<String, ValidateCodeProcessor> validateCodeProcessors;
+    private ValidateCodeProcessorHolder validateCodeProcessorHolder;
 
-    @GetMapping("/code/{type}")
+    @GetMapping(SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/{type}")
     public void creatCode(HttpServletRequest request, HttpServletResponse response,
                           @PathVariable String type) throws Exception {
-        validateCodeProcessors.get(type + "CodeProcessor")
+        validateCodeProcessorHolder.findValidateCodeProcessor(type)
                 .create(new ServletWebRequest(request, response));
     }
 

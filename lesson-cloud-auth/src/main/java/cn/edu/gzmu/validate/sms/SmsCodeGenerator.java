@@ -10,7 +10,7 @@ import org.springframework.web.context.request.ServletWebRequest;
  * @version 1.0
  * @date 19-4-14 14:11
  */
-@Component
+@Component("smsValidateCodeGenerator")
 public class SmsCodeGenerator implements ValidateCodeGenerator {
     /**
      * 生成验证码

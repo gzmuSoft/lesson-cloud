@@ -17,10 +17,6 @@
     <!--相关依赖-->
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
             <groupId>cn.edu.gzmu</groupId>
             <artifactId>lesson-cloud-repository</artifactId>
             <version>${lesson.cloud.version}</version>
@@ -33,24 +29,29 @@
         <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-security</artifactId>
-            <version>1.1.6.RELEASE</version>
+            <version>${spring-social.version}</version>
         </dependency>
 
-        <!--oauth2自动配置依赖-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.security.oauth.boot</groupId>-->
-        <!--            <artifactId>spring-security-oauth2-autoconfigure</artifactId>-->
-        <!--            <version>${spring.boot.version}</version>-->
-        <!--        </dependency>-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-config</artifactId>
+            <version>${spring-social.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-core</artifactId>
+            <version>${spring-social.version}</version>
         </dependency>
         <!--security核心依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
         <!--security的token依赖-->
         <!--        <dependency>-->
@@ -75,13 +76,12 @@
         <!--            <artifactId>spring-restdocs-mockmvc</artifactId>-->
         <!--            <scope>test</scope>-->
         <!--        </dependency>-->
+        <!--oauth2自动配置依赖-->
+        <!--<dependency>-->
+        <!--    <groupId>org.springframework.security.oauth.boot</groupId>-->
+        <!--    <artifactId>spring-security-oauth2-autoconfigure</artifactId>-->
+        <!--    <version>${spring.boot.version}</version>-->
+        <!--</dependency>-->
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+
 </project>
