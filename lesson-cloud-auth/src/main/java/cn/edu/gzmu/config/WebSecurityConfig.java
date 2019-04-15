@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 /**
  * @author echo
@@ -29,12 +30,17 @@ public class WebSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private ValidateCodeSecurityConfig validateCodeSecurityConfig;
 
+    @Autowired
+    private SpringSocialConfigurer springSocialConfigurer;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         applyPasswordAuthenticationConfig(http);
         http.apply(smsAuthenticationSecurityConfig)
                 .and()
                 .apply(validateCodeSecurityConfig)
+                .and()
+                .apply(springSocialConfigurer)
                 .and()
                 .authorizeRequests()
                 .antMatchers(

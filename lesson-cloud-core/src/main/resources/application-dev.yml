@@ -1,6 +1,11 @@
 server:
   port: 8080
-
+#gzmu:
+#  social:
+#    qq:
+#      app-id: 123456
+#      app-secret: 654321
+#      provider-id: 654321
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
