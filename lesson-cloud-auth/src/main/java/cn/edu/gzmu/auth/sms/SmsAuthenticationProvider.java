@@ -1,8 +1,6 @@
 package cn.edu.gzmu.auth.sms;
 
-import cn.edu.gzmu.auth.UserDetailsServiceImpl;
 import lombok.Setter;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -33,7 +31,6 @@ public class SmsAuthenticationProvider implements AuthenticationProvider {
         authenticationResult.setDetails(authenticationToken.getDetails());
         return authenticationResult;
     }
-
 
     @Override
     public boolean supports(Class<?> authentication) {

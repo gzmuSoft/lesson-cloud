@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 获取用户信息测试
+ *
  * @author echo
  * @version 1.0
  * @date 19-4-16 20:46

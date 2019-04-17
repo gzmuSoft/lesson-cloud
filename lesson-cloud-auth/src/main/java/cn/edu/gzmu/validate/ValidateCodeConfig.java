@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 19-4-14 14:17
  */
 @Configuration
-public class ValidateConfig {
+public class ValidateCodeConfig {
 
     @Bean
     public ValidateCodeSender smsCodeSender(){

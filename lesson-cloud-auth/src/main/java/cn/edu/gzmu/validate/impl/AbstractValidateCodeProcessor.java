@@ -12,6 +12,8 @@ import javax.xml.bind.ValidationException;
 import java.util.Map;
 
 /**
+ * 默认抽象的验证码处理器
+ *
  * @author echo
  * @version 1.0
  * @date 19-4-14 11:37
@@ -58,10 +60,17 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode>
         return (C) validateCodeGenerator.generate(request);
     }
 
+    /**
+     * 验证器验证验证码
+     *
+     * @param request 被验证的请求
+     */
     @Override
+    @SuppressWarnings("unchecked")
     public void validate(ServletWebRequest request) {
         ValidateCodeType validateCodeType = getValidateCodeType();
         C code = (C) validateRepository.get(request, validateCodeType);
+        // 暂时做简单处理不做验证
         try {
             System.out.println(code.getCode());
             System.out.println("code in request : " + ServletRequestUtils.getStringParameter(request.getRequest(),

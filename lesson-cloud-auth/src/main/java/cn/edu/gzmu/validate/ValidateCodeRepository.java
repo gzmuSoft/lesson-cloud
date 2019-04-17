@@ -5,6 +5,8 @@ import cn.edu.gzmu.constant.ValidateCodeType;
 import org.springframework.web.context.request.ServletWebRequest;
 
 /**
+ * 验证码资源处理
+ *
  * @author echo
  * @version 1.0
  * @date 19-4-16 22:08
@@ -25,6 +27,7 @@ public interface ValidateCodeRepository {
      *
      * @param request 请求
      * @param type    类型
+     * @return 验证码
      */
     ValidateCode get(ServletWebRequest request, ValidateCodeType type);
 

@@ -1,12 +1,12 @@
 package cn.edu.gzmu.auth.sms;
 
 import cn.edu.gzmu.constant.SecurityConstants;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,80 +20,43 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SmsAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private String phoneParameter = SecurityConstants.DEFAULT_PARAMETER_NAME_SMS;
-    private boolean postOnly = true;
-
-
-    public SmsAuthenticationFilter() {
+    SmsAuthenticationFilter() {
         super(new AntPathRequestMatcher(SecurityConstants.LOGIN_PROCESSING_URL_SMS, "POST"));
     }
-
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
-        if (postOnly && !request.getMethod().equals("POST")) {
+        if (!HttpMethod.POST.matches(request.getMethod())) {
             throw new AuthenticationServiceException(
                     "Authentication method not supported: " + request.getMethod());
         }
-
-        String phone = obtainPhone(request);
-
-        if (phone == null) {
-            phone = "";
-        }
-        phone = phone.trim();
-
+        String phone = obtainSms(request);
+        phone = phone == null? "" : phone.trim();
         SmsAuthenticationToken authRequest = new SmsAuthenticationToken(phone);
         setDetails(request, authRequest);
-
         return this.getAuthenticationManager().authenticate(authRequest);
     }
 
-    private String obtainPhone(HttpServletRequest request) {
-        return request.getParameter(phoneParameter);
+    /**
+     * 获取请求中的 sms 值
+     *
+     * @param request 正在为其创建身份验证请求
+     * @return 请求中的 sms 值
+     */
+    private String obtainSms(HttpServletRequest request) {
+        return request.getParameter(SecurityConstants.DEFAULT_PARAMETER_NAME_SMS);
     }
 
     /**
-     * Provided so that subclasses may configure what is put into the authentication
-     * request's details property.
+     * 提供以便子类可以配置放入 authentication request 的 details 属性的内容
      *
-     * @param request     that an authentication request is being created for
-     * @param authRequest the authentication request object that should have its details
-     *                    set
+     * @param request     正在为其创建身份验证请求
+     * @param authRequest 应设置其详细信息的身份验证请求对象
      */
-    protected void setDetails(HttpServletRequest request,
-                              SmsAuthenticationToken authRequest) {
+    private void setDetails(HttpServletRequest request,
+                            SmsAuthenticationToken authRequest) {
         authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
     }
 
-    /**
-     * Sets the parameter name which will be used to obtain the username from the login
-     * request.
-     *
-     * @param phoneParameter the parameter name. Defaults to "username".
-     */
-    public void setPhoneParameter(String phoneParameter) {
-        Assert.hasText(phoneParameter, "phone parameter must not be empty or null");
-        this.phoneParameter = phoneParameter;
-    }
-
-
-    /**
-     * Defines whether only HTTP POST requests will be allowed by this filter. If set to
-     * true, and an authentication request is received which is not a POST request, an
-     * exception will be raised immediately and authentication will not be attempted. The
-     * <tt>unsuccessfulAuthentication()</tt> method will be called as if handling a failed
-     * authentication.
-     * <p>
-     * Defaults to <tt>true</tt> but may be overridden by subclasses.
-     */
-    public void setPostOnly(boolean postOnly) {
-        this.postOnly = postOnly;
-    }
-
-
-    public final String getPhoneParameter() {
-        return phoneParameter;
-    }
 }

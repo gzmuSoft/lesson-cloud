@@ -23,6 +23,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * 验证码过滤器。
+ *
+ * <p>继承于 {@link OncePerRequestFilter} 确保在一次请求只通过一次filter</p>
+ * <p>需要配置指定拦截路径，默认拦截 POST 请求</p>
+ *
  * @author echo
  * @version 1.0
  * @date 19-4-14 10:56
@@ -41,10 +46,10 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
 
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
-
     @Override
     public void afterPropertiesSet() throws ServletException {
         super.afterPropertiesSet();
+        // 路径拦截
         urlMap.put(SecurityConstants.LOGIN_PROCESSING_URL_SMS, ValidateCodeType.SMS);
     }
 
@@ -59,13 +64,21 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
                     .validate(new ServletWebRequest(request, response));
                 logger.info("验证码通过！");
             } catch (ValidateCodeException e) {
+                // 授权失败处理器接受处理
                 authFailureHandle.onAuthenticationFailure(request, response, e);
                 return;
             }
         }
+        // 放行
         filterChain.doFilter(request, response);
     }
 
+    /**
+     * 获取验证码类型
+     *
+     * @param request 请求
+     * @return 验证码类型
+     */
     private ValidateCodeType getValidateCodeType(HttpServletRequest request) {
         if (StringUtils.endsWithIgnoreCase(request.getMethod(), HttpMethod.POST.name())) {
             Set<String> urls = urlMap.keySet();

@@ -3,6 +3,11 @@ package cn.edu.gzmu.validate.sms;
 import cn.edu.gzmu.validate.ValidateCodeSender;
 
 /**
+ * 验证码发送
+ *
+ * 对于他的注入，请在 {@link cn.edu.gzmu.validate.ValidateCodeConfig} 中进行配置
+ * 使用 CGLIB 增强
+ *
  * @author echo
  * @version 1.0
  * @date 19-4-14 14:13

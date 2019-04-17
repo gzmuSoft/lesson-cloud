@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * 登录失败处理器
+ *
  * @author echo
  * @version 1.0
  * @date 19-4-14 10:51
@@ -23,18 +25,13 @@ public class AuthFailureHandle implements AuthenticationFailureHandler {
     @Autowired
     private ObjectMapper objectMapper;
 
-    /**
-     * Called when an authentication attempt fails.
-     *
-     * @param request   the request during which the authentication attempt occurred.
-     * @param response  the response.
-     * @param exception the exception which was thrown to reject the authentication
-     */
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
-        log.warn("登录失败");
+        log.info("Login failed!");
         response.setContentType("application/json;charset=utf-8");
+        // 暂时直接把异常跑出去
+        // todo 待完成登录失败信息回显
         response.getWriter().write(objectMapper.writeValueAsString(exception));
     }
 }

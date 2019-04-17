@@ -3,11 +3,8 @@ package cn.edu.gzmu.auth.sms;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
-import org.springframework.security.core.authority.AuthorityUtils;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  * token配置
@@ -16,6 +13,7 @@ import java.util.Collections;
  * @version 1.0
  * @date 19-4-14 15:47
  */
+@SuppressWarnings("all")
 public class SmsAuthenticationToken extends AbstractAuthenticationToken {
 
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;

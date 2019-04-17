@@ -1,9 +1,6 @@
 package cn.edu.gzmu.auth.sms;
 
-import cn.edu.gzmu.auth.handler.AuthFailureHandle;
-import cn.edu.gzmu.auth.handler.AuthSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,7 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.stereotype.Component;
 
 /**
- * 安全配置
+ * sms 授权配置
  *
  * @author echo
  * @version 1.0
@@ -33,12 +30,14 @@ public class SmsAuthenticationSecurityConfig
     private UserDetailsService userDetailsService;
 
     @Override
-    public void configure(HttpSecurity http) throws Exception {
+    public void configure(HttpSecurity http)  {
+        // 过滤器链
         SmsAuthenticationFilter smsAuthenticationFilter = new SmsAuthenticationFilter();
         smsAuthenticationFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
         smsAuthenticationFilter.setAuthenticationSuccessHandler(authSuccessHandler);
         smsAuthenticationFilter.setAuthenticationFailureHandler(authFailureHandle);
 
+        // 授权提供者
         SmsAuthenticationProvider smsAuthenticationProvider = new SmsAuthenticationProvider();
         smsAuthenticationProvider.setUserDetailsService(userDetailsService);
 

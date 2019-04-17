@@ -10,6 +10,8 @@ import org.springframework.web.context.request.ServletWebRequest;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 验证码资源类
+ *
  * @author echo
  * @version 1.0
  * @date 19-4-16 22:18
@@ -34,5 +36,15 @@ public abstract class AbstractValidateCodeRepository implements ValidateCodeRepo
         redisTemplate.delete(buildKey(request, type));
     }
 
+    /**
+     * 构建 redis 的 key 值，需要子类实现。
+     *
+     * 对于每种不同的验证码类型，都应该有不同的 key 的构建方式.
+     * 请求中的不同的参数应该分别获取不同的属性
+     *
+     * @param request 需要构建的请求体，
+     * @param type 验证码类型。
+     * @return key
+     */
     protected abstract String buildKey(ServletWebRequest request, ValidateCodeType type);
 }

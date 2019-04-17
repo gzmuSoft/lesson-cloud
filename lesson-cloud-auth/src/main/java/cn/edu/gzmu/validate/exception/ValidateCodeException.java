@@ -3,6 +3,8 @@ package cn.edu.gzmu.validate.exception;
 import org.springframework.security.core.AuthenticationException;
 
 /**
+ * 验证码异常
+ *
  * @author echo
  * @version 1.0
  * @date 19-4-14 11:14
