@@ -1,7 +1,7 @@
 package cn.edu.gzmu.validate;
 
 import cn.edu.gzmu.constant.ValidateCodeType;
-import com.sun.xml.internal.ws.api.policy.ValidationProcessor;
+import cn.edu.gzmu.validate.exception.ValidateCodeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

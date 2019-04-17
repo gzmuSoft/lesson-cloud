@@ -31,7 +31,6 @@
             <artifactId>spring-social-security</artifactId>
             <version>${spring-social.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-config</artifactId>
@@ -76,11 +75,11 @@
         <!--            <scope>test</scope>-->
         <!--        </dependency>-->
         <!--oauth2自动配置依赖-->
-        <!--<dependency>-->
-        <!--    <groupId>org.springframework.security.oauth.boot</groupId>-->
-        <!--    <artifactId>spring-security-oauth2-autoconfigure</artifactId>-->
-        <!--    <version>${spring.boot.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.springframework.security.oauth.boot</groupId>
+            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

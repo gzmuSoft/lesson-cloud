@@ -20,6 +20,6 @@ public class SmsCodeGenerator implements ValidateCodeGenerator {
      */
     @Override
     public ValidateCode generate(ServletWebRequest request) {
-        return new SmsValidateCode("1234", 60);
+        return new SmsCode("1234", 60);
     }
 }

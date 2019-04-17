@@ -1,22 +1,19 @@
 package cn.edu.gzmu.validate;
 
-import cn.edu.gzmu.auth.handler.AuthFailureHandle;
 import cn.edu.gzmu.constant.SecurityConstants;
 import cn.edu.gzmu.constant.ValidateCodeType;
-import com.sun.xml.internal.ws.api.policy.ValidationProcessor;
+import cn.edu.gzmu.validate.exception.ValidateCodeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.ServletRequestBindingException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,7 +45,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
     @Override
     public void afterPropertiesSet() throws ServletException {
         super.afterPropertiesSet();
-        urlMap.put(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_FORM, ValidateCodeType.SMS);
+        urlMap.put(SecurityConstants.LOGIN_PROCESSING_URL_SMS, ValidateCodeType.SMS);
     }
 
     @Override
@@ -69,25 +66,16 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void validate(HttpServletRequest request) throws ServletRequestBindingException {
-        String username = ServletRequestUtils.getStringParameter(request, "username");
-        if ("user".equalsIgnoreCase(username)) {
-            log.warn("帐号无效！");
-            throw new ValidateCodeException("帐号无效！");
-        }
-    }
-
     private ValidateCodeType getValidateCodeType(HttpServletRequest request) {
-        ValidateCodeType validateCodeType = null;
-        if (StringUtils.endsWithIgnoreCase(request.getMethod(), "GET")) {
+        if (StringUtils.endsWithIgnoreCase(request.getMethod(), HttpMethod.POST.name())) {
             Set<String> urls = urlMap.keySet();
             for (String url : urls){
                 if (antPathMatcher.match(url, request.getRequestURI())){
-                    validateCodeType =  urlMap.get(url);
+                    return urlMap.get(url);
                 }
             }
         }
-        return validateCodeType;
+        return null;
     }
 
 }

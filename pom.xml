@@ -64,11 +64,11 @@
             <artifactId>lombok</artifactId>
         </dependency>
         <!--开发环境工具依赖,包括热部署等-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-        </dependency>
+        <!--<dependency>-->
+        <!--    <groupId>org.springframework.boot</groupId>-->
+        <!--    <artifactId>spring-boot-devtools</artifactId>-->
+        <!--    <scope>runtime</scope>-->
+        <!--</dependency>-->
     </dependencies>
 
     <!--依赖管理-->

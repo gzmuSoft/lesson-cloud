@@ -20,8 +20,8 @@ import javax.sql.DataSource;
  * @version 1.0
  * @date 19-4-15 20:43
  */
-@Configuration
-@EnableSocial
+//@Configuration
+//@EnableSocial
 public class SocialConfig extends SocialConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
@@ -36,7 +36,7 @@ public class SocialConfig extends SocialConfigurerAdapter {
         return new AuthenticationNameUserIdSource();
     }
 
-    @Bean
+//    @Bean
     public SpringSocialConfigurer springSocialConfigurer() {
         return new SpringSocialConfigurer();
     }

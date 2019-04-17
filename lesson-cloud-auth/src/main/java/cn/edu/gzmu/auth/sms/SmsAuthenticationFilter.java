@@ -2,7 +2,6 @@ package cn.edu.gzmu.auth.sms;
 
 import cn.edu.gzmu.constant.SecurityConstants;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -20,21 +19,15 @@ import javax.servlet.http.HttpServletResponse;
  * @date 19-4-14 15:44
  */
 public class SmsAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-    // ~ Static fields/initializers
-    // =====================================================================================
 
     private String phoneParameter = SecurityConstants.DEFAULT_PARAMETER_NAME_SMS;
     private boolean postOnly = true;
 
-    // ~ Constructors
-    // ===================================================================================================
 
     public SmsAuthenticationFilter() {
-        super(new AntPathRequestMatcher(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE, "POST"));
+        super(new AntPathRequestMatcher(SecurityConstants.LOGIN_PROCESSING_URL_SMS, "POST"));
     }
 
-    // ~ Methods
-    // ========================================================================================================
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,

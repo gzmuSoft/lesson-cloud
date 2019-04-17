@@ -28,13 +28,13 @@ public class UserDetailsServiceImpl implements UserDetailsService, SocialUserDet
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("login user: {}", username);
-        return new User(username, passwordEncoder.encode("123456"), AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+        return new User(username, passwordEncoder.encode("123456"), AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_user"));
     }
 
     @Override
     public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
         log.info("social login user: {}", userId);
-        return new SocialUser(userId, passwordEncoder.encode("123456"), AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+        return new SocialUser(userId, passwordEncoder.encode("123456"), AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_user"));
     }
 
 }

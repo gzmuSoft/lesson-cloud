@@ -1,7 +1,6 @@
 package cn.edu.gzmu.validate;
 
 import cn.edu.gzmu.validate.sms.SmsCodeSender;
-import cn.edu.gzmu.validate.sms.SmsCodeSenderImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 public class ValidateConfig {
 
     @Bean
-    public SmsCodeSender smsCodeSender(){
-        return new SmsCodeSenderImpl();
+    public ValidateCodeSender smsCodeSender(){
+        return new SmsCodeSender();
     }
 }

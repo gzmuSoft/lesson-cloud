@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
  * @date 19-4-14 11:23
  */
 @Data
-public class ValidateCode {
+public class ValidateCode implements Serializable {
     /**
      * 验证码
      */

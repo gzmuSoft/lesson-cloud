@@ -1,4 +1,4 @@
-package cn.edu.gzmu.validate;
+package cn.edu.gzmu.validate.exception;
 
 import org.springframework.security.core.AuthenticationException;
 
