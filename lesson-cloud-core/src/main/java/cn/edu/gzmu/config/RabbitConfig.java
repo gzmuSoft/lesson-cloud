@@ -18,7 +18,7 @@ import java.util.Map;
  *
  * @author soul
  * @version 1.0
- * @date 19-3-25 14:51
+ * @date 19-4-18 11:11
  */
 @Configuration
 public class RabbitConfig {
