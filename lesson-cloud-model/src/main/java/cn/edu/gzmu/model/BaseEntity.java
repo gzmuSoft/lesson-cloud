@@ -81,5 +81,5 @@ public class BaseEntity {
     /**
      * 是否启用
      */
-    private Boolean isEnable;
+    private Boolean isEnable = true;
 }

@@ -11,6 +11,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * sys_log
@@ -26,7 +27,7 @@ import javax.persistence.Table;
 @Where(clause = "is_enable = 1")
 @EqualsAndHashCode(callSuper = true)
 @Cache(region = "sys_log", usage = CacheConcurrencyStrategy.READ_WRITE )
-public class SysLog extends BaseEntity {
+public class SysLog extends BaseEntity implements Serializable {
 
     /**
      * 浏览器
