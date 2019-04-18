@@ -1,15 +1,16 @@
 package cn.edu.gzmu.config;
 
-import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 /**
  * web 安全配置，在这里主要配额一些 Bean
@@ -18,11 +19,12 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
  * @version 1.0
  * @date 19-4-14 10:43
  */
-@Configuration
-public class WebSecurityConfig {
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private RedissonConnectionFactory redissonConnectionFactory;
+    private TokenStore tokenStore;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -30,14 +32,20 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public TokenStore tokenStore() {
-        return new RedisTokenStore(redissonConnectionFactory);
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
+    /**
+     * TokenServices
+     *
+     * @return Token 配置
+     */
     @Bean
-    public AuthorizationServerTokenServices authorizationServerTokenServices(){
+    public AuthorizationServerTokenServices authorizationServerTokenServices() {
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-        defaultTokenServices.setTokenStore(tokenStore());
+        defaultTokenServices.setTokenStore(tokenStore);
         return defaultTokenServices;
     }
 }

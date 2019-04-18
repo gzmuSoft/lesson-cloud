@@ -68,12 +68,17 @@ management:
       exposure:
         include: "*"
 
-security:
-  oauth2:
-    client:
-      client-secret: gzmuSecret
-      client-id: gzmu
-      registered-redirect-uri: http://example.com
-#logging:
-#  level:
-#    org: debug
+application:
+  security:
+    client-id: lesson-cloud
+    client-secret: $2a$10$umkgXrUxihp5ckmhvFOChuqAIIFbDefSGzUIBTXxaztbZ4ajyEi.2
+    resource-id: lesson-cloud
+    access-token-validity-minutes: 60
+    refresh-token-validity-minutes: 60
+    scope: all
+    jwt-signing-key: lesson-cloud
+logging:
+  level:
+    org:
+      springframework:
+        security: debug

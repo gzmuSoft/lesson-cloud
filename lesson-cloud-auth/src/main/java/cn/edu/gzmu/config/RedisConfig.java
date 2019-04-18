@@ -29,12 +29,25 @@ public class RedisConfig {
         return new RedissonConnectionFactory(redisson);
     }
 
+    /**
+     * redisson 配置
+     *
+     * @param configFile 配置文件
+     * @return 结果
+     * @throws IOException 异常
+     */
     @Bean(destroyMethod = "shutdown")
     public RedissonClient redisson(@Value("classpath:/redisson.yaml") Resource configFile) throws IOException {
         Config config = Config.fromYAML(configFile.getInputStream());
         return Redisson.create(config);
     }
 
+    /**
+     * 操作 redis
+     *
+     * @param redisConnectionFactory redis 链接工厂
+     * @return RedisTemplate
+     */
     @Bean
     public RedisTemplate<String, ValidateCode> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, ValidateCode> redis = new RedisTemplate<>();
