@@ -47,7 +47,7 @@ public class RabbitProducer {
 //    }
 
     /**
-     * 立即消费的发送方
+     * 立即消费者发送方
      */
     @RequestMapping("/log1")
     public String ImmediateSend() {
@@ -60,7 +60,7 @@ public class RabbitProducer {
     }
 
     /**
-     * 延时消费的发送方
+     * 延时消费者发送方
      * 3000表示设置的延迟时间
      */
     @RequestMapping("/log2")

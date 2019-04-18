@@ -31,6 +31,9 @@ public class RabbitConsumer {
         this.sysLogRepository = sysLogRepository;
     }
 
+    /**
+     * 立即消费者
+     */
     @RabbitListener(queues = RabbitConfig.LOG_QUEUE)
     @RabbitHandler
     public void immediateProcess(SysLog sysLog, Channel channel, Message message) throws IOException {
@@ -42,6 +45,9 @@ public class RabbitConsumer {
     }
 
 
+    /**
+     * 延时消费者
+     */
     @RabbitListener(queues = RabbitConfig.DELAY_LOG_QUEUE)
     @RabbitHandler
     public void delayProcess(SysLog sysLog, Channel channel, Message message) throws IOException {
