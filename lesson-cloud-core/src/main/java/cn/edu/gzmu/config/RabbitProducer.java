@@ -1,8 +1,6 @@
 package cn.edu.gzmu.config;
 
 import cn.edu.gzmu.model.entity.SysLog;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +22,13 @@ import java.util.Date;
 @RestController
 @Aspect
 public class RabbitProducer {
-    final
+    private final
     HttpServletRequest httpServletRequest;
 
     /**
      * AmqpTemplate接口定义了发送和接收消息的基本操作。
      */
-    final
+    private final
     AmqpTemplate rabbitmqTemplate;
 
     @Autowired
@@ -63,19 +61,18 @@ public class RabbitProducer {
 
     /**
      * 延时消费的发送方
-     * 1000表示设置的延迟时间
+     * 3000表示设置的延迟时间
      */
     @RequestMapping("/log2")
     public String DelaySend() {
         SysLog sysLog = new SysLog();
         sysLog.setUrl(httpServletRequest.getRequestURI());
         sysLog.setBrowser(httpServletRequest.getAuthType());
-        System.out.println("延迟时间:" + 1000);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        rabbitmqTemplate.convertAndSend(RabbitConfig.DEAD_LETTER_EXCHANGE, RabbitConfig.DELAY_ROUTING_KEY, sysLog,
+        System.out.println("消息发送时间:" + simpleDateFormat.format(new Date()));
+        rabbitmqTemplate.convertAndSend(RabbitConfig.DELAY_EXCHANGE, RabbitConfig.DELAY_ROUTING_KEY, sysLog,
                 message -> {
-                    message.getMessageProperties().setExpiration(1000 + "");
-                    System.out.println(simpleDateFormat.format(new Date()) + " Delay sent.");
+                    message.getMessageProperties().setDelay(3000);
                     return message;
                 });
         return "队列成功";

@@ -1,9 +1,6 @@
 package cn.edu.gzmu.config;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,16 +9,12 @@ import java.util.Map;
 
 /**
  * rabbitmq配置类
- *
- * 1、TTL
- * RabbitMQ可以针对队列设置x-expires(则队列中所有的消息都有相同的过期时间)或者针对Message设置x-message-ttl(对消息进行单独设置，每条消息TTL可以不同)
- * 来控制消息的生存时间，如果超时(两者同时设置以最先到期的时间为准)，则消息变为dead letter(死信)
- *
- * 2、Dead Letter Exchanges（DLX）
- * RabbitMQ的Queue可以配置x-dead-letter-exchange和x-dead-letter-routing-key（可选）两个参数
- * 如果队列内出现了dead letter，则按照这两个参数重新路由转发到指定的队列。
- * x-dead-letter-exchange：出现dead letter之后将dead letter重新发送到指定exchange
- * x-dead-letter-routing-key：出现dead letter之后将dead letter重新按照指定的routing-key发送
+ * 延时队列需要做以下工作:
+ * 1、访问http://www.rabbitmq.com/community-plugins.html并且ctrl+f搜索rabbitmq_delayed_message_exchange
+ * 2、下载对应rabbitmq的版本并解压放入rabbitmq安装目录里面的plugins里面
+ * 3、启动插件输入命令:rabbitmq-plugins enable rabbitmq_delayed_message_exchange
+ * 4、查看插件列表命令:rabbitmq-plugins list
+ * 5、重启rabbitmq
  *
  * @author soul
  * @version 1.0
@@ -29,59 +22,58 @@ import java.util.Map;
  */
 @Configuration
 public class RabbitConfig {
-    public final static String LOG_QUEUE = "log";
-    public final static String DELAY_LOG_QUEUE = "delayLog";
-    public final static String EXCHANGE = "logExchange";
-    public final static String ROUTING_KEY = "logRoutingKey";
-    public final static String DEAD_LETTER_EXCHANGE = "deadLetterExchange";
-    public final static String DELAY_ROUTING_KEY = "delayRoutingKey";
+    final static String LOG_QUEUE = "logQueue";
+    final static String DELAY_LOG_QUEUE = "delayLogQueue";
+    final static String EXCHANGE = "Exchange";
+    final static String ROUTING_KEY = "RoutingKey";
+    final static String DELAY_EXCHANGE = "delayExchange";
+    final static String DELAY_ROUTING_KEY = "delayRoutingKey";
 
 
     /**
-     * 创建一个名为log的消息队列(立即消费)
-     * 第一个参数是创建的queue的名字，第二个参数是是否支持持久化
+     * 创建一个LOG_QUEUE的消息队列(立即消费)
+     * 第一个参数是创建的queue的名字，第二个参数是是否支持持久化,第三个是否唯一,第四个是否自动删除
      *
      * @return Queue
      */
     @Bean
     public Queue immediateQueue() {
-        return new Queue(this.LOG_QUEUE, true);
+        return new Queue(LOG_QUEUE, true, false, false);
     }
 
     /**
-     * 创建一个延时队列,绑定交换机和路由
+     * 创建一个DELAY_LOG_QUEUE的消息队列(延时消费)
+     *
+     * @return Queue
      */
     @Bean
     public Queue delayQueue() {
-        Map<String, Object> params = new HashMap<>();
-        // x-dead-letter-exchange 声明了队列里的死信转发到的DLX名称，
-        params.put("x-dead-letter-exchange", this.EXCHANGE);
-        // x-dead-letter-routing-key 声明了这些死信在转发时携带的 routing-key 名称。
-        params.put("x-dead-letter-routing-key", this.ROUTING_KEY);
-        return new Queue(this.DELAY_LOG_QUEUE, true, false, false, params);
+        return new Queue(DELAY_LOG_QUEUE, true, false, false);
     }
 
     /**
-     * 构造立即消费的交换机
+     * 构造立即消费的交换机(exchange)
      * 一共有三种构造方法，可以只传exchange的名字，
-     * 第二种，可以传exchange名字，是否支持持久化，是否可以自动删除，
+     * 第二种，可以传exchange名字，是否支持持久化，是否可以自动删除等，
      * 第三种在第二种参数上可以增加Map，Map中可以存放自定义exchange中的参数
      *
      * @return DirectExchange
      */
     @Bean
     public DirectExchange immediateExchange() {
-        return new DirectExchange(this.EXCHANGE, true, false);
+        return new DirectExchange(EXCHANGE, true, false);
     }
 
     /**
-     * 构造延时消费的交换机
+     * 构造延时消费的交换机(exchange)
      *
-     * @return DirectExchange
+     * @return CustomExchange
      */
     @Bean
-    public DirectExchange deadLetterExchange() {
-        return new DirectExchange(this.DEAD_LETTER_EXCHANGE, true, false);
+    public CustomExchange delayExchange() {
+        Map<String, Object> args = new HashMap<>();
+        args.put("x-delayed-type", "direct");
+        return new CustomExchange(DELAY_EXCHANGE, "x-delayed-message", true, false, args);
     }
 
     /**
@@ -91,17 +83,17 @@ public class RabbitConfig {
      */
     @Bean
     public Binding immediateBinding() {
-        return BindingBuilder.bind(immediateQueue()).to(immediateExchange()).with(this.ROUTING_KEY);
+        return BindingBuilder.bind(immediateQueue()).to(immediateExchange()).with(ROUTING_KEY);
     }
 
     /**
-     * 把延时消费的队列和死信消费的exchange绑定在一起
+     * 把延时消费的队列和延时消费的exchange绑定在一起
      *
      * @return BindingBuilder
      */
     @Bean
     public Binding delayBinding() {
-        return BindingBuilder.bind(delayQueue()).to(deadLetterExchange()).with(this.DELAY_ROUTING_KEY);
+        return BindingBuilder.bind(delayQueue()).to(delayExchange()).with(DELAY_ROUTING_KEY).noargs();
     }
 }
 

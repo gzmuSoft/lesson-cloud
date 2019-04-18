@@ -7,10 +7,11 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Rabbit消费端
@@ -22,7 +23,7 @@ import java.io.IOException;
  */
 @Component
 public class RabbitConsumer {
-    final
+    private final
     SysLogRepository sysLogRepository;
 
     @Autowired
@@ -36,10 +37,6 @@ public class RabbitConsumer {
         try {
             sysLogRepository.save(sysLog);
         } catch (Exception e) {
-            /**
-             * 这段代码表示，这次消息我已经接受并消费掉了，不会再重复发送消费
-             * 不然当有错误的队列信息时会使得程序死循环
-             */
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         }
     }
@@ -49,12 +46,11 @@ public class RabbitConsumer {
     @RabbitHandler
     public void delayProcess(SysLog sysLog, Channel channel, Message message) throws IOException {
         try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            System.out.println("消息接收时间:" + simpleDateFormat.format(new Date()));
             sysLogRepository.save(sysLog);
         } catch (Exception e) {
-            /**
-             * 这段代码表示，这次消息我已经接受并消费掉了，不会再重复发送消费
-             * 不然当有错误的队列信息时会使得程序死循环
-             */
+            //这段代码表示，这次消息我已经接受并消费掉了，不会再重复发送消费,不然当有错误的队列信息时会使得程序死循环
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         }
     }
