@@ -4,7 +4,9 @@ import cn.edu.gzmu.model.entity.SysLog;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,10 +63,10 @@ public class RabbitProducer {
 
     /**
      * 延时消费者发送方
-     * 3000表示设置的延迟时间
+     * delayTime表示设置的延迟时间
      */
     @RequestMapping("/log2")
-    public String DelaySend() {
+    public String DelaySend(@RequestParam(value = "delayTime", defaultValue = "1000") String delayTime) {
         SysLog sysLog = new SysLog();
         sysLog.setUrl(httpServletRequest.getRequestURI());
         sysLog.setBrowser(httpServletRequest.getAuthType());
@@ -72,7 +74,7 @@ public class RabbitProducer {
         System.out.println("消息发送时间:" + simpleDateFormat.format(new Date()));
         rabbitmqTemplate.convertAndSend(RabbitConfig.DELAY_EXCHANGE, RabbitConfig.DELAY_ROUTING_KEY, sysLog,
                 message -> {
-                    message.getMessageProperties().setDelay(3000);
+                    message.getMessageProperties().setDelay(Integer.parseInt(delayTime));
                     return message;
                 });
         return "队列成功";
