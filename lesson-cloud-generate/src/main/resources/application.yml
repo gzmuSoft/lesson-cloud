@@ -2,9 +2,9 @@ gzmu:
   generate:
     version: 1.0
     database:
-      url: jdbc:mysql://localhost:3306/lesson_cloud?characterEncoding=UTF-8
+      url: jdbc:mysql://10.102.42.203:3306/lesson-cloud
       username: root
-      password: 981214
+      password: 123456
       driver: com.mysql.cj.jdbc.Driver
       catalog: lesson-cloud
       base-field: id, name, spell, sort, create_user_name, create_time, last_update_user_name, last_update_time, remark, is_enable, create_time, modify_time, create_user, modify_user
