@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 *
 * @author echo
 * @version 1.0
-* @date 19-3-25 14:51
+* @date 2019-4-19 22:08:05
 */
 @RepositoryRestController
 @RequestMapping("/courses")

@@ -17,7 +17,7 @@ import javax.persistence.Table;
  *
  * @author echo
  * @version 1.0
- * @date 2019-4-12 20:32:45
+ * @date 2019-4-19 22:08:04
  */
 @Data
 @Cacheable
@@ -39,9 +39,24 @@ public class SysRes extends BaseEntity {
     private java.lang.String des;
 
     /**
-     * url地址
+     * url 匹配
      */
-    private java.lang.String url;
+    private java.lang.String matchUrl;
+
+    /**
+     * 路由路径
+     */
+    private java.lang.String router;
+
+    /**
+     * 组件名称
+     */
+    private java.lang.String component;
+
+    /**
+     * 图标
+     */
+    private java.lang.String iconCls;
 
     /**
      * 层级
@@ -49,9 +64,9 @@ public class SysRes extends BaseEntity {
     private java.lang.Integer level;
 
     /**
-     * 图标
+     * 允许使用的方法：GET、POST、PUT、PATCH、DELETE、ALL
      */
-    private java.lang.String iconCls;
+    private java.lang.String method;
 
     /**
      * 类型：1 功能 2 权限

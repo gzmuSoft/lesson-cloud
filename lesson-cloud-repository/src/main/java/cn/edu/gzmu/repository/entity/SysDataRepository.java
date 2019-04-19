@@ -10,7 +10,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  *
  * @author echo
  * @version 1.0
- * @date 2019-4-12 20:32:46
+ * @date 2019-4-19 22:08:04
  */
 @RepositoryRestResource
 public interface SysDataRepository extends BaseRepository<SysData, Long> {
