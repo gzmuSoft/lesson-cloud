@@ -46,4 +46,8 @@ public class GenDatabaseConfig {
      * 基类字段，将会排除
      */
     private List<String> baseField = new ArrayList<>();
+    /**
+     * 需要排除的表
+     */
+    private List<String> excludeTable = new ArrayList<>();
 }

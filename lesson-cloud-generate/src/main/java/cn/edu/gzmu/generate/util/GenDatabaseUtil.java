@@ -47,7 +47,11 @@ public class GenDatabaseUtil {
             ResultSet resultSet = getMetaData().getTables(genDatabaseConfig.getCatalog(), null,
                     genDatabaseConfig.getPrefix() + "%", new String[]{"TABLE"});
             while (resultSet.next()) {
-                tables.add(resultSet.getString("TABLE_NAME"));
+                String tableName = resultSet.getString("TABLE_NAME");
+                if (genDatabaseConfig.getExcludeTable().contains(tableName)) {
+                    continue;
+                }
+                tables.add(tableName);
             }
             resultSet.close();
         } catch (Exception e) {

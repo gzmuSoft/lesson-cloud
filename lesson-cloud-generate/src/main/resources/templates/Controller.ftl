@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 * ${class_name} Controller
 *
 * @author echo
-* @version 1.0
-* @date 19-3-25 14:51
+* @version ${now_version}
+* @date ${.now?datetime}
 */
 @RepositoryRestController
 @RequestMapping("/${rest_path}")
