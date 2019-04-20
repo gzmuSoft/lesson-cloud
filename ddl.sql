@@ -1,8 +1,29 @@
 create schema if not exists `lesson-cloud` collate utf8mb4_unicode_ci;
 
+use `lesson-cloud`;
+
+create table if not exists UserConnection
+(
+    userId         varchar(255) not null,
+    providerId     varchar(255) not null,
+    providerUserId varchar(255) not null,
+    `rank`         int          not null,
+    displayName    varchar(255) null,
+    profileUrl     varchar(512) null,
+    imageUrl       varchar(512) null,
+    accessToken    varchar(512) not null,
+    secret         varchar(512) null,
+    refreshToken   varchar(512) null,
+    expireTime     bigint       null,
+    primary key (userId, providerId, providerUserId),
+    constraint UserConnectionRank
+        unique (userId, providerId, `rank`)
+);
+
 create table if not exists course
 (
-    id          bigint auto_increment comment '编号' primary key,
+    id          bigint auto_increment comment '编号'
+        primary key,
     name        varchar(255)                             null comment '名称',
     spell       varchar(255)                             null comment '名称的全拼',
     period      smallint(6)  default 16                  not null comment '基础学时',
@@ -20,7 +41,8 @@ create table if not exists course
 
 create table if not exists section
 (
-    id          bigint auto_increment comment '编号' primary key,
+    id          bigint auto_increment comment '编号'
+        primary key,
     name        varchar(255)                          null comment '名称',
     spell       varchar(255)                          null comment '名称的全拼',
     intro       varchar(1024)                         null comment '内容简介',
@@ -42,7 +64,8 @@ create table if not exists section
 
 create table if not exists knowledge
 (
-    id          bigint auto_increment comment '编号' primary key,
+    id          bigint auto_increment comment '编号'
+        primary key,
     name        varchar(255)                          null comment '名称',
     spell       varchar(255)                          null comment '名称的全拼',
     intro       varchar(1024)                         null comment '内容简介',
@@ -73,7 +96,8 @@ create index FK_knowledge_section
 
 create table if not exists multi_sel
 (
-    id             bigint auto_increment comment '编号' primary key,
+    id             bigint auto_increment comment '编号'
+        primary key,
     name           varchar(255)                          null comment '题目',
     spell          varchar(255)                          null comment '题目的全拼',
     difficult_rate float     default 0.1                 not null comment '难度系数，介于0~1之间',
@@ -115,7 +139,8 @@ create index FK_section_course
 
 create table if not exists sel_options
 (
-    id          bigint auto_increment comment '编号' primary key,
+    id          bigint auto_increment comment '编号'
+        primary key,
     name        varchar(255)                            null comment '选项值',
     spell       varchar(255)                            null comment '选项值的全拼',
     question_id bigint      default 0                   not null comment '题目编号',
@@ -132,7 +157,8 @@ create table if not exists sel_options
 
 create table if not exists single_sel
 (
-    id             bigint auto_increment comment '编号' primary key,
+    id             bigint auto_increment comment '编号'
+        primary key,
     name           varchar(255)                            null comment '题目',
     spell          varchar(255)                            null comment '题目的全拼',
     difficult_rate float       default 0.1                 not null comment '难度系数，介于0~1之间',
@@ -171,7 +197,8 @@ create index FK_single_section
 
 create table if not exists sys_data
 (
-    id          bigint auto_increment comment '编号' primary key,
+    id          bigint auto_increment comment '编号'
+        primary key,
     name        varchar(50)                             not null comment '名称',
     spell       varchar(255)                            null comment '名称的全拼',
     parent_id   bigint      default 0                   null comment '0，代表无上级，即：学校',
@@ -189,7 +216,8 @@ create table if not exists sys_data
 
 create table if not exists semester
 (
-    id          bigint auto_increment comment '编号' primary key,
+    id          bigint auto_increment comment '编号'
+        primary key,
     name        varchar(255)                          null comment '名称',
     spell       varchar(255)                          null comment '名称的全拼',
     school_id   bigint                                not null comment '学校编号',
@@ -213,7 +241,8 @@ create index FK_school
 
 create table if not exists sys_log
 (
-    id          bigint auto_increment comment '编号' primary key,
+    id          bigint auto_increment comment '编号'
+        primary key,
     name        varchar(55)                              null comment '名称',
     spell       varchar(255) default ''                  null comment '名称的全拼',
     browser     varchar(255)                             null comment '浏览器',
@@ -234,14 +263,18 @@ create table if not exists sys_log
 
 create table if not exists sys_res
 (
-    id          bigint auto_increment comment '编号' primary key,
+    id          bigint auto_increment comment '编号'
+        primary key,
     name        varchar(255)                          null comment '名称',
     spell       varchar(255)                          null comment '名称的全拼',
     parent_id   bigint                                null comment '父权限资源编号',
     des         varchar(1024)                         null comment '描述',
-    url         varchar(512)                          null comment 'url地址',
-    level       int                                   null comment '层级',
+    match_url   varchar(512)                          not null comment 'url 匹配',
+    router      varchar(255)                          null comment '路由路径',
+    component   varchar(255)                          null comment '组件名称',
     icon_cls    varchar(255)                          null comment '图标',
+    level       int                                   null comment '层级',
+    method      varchar(50)                           null comment '允许使用的方法：GET、POST、PUT、PATCH、DELETE、ALL',
     type        varchar(255)                          null comment '类型：1 功能 2 权限',
     sort        smallint(6)                           null comment '排序',
     create_user bigint                                null comment '创建用户名称',
@@ -255,12 +288,13 @@ create table if not exists sys_res
 
 create table if not exists sys_role
 (
-    id          bigint auto_increment comment '编号' primary key,
-    name        varchar(255)                            null comment '名称',
+    id          bigint auto_increment comment '编号'
+        primary key,
+    name        varchar(255)                            not null comment '名称',
     spell       varchar(255)                            null comment '名称的全拼',
     des         varchar(128)                            null comment '描述',
     icon_cls    varchar(55) default 'status_online'     null comment '图标',
-    parent_id   bigint      default 0                   null comment '父角色编号',
+    parent_id   bigint      default 0                   not null comment '父角色编号',
     sort        smallint(6)                             null comment '排序',
     create_user varchar(255)                            null comment '创建用户名称',
     create_time datetime    default current_timestamp() null comment '创建日期',
@@ -273,7 +307,8 @@ create table if not exists sys_role
 
 create table if not exists sys_role_res
 (
-    id          bigint auto_increment comment '编号' primary key,
+    id          bigint auto_increment comment '编号'
+        primary key,
     name        varchar(255)                          null comment '名称',
     spell       varchar(255)                          null comment '名称的全拼',
     role_id     bigint                                null comment '角色编号',
@@ -300,12 +335,12 @@ create index FK_userAuth_ur
 
 create table if not exists sys_user
 (
-    id            bigint auto_increment comment '编号' primary key,
+    id            bigint auto_increment comment '编号'
+        primary key,
     name          varchar(55)                                null comment '名称',
     spell         varchar(255) default ''                    null comment '名称的全拼',
     entity_id     bigint                                     null comment '用户主体编号',
     entity_type   int(4)                                     null comment '0：系统管理员、1：教务管理员、2：课程管理员、3：教师、4：学生',
-    salt          varchar(55)                                null comment '用于用户密码的加盐处理',
     pwd           varchar(255)                               null comment '密码',
     status        int(2)       default 1                     not null comment '1：正常、2：锁定一小时、3：禁用',
     icon          varchar(255) default '图标：images/guest.jpg' null,
@@ -318,7 +353,13 @@ create table if not exists sys_user
     modify_user   varchar(255)                               null comment '末次更新用户名称',
     modify_time   datetime     default current_timestamp()   null on update current_timestamp() comment '末次更新时间',
     remark        varchar(255)                               null comment '备注',
-    is_enable     tinyint(1)   default 1                     not null comment '是否可用，1：可用，0：不可用'
+    is_enable     tinyint(1)   default 1                     not null comment '是否可用，1：可用，0：不可用',
+    constraint sys_user_email_uindex
+        unique (email),
+    constraint sys_user_name_uindex
+        unique (name),
+    constraint sys_user_phone_uindex
+        unique (phone)
 )
     charset = utf8;
 
@@ -327,11 +368,12 @@ create index entity_id
 
 create table if not exists sys_user_role
 (
-    id          bigint auto_increment comment '编号' primary key,
+    id          bigint auto_increment comment '编号'
+        primary key,
     name        varchar(254)                          null comment '名称',
     spell       varchar(254)                          null comment '名称的全拼',
-    user_id     bigint                                null comment '用户编号',
-    role_id     bigint                                null comment '角色编号',
+    user_id     bigint                                not null comment '用户编号',
+    role_id     bigint                                not null comment '角色编号',
     sort        smallint(6)                           null comment '排序',
     create_user varchar(255)                          null comment '创建用户名称',
     create_time datetime  default current_timestamp() null comment '创建日期',
