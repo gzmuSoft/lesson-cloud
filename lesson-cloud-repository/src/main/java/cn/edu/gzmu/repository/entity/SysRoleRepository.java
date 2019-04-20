@@ -31,5 +31,14 @@ public interface SysRoleRepository extends BaseRepository<SysRole, Long> {
     @Query(value = "SELECT r.* FROM sys_role r, sys_user_role ur WHERE ur.user_id = :id AND ur.role_id = r.id AND ur.is_enable = 1 AND r.is_enable = 1 ", nativeQuery = true)
     List<SysRole> searchBySysUserId(@Param("id") Long id);
 
+    /**
+     * 通过资源id查询所有角色
+     *
+     * @param id id
+     * @return SysRoles
+     */
+    @RestResource(path = "sysRes", rel = "sysRes", description = @Description("通过用户id查询所有角色"))
+    @Query(value = "SELECT r.* FROM sys_role r, sys_role_res rr WHERE rr.res_id = :id AND rr.role_id = r.id AND rr.is_enable = 1 AND r.is_enable = 1 ", nativeQuery = true)
+    List<SysRole> searchBySysResId(@Param("id") Long id);
 
 }

@@ -4,7 +4,6 @@ import cn.edu.gzmu.constant.SecurityConstants;
 import cn.edu.gzmu.constant.ValidateCodeType;
 import cn.edu.gzmu.validate.exception.ValidateCodeException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
