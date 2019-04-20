@@ -16,8 +16,12 @@ public interface SecurityConstants {
      */
     String LOGIN_PROCESSING_URL_SMS = "/oauth/sms";
     /**
-     * 发送短信验证码或验证短信验证码时，手机号的参数名称
+     *  发送短信验证码或验证短信验证码时，手机验证码的参数名称
      */
-    String DEFAULT_PARAMETER_NAME_SMS = "sms";
+    String PARAMETER_SMS = "sms";
+    /**
+     *  发送短信验证码或验证短信验证码时，手机号的参数名称
+     */
+    String PARAMETER_PHONE = "phone";
 
 }

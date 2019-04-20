@@ -12,7 +12,7 @@ public enum  ValidateCodeType {
     SMS {
         @Override
         public String getParamNameOnValidate() {
-            return SecurityConstants.DEFAULT_PARAMETER_NAME_SMS;
+            return SecurityConstants.PARAMETER_SMS;
         }
     };
     public abstract String getParamNameOnValidate();

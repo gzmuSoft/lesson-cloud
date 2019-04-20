@@ -11,13 +11,15 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
+
 
 /**
  * sel_options
  *
  * @author echo
  * @version 1.0
- * @date 2019-4-19 22:08:04
+ * @date 2019-4-20 0:08:37
  */
 @Data
 @Cacheable
@@ -26,7 +28,7 @@ import javax.persistence.Table;
 @Where(clause = "is_enable = 1")
 @EqualsAndHashCode(callSuper = true)
 @Cache(region = "sel_options", usage = CacheConcurrencyStrategy.READ_WRITE )
-public class SelOptions extends BaseEntity {
+public class SelOptions extends BaseEntity implements Serializable {
 
     /**
      * 题目编号

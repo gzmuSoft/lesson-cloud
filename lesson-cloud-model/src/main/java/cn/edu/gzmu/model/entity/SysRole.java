@@ -11,13 +11,15 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
+
 
 /**
  * sys_role
  *
  * @author echo
  * @version 1.0
- * @date 2019-4-19 22:08:04
+ * @date 2019-4-20 0:08:37
  */
 @Data
 @Cacheable
@@ -26,7 +28,7 @@ import javax.persistence.Table;
 @Where(clause = "is_enable = 1")
 @EqualsAndHashCode(callSuper = true)
 @Cache(region = "sys_role", usage = CacheConcurrencyStrategy.READ_WRITE )
-public class SysRole extends BaseEntity {
+public class SysRole extends BaseEntity implements Serializable {
 
     /**
      * 描述

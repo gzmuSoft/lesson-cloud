@@ -1,10 +1,11 @@
 package cn.edu.gzmu.auth.sms;
 
+import cn.edu.gzmu.auth.user.SmsUserDetailsService;
+import cn.edu.gzmu.auth.user.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -27,7 +28,7 @@ public class SmsAuthenticationSecurityConfig
     @Autowired
     private AuthenticationFailureHandler authFailureHandle;
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Override
     public void configure(HttpSecurity http)  {

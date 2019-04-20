@@ -1,5 +1,6 @@
 package cn.edu.gzmu.validate.sms;
 
+import cn.edu.gzmu.constant.SecurityConstants;
 import cn.edu.gzmu.validate.ValidateCodeSender;
 import cn.edu.gzmu.validate.impl.AbstractValidateCodeProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class SmsCodeProcessor extends AbstractValidateCodeProcessor<SmsCode> {
 
     @Override
     protected void send(ServletWebRequest request, SmsCode validateCode) throws ServletRequestBindingException {
-        smsCodeSender.send(request.getHeader("sms"), validateCode.getCode());
+        smsCodeSender.send(request.getHeader(SecurityConstants.PARAMETER_SMS), validateCode.getCode());
     }
 
 }

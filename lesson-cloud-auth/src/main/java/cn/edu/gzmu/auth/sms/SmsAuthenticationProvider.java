@@ -1,5 +1,7 @@
 package cn.edu.gzmu.auth.sms;
 
+import cn.edu.gzmu.auth.user.SmsUserDetailsService;
+import cn.edu.gzmu.auth.user.UserDetailsServiceImpl;
 import lombok.Setter;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -18,12 +20,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @Setter
 public class SmsAuthenticationProvider implements AuthenticationProvider {
 
-    private UserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         SmsAuthenticationToken authenticationToken = (SmsAuthenticationToken) authentication;
-        UserDetails user = userDetailsService.loadUserByUsername(authenticationToken.getPrincipal().toString());
+        UserDetails user = userDetailsService.loadUserBySms(authenticationToken.getPrincipal().toString());
         if (user == null) {
             throw new InternalAuthenticationServiceException("无效认证");
         }

@@ -11,13 +11,15 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
+
 
 /**
  * knowledge
  *
  * @author echo
  * @version 1.0
- * @date 2019-4-19 22:08:04
+ * @date 2019-4-20 0:08:37
  */
 @Data
 @Cacheable
@@ -26,7 +28,7 @@ import javax.persistence.Table;
 @Where(clause = "is_enable = 1")
 @EqualsAndHashCode(callSuper = true)
 @Cache(region = "knowledge", usage = CacheConcurrencyStrategy.READ_WRITE )
-public class Knowledge extends BaseEntity {
+public class Knowledge extends BaseEntity implements Serializable {
 
     /**
      * 内容简介

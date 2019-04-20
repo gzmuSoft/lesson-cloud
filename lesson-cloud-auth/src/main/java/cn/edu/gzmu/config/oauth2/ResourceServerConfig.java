@@ -50,7 +50,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .apply(smsAuthenticationSecurityConfig);
 
         http.formLogin()
-                .loginProcessingUrl(SecurityConstants.LOGIN_PROCESSING_URL_SMS)
                 .successHandler(authSuccessHandler)
                 .failureHandler(authFailureHandle)
                 .and()

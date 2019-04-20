@@ -5,6 +5,7 @@ import cn.edu.gzmu.validate.*;
 import cn.edu.gzmu.validate.exception.ValidateCodeException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
@@ -12,7 +13,11 @@ import javax.xml.bind.ValidationException;
 import java.util.Map;
 
 /**
- * 默认抽象的验证码处理器
+ * 默认抽象的验证码处理器，不同类型的验证码必须继承此类。
+ * <p>
+ * 提供了一套默认完整的生成、保存操作,对于不同的类型会有不同的发送操作，因此子类必须实现
+ * 抽象 <code>send</code> 方法
+ * 具体请参阅每个方法的详细注释
  *
  * @author echo
  * @version 1.0
@@ -70,13 +75,13 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode>
     public void validate(ServletWebRequest request) {
         ValidateCodeType validateCodeType = getValidateCodeType();
         C code = (C) validateRepository.get(request, validateCodeType);
-        // 暂时做简单处理不做验证
         try {
-            System.out.println(code.getCode());
-            System.out.println("code in request : " + ServletRequestUtils.getStringParameter(request.getRequest(),
-                    validateCodeType.getParamNameOnValidate()));
+            if (!StringUtils.equalsIgnoreCase(code.getCode(), ServletRequestUtils.getStringParameter(request.getRequest(),
+                    validateCodeType.getParamNameOnValidate()))) {
+                throw new ValidateCodeException("验证码不正确，请重新输入！");
+            }
         } catch (Exception e) {
-            throw new ValidateCodeException("获取验证码失败");
+            throw new ValidateCodeException("获取验证码失败，请重新发送！");
         }
     }
 

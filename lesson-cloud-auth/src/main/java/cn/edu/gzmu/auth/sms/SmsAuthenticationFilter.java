@@ -32,7 +32,7 @@ public class SmsAuthenticationFilter extends AbstractAuthenticationProcessingFil
                     "Authentication method not supported: " + request.getMethod());
         }
         String phone = obtainSms(request);
-        phone = phone == null? "" : phone.trim();
+        phone = phone == null ? "" : phone.trim();
         SmsAuthenticationToken authRequest = new SmsAuthenticationToken(phone);
         setDetails(request, authRequest);
         return this.getAuthenticationManager().authenticate(authRequest);
@@ -45,7 +45,7 @@ public class SmsAuthenticationFilter extends AbstractAuthenticationProcessingFil
      * @return 请求中的 sms 值
      */
     private String obtainSms(HttpServletRequest request) {
-        return request.getParameter(SecurityConstants.DEFAULT_PARAMETER_NAME_SMS);
+        return request.getParameter(SecurityConstants.PARAMETER_PHONE);
     }
 
     /**
