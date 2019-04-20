@@ -23,8 +23,11 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private TokenStore tokenStore;
+    private final TokenStore tokenStore;
+
+    public WebSecurityConfig(TokenStore tokenStore) {
+        this.tokenStore = tokenStore;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

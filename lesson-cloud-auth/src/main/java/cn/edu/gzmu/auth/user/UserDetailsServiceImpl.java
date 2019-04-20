@@ -36,14 +36,15 @@ import java.util.stream.Collectors;
 public class UserDetailsServiceImpl implements UserDetailsService, SocialUserDetailsService,
         SmsUserDetailsService {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    private final SysUserRepository sysUserRepository;
+    private final SysRoleRepository sysRoleRepository;
 
-    @Autowired
-    private SysUserRepository sysUserRepository;
-
-    @Autowired
-    private SysRoleRepository sysRoleRepository;
+    public UserDetailsServiceImpl(PasswordEncoder passwordEncoder, SysUserRepository sysUserRepository, SysRoleRepository sysRoleRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.sysUserRepository = sysUserRepository;
+        this.sysRoleRepository = sysRoleRepository;
+    }
 
     /**
      * 通过用户名查找用户，这是对密码登录的仅有支持。

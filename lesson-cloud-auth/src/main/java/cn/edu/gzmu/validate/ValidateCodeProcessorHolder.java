@@ -2,7 +2,6 @@ package cn.edu.gzmu.validate;
 
 import cn.edu.gzmu.constant.ValidateCodeType;
 import cn.edu.gzmu.validate.exception.ValidateCodeException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -19,8 +18,11 @@ import java.util.Map;
  */
 @Component
 public class ValidateCodeProcessorHolder {
-    @Autowired
-    private Map<String, ValidateCodeProcessor> validateCodeProcessors;
+    private final Map<String, ValidateCodeProcessor> validateCodeProcessors;
+
+    public ValidateCodeProcessorHolder(Map<String, ValidateCodeProcessor> validateCodeProcessors) {
+        this.validateCodeProcessors = validateCodeProcessors;
+    }
 
     /**
      * 通过验证码类型查找

@@ -12,7 +12,6 @@
     <!--项目基本信息-->
     <modelVersion>4.0.0</modelVersion>
     <artifactId>lesson-cloud-auth</artifactId>
-    <packaging>pom</packaging>
 
     <!--相关依赖-->
     <dependencies>

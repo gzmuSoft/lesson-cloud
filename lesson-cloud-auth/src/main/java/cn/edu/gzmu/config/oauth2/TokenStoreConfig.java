@@ -21,8 +21,11 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 @Configuration
 public class TokenStoreConfig {
 
-    @Autowired
-    private RedissonConnectionFactory redissonConnectionFactory;
+    private final RedissonConnectionFactory redissonConnectionFactory;
+
+    public TokenStoreConfig(RedissonConnectionFactory redissonConnectionFactory) {
+        this.redissonConnectionFactory = redissonConnectionFactory;
+    }
 
     @Bean
     public TokenStore tokenStore() {
@@ -33,8 +36,11 @@ public class TokenStoreConfig {
     @ConditionalOnProperty(prefix = "application.security", name = "store-type", havingValue = "jwt", matchIfMissing = true)
     public static class JwtTokenConfig {
 
-        @Autowired
-        private Oauth2Properties oauth2Properties;
+        private final Oauth2Properties oauth2Properties;
+
+        public JwtTokenConfig(Oauth2Properties oauth2Properties) {
+            this.oauth2Properties = oauth2Properties;
+        }
 
         @Bean
         public TokenStore jwtTokenStore() {

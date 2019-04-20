@@ -22,8 +22,11 @@ import javax.servlet.Filter;
 public class ValidateCodeSecurityConfig
         extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
-    @Autowired
-    private ValidateCodeFilter validateCodeFilter;
+    private final ValidateCodeFilter validateCodeFilter;
+
+    public ValidateCodeSecurityConfig(ValidateCodeFilter validateCodeFilter) {
+        this.validateCodeFilter = validateCodeFilter;
+    }
 
     @Override
     public void configure(HttpSecurity http) {

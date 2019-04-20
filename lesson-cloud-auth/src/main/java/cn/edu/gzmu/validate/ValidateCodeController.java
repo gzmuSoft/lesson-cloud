@@ -20,8 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 public class ValidateCodeController {
 
-    @Autowired
-    private ValidateCodeProcessorHolder validateCodeProcessorHolder;
+    private final ValidateCodeProcessorHolder validateCodeProcessorHolder;
+
+    public ValidateCodeController(ValidateCodeProcessorHolder validateCodeProcessorHolder) {
+        this.validateCodeProcessorHolder = validateCodeProcessorHolder;
+    }
 
     /**
      * 通过 type 进行查询到对对应的处理器

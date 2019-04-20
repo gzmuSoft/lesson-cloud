@@ -36,15 +36,15 @@ import java.util.Set;
 @Slf4j
 public class ValidateCodeFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private AuthenticationFailureHandler authFailureHandle;
-
-    @Autowired
-    private ValidateCodeProcessorHolder validateCodeProcessorHolder;
-
+    private final AuthenticationFailureHandler authFailureHandle;
+    private final ValidateCodeProcessorHolder validateCodeProcessorHolder;
     private Map<String, ValidateCodeType> urlMap = new HashMap<>();
-
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
+
+    public ValidateCodeFilter(AuthenticationFailureHandler authFailureHandle, ValidateCodeProcessorHolder validateCodeProcessorHolder) {
+        this.authFailureHandle = authFailureHandle;
+        this.validateCodeProcessorHolder = validateCodeProcessorHolder;
+    }
 
     @Override
     public void afterPropertiesSet() throws ServletException {

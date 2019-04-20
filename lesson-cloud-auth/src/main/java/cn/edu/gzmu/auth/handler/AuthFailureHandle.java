@@ -22,8 +22,11 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class AuthFailureHandle implements AuthenticationFailureHandler {
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
+
+    public AuthFailureHandle(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,

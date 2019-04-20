@@ -17,8 +17,11 @@ import org.springframework.web.context.request.ServletWebRequest;
 @Component("smsValidateCodeProcessor")
 public class SmsCodeProcessor extends AbstractValidateCodeProcessor<SmsCode> {
 
-    @Autowired
-    private ValidateCodeSender smsCodeSender;
+    private final ValidateCodeSender smsCodeSender;
+
+    public SmsCodeProcessor(ValidateCodeSender smsCodeSender) {
+        this.smsCodeSender = smsCodeSender;
+    }
 
     @Override
     protected void send(ServletWebRequest request, SmsCode validateCode) throws ServletRequestBindingException {

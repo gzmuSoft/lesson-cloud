@@ -23,20 +23,19 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-    @Autowired
-    private AuthenticationFailureHandler authFailureHandle;
+    private final AuthenticationFailureHandler authFailureHandle;
+    private final AuthenticationSuccessHandler authSuccessHandler;
+    private final ValidateCodeSecurityConfig validateCodeSecurityConfig;
+    private final SmsAuthenticationSecurityConfig smsAuthenticationSecurityConfig;
+    private final Oauth2Properties oauth2Properties;
 
-    @Autowired
-    private AuthenticationSuccessHandler authSuccessHandler;
-
-    @Autowired
-    private ValidateCodeSecurityConfig validateCodeSecurityConfig;
-
-    @Autowired
-    private SmsAuthenticationSecurityConfig smsAuthenticationSecurityConfig;
-
-    @Autowired
-    private Oauth2Properties oauth2Properties;
+    public ResourceServerConfig(AuthenticationFailureHandler authFailureHandle, AuthenticationSuccessHandler authSuccessHandler, ValidateCodeSecurityConfig validateCodeSecurityConfig, SmsAuthenticationSecurityConfig smsAuthenticationSecurityConfig, Oauth2Properties oauth2Properties) {
+        this.authFailureHandle = authFailureHandle;
+        this.authSuccessHandler = authSuccessHandler;
+        this.validateCodeSecurityConfig = validateCodeSecurityConfig;
+        this.smsAuthenticationSecurityConfig = smsAuthenticationSecurityConfig;
+        this.oauth2Properties = oauth2Properties;
+    }
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {

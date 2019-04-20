@@ -26,20 +26,19 @@ import java.time.Duration;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final TokenStore tokenStore;
+    private final Oauth2Properties oauth2Properties;
+    private final JwtAccessTokenConverter jwtAccessTokenConverter;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private TokenStore tokenStore;
-
-    @Autowired
-    private Oauth2Properties oauth2Properties;
-
-    @Autowired(required = false)
-    private JwtAccessTokenConverter jwtAccessTokenConverter;
+    public AuthorizationServerConfig(AuthenticationManager authenticationManager, UserDetailsServiceImpl userDetailsService, TokenStore tokenStore, Oauth2Properties oauth2Properties, JwtAccessTokenConverter jwtAccessTokenConverter) {
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.tokenStore = tokenStore;
+        this.oauth2Properties = oauth2Properties;
+        this.jwtAccessTokenConverter = jwtAccessTokenConverter;
+    }
 
     /**
      * 端点配置，在这里配置 token 存储以及用户处理

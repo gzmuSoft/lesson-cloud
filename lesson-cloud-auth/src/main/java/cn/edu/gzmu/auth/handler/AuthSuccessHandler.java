@@ -35,14 +35,15 @@ import java.util.HashMap;
 @Component
 public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
+    private final ClientDetailsService clientDetailsService;
+    private final AuthorizationServerTokenServices authorizationServerTokenServices;
 
-    @Autowired
-    private ClientDetailsService clientDetailsService;
-
-    @Autowired
-    private AuthorizationServerTokenServices authorizationServerTokenServices;
+    public AuthSuccessHandler(ObjectMapper objectMapper, ClientDetailsService clientDetailsService, AuthorizationServerTokenServices authorizationServerTokenServices) {
+        this.objectMapper = objectMapper;
+        this.clientDetailsService = clientDetailsService;
+        this.authorizationServerTokenServices = authorizationServerTokenServices;
+    }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
