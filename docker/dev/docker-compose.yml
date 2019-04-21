@@ -6,7 +6,7 @@ services:
     ports: 
       - 6379:6379
     volumes: 
-      # 目录映射 存在于.env下
+      # docker volumes mapping
       - "${REDIS_DIR}/conf:/usr/local/etc/redis"
       - "${REDIS_DIR}/data:/data"
     command: 
@@ -21,7 +21,7 @@ services:
       - "${MYSQL_DIR}/data:/var/lib/mysql"
       - "${MYSQL_DIR}/conf.d:/etc/mysql/conf.d"
     environment: 
-      #环境变量
+      # environment variables
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
   lesson-cloud-rabbitmq:
     container_name: rabbitmq-dev
@@ -30,7 +30,7 @@ services:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
     ports: 
-      #管理界面端口
+      # admin port mapping
       - "5672:5672"
       - "4369:4369"
       - "5671:5671"
