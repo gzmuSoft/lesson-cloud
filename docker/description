@@ -1,0 +1,5 @@
+docker部署服务 mysql redis rabbitmq
+dev 开发环境
+run:cd dev &&docker-compose up
+prod 生产环境 未完成
+run:cd prod &&docker-compose up
