@@ -4,15 +4,19 @@ import cn.edu.gzmu.model.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Where;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -38,36 +42,55 @@ public class Judgement extends BaseEntity implements Serializable {
     /**
      * 难度系数，介于0~1之间
      */
-    @javax.validation.constraints.NotNull(message = "difficultRate 难度系数，介于0~1之间 为必填项")
-    private java.lang.Float difficultRate;
+    @NotNull(message = "difficultRate 难度系数，介于0~1之间 为必填项")
+    private Float difficultRate;
 
     /**
      * 参考答案（1：正确，0：错误）
      */
-    @javax.validation.constraints.NotNull(message = "answer 参考答案（1：正确，0：错误） 为必填项")
-    private java.lang.Byte answer;
+    @NotNull(message = "answer 参考答案（1：正确，0：错误） 为必填项")
+    private Byte answer;
 
     /**
      * 答案解析
      */
     @Size(max = 2048, message = "explanation 不能大于 2048 位")
-    private java.lang.String explanation;
+    private String explanation;
 
     /**
      * 课程编号
      */
-    @javax.validation.constraints.NotNull(message = "courseId 课程编号 为必填项")
-    private java.lang.Long courseId;
+    @NotNull(message = "courseId 课程编号 为必填项")
+    private Long courseId;
 
     /**
      * 章节编号
      */
-    @javax.validation.constraints.NotNull(message = "sectionId 章节编号 为必填项")
-    private java.lang.Long sectionId;
+    @NotNull(message = "sectionId 章节编号 为必填项")
+    private Long sectionId;
 
     /**
      * 知识点编号
      */
-    @javax.validation.constraints.NotNull(message = "knowledgeId 知识点编号 为必填项")
-    private java.lang.Long knowledgeId;
+    @NotNull(message = "knowledgeId 知识点编号 为必填项")
+    private Long knowledgeId;
+
+    /**
+     * 课程实体
+     * */
+    @Transient
+    private Course course;
+
+    /**
+     * 章节实体
+     * */
+    @Transient
+    private Section section;
+
+    /**
+     * 知识点编号
+     * */
+    @Transient
+    private Knowledge knowledge;
+
 }
