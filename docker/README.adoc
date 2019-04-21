@@ -35,6 +35,7 @@ Docker Compose 并不是通过脚本和各种冗长的 `docker` 命令(即 Docke
 > *提示：对于 windows docker 还有一种解决方案，使用 https://docs.docker.com/toolbox/toolbox_install_windows/[docker toolbox]，由于我没有windows 系统的电脑，所以无法测试，请自行研究。这是一种推荐的集成解决方案。*
 
 在安装之前，Windows版Docker的环境有以下要求。
+
 - Windows 10 Pro / Enterprise / Education（1607 Anniversary Update、Build 14393或者更新的版本）。
 - Windows 必须是64位的版本。
 - 需要启用 Windows 操作系统中的 Hyper-V 和容器特性。
