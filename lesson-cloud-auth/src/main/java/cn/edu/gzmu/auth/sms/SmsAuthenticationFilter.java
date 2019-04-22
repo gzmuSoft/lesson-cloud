@@ -45,7 +45,7 @@ public class SmsAuthenticationFilter extends AbstractAuthenticationProcessingFil
      * @return 请求中的 sms 值
      */
     private String obtainSms(HttpServletRequest request) {
-        return request.getParameter(SecurityConstants.PARAMETER_PHONE);
+        return request.getHeader(SecurityConstants.PARAMETER_SMS);
     }
 
     /**
