@@ -5,3 +5,4 @@ spring:
     redis:
       repositories:
         enabled: false
+

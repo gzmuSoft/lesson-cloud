@@ -3,10 +3,9 @@ server:
 
 spring:
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://10.102.42.203:3306/lesson-cloud?useUnicode=true&characterEncoding=UTF-8&useOldAliasMetadataBehavior=true&autoReconnect=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/lesson_cloud?characterEncoding=UTF-8
     username: root
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 981214
+    driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: false
