@@ -1,0 +1,41 @@
+version: "3"
+services:
+  lesson-cloud-redis:
+    container_name: redis-dev
+    image: redis:5
+    ports: 
+      - 6379:6379
+    volumes: 
+      # docker volumes mapping
+      - "${REDIS_DIR}/conf:/usr/local/etc/redis"
+      - "${REDIS_DIR}/data:/data"
+    command: 
+      redis-server
+    restart: always
+  lesson-cloud-mysql:
+    container_name: mysql-dev
+    image: mysql:8
+    ports: 
+      - 3306:3306
+    volumes: 
+      - "${MYSQL_DIR}/data:/var/lib/mysql"
+      - "${MYSQL_DIR}/conf.d:/etc/mysql/conf.d"
+    environment: 
+      # environment variables
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+  lesson-cloud-rabbitmq:
+    container_name: rabbitmq-dev
+    build: ./rabbitmq/
+    environment: 
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    ports: 
+      # admin port mapping
+      - "5672:5672"
+      - "4369:4369"
+      - "5671:5671"
+      - "15671:15671"
+      - "15672:15672"
+    
+
+

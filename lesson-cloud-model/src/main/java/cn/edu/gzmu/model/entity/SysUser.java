@@ -41,11 +41,6 @@ public class SysUser extends BaseEntity implements Serializable {
     private java.lang.Integer entityType;
 
     /**
-     * 用于用户密码的加盐处理
-     */
-    private java.lang.String salt;
-
-    /**
      * 密码
      */
     private java.lang.String pwd;

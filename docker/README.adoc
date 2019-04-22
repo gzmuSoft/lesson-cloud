@@ -1,0 +1,258 @@
+= lesson-cloud 环境部署
+
+为了方便后端环境的搭建以及统一，国睿学长和我商量了后决定使用 docker 进行环境搭建
+
+== docker 是什么
+
+简单的来说，Docker 是一种运行于 Linux 和 Windows 上的软件， Docker 用于创建、管理和编排容器。
+
+我们后端所依赖的环境，都被 Docker 以最小化的方式封装为一个个单独的容器，我们将需要用到的容器结合起来，就可以完成一个环境的搭建，这个过程就是容器的编排。
+
+多数技术人员在谈到Docker时，主要是指Docker引擎。
+
+Docker引擎是用于运行和编排容器的基础设施工具。有 VMware 管理经验的话可以将其类比为ESXi。
+ESXi是运行虚拟机的核心管理程序，而Docker引擎是运行容器的核心容器运行时。
+
+不过，多数的现代应用通过多个更小的容器互相协同来组成一个完整可运行的环境，比如我们现在暂时用到的开发环境如下：
+- mysql 8
+- redis 5
+- rabbitmq 3.7
+将以上容器组织在一起，就是一个完整可运行的环境。
+
+部署和管理繁多的容器是困难的。而这正是 Docker Compose 要解决的问题。所以接下来我们要引入另外一个东西 https://docs.docker.com/compose/[Docker Compose]
+
+== Docker Compose
+
+Docker Compose 并不是通过脚本和各种冗长的 `docker` 命令(即 DockerFile)来将应用组件组织起来，而是通过一个声明式的配置文件描述整个应用，从而使用一条命令完成部署。
+应用部署成功后，还可以通过一系列简单的命令实现对其完整声明周期的管理。甚至，配置文件还可以置于版本控制系统中进行存储和管理。这就是我们为什么引入 Docker Compose 的原因。
+
+== Docker 安装
+
+我们将会简单介绍三个平台的 docker 安装
+
+=== Windows for Docker（DfW）
+
+> *提示：对于 windows docker 还有一种解决方案，使用 https://docs.docker.com/toolbox/toolbox_install_windows/[docker toolbox]，由于我没有windows 系统的电脑，所以无法测试，请自行研究。这是一种推荐的集成解决方案。*
+
+在安装之前，Windows版Docker的环境有以下要求。
+
+- Windows 10 Pro / Enterprise / Education（1607 Anniversary Update、Build 14393或者更新的版本）。
+- Windows 必须是64位的版本。
+- 需要启用 Windows 操作系统中的 Hyper-V 和容器特性。
+接下来的步骤会假设计算机已经开启了BIOS设置中的硬件虚拟化支持。如果没有开启，需要在机器上执行下面的步骤。
+
+首先，需要确认在Windows 10操作系统中，Hyper-V和容器特性已安装并且开启。
+1. 右键单击Windows开始按钮并选择“应用和功能”页面。
+2. 单击“程序和功能”链接。
+3. 单击“启用或关闭Windows功能”。
+4. 确认Hyper-V和容器复选框已经被勾选，并单击确定按钮。
+
+按上述步骤操作完成后，会安装并开启Hyper-V和容器特性，如图所示。需要重启操作系统。
+
+image::https://resources.echocow.cn/file/2019/4/21/1903ae49712117804e8c-Original-image1.png[Hyper-V]
+
+image::https://resources.echocow.cn/file/2019/4/21/1903c6550fa96041c526-Original-image2.png[Hyper-V]
+
+其中，容器特性只有在summer 2016 Windows 10 Anniversary Update（build 14393）版本或更高版本上才能开启。
+
+当完成Hyper-V和容器特性的安装并重启机器之后，就可以安装Windows版Docker了。
+
+1. 访问Docker的 https://www.docker.com/products/docker-desktop[下载页面]，并单击其中的Download for Windows按钮。
+2. 单击后会跳转到Docker商店，需要使用自己的Docker ID进行登录。
+3. 单击任意Get Docker下载链接。Docker for Windows分为稳定版（Stable）和抢鲜版（Edge）。抢鲜版当中包含一些新特性，但是可能不够稳定。单击下载链接后，会将名为Docker for Windows Installer.exe的安装包下载到默认下载目录。
+4. 找到上一步下载的安装包并运行即可。
+
+安装包我已经上传群文件，以**管理员身份**运行安装向导，并按照提示一步一步完成整个安装过程。安装完成后Docker会作为系统服务自动启动，并且在Windows的通知栏看到Docker的大鲸鱼图标。
+
+打开命令行或者PowerShell界面，并尝试执行 `docker system info` 命令。
+
+----
+docker system info
+
+Client:
+ Version:       18.01.0-ce
+ API version:   1.35
+ Go version:    go1.9.2
+ Git commit:    03596f5
+ Built: Wed Jan 10 20:05:55 2018
+ OS/Arch:       windows/amd64
+ Experimental:  false
+ Orchestrator:  swarm
+Server:
+ Engine:
+  Version:      18.01.0-ce
+  API version:  1.35 (minimum version 1.12)
+  Go version:   go1.9.2
+  Git commit:   03596f5
+  Built:        Wed Jan 10 20:13:12 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+----
+
+=== Mac for Docker（DfM）
+
+1. 打开浏览器，访问Docker的  https://www.docker.com/products/docker-desktop[下载页面]，然后单击Download for Mac按钮。
+2. 页面会跳转到Docker商店，需要使用自己的Docker ID和密码进行登录。
+3. 单击下载链接Get Docker CE。Mac版Docker分为两个版本：稳定版（Stable）和抢鲜版（Edge）。抢鲜版包含一些新特性，但是并不保证稳定运行。
+4. 运行上一步中下载的Docker.dmg文件。将代表Docker的鲸鱼图标拖拽到应用文件夹（Application folder）中。
+5. 打开应用文件夹（可能会自动打开）并且双击Docker应用图标来启动Docker。可能需要确认是否运行，因为这是从互联网下载的应用程序。
+6. 输入Mac用户密码，这样安装程序可以获取到创建组件所需的权限。
+7. Docker daemon进程启动。
+
+一个活动的鲸鱼图标会在屏幕上方状态栏中出现。一旦Docker成功运行，鲸鱼图标就静止了。可以单击鲸鱼图标来管理DfM。
+
+DfM现在已经安装完成，可以打开一个终端，并运行一些常用的Docker指令。尝试运行下面的命令。
+
+----
+$ docker version
+Client:
+ Version:      17.05.0-ce
+ API version:  1.29
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May 4 21:43:09 2017
+ OS/Arch:      darwin/amd64
+Server:
+ Version:      17.05.0-ce
+ API version:  1.29 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   89658be
+ Built:        Thu May 4 21:43:09 2017
+ OS/Arch:      linux/amd64
+ Experimental: true
+----
+
+=== Linux for Docker（原生）
+
+在Linux上安装Docker是常见的安装场景，并且安装过程非常简单。通常难点在于Linux不同发行版之间的轻微区别，比如Ubuntu和CentOS之间的差异。理论上，下面的示例在CentOS的各种版本上也是可以执行的。至于Linux操作系统是安装在自己的数据中心，还是第三方公有云，或是笔记本的虚拟机上，都没有任何的区别。唯一需求就是这台机器是Linux操作系统，并且能够访问https://get.docker.com。
+
+下面的例子使用 `wget` 命令来运行一个Shell脚本，完成Docker CE的安装。更多其他在Linux上安装Docker的方式，可以打开Docker主页面，单击页面中 `Get Started` 按钮来获取。
+
+1. 在Linux机器上打开一个新的Shell。
+2. 使用 wget 从 https://get.docker.com 获取并运行Docker安装脚本，然后采用Shell中管道（pipe）的方式来执行这个脚本。
+----
+$ wget -qO- https://get.docker.com/ | sh
+modprobe: FATAL: Module aufs not found /lib/modules/4.4.0-36-generic
++ sh -c 'sleep 3; yum -y -q install docker-engine'
+<Snip>
+If you would like to use Docker as a non-root user, you should
+ now consider adding your user to the "docker" group with
+ something like:
+sudo usermod -aG docker your-user
+Remember that you will have to log out and back in...
+----
+3. 最好通过非root用户来使用Docker。这时需要添加非root用户到本地Docker Unix组当中。下面的命令展示了如何把名为npoulton的用户添加到Docker组中，以及如何确认操作是否执行成功。请自行使用系统中的有效用户。
+----
+$ sudo usermod -aG docker npoulton
+$ cat /etc/group | grep docker
+docker:x:999:npoulton
+----
+如果当前登录用户就是要添加到Docker组中的用户的话，则需要重新登录，组权限设置才会生效。
+运行下面命令来确认安装结果。
+----
+$ docker --version
+Docker version 18.01.0-ce, build 03596f5
+$ docker system info
+Containers: 0
+ Running: 0
+ Paused: 0
+ Stopped: 0
+Images: 0
+Server Version: 18.01.0-ce
+Storage Driver: overlay2
+ Backing Filesystem: extfs
+<Snip>
+----
+
+==== arch
+
+由于我使用的是基于 arch 的衍生版，所以可以使用我尝试过的方法
+1. 运行 `sudo pacman -S docker` 安装
+2. 运行 `sudo usermod -aG docker 当前用户名` 添加用户组
+3. 注销用户，重启 docker 即可
+
+== Docker 国内源
+
+你可以自己寻找并配置 docker 国内源，我是用的是 https://lug.ustc.edu.cn/wiki/mirrors/help/docker[USTC] 的，需要的自取。里面有说明。
+
+== Docker Compose
+
+Docker Compose可用于多种平台。下面将会介绍Windows、Mac以及Linux上的几种安装方法。当然还有其他的安装方法，不过以下几种足够帮助入门。
+
+=== 在Windows 10上安装Docker Compose
+
+在Windows 10上运行Docker的推荐工具是Windows版Docker（Docker for Windows, DfW)。Docker Compose会包含在标准DfW安装包中。所以，安装DfW之后就已经有Docker Compose工具了。
+
+在PowerShell或CMD终端中使用如下命令可以检查Docker Compose是否安装成功。
+----
+> docker-compose --version
+docker-compose version 1.18.0, build 8dd22a96
+----
+
+=== 在Mac上安装Docker Compose
+
+与Windows 10一样，Docker Compose也作为Mac版Docker（Docker for Mac, DfM）的一部分进行安装，所以一旦安装了DfM，也就安装了Docker Compose。
+
+在终端中运行如下命令检查Docker Compose是否安装。
+----
+$ docker-compose --version
+docker-compose version 1.18.0, build 8dd22a96
+----
+
+=== 在Linux上安装Docker Compose
+
+在Linux上安装Docker Compose分为两步。首先使用curl命令下载二进制文件，然后使用chmod命令将其置为可运行。
+
+Docker Compose在Linux上的使用，同样需要先安装有Docker引擎。
+
+如下命令会下载1.18.0版本的Docker Compose到/usr/bin/local。请在GitHub上查找想安装的版本，并替换URL中的1.18.0。
+
+下面的示例是一条写成多行的命令，如果要将其合并为一行，请删掉反斜杠（\）。
+====
+$ curl -L \
+ https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`\
+uname -s`-`uname -m` \
+ -o /usr/local/bin/docker-compose
+% Total   % Received    Time    Time    Time    Current
+                        Total   Spent   Left    Speed
+100   617    0   617    0 --:--:-- --:--:-- --:--:-- 1047
+100 8280k  100 8280k    0  0:00:03  0:00:03 --:--:-- 4069k
+====
+
+下载docker-compose二进制文件后，使用如下命令使其可执行。
+====
+$ chmod +x /usr/local/bin/docker-compose
+====
+检查安装情况以及版本。
+====
+$ docker-compose --version
+docker-compose version 1.18.0, build 8dd22a9
+====
+现在就可以在Linux上使用Docker Compose了。
+
+此外，也可以使用pip来安装Docker Compose的Python包。需要的自己去研究把=-=。
+
+== 使用我们的环境
+
+我们准备了两个环境，开发环境已经可以成功运行。
+
+=== dev 开发环境
+
+==== windows
+
+打开 PowerShell 终端（文件管理器当前目录按住 shift+右键 找到选项），切换到 dev 目录并运行
+----
+run:cd dev && docker-compose up
+----
+
+==== mac 和 linux
+切换到 dev 目录下，运行命令即可
+----
+> cd dev && docker-compose up
+----
+后台运行如下
+----
+> cd dev && docker-compose up &
+----
+=== prod 生产环境 未完成
+
