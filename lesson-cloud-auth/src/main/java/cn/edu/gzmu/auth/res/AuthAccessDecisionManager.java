@@ -23,10 +23,6 @@ public class AuthAccessDecisionManager implements AccessDecisionManager {
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
         for (ConfigAttribute configAttribute : configAttributes) {
             String needRole = configAttribute.getAttribute();
-            // 对于开放的资源，直接放行
-            if ("ROLE_ANONYMOUS".equals(needRole)) {
-                return;
-            }
             //  对于不允许访问的资源
             if ("ROLE_NO_AUTH".equals(needRole)) {
                 throw new AccessDeniedException("权限不足");
@@ -34,10 +30,6 @@ public class AuthAccessDecisionManager implements AccessDecisionManager {
             // 公共资源或者通过的资源
             if ("ROLE_PUBLIC".equals(needRole) || authentication.getAuthorities().stream().anyMatch(
                     authority -> authority.getAuthority().equals(needRole))) {
-                return;
-            }
-            // 对于管理员，开放所有资源
-            if ("ROLE_ADMIN".equals(needRole)) {
                 return;
             }
         }
