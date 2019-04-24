@@ -7,6 +7,9 @@ import cn.edu.gzmu.repository.entity.SysResRepository;
 import cn.edu.gzmu.repository.entity.SysRoleRepository;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
@@ -44,6 +47,10 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
         HttpServletRequest httpRequest = ((FilterInvocation) object).getHttpRequest();
         String method = httpRequest.getMethod();
         String requestUrl = httpRequest.getServletPath();
+        if (isRoleAdmin()) {
+            // 对于管理员角色，开放所有资源
+            return SecurityConfig.createList("ROLE_PUBLIC");
+        }
         List<SysRes> sysRes = sysResRepository.findAll();
         for (SysRes res : sysRes) {
             // 路径匹配
@@ -75,6 +82,20 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
 
     @Override
     public boolean supports(Class<?> clazz) {
+        return false;
+    }
+
+    /**
+     * 判断当前用户是否是管理员
+     *
+     * @return 是否是管理员
+     */
+    private boolean isRoleAdmin() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            return ((UserDetails) principal).getAuthorities()
+                    .contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
         return false;
     }
 }
