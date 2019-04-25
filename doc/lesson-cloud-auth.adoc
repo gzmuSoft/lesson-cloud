@@ -541,6 +541,15 @@ spring security oauth2 提供了其他路径进行帮助。
 
 具体查看 `cn.edu.gzmu.auth.res` 下的两个实现类，里面都有注释。
 
+= 请求资源
+
+对于所有需要授权的资源，都必须在请求头中携带你通过 密码/手机验证 获取到的 access_token 进行访问，方式如图：
+
+[[img-sunset]]
+image::img/auth.png[title="携带 token", alt="携带 token"]
+
+携带了这个 access_token 访问以后，才能够对用户身份进行鉴别。
+
 = 总结
 
 其实大多数我用的都是他自带的，难点就在于手机验证码登录和动态权限认证。大家多打打断点 debug，流程跑一下应该就能明白了。
