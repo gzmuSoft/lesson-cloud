@@ -32,6 +32,7 @@ ESXi是运行虚拟机的核心管理程序，而Docker引擎是运行容器的�
 == Docker Compose
 
 Docker Compose 并不是通过脚本和各种冗长的 `docker` 命令(即 DockerFile)来将应用组件组织起来，而是通过一个声明式的配置文件描述整个应用，从而使用一条命令完成部署。
+
 应用部署成功后，还可以通过一系列简单的命令实现对其完整声明周期的管理。甚至，配置文件还可以置于版本控制系统中进行存储和管理。这就是我们为什么引入 Docker Compose 的原因。
 
 == Docker 安装
@@ -218,6 +219,7 @@ Docker Compose在Linux上的使用，同样需要先安装有Docker引擎。
 如下命令会下载1.18.0版本的Docker Compose到/usr/bin/local。请在GitHub上查找想安装的版本，并替换URL中的1.18.0。
 
 下面的示例是一条写成多行的命令，如果要将其合并为一行，请删掉反斜杠（\）。
+
 ====
 $ curl -L \
  https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`\
@@ -230,14 +232,18 @@ uname -s`-`uname -m` \
 ====
 
 下载docker-compose二进制文件后，使用如下命令使其可执行。
+
 ====
 $ chmod +x /usr/local/bin/docker-compose
 ====
+
 检查安装情况以及版本。
+
 ====
 $ docker-compose --version
 docker-compose version 1.18.0, build 8dd22a9
 ====
+
 现在就可以在Linux上使用Docker Compose了。
 
 此外，也可以使用pip来安装Docker Compose的Python包。需要的自己去研究把=-=。
@@ -251,6 +257,7 @@ docker-compose version 1.18.0, build 8dd22a9
 ==== windows
 
 打开 PowerShell 终端（文件管理器当前目录按住 shift+右键 找到选项），切换到 dev 目录并运行
+
 ----
 run:cd dev && docker-compose up
 ----
