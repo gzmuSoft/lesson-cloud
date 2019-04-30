@@ -20,9 +20,11 @@ Docker引擎是用于运行和编排容器的基础设施工具。有 VMware 管
 ESXi是运行虚拟机的核心管理程序，而Docker引擎是运行容器的核心容器运行时。
 
 不过，多数的现代应用通过多个更小的容器互相协同来组成一个完整可运行的环境，比如我们现在暂时用到的开发环境如下：
+
 - mysql 8
 - redis 5
 - rabbitmq 3.7
+
 将以上容器组织在一起，就是一个完整可运行的环境。
 
 部署和管理繁多的容器是困难的。而这正是 Docker Compose 要解决的问题。所以接下来我们要引入另外一个东西 https://docs.docker.com/compose/[Docker Compose]
@@ -48,6 +50,7 @@ Docker Compose 并不是通过脚本和各种冗长的 `docker` 命令(即 Docke
 接下来的步骤会假设计算机已经开启了BIOS设置中的硬件虚拟化支持。如果没有开启，需要在机器上执行下面的步骤。
 
 首先，需要确认在Windows 10操作系统中，Hyper-V和容器特性已安装并且开启。
+
 1. 右键单击Windows开始按钮并选择“应用和功能”页面。
 2. 单击“程序和功能”链接。
 3. 单击“启用或关闭Windows功能”。
@@ -170,9 +173,10 @@ Storage Driver: overlay2
 <Snip>
 ----
 
-==== arch
+=== Arch
 
 由于我使用的是基于 arch 的衍生版，所以可以使用我尝试过的方法
+
 1. 运行 `sudo pacman -S docker` 安装
 2. 运行 `sudo usermod -aG docker 当前用户名` 添加用户组
 3. 注销用户，重启 docker 即可
@@ -252,6 +256,7 @@ run:cd dev && docker-compose up
 ----
 
 ==== mac 和 linux
+
 切换到 dev 目录下，运行命令即可
 ----
 > cd dev && docker-compose up
