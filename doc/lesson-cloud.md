@@ -99,9 +99,10 @@
 - **JDK 1.8 不可高不可低**
 - **[IDEA](https://www.jetbrains.com/idea/) 2018 或以上**
 - maven 3 （安装 IDEA 时会自带）
-~~- [mysql 5.7](https://dev.mysql.com/downloads/) / [mariadb 10](https://mariadb.org/) 或以上
-- [redis 4](https://redis.io/download) 或以上~~
-- 以上替换为 [docker](https://www.docker.com/) 的 [docker-compose](https://docs.docker.com/compose/)
+- ~~[mysql 5.7](https://dev.mysql.com/downloads/) / [mariadb 10](https://mariadb.org/) 或以上
+- ~~[redis 4](https://redis.io/download) 或以上~~
+- ~~rabbitmq``
+- mysql、redis、rabbitmq 请使用 [docker](https://www.docker.com/) 的 [docker-compose](https://docs.docker.com/compose/) 进行打搭建。
 
 对于前端的同学：
 - 可选： [nvm linux](https://github.com/creationix/nvm) / [nvm windows](https://github.com/coreybutler/nvm-windows) ：node js 版本管理工具
@@ -170,7 +171,9 @@ lesson-cloud-repository | 资源模块
 
 由于项目前后端分离，所以前端请求的数据为模拟数据，前端人员完全不用搭建任何后端环境。使用 `express` 进行数据模拟，请参见 `mock` 目录，`mock` 启动同上第三步。
 
-~~目前为单页面，后面会弄成多页面。~~考虑到业务的复杂性，由多页面再次转化为单页面，权限模块由我和国睿已经完成，目前前端大部分已经由我和国瑞搭建完成了。
+~~目前为单页面，后面会弄成多页面~~
+
+但是考虑到业务的复杂性，由多页面再次转化为单页面，权限模块由我和国睿已经完成，目前前端大部分已经由我和国瑞搭建完成了。
 
 ## 开发
 
