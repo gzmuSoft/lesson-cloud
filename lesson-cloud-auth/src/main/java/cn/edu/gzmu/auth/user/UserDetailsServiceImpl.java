@@ -5,7 +5,6 @@ import cn.edu.gzmu.model.entity.SysUser;
 import cn.edu.gzmu.repository.entity.SysRoleRepository;
 import cn.edu.gzmu.repository.entity.SysUserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -40,7 +39,8 @@ public class UserDetailsServiceImpl implements UserDetailsService, SocialUserDet
     private final SysUserRepository sysUserRepository;
     private final SysRoleRepository sysRoleRepository;
 
-    public UserDetailsServiceImpl(PasswordEncoder passwordEncoder, SysUserRepository sysUserRepository, SysRoleRepository sysRoleRepository) {
+    public UserDetailsServiceImpl(PasswordEncoder passwordEncoder, SysUserRepository sysUserRepository,
+                                  SysRoleRepository sysRoleRepository) {
         this.passwordEncoder = passwordEncoder;
         this.sysUserRepository = sysUserRepository;
         this.sysRoleRepository = sysRoleRepository;
@@ -67,7 +67,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, SocialUserDet
 
     /**
      * 通过设备号查找用户，这是对设备登录的仅有支持
-     *
+     * <p>
      * 注意，在这里并不会验证密码，sms 登录仅对验证吗进行验证
      * 具体验证规则见 {@link cn.edu.gzmu.validate.impl.AbstractValidateCodeProcessor}
      * 需要修改请继承此类并覆盖其方法
@@ -92,7 +92,8 @@ public class UserDetailsServiceImpl implements UserDetailsService, SocialUserDet
     private User loadUser(Supplier<SysUser> load) {
         SysUser sysUser = load.get();
         List<SysRole> sysRoles = sysRoleRepository.searchBySysUserId(sysUser.getId());
-        List<SimpleGrantedAuthority> authorities = sysRoles.stream().map(sysRole -> new SimpleGrantedAuthority(sysRole.getName())).collect(Collectors.toList());
+        List<SimpleGrantedAuthority> authorities = sysRoles.stream().map(sysRole ->
+                new SimpleGrantedAuthority(sysRole.getName())).collect(Collectors.toList());
         return new User(sysUser.getName(), sysUser.getPwd(), authorities);
     }
 
@@ -106,7 +107,8 @@ public class UserDetailsServiceImpl implements UserDetailsService, SocialUserDet
     @Override
     public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
         log.info("social login user: {}", userId);
-        return new SocialUser(userId, passwordEncoder.encode("123456"), AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_user"));
+        return new SocialUser(userId, passwordEncoder.encode("123456"),
+                AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_user"));
     }
 
 }
