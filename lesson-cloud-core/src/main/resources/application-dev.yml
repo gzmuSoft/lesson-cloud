@@ -81,6 +81,7 @@ application:
     refresh-token-validity-minutes: 60
     scope: all
     jwt-signing-key: lesson-cloud
+    enabled: false
 logging:
   level:
     org:

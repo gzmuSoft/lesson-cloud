@@ -12,7 +12,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @version ${now_version}
  * @date ${.now?datetime}
  */
-@RepositoryRestResource
+@RepositoryRestResource(path = "/${rest_path}")
 public interface ${class_name}Repository extends BaseRepository<${class_name}, Long> {
 
 }

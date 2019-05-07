@@ -38,6 +38,10 @@ public class Oauth2Properties {
      */
     private String scope;
     /**
+     * 是否启用，启用后，不做角色认证
+     */
+    private boolean enabled = true;
+    /**
      * 重要！！！jwt签名密钥，不可公开！
      */
     private String jwtSigningKey;

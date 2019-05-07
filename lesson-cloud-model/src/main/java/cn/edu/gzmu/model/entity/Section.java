@@ -3,6 +3,7 @@ package cn.edu.gzmu.model.entity;
 import cn.edu.gzmu.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Where;
@@ -19,7 +20,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-4-20 0:08:37
+ * @date 2019-5-7 11:05:30
  */
 @Data
 @Cacheable
@@ -27,6 +28,7 @@ import java.io.Serializable;
 @Entity(name = "section")
 @Where(clause = "is_enable = 1")
 @EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
 @Cache(region = "section", usage = CacheConcurrencyStrategy.READ_WRITE )
 public class Section extends BaseEntity implements Serializable {
 

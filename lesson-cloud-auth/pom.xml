@@ -17,12 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>cn.edu.gzmu</groupId>
-            <artifactId>lesson-cloud-repository</artifactId>
-            <version>${lesson.cloud.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.edu.gzmu</groupId>
-            <artifactId>lesson-cloud-common</artifactId>
+            <artifactId>lesson-cloud-service</artifactId>
             <version>${lesson.cloud.version}</version>
         </dependency>
         <dependency>
@@ -40,16 +35,7 @@
             <artifactId>spring-social-core</artifactId>
             <version>${spring-social.version}</version>
         </dependency>
-        <!--security核心依赖-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
+
         <!--security的token依赖-->
         <!--        <dependency>-->
         <!--            <groupId>org.springframework.security</groupId>-->

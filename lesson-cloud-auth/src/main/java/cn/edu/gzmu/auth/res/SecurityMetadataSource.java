@@ -3,6 +3,7 @@ package cn.edu.gzmu.auth.res;
 import cn.edu.gzmu.constant.HttpMethod;
 import cn.edu.gzmu.model.entity.SysRes;
 import cn.edu.gzmu.model.entity.SysRole;
+import cn.edu.gzmu.properties.Oauth2Properties;
 import cn.edu.gzmu.repository.entity.SysResRepository;
 import cn.edu.gzmu.repository.entity.SysRoleRepository;
 import org.springframework.security.access.ConfigAttribute;
@@ -35,11 +36,13 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
 
     private final SysResRepository sysResRepository;
     private final SysRoleRepository sysRoleRepository;
+    private final Oauth2Properties oauth2Properties;
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
-    public SecurityMetadataSource(SysResRepository sysResRepository, SysRoleRepository sysRoleRepository) {
+    public SecurityMetadataSource(SysResRepository sysResRepository, SysRoleRepository sysRoleRepository, Oauth2Properties oauth2Properties) {
         this.sysResRepository = sysResRepository;
         this.sysRoleRepository = sysRoleRepository;
+        this.oauth2Properties = oauth2Properties;
     }
 
     @Override
@@ -47,8 +50,8 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
         HttpServletRequest httpRequest = ((FilterInvocation) object).getHttpRequest();
         String method = httpRequest.getMethod();
         String requestUrl = httpRequest.getServletPath();
-        if (isRoleAdmin()) {
-            // 对于管理员角色，开放所有资源
+        if (isRoleAdmin() || !oauth2Properties.isEnabled()) {
+            // 对于管理员角色和不启用的情况，开放所有资源
             return SecurityConfig.createList("ROLE_PUBLIC");
         }
         List<SysRes> sysRes = sysResRepository.findAll();

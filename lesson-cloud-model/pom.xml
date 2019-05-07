@@ -15,6 +15,11 @@
 
     <!--相关依赖-->
     <dependencies>
+        <dependency>
+            <groupId>cn.edu.gzmu</groupId>
+            <artifactId>lesson-cloud-common</artifactId>
+            <version>${lesson.cloud.version}</version>
+        </dependency>
         <!--jpa数据持久化依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

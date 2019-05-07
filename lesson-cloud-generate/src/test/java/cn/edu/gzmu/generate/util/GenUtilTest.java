@@ -27,5 +27,6 @@ public class GenUtilTest {
     public void testUnderlineToHump() {
         log.info(GenUtil.underlineToHump("sys_user"));
         log.info(GenUtil.underlineToHump("sys_user", true));
+        System.out.println(GenUtil.toPlural("exam_history"));
     }
 }

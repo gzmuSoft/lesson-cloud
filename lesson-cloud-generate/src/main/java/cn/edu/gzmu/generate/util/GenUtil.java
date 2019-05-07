@@ -3,8 +3,10 @@ package cn.edu.gzmu.generate.util;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 生成工具类
@@ -28,6 +30,7 @@ public class GenUtil {
         MYSQL_TO_JAVA.put("INT", "java.lang.Integer");
         MYSQL_TO_JAVA.put("BINARY", "java.lang.Byte");
         MYSQL_TO_JAVA.put("SMALLINT", "java.lang.Short");
+        MYSQL_TO_JAVA.put("DATETIME", "java.time.LocalDateTime");
         MYSQL_TO_JAVA.put("BIT", "java.lang.Boolean");
     }
 
@@ -124,6 +127,18 @@ public class GenUtil {
     }
 
     /**
+     * 代码生成目录
+     *
+     * @param moduleName  模块名
+     * @param packageName 包名
+     * @param other       其他目录
+     * @return 目录
+     */
+    public static String generateDir(String moduleName, String packageName, String... other) {
+        return dirPathContact(generateDir(moduleName, packageName), String.join(File.separator, other));
+    }
+
+    /**
      * 下划线转驼峰并简单添加复数
      *
      * @param name 名称
@@ -131,6 +146,9 @@ public class GenUtil {
      */
     public static String toPlural(String name) {
         String result = underlineToHump(name);
+        if (result.matches(".*[^a|^e|^i|^o|^u]y$")) {
+            return result.substring(0, result.length() - 1) + "ies";
+        }
         return result.endsWith("s") ? result + "es" : result + "s";
     }
 }

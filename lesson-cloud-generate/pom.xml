@@ -20,12 +20,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        <!--配置文件引入依赖-->
-        <dependency>
-            <groupId> org.springframework.boot </groupId>
-            <artifactId> spring-boot-configuration-processor </artifactId>
-            <optional> true </optional>
-        </dependency>
         <!--FreeMarker模板引擎依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

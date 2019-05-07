@@ -1,7 +1,7 @@
 package cn.edu.gzmu.controller;
 
 import cn.edu.gzmu.model.entity.MultiSel;
-import cn.edu.gzmu.repository.entity.MultiSelRepository;
+import cn.edu.gzmu.service.MultiSelService;
 import cn.edu.gzmu.controller.BaseController;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 *
 * @author echo
 * @version 1.0
-* @date 2019-4-20 0:08:37
+* @date 2019-5-7 11:05:31
 */
 @RepositoryRestController
 @RequestMapping("/multiSels")
-public class MultiSelController extends BaseController<MultiSel, MultiSelRepository, Long> {
+public class MultiSelController extends BaseController<MultiSel, MultiSelService, Long> {
 
 }
