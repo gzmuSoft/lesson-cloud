@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 
 
 /**
-* Userconnection Service Impl
-*
-* @author echo
-* @version 1.0
-* @date 2019-5-7 11:05:31
-*/
+ * Userconnection Service Impl
+ *
+ * @author echo
+ * @version 1.0
+ * @date 2019-5-7 11:33:57
+ */
 @Service
 public class UserconnectionServiceImpl extends BaseServiceImpl<UserconnectionRepository, Userconnection, Long>
         implements UserconnectionService {

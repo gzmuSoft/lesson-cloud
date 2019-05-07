@@ -14,7 +14,7 @@ gzmu:
       base-entity: cn.edu.gzmu.model.BaseEntity
       module-name: lesson-cloud-model
       where-clause: is_enable = 1
-      overwrite: false
+      overwrite: true
     repository:
       package-name: cn.edu.gzmu.repository.entity
       base-repository: cn.edu.gzmu.repository.BaseRepository
@@ -24,13 +24,13 @@ gzmu:
       package-name: cn.edu.gzmu.controller
       base-controller: cn.edu.gzmu.controller.BaseController
       module-name: lesson-cloud-core
-      overwrite: false
+      overwrite: true
     service:
       package-name: cn.edu.gzmu.service
       base-service: cn.edu.gzmu.base.BaseService
       base-service-impl: cn.edu.gzmu.base.impl.BaseServiceImpl
       module-name: lesson-cloud-service
-      overwrite: false
+      overwrite: true
     gen-controller: true
     gen-repository: true
     gen-entity: true

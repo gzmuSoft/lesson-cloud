@@ -14,7 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-
 /**
  * ${table_name}
  *
@@ -29,7 +28,7 @@ import java.io.Serializable;
 @Where(clause = "${where_clause}")
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@Cache(region = "${table_name}", usage = CacheConcurrencyStrategy.READ_WRITE )
+@Cache(region = "${table_name}", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ${class_name} extends BaseEntity implements Serializable {
 <#list columns as column>
 

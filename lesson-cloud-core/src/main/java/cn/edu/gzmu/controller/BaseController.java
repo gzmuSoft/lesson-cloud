@@ -6,8 +6,8 @@ import cn.edu.gzmu.service.BaseService;
 /**
  * 控制器基类
  *
- * @param <E> 实体类
- * @param <S> 资源
+ * @param <E>  实体类
+ * @param <S>  资源
  * @param <ID> id
  * @author echo
  * @version 1.0

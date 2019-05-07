@@ -14,13 +14,12 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-
 /**
  * sys_user
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-7 11:05:30
+ * @date 2019-5-7 11:33:57
  */
 @Data
 @Cacheable
@@ -29,7 +28,7 @@ import java.io.Serializable;
 @Where(clause = "is_enable = 1")
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@Cache(region = "sys_user", usage = CacheConcurrencyStrategy.READ_WRITE )
+@Cache(region = "sys_user", usage = CacheConcurrencyStrategy.READ_WRITE)
 public class SysUser extends BaseEntity implements Serializable {
 
     /**

@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 
 
 /**
-* Student Service Impl
-*
-* @author echo
-* @version 1.0
-* @date 2019-5-7 11:05:31
-*/
+ * Student Service Impl
+ *
+ * @author echo
+ * @version 1.0
+ * @date 2019-5-7 11:33:57
+ */
 @Service
 public class StudentServiceImpl extends BaseServiceImpl<StudentRepository, Student, Long>
         implements StudentService {
