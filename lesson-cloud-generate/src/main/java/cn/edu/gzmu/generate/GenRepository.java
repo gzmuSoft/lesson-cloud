@@ -53,6 +53,10 @@ public class GenRepository implements ApplicationRunner {
     @Override
     @SuppressWarnings("Duplicates")
     public void run(ApplicationArguments args) throws Exception {
+        if (!genConfig.isGenRepository()) {
+            log.info("Repository don't generate!");
+            return;
+        }
         Configuration configuration = freeMarkerConfigurationFactory.createConfiguration();
         Template entityTemplate = configuration.getTemplate("Repository.ftl");
         List<String> tables = genDatabaseUtil.getTables();
@@ -66,9 +70,15 @@ public class GenRepository implements ApplicationRunner {
             String entityClassName = GenUtil.underlineToHump(table, true);
             data.put("entity_path", genEntityConfig.getPackageName() + "." + entityClassName);
             data.put("table_name", table);
+            data.put("rest_path", GenUtil.toPlural(table));
             data.put("class_name", entityClassName);
-            fileWriter = new FileWriter(GenUtil.generateDir(genRepositoryConfig.getModuleName(), genRepositoryConfig.getPackageName())
+            File file = new File(GenUtil.generateDir(genRepositoryConfig.getModuleName(), genRepositoryConfig.getPackageName())
                     + GenUtil.underlineToHump(table, true) + "Repository" + GenUtil.SUFFIX);
+            if (file.exists() && !genRepositoryConfig.isOverwrite()) {
+                log.info("Table {} Repository is existed, do nothing!", table);
+                continue;
+            }
+            fileWriter = new FileWriter(file);
             entityTemplate.process(data, fileWriter);
             log.info("Table {} Repository generate succeed!", table);
         }

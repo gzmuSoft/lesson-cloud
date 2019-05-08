@@ -26,3 +26,5 @@
 
 ### VS Code ###
 .vscode/
+/docker/dev/mysql/
+/docker/dev/redis/

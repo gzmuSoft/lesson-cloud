@@ -15,6 +15,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +49,10 @@ public class GenEntity implements ApplicationRunner {
     @Override
     @SuppressWarnings("Duplicates")
     public void run(ApplicationArguments args) throws Exception {
+        if (!genConfig.isGenEntity()) {
+            log.info("Entity don't generate!");
+            return;
+        }
         Configuration configuration = freeMarkerConfigurationFactory.createConfiguration();
         Template entityTemplate = configuration.getTemplate("Entity.ftl");
         List<String> tables = genDatabaseUtil.getTables();
@@ -63,12 +68,17 @@ public class GenEntity implements ApplicationRunner {
             data.put("table_name", table);
             data.put("class_name", GenUtil.underlineToHump(table, true));
             data.put("columns", columns);
-            fileWriter = new FileWriter(GenUtil.generateDir(genEntityConfig.getModuleName(), genEntityConfig.getPackageName())
+            File file = new File(GenUtil.generateDir(genEntityConfig.getModuleName(), genEntityConfig.getPackageName())
                     + GenUtil.underlineToHump(table, true) + GenUtil.SUFFIX);
+            if (file.exists() && !genEntityConfig.isOverwrite()) {
+                log.info("Table {} Entity is existed, do nothing!", table);
+                continue;
+            }
+            fileWriter = new FileWriter(file);
             entityTemplate.process(data, fileWriter);
-            log.info("Table {} generate succeed!", table);
+            log.info("Table {} Entity generate succeed!", table);
         }
-        log.info("Tables generate succeed!");
+        log.info("Entity generate succeed!");
     }
 
 

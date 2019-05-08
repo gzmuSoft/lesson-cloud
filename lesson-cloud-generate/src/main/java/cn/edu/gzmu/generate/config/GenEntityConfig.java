@@ -15,20 +15,29 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "gzmu.generate.entity")
 public class GenEntityConfig {
+
     /**
      * 包名
      */
     private String packageName;
+
     /**
      * 实体类路径
      */
     private String baseEntity;
+
     /**
      * 模块名
      */
     private String moduleName;
+
     /**
      * where 条件
      */
     private String whereClause;
+
+    /**
+     * 是否以及存在的覆盖文件
+     */
+    private boolean overwrite = false;
 }

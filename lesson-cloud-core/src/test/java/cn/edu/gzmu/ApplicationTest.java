@@ -1,6 +1,8 @@
 package cn.edu.gzmu;
 
 import cn.edu.gzmu.controller.SysLogController;
+import cn.edu.gzmu.util.SubMailUtils;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +22,17 @@ public class ApplicationTest {
     @Autowired
     private SysLogController sysLogController;
 
+    @Autowired
+    private SubMailUtils subMailUtils;
+
     @Test
     public void application() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("action", "登录");
+        jsonObject.put("code", "123456");
+        jsonObject.put("time", "123");
+        boolean b = subMailUtils.sendActionMessage("13765308262", jsonObject);
+        System.out.println(b);
         assertNotNull(sysLogController);
     }
 }

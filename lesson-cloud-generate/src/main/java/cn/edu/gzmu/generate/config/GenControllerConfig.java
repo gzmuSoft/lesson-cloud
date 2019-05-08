@@ -30,4 +30,9 @@ public class GenControllerConfig {
      * 模块名
      */
     private String moduleName;
+
+    /**
+     * 是否以及存在的覆盖文件
+     */
+    private boolean overwrite = false;
 }

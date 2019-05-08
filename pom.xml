@@ -17,6 +17,7 @@
         <module>lesson-cloud-generate</module>
         <module>lesson-cloud-common</module>
         <module>lesson-cloud-repository</module>
+        <module>lesson-cloud-service</module>
     </modules>
 
     <!--项目基本信息-->
@@ -63,7 +64,13 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        <!--开发环境工具依赖,包括热部署等-->
+        <!--配置读取-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!--开发环境工具依赖,包括热部署等，移除，避免redis无法使用情况-->
         <!--<dependency>-->
         <!--    <groupId>org.springframework.boot</groupId>-->
         <!--    <artifactId>spring-boot-devtools</artifactId>-->
