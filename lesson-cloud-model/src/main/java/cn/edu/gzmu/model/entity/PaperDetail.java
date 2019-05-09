@@ -12,6 +12,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -19,7 +20,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-7 11:33:56
+ * @date 2019-5-8 16:03:14
  */
 @Data
 @Cacheable
@@ -49,11 +50,13 @@ public class PaperDetail extends BaseEntity implements Serializable {
     /**
      * 参考答案（仅记录单项、多项、判断题这些客观题的参考答案，其他题的答案直接从题库中读取）
      */
+    @Size(max = 255, message = "refAnswer 不能大于 255 位")
     private java.lang.String refAnswer;
 
     /**
      * 用户答案
      */
+    @Size(max = 2048, message = "userAnswer 不能大于 2048 位")
     private java.lang.String userAnswer;
 
     /**

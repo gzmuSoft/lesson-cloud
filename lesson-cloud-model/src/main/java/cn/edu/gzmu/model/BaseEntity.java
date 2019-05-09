@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 /**
@@ -33,11 +34,13 @@ public class BaseEntity {
     /**
      * 名称
      */
+    @Size(max = 30, message = "name 长度不能超过 30")
     private String name;
 
     /**
      * 全称
      */
+    @Size(max = 55, message = "spell 长度不能超过 55")
     private String spell;
 
     /**
@@ -76,6 +79,7 @@ public class BaseEntity {
     /**
      * 备注
      */
+    @Size(max = 255, message = "remark 长度不能超过 255")
     private String remark;
 
     /**

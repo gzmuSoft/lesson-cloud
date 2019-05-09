@@ -108,11 +108,15 @@ public class GenDatabaseUtil {
             if (exclude && hasBaseField(columnName)) {
                 continue;
             }
+            String remarks = resultSet.getString("REMARKS");
+            Boolean nullAble = resultSet.getInt("NULLABLE") == 1;
+            List<String> constraints = GenUtil.getConstraints(columnName, remarks);
             columns.add(new ColumnClass(
                     tableName,
                     GenUtil.underlineToHump(columnName),
+                    resultSet.getInt("COLUMN_SIZE"),
                     GenUtil.fieldConversion(resultSet.getString("TYPE_NAME")),
-                    resultSet.getString("REMARKS")
+                    remarks, nullAble, constraints
             ));
         }
         return columns;

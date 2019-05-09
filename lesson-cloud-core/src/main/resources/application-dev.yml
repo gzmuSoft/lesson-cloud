@@ -32,11 +32,11 @@ spring:
         login-password: 123456
         login-username: admin
         url-pattern: /druid/*
-  rabbitmq:
-    host: 127.0.0.1
-    port: 5672
-    username: guest
-    password: guest
+#  rabbitmq:
+#    host: 127.0.0.1
+#    port: 5672
+#    username: guest
+#    password: guest
   jpa:
     show-sql: true
     properties:

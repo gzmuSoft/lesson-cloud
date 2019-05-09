@@ -3,9 +3,7 @@ package cn.edu.gzmu.generate.util;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -150,5 +148,27 @@ public class GenUtil {
             return result.substring(0, result.length() - 1) + "ies";
         }
         return result.endsWith("s") ? result + "es" : result + "s";
+    }
+
+    /**
+     * 从 列名和备注中 读取其他的条件
+     *
+     * @param columnName 列明
+     * @param remarks    备注
+     * @return 条件
+     */
+    @SuppressWarnings("all")
+    public static List<String> getConstraints(String columnName, String remarks) {
+        ArrayList<String> other = new ArrayList<>();
+        if (columnName.contains("mail")) {
+            other.add("@javax.validation.constraints.Email(message = \"" + columnName + "不合法，请输入正确的邮箱地址\")");
+        }
+        if (columnName.contains("birthday")) {
+            other.add("@javax.validation.constraints.Past");
+        }
+        if ("pwd".equals(columnName)) {
+            other.add("@com.fasterxml.jackson.annotation.JsonIgnore");
+        }
+        return other;
     }
 }

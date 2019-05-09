@@ -12,6 +12,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -19,7 +20,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-7 11:33:57
+ * @date 2019-5-8 16:03:14
  */
 @Data
 @Cacheable
@@ -39,6 +40,7 @@ public class SysData extends BaseEntity implements Serializable {
     /**
      * 简介
      */
+    @Size(max = 2048, message = "brief 不能大于 2048 位")
     private java.lang.String brief;
 
     /**

@@ -12,6 +12,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -19,7 +20,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-7 11:33:57
+ * @date 2019-5-8 16:03:14
  */
 @Data
 @Cacheable
@@ -54,26 +55,31 @@ public class Teacher extends BaseEntity implements Serializable {
     /**
      * 性别
      */
+    @Size(max = 255, message = "gender 不能大于 255 位")
     private java.lang.String gender;
 
     /**
      * 出生日期
      */
+    @javax.validation.constraints.Past
     private java.time.LocalDate birthday;
 
     /**
      * 民族
      */
+    @Size(max = 255, message = "nation 不能大于 255 位")
     private java.lang.String nation;
 
     /**
      * 学位
      */
+    @Size(max = 255, message = "degree 不能大于 255 位")
     private java.lang.String degree;
 
     /**
      * 最后学历
      */
+    @Size(max = 255, message = "academic 不能大于 255 位")
     private java.lang.String academic;
 
     /**
@@ -84,21 +90,25 @@ public class Teacher extends BaseEntity implements Serializable {
     /**
      * 最后学历所学专业
      */
+    @Size(max = 255, message = "major 不能大于 255 位")
     private java.lang.String major;
 
     /**
      * 最后学历毕业院校
      */
+    @Size(max = 255, message = "graduateInstitution 不能大于 255 位")
     private java.lang.String graduateInstitution;
 
     /**
      * 主要研究方向
      */
+    @Size(max = 255, message = "majorResearch 不能大于 255 位")
     private java.lang.String majorResearch;
 
     /**
      * 个人简历
      */
+    @Size(max = 2048, message = "resume 不能大于 2048 位")
     private java.lang.String resume;
 
     /**
@@ -109,6 +119,7 @@ public class Teacher extends BaseEntity implements Serializable {
     /**
      * 职称
      */
+    @Size(max = 255, message = "profTitle 不能大于 255 位")
     private java.lang.String profTitle;
 
     /**
@@ -124,20 +135,25 @@ public class Teacher extends BaseEntity implements Serializable {
     /**
      * 所属学科门类
      */
+    @Size(max = 255, message = "subjectCategory 不能大于 255 位")
     private java.lang.String subjectCategory;
 
     /**
      * 身份证号码
      */
+    @Size(max = 18, message = "idNumber 不能大于 18 位")
     private java.lang.String idNumber;
 
     /**
      * 联系电话
      */
+    @Size(max = 255, message = "phone 不能大于 255 位")
     private java.lang.String phone;
 
     /**
      * 邮箱
      */
+    @Size(max = 255, message = "email 不能大于 255 位")
+    @javax.validation.constraints.Email(message = "email不合法，请输入正确的邮箱地址")
     private java.lang.String email;
 }

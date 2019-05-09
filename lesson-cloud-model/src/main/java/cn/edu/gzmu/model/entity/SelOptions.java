@@ -12,6 +12,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -19,7 +20,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-7 11:33:56
+ * @date 2019-5-8 16:03:14
  */
 @Data
 @Cacheable
@@ -34,10 +35,12 @@ public class SelOptions extends BaseEntity implements Serializable {
     /**
      * 题目编号
      */
+    @javax.validation.constraints.NotNull(message = "questionId 为必填项")
     private java.lang.Long questionId;
 
     /**
      * 题目类型，0：单项选择题，1：多项选择题，2：填空题
      */
+    @javax.validation.constraints.NotNull(message = "type 为必填项")
     private java.lang.Short type;
 }

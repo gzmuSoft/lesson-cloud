@@ -12,6 +12,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -19,7 +20,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-7 11:33:56
+ * @date 2019-5-8 16:03:14
  */
 @Data
 @Cacheable
@@ -39,6 +40,7 @@ public class ExamRule extends BaseEntity implements Serializable {
     /**
      * 题型（单项选择题、多项选择题、判断题、填空题、编程题）
      */
+    @Size(max = 255, message = "questionType 不能大于 255 位")
     private java.lang.String questionType;
 
     /**
@@ -59,5 +61,6 @@ public class ExamRule extends BaseEntity implements Serializable {
     /**
      * 每题分值
      */
+    @javax.validation.constraints.NotNull(message = "eachValue 为必填项")
     private java.lang.Float eachValue;
 }

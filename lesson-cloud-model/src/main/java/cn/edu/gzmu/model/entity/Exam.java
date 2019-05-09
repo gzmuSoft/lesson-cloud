@@ -12,6 +12,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -19,7 +20,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-7 11:33:56
+ * @date 2019-5-8 16:03:14
  */
 @Data
 @Cacheable
@@ -59,6 +60,7 @@ public class Exam extends BaseEntity implements Serializable {
     /**
      * 参与考试的班级id列表，以分号作为分隔符
      */
+    @Size(max = 512, message = "classIds 不能大于 512 位")
     private java.lang.String classIds;
 
     /**

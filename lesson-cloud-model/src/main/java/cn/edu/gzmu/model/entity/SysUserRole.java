@@ -12,6 +12,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -19,7 +20,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-7 11:33:57
+ * @date 2019-5-8 16:03:14
  */
 @Data
 @Cacheable
@@ -34,10 +35,12 @@ public class SysUserRole extends BaseEntity implements Serializable {
     /**
      * 用户编号
      */
+    @javax.validation.constraints.NotNull(message = "userId 为必填项")
     private java.lang.Long userId;
 
     /**
      * 角色编号
      */
+    @javax.validation.constraints.NotNull(message = "roleId 为必填项")
     private java.lang.Long roleId;
 }
