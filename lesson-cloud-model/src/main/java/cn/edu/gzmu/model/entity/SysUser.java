@@ -12,6 +12,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -19,7 +20,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-7 11:33:57
+ * @date 2019-5-8 16:03:14
  */
 @Data
 @Cacheable
@@ -44,26 +45,35 @@ public class SysUser extends BaseEntity implements Serializable {
     /**
      * 密码
      */
+    @Size(max = 255, message = "pwd 不能大于 255 位")
+    @com.fasterxml.jackson.annotation.JsonProperty
+            (access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
     private java.lang.String pwd;
 
     /**
      * 1：正常、2：锁定一小时、3：禁用
      */
+    @javax.validation.constraints.NotNull(message = "status 为必填项")
     private java.lang.Integer status;
 
     /**
      * 图标
      */
+    @Size(max = 255, message = "icon 不能大于 255 位")
     private java.lang.String icon;
 
     /**
      * 电子邮箱
      */
+    @Size(max = 255, message = "email 不能大于 255 位")
+    @javax.validation.constraints.Email(message = "email不合法，请输入正确的邮箱地址")
     private java.lang.String email;
 
     /**
      * 联系电话
      */
+    @javax.validation.constraints.NotNull(message = "phone 为必填项")
+    @Size(max = 20, message = "phone 不能大于 20 位")
     private java.lang.String phone;
 
     /**

@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  *
  * @author echo
  */
 @Data
-@AllArgsConstructor
+@AllArgsConstructor()
 @NoArgsConstructor
 public class ColumnClass {
     /**
@@ -21,6 +23,10 @@ public class ColumnClass {
      */
     private String columnName;
     /**
+     * 列大小
+     */
+    private Integer columnSize;
+    /**
      * 列的类型
      */
     private String columnType;
@@ -28,4 +34,12 @@ public class ColumnClass {
      * 列的注释
      */
     private String columnComment;
+    /**
+     * 是否能为空值
+     */
+    private Boolean nullAble;
+    /**
+     * 其他约束
+     */
+    private List<String> otherConstraints;
 }
