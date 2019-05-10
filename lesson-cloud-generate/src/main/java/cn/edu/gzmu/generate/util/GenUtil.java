@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 生成工具类
@@ -14,6 +13,7 @@ import java.util.stream.Collectors;
  * @date 19-4-9 21:05
  */
 @Slf4j
+@SuppressWarnings("all")
 public class GenUtil {
     private static final String UNDERLINE = "_";
     private static final Map<String, String> MYSQL_TO_JAVA = new HashMap<>();
@@ -120,7 +120,7 @@ public class GenUtil {
      * @return 目录
      */
     public static String generateDir(String moduleName, String packageName) {
-        return dirPathContact(getParentPath() + moduleName, "src", "main", "java",
+        return dirPathContact(moduleName, "src", "main", "java",
                 packageName.replaceAll("\\.", File.separator));
     }
 
@@ -144,7 +144,7 @@ public class GenUtil {
      */
     public static String toPlural(String name) {
         String result = underlineToHump(name);
-        if (result.matches(".*[^a|^e|^i|^o|^u]y$")) {
+        if (result.matches(".*[^aeiou]y$")) {
             return result.substring(0, result.length() - 1) + "ies";
         }
         return result.endsWith("s") ? result + "es" : result + "s";

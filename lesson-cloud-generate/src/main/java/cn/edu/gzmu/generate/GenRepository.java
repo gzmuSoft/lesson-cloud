@@ -88,7 +88,7 @@ public class GenRepository implements ApplicationRunner {
         entityTemplate = configuration.getTemplate("rest-messages.ftl");
         data = new HashMap<>(1);
         data.put("columns", columns);
-        fileWriter = new FileWriter(GenUtil.dirPathContact(GenUtil.getParentPath(), genRepositoryConfig.getModuleName(),
+        fileWriter = new FileWriter(GenUtil.dirPathContact(genRepositoryConfig.getModuleName(),
                 "src", "main", "resources", "rest-messages.properties"));
         entityTemplate.process(data, fileWriter);
         log.info("rest-messages.properties generate succeed!");
