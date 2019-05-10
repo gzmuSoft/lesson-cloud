@@ -22,10 +22,10 @@
             <version>${lesson.cloud.version}</version>
         </dependency>
         <!--rabbitmq消息队列-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-amqp</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
         <!--cache组件依赖,配合redis使用-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
