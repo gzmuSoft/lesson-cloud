@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -38,6 +39,8 @@ public class RabbitConsumer {
     @RabbitHandler
     public void immediateProcess(SysLog sysLog, Channel channel, Message message) throws IOException {
         try {
+            sysLog.setCreateTime(LocalDateTime.now());
+            sysLog.setModifyTime(LocalDateTime.now());
             sysLogRepository.save(sysLog);
         } catch (Exception e) {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);

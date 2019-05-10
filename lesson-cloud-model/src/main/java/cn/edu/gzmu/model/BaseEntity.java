@@ -2,6 +2,7 @@ package cn.edu.gzmu.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @MappedSuperclass
+@Accessors(chain = true)
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
     /**

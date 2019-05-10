@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -47,16 +46,18 @@ public class RabbitProducer {
      */
     @Pointcut("execution(* cn.edu.gzmu.repository.entity.*..*(..))")
     @Order(1)
-    public void repositoryPoint(){}
+    public void repositoryPoint() {
+    }
 
     @Pointcut("execution(* cn.edu.gzmu.controller.*.*(..))")
     @Order(2)
-    public void controllerpoint(){}
+    public void controllerPoint() {
+    }
 
     /**
      * aop切面监控所有执行的方法，获取基本信息保存到log
      * 这里尝试了@Around，@Around和队列会有冲突导致队列通道中断，pass掉
-     *
+     * <p>
      * getRequestURI()：请求的URI（相对路劲）
      * getMethod()：请求方式
      * getRequestURL()：请求的URL（绝对路劲）
@@ -65,22 +66,16 @@ public class RabbitProducer {
      * getServerName()：服务器名，若失败，则返回来源ip
      * getHeader("User-Agent")：浏览器信息
      * getRemoteHost()：客户端电脑名，若失败，则返回来源ip
-     *
      */
-    @After("repositoryPoint() || controllerpoint()")
-    public void logMessageGenerate(){
-        LocalDateTime date = LocalDateTime.now();
+    @After("repositoryPoint() || controllerPoint()")
+    public void logMessageGenerate() {
         SysLog sysLog = new SysLog();
         sysLog.setStatus("1");
-        sysLog.setCreateTime(date);
-        sysLog.setCreateUser("admin");
         sysLog.setBrowser(httpServletRequest.getHeader("User-Agent"));
         sysLog.setIp(httpServletRequest.getRemoteAddr());
         sysLog.setFromUrl(httpServletRequest.getRequestURL().toString());
         sysLog.setUrl(httpServletRequest.getRequestURI());
         sysLog.setOperation(httpServletRequest.getMethod());
-        sysLog.setName("来自"+httpServletRequest.getRequestURL().toString()+"的日志信息");
-        sysLog.setSpell("来自"+httpServletRequest.getRequestURL().toString()+"的日志信息");
         rabbitmqTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_KEY, sysLog);
     }
 
@@ -88,7 +83,7 @@ public class RabbitProducer {
      * 测试立即消费者发送方
      */
     @RequestMapping("/immediateTest")
-    public String ImmediateSend() {
+    public String immediateSend() {
         SysLog sysLog = new SysLog();
         sysLog.setFromUrl(httpServletRequest.getServletPath());
         rabbitmqTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_KEY, sysLog);
@@ -100,7 +95,7 @@ public class RabbitProducer {
      * delayTime表示设置的延迟时间
      */
     @RequestMapping("/delayTest")
-    public String DelaySend(@RequestParam(value = "delayTime", defaultValue = "1000") String delayTime) {
+    public String delaySend(@RequestParam(value = "delayTime", defaultValue = "1000") String delayTime) {
         SysLog sysLog = new SysLog();
         sysLog.setFromUrl(httpServletRequest.getServletPath());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
