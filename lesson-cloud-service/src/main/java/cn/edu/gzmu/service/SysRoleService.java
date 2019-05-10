@@ -2,6 +2,8 @@ package cn.edu.gzmu.service;
 
 import cn.edu.gzmu.model.entity.SysRole;
 
+import java.util.List;
+
 
 /**
  * SysRole Service
@@ -12,4 +14,11 @@ import cn.edu.gzmu.model.entity.SysRole;
  */
 public interface SysRoleService extends BaseService<SysRole, Long> {
 
+    /**
+     * 通过用户名查询所有角色
+     *
+     * @param username 用户名
+     * @return 所有角色
+     */
+    List<SysRole> searchByUsername(String username);
 }
