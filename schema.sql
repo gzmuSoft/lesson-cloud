@@ -11,12 +11,11 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 06/05/2019 21:31:32
+ Date: 13/05/2019 21:33:58
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
 
 -- ----------------------------
 -- Table structure for course
@@ -33,8 +32,8 @@ CREATE TABLE `course`
     `sort`        smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
     `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
     `create_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_user` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
+    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
+    `modify_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
     `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
     `is_enable`   binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
     PRIMARY KEY (`id`) USING BTREE
@@ -98,8 +97,8 @@ CREATE TABLE `exam`
     `sort`           smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
     `create_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
     `create_time`    datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_time`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_user`    datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
+    `modify_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
+    `modify_time`    datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
     `remark`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
     `is_enable`      binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
     PRIMARY KEY (`id`) USING BTREE
@@ -127,8 +126,8 @@ CREATE TABLE `exam_history`
     `sort`        smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
     `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
     `create_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_time` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_user` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
+    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
+    `modify_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
     `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
     `is_enable`   binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
     PRIMARY KEY (`id`) USING BTREE,
@@ -162,8 +161,8 @@ CREATE TABLE `exam_rule`
     `sort`                 smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
     `create_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
     `create_time`          datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_time`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_user`          datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
+    `modify_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
+    `modify_time`          datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
     `remark`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
     `is_enable`            binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
     PRIMARY KEY (`id`) USING BTREE,
@@ -301,8 +300,8 @@ CREATE TABLE `paper`
     `sort`            smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
     `create_user`     varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
     `create_time`     datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_time`     varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_user`     datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
+    `modify_user`     varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
+    `modify_time`     datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
     `remark`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
     `is_enable`       binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
     PRIMARY KEY (`id`) USING BTREE,
@@ -335,8 +334,8 @@ CREATE TABLE `paper_detail`
     `sort`          smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
     `create_user`   varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
     `create_time`   datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_time`   varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_user`   datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
+    `modify_user`   varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
+    `modify_time`   datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
     `remark`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
     `is_enable`     binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
     PRIMARY KEY (`id`) USING BTREE,
@@ -527,8 +526,8 @@ CREATE TABLE `student`
     `sort`                 smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
     `create_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
     `create_time`          datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_time`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_user`          datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
+    `modify_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
+    `modify_time`          datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
     `remark`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
     `is_enable`            binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
     PRIMARY KEY (`id`) USING BTREE
@@ -551,9 +550,9 @@ CREATE TABLE `sys_data`
     `brief`       varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '简介',
     `type`        tinyint(4)                                               NULL     DEFAULT 0 COMMENT '0：学校，1：学院，2：系部，3：专业，4：班级，5：性别，6：学历，7：学位，8：教师毕业专业，9：民族，10：研究方向，11：职称',
     `sort`        smallint(6)                                              NULL     DEFAULT 1 COMMENT '同一type数据（如：学校）的排序顺序，值大于等于1',
-    `create_user` bigint(20)                                               NULL     DEFAULT NULL COMMENT '创建用户名称',
+    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
     `create_time` datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` bigint(20)                                               NULL     DEFAULT NULL COMMENT '末次更新用户名称',
+    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
     `modify_time` datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
     `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
     `is_enable`   binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
@@ -622,9 +621,9 @@ CREATE TABLE `sys_res`
     `method`      varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '允许使用的方法：GET、POST、PUT、PATCH、DELETE、ALL',
     `type`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '类型：1 功能 2 权限',
     `sort`        smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
-    `create_user` bigint(20)                                               NULL     DEFAULT NULL COMMENT '创建用户名称',
+    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
     `create_time` datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` bigint(20)                                               NULL     DEFAULT NULL COMMENT '末次更新用户名称',
+    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
     `modify_time` datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
     `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
     `is_enable`   binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
@@ -836,12 +835,12 @@ CREATE TABLE `teacher`
     `subject_category`     varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '所属学科门类',
     `id_number`            varchar(18) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '身份证号码',
     `phone`                varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '联系电话',
-    `email`                varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '邮箱',
+    `e-mail`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '邮箱',
     `sort`                 smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
     `create_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
     `create_time`          datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_time`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_user`          datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
+    `modify_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
+    `modify_time`          datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
     `remark`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
     `is_enable`            binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
     PRIMARY KEY (`id`) USING BTREE

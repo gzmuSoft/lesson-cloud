@@ -20,7 +20,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-8 16:03:14
+ * @date 2019-5-13 22:20:23
  */
 @Data
 @Cacheable
@@ -46,8 +46,7 @@ public class SysUser extends BaseEntity implements Serializable {
      * 密码
      */
     @Size(max = 255, message = "pwd 不能大于 255 位")
-    @com.fasterxml.jackson.annotation.JsonProperty
-            (access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private java.lang.String pwd;
 
     /**

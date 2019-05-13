@@ -37,6 +37,9 @@ spring:
 #    port: 5672
 #    username: guest
 #    password: guest
+  data:
+    rest:
+      default-page-size: 10
   jpa:
     show-sql: true
     properties:
