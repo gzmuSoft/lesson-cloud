@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-7 11:33:57
+ * @date 2019-5-14 11:36:13
  */
 @RepositoryRestController
-@RequestMapping("/papers")
+@RequestMapping("/papers/search")
 public class PaperController extends BaseController<Paper, PaperService, Long> {
 
 }

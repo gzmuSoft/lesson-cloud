@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-7 11:33:57
+ * @date 2019-5-14 11:36:13
  */
 @RepositoryRestController
-@RequestMapping("/sysLogs")
+@RequestMapping("/sysLogs/search")
 public class SysLogController extends BaseController<SysLog, SysLogService, Long> {
 
 }

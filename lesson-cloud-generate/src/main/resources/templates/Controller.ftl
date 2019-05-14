@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @date ${.now?datetime}
  */
 @RepositoryRestController
-@RequestMapping("/${rest_path}")
+@RequestMapping("/${rest_path}/search")
 public class ${class_name}Controller extends BaseController<${class_name}, ${class_name}Service, Long> {
 
 }
