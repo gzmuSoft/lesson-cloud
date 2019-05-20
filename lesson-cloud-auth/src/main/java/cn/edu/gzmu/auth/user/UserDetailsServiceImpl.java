@@ -2,8 +2,8 @@ package cn.edu.gzmu.auth.user;
 
 import cn.edu.gzmu.model.entity.SysRole;
 import cn.edu.gzmu.model.entity.SysUser;
-import cn.edu.gzmu.repository.entity.SysRoleRepository;
-import cn.edu.gzmu.repository.entity.SysUserRepository;
+import cn.edu.gzmu.service.SysRoleService;
+import cn.edu.gzmu.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,14 +36,14 @@ public class UserDetailsServiceImpl implements UserDetailsService, SocialUserDet
         SmsUserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
-    private final SysUserRepository sysUserRepository;
-    private final SysRoleRepository sysRoleRepository;
+    private final SysUserService sysUserService;
+    private final SysRoleService sysRoleService;
 
-    public UserDetailsServiceImpl(PasswordEncoder passwordEncoder, SysUserRepository sysUserRepository,
-                                  SysRoleRepository sysRoleRepository) {
+    public UserDetailsServiceImpl(PasswordEncoder passwordEncoder, SysUserService sysUserService,
+                                  SysRoleService sysRoleService) {
         this.passwordEncoder = passwordEncoder;
-        this.sysUserRepository = sysUserRepository;
-        this.sysRoleRepository = sysRoleRepository;
+        this.sysUserService = sysUserService;
+        this.sysRoleService = sysRoleService;
     }
 
     /**
@@ -59,10 +59,9 @@ public class UserDetailsServiceImpl implements UserDetailsService, SocialUserDet
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("username login user: {}", username);
+        log.info("password login user: {}", username);
         // 由于用户不复杂所以不在去自己构建 UserDetails 的实现类了。
-        return loadUser(() -> sysUserRepository.findFirstByName(username).orElseThrow(() ->
-                new UsernameNotFoundException(String.format("The user %s not found!", username))));
+        return loadUser(() -> sysUserService.searchByAll(username));
     }
 
     /**
@@ -79,8 +78,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, SocialUserDet
     @Override
     public UserDetails loadUserBySms(String sms) throws SmsNotFoundException {
         log.info("sms login user: {}", sms);
-        return loadUser(() -> sysUserRepository.findFirstByPhone(sms).orElseThrow(() ->
-                new SmsNotFoundException(String.format("The user %s not found!", sms))));
+        return loadUser(() -> sysUserService.searchByPhone(sms));
     }
 
     /**
@@ -91,9 +89,10 @@ public class UserDetailsServiceImpl implements UserDetailsService, SocialUserDet
      */
     private User loadUser(Supplier<SysUser> load) {
         SysUser sysUser = load.get();
-        List<SysRole> sysRoles = sysRoleRepository.searchBySysUserId(sysUser.getId());
-        List<SimpleGrantedAuthority> authorities = sysRoles.stream().map(sysRole ->
-                new SimpleGrantedAuthority(sysRole.getName())).collect(Collectors.toList());
+        List<SysRole> sysRoles = sysRoleService.searchByUsername(sysUser.getName());
+        List<SimpleGrantedAuthority> authorities = sysRoles.stream()
+                .map(sysRole -> new SimpleGrantedAuthority(sysRole.getName()))
+                .collect(Collectors.toList());
         return new User(sysUser.getName(), sysUser.getPwd(), authorities);
     }
 
