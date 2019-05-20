@@ -3,6 +3,7 @@ package cn.edu.gzmu.model.entity;
 import cn.edu.gzmu.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -20,10 +21,11 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-13 22:20:23
+ * @date 2019-5-20 11:34:29
  */
 @Data
 @Cacheable
+@ToString(callSuper = true)
 @Table(name = "sys_log")
 @Entity(name = "sys_log")
 @Where(clause = "is_enable = 1")
@@ -53,7 +55,6 @@ public class SysLog extends BaseEntity implements Serializable {
     /**
      * 来源ip地址
      */
-    @javax.validation.constraints.NotNull(message = "ip 为必填项")
     @Size(max = 200, message = "ip 不能大于 200 位")
     private java.lang.String ip;
 
@@ -62,6 +63,19 @@ public class SysLog extends BaseEntity implements Serializable {
      */
     @Size(max = 255, message = "url 不能大于 255 位")
     private java.lang.String url;
+
+    /**
+     * 请求参数
+
+     */
+    @Size(max = 255, message = "args 不能大于 255 位")
+    private java.lang.String args;
+
+    /**
+     * 返回结果
+     */
+    @Size(max = 10240, message = "result 不能大于 10240 位")
+    private java.lang.String result;
 
     /**
      * 1-记录

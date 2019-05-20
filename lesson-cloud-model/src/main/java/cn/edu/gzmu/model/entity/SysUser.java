@@ -3,6 +3,7 @@ package cn.edu.gzmu.model.entity;
 import cn.edu.gzmu.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -20,10 +21,11 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-13 22:20:23
+ * @date 2019-5-20 11:34:29
  */
 @Data
 @Cacheable
+@ToString(callSuper = true)
 @Table(name = "sys_user")
 @Entity(name = "sys_user")
 @Where(clause = "is_enable = 1")
@@ -71,7 +73,6 @@ public class SysUser extends BaseEntity implements Serializable {
     /**
      * 联系电话
      */
-    @javax.validation.constraints.NotNull(message = "phone 为必填项")
     @Size(max = 20, message = "phone 不能大于 20 位")
     private java.lang.String phone;
 

@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.junit.Assert.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -35,6 +36,7 @@ public class SysLogControllerTest extends MockMvcInit {
                 .andExpect(jsonPath("$._links").exists())
                 .andExpect(jsonPath("$._embedded").exists())
                 .andExpect(jsonPath("$.page").exists())
+                .andDo(document(""))
                 .andReturn();
         assertEquals(mapper.readTree(mvcResult.getResponse().getContentAsString())
                         .get("_embedded").get("sysLogs").size(),

@@ -4,9 +4,6 @@ import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * rabbitmq配置类
  * 延时队列需要做以下工作:
@@ -23,11 +20,8 @@ import java.util.Map;
 @Configuration
 public class RabbitConfig {
     final static String LOG_QUEUE = "logQueue";
-    final static String DELAY_LOG_QUEUE = "delayLogQueue";
     final static String EXCHANGE = "Exchange";
     final static String ROUTING_KEY = "RoutingKey";
-    final static String DELAY_EXCHANGE = "delayExchange";
-    final static String DELAY_ROUTING_KEY = "delayRoutingKey";
 
     /**
      * 创建一个LOG_QUEUE的消息队列(立即消费)
@@ -38,16 +32,6 @@ public class RabbitConfig {
     @Bean
     public Queue immediateQueue() {
         return new Queue(LOG_QUEUE, true, false, false);
-    }
-
-    /**
-     * 创建一个DELAY_LOG_QUEUE的消息队列(延时消费)
-     *
-     * @return Queue
-     */
-    @Bean
-    public Queue delayQueue() {
-        return new Queue(DELAY_LOG_QUEUE, true, false, false);
     }
 
     /**
@@ -64,18 +48,6 @@ public class RabbitConfig {
     }
 
     /**
-     * 构造延时消费的交换机(exchange)
-     *
-     * @return CustomExchange
-     */
-    @Bean
-    public CustomExchange delayExchange() {
-        Map<String, Object> args = new HashMap<>();
-        args.put("x-delayed-type", "direct");
-        return new CustomExchange(DELAY_EXCHANGE, "x-delayed-message", true, false, args);
-    }
-
-    /**
      * 把立即消费的队列和立即消费的exchange绑定在一起
      *
      * @return BindingBuilder
@@ -85,14 +57,5 @@ public class RabbitConfig {
         return BindingBuilder.bind(immediateQueue()).to(immediateExchange()).with(ROUTING_KEY);
     }
 
-    /**
-     * 把延时消费的队列和延时消费的exchange绑定在一起
-     *
-     * @return BindingBuilder
-     */
-    @Bean
-    public Binding delayBinding() {
-        return BindingBuilder.bind(delayQueue()).to(delayExchange()).with(DELAY_ROUTING_KEY).noargs();
-    }
 }
 

@@ -3,6 +3,7 @@ package cn.edu.gzmu.model.entity;
 import cn.edu.gzmu.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -20,10 +21,11 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-13 22:20:23
+ * @date 2019-5-20 11:34:29
  */
 @Data
 @Cacheable
+@ToString(callSuper = true)
 @Table(name = "student")
 @Entity(name = "student")
 @Where(clause = "is_enable = 1")
@@ -63,10 +65,22 @@ public class Student extends BaseEntity implements Serializable {
     private java.lang.Long classId;
 
     /**
+     * 学号
+     */
+    @Size(max = 20, message = "no 不能大于 20 位")
+    private java.lang.String no;
+
+    /**
      * 性别
      */
     @Size(max = 255, message = "gender 不能大于 255 位")
     private java.lang.String gender;
+
+    /**
+     * 身份证号码
+     */
+    @Size(max = 18, message = "idNumber 不能大于 18 位")
+    private java.lang.String idNumber;
 
     /**
      * 出生日期

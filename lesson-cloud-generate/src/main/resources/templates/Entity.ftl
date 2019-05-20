@@ -3,6 +3,7 @@ package ${package_name};
 import ${base_entity};
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -24,6 +25,7 @@ import java.io.Serializable;
  */
 @Data
 @Cacheable
+@ToString(callSuper = true)
 @Table(name = "${table_name}")
 @Entity(name = "${table_name}")
 @Where(clause = "${where_clause}")

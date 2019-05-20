@@ -1,19 +1,24 @@
 package cn.edu.gzmu.config;
 
 import cn.edu.gzmu.model.entity.SysLog;
-import org.aspectj.lang.annotation.After;
+import cn.edu.gzmu.repository.entity.SysLogRepository;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Rabbit服务端
@@ -23,7 +28,7 @@ import java.util.Date;
  * @version 1.0
  * @date 19-3-25 14:51
  */
-@RestController
+@Component
 @Aspect
 public class RabbitProducer {
     private final
@@ -34,24 +39,24 @@ public class RabbitProducer {
      */
     private final
     AmqpTemplate rabbitmqTemplate;
+    private final SysLogRepository sysLogRepository;
+
 
     @Autowired
-    public RabbitProducer(AmqpTemplate rabbitmqTemplate, HttpServletRequest httpServletRequest) {
+    public RabbitProducer(AmqpTemplate rabbitmqTemplate, HttpServletRequest httpServletRequest, SysLogRepository sysLogRepository) {
         this.rabbitmqTemplate = rabbitmqTemplate;
         this.httpServletRequest = httpServletRequest;
+        this.sysLogRepository = sysLogRepository;
     }
 
     /**
      * 声明切点，Order代表优先级，数字越小优先级越高
      */
-    @Pointcut("execution(* cn.edu.gzmu.repository.entity.*..*(..))")
-    @Order(1)
-    public void repositoryPoint() {
+    @Pointcut("@annotation(org.springframework.data.rest.webmvc.RepositoryRestController)")
+    public void annotationController() {
     }
-
-    @Pointcut("execution(* cn.edu.gzmu.controller.*.*(..))")
-    @Order(2)
-    public void controllerPoint() {
+    @Pointcut("execution(* org.springframework.data.rest.webmvc.*Controller..*(..))")
+    public void restController() {
     }
 
     /**
@@ -67,44 +72,31 @@ public class RabbitProducer {
      * getHeader("User-Agent")：浏览器信息
      * getRemoteHost()：客户端电脑名，若失败，则返回来源ip
      */
-    @After("repositoryPoint() || controllerPoint()")
-    public void logMessageGenerate() {
+    @Around("annotationController() || restController()")
+    public Object logMessageGenerate(ProceedingJoinPoint joinPoint) {
         SysLog sysLog = new SysLog();
-        sysLog.setStatus("1");
-        sysLog.setBrowser(httpServletRequest.getHeader("User-Agent"));
-        sysLog.setIp(httpServletRequest.getRemoteAddr());
-        sysLog.setFromUrl(httpServletRequest.getRequestURL().toString());
-        sysLog.setUrl(httpServletRequest.getRequestURI());
-        sysLog.setOperation(httpServletRequest.getMethod());
-        rabbitmqTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_KEY, sysLog);
-    }
-
-    /**
-     * 测试立即消费者发送方
-     */
-    @RequestMapping("/immediateTest")
-    public String immediateSend() {
-        SysLog sysLog = new SysLog();
-        sysLog.setFromUrl(httpServletRequest.getServletPath());
-        rabbitmqTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_KEY, sysLog);
-        return "立即队列成功";
-    }
-
-    /**
-     * 测试延时消费者发送方
-     * delayTime表示设置的延迟时间
-     */
-    @RequestMapping("/delayTest")
-    public String delaySend(@RequestParam(value = "delayTime", defaultValue = "1000") String delayTime) {
-        SysLog sysLog = new SysLog();
-        sysLog.setFromUrl(httpServletRequest.getServletPath());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        System.out.println("消息发送时间:" + simpleDateFormat.format(new Date()));
-        rabbitmqTemplate.convertAndSend(RabbitConfig.DELAY_EXCHANGE, RabbitConfig.DELAY_ROUTING_KEY, sysLog,
-                message -> {
-                    message.getMessageProperties().setDelay(Integer.parseInt(delayTime));
-                    return message;
-                });
-        return "延时队列成功";
+        sysLog.setArgs(StringUtils.left(
+                Stream.of(joinPoint.getArgs())
+                        .filter(Objects::nonNull)
+                        .map(Object::toString)
+                        .collect(Collectors.joining(",")), 255))
+                .setBrowser(httpServletRequest.getHeader("User-Agent"))
+                .setIp(httpServletRequest.getRemoteAddr())
+                .setFromUrl(httpServletRequest.getRequestURL().toString())
+                .setUrl(httpServletRequest.getRequestURI())
+                .setOperation(httpServletRequest.getMethod());
+        Object proceed = null;
+        try {
+            proceed = joinPoint.proceed();
+            sysLog.setStatus("1")
+                    .setResult(StringUtils.left(proceed.toString(), 10240));
+        } catch (Throwable throwable) {
+            sysLog.setStatus("0")
+                    .setResult(StringUtils.left(throwable.getMessage(), 10240));
+            throwable.printStackTrace();
+        } finally {
+            rabbitmqTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_KEY, sysLog);
+        }
+        return proceed;
     }
 }

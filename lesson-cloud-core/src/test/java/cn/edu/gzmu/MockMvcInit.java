@@ -7,10 +7,14 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.junit.Before;
+import org.junit.Rule;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
 
 /**
@@ -20,6 +24,9 @@ import org.springframework.web.context.WebApplicationContext;
  */
 public abstract class MockMvcInit {
 
+    @Rule
+    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
+
     @Autowired
     private WebApplicationContext ctx;
 
@@ -28,7 +35,9 @@ public abstract class MockMvcInit {
 
     @Before
     public void init(){
-        mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(ctx)
+                .apply(documentationConfiguration(this.restDocumentation))
+                .build();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         mapper.registerModule(new ParameterNamesModule())
