@@ -37,23 +37,21 @@ public class RabbitProducer {
     /**
      * AmqpTemplate接口定义了发送和接收消息的基本操作。
      */
-    private final
-    AmqpTemplate rabbitmqTemplate;
-    private final SysLogRepository sysLogRepository;
+    private final AmqpTemplate rabbitmqTemplate;
 
 
     @Autowired
-    public RabbitProducer(AmqpTemplate rabbitmqTemplate, HttpServletRequest httpServletRequest, SysLogRepository sysLogRepository) {
+    public RabbitProducer(AmqpTemplate rabbitmqTemplate, HttpServletRequest httpServletRequest) {
         this.rabbitmqTemplate = rabbitmqTemplate;
         this.httpServletRequest = httpServletRequest;
-        this.sysLogRepository = sysLogRepository;
     }
 
-    /**
-     * 声明切点，Order代表优先级，数字越小优先级越高
-     */
+
     @Pointcut("@annotation(org.springframework.data.rest.webmvc.RepositoryRestController)")
-    public void annotationController() {
+    public void annotationRepositoryController() {
+    }
+    @Pointcut("@annotation(org.springframework.web.bind.annotation.RestController)")
+    public void annotationRestController() {
     }
     @Pointcut("execution(* org.springframework.data.rest.webmvc.*Controller..*(..))")
     public void restController() {
@@ -72,7 +70,7 @@ public class RabbitProducer {
      * getHeader("User-Agent")：浏览器信息
      * getRemoteHost()：客户端电脑名，若失败，则返回来源ip
      */
-    @Around("annotationController() || restController()")
+    @Around("annotationRepositoryController() || restController() || annotationRestController()")
     public Object logMessageGenerate(ProceedingJoinPoint joinPoint) {
         SysLog sysLog = new SysLog();
         sysLog.setArgs(StringUtils.left(

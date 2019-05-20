@@ -32,27 +32,4 @@ public class TokenStoreConfig {
         return new RedisTokenStore(redissonConnectionFactory);
     }
 
-    @Configuration
-    @ConditionalOnProperty(prefix = "application.security", name = "store-type", havingValue = "jwt", matchIfMissing = true)
-    public static class JwtTokenConfig {
-
-        private final Oauth2Properties oauth2Properties;
-
-        public JwtTokenConfig(Oauth2Properties oauth2Properties) {
-            this.oauth2Properties = oauth2Properties;
-        }
-
-        @Bean
-        public TokenStore jwtTokenStore() {
-            return new JwtTokenStore(jwtAccessTokenConverter());
-        }
-
-        @Bean
-        public JwtAccessTokenConverter jwtAccessTokenConverter() {
-            JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-            accessTokenConverter.setSigningKey(oauth2Properties.getJwtSigningKey());
-            return accessTokenConverter;
-        }
-
-    }
 }
