@@ -23,12 +23,12 @@ import org.springframework.stereotype.Component;
 public class SmsAuthenticationSecurityConfig
         extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
-    private final AuthenticationSuccessHandler authSuccessHandler;
+    private final AuthenticationSuccessHandler smsSuccessHandler;
     private final AuthenticationFailureHandler authFailureHandle;
     private final UserDetailsServiceImpl userDetailsService;
 
-    public SmsAuthenticationSecurityConfig(AuthenticationSuccessHandler authSuccessHandler, AuthenticationFailureHandler authFailureHandle, UserDetailsServiceImpl userDetailsService) {
-        this.authSuccessHandler = authSuccessHandler;
+    public SmsAuthenticationSecurityConfig(AuthenticationSuccessHandler smsSuccessHandler, AuthenticationFailureHandler authFailureHandle, UserDetailsServiceImpl userDetailsService) {
+        this.smsSuccessHandler = smsSuccessHandler;
         this.authFailureHandle = authFailureHandle;
         this.userDetailsService = userDetailsService;
     }
@@ -38,7 +38,7 @@ public class SmsAuthenticationSecurityConfig
         // 过滤器链
         SmsAuthenticationFilter smsAuthenticationFilter = new SmsAuthenticationFilter();
         smsAuthenticationFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
-        smsAuthenticationFilter.setAuthenticationSuccessHandler(authSuccessHandler);
+        smsAuthenticationFilter.setAuthenticationSuccessHandler(smsSuccessHandler);
         smsAuthenticationFilter.setAuthenticationFailureHandler(authFailureHandle);
 
         // 授权提供者

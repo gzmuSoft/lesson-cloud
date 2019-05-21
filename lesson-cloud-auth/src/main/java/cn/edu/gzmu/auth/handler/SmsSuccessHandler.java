@@ -13,7 +13,6 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -34,15 +33,15 @@ import java.util.UUID;
  */
 @Slf4j
 @Component
-public class AuthSuccessHandler implements AuthenticationSuccessHandler {
+public class SmsSuccessHandler implements AuthenticationSuccessHandler {
 
     private final ObjectMapper objectMapper;
     private final ClientDetailsService clientDetailsService;
     private final TokenStore jwtTokenStore;
     private final JwtAccessTokenConverter jwtAccessTokenConverter;
 
-    public AuthSuccessHandler(ObjectMapper objectMapper, ClientDetailsService clientDetailsService,
-                              TokenStore jwtTokenStore, JwtAccessTokenConverter jwtAccessTokenConverter) {
+    public SmsSuccessHandler(ObjectMapper objectMapper, ClientDetailsService clientDetailsService,
+                             TokenStore jwtTokenStore, JwtAccessTokenConverter jwtAccessTokenConverter) {
         this.objectMapper = objectMapper;
         this.clientDetailsService = clientDetailsService;
         this.jwtTokenStore = jwtTokenStore;
@@ -51,7 +50,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
+                                        Authentication authentication) throws IOException {
         log.info("Login succeed！");
         String header = request.getHeader("Authorization");
         if (header == null || !header.toLowerCase().startsWith("basic ")) {
@@ -126,12 +125,12 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
                     "Failed to decode basic authentication token");
         }
         String token = new String(decoded, StandardCharsets.UTF_8);
-        int delim = token.indexOf(":");
+        int delimiter = token.indexOf(":");
 
-        if (delim == -1) {
+        if (delimiter == -1) {
             throw new BadCredentialsException("Invalid basic authentication token");
         }
-        return new String[]{token.substring(0, delim), token.substring(delim + 1)};
+        return new String[]{token.substring(0, delimiter), token.substring(delimiter + 1)};
     }
 
     /**
