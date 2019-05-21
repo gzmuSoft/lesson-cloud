@@ -1,8 +1,9 @@
 package cn.edu.gzmu.auth.handler;
 
+import cn.edu.gzmu.model.resource.ExceptionResource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -33,8 +34,8 @@ public class AuthFailureHandle implements AuthenticationFailureHandler {
                                         AuthenticationException exception) throws IOException, ServletException {
         log.info("Login failed!");
         response.setContentType("application/json;charset=utf-8");
-        // 暂时直接把异常跑出去
-        // todo 待完成登录失败信息回显
-        response.getWriter().write(objectMapper.writeValueAsString(exception));
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.getWriter().write(objectMapper.writeValueAsString(
+                new ExceptionResource(exception.getLocalizedMessage())));
     }
 }

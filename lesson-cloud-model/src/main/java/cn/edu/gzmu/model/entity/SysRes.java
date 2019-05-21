@@ -3,6 +3,7 @@ package cn.edu.gzmu.model.entity;
 import cn.edu.gzmu.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -20,10 +21,11 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-13 22:20:23
+ * @date 2019-5-21 16:03:38
  */
 @Data
 @Cacheable
+@ToString(callSuper = true)
 @Table(name = "sys_res")
 @Entity(name = "sys_res")
 @Where(clause = "is_enable = 1")
@@ -46,7 +48,7 @@ public class SysRes extends BaseEntity implements Serializable {
     /**
      * url 匹配
      */
-    @javax.validation.constraints.NotNull(message = "matchUrl 为必填项")
+    @javax.validation.constraints.NotNull(message = "matchUrl url 匹配 为必填项")
     @Size(max = 512, message = "matchUrl 不能大于 512 位")
     private java.lang.String matchUrl;
 

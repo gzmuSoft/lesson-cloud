@@ -3,6 +3,7 @@ package cn.edu.gzmu.model.entity;
 import cn.edu.gzmu.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -20,10 +21,11 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-13 22:20:23
+ * @date 2019-5-21 16:03:38
  */
 @Data
 @Cacheable
+@ToString(callSuper = true)
 @Table(name = "sys_role")
 @Entity(name = "sys_role")
 @Where(clause = "is_enable = 1")
@@ -47,6 +49,6 @@ public class SysRole extends BaseEntity implements Serializable {
     /**
      * 父角色编号
      */
-    @javax.validation.constraints.NotNull(message = "parentId 为必填项")
+    @javax.validation.constraints.NotNull(message = "parentId 父角色编号 为必填项")
     private java.lang.Long parentId;
 }

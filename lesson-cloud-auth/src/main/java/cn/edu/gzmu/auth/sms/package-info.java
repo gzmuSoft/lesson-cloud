@@ -15,7 +15,7 @@
  * 让 {@link cn.edu.gzmu.auth.user.UserDetailsServiceImpl} 实现其所有方法
  * 通过它就可以获取到用户信息。
  * <p>
- * 最后我们需要将他交给登录成功处理器 {@link cn.edu.gzmu.auth.handler.AuthSuccessHandler}
+ * 最后我们需要将他交给登录成功处理器 {@link cn.edu.gzmu.auth.handler.SmsSuccessHandler}
  * 进行构建完整的 token 信息
  *
  * @author echo

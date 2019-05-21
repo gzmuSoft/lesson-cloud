@@ -33,8 +33,9 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleRepository, SysRo
 
     @Override
     public List<SysRole> searchByUsername(String username) {
-        SysUser user = sysUserRepository.findFirstByName(username).orElseThrow(() ->
-                new UserNotFoundException(String.format("The user %s not found!", username)));
+        SysUser user =
+                sysUserRepository.findFirstByName(username).orElseThrow(() ->
+                        new UserNotFoundException(String.format("The user %s not found!", username)));
         return sysRoleRepository.searchBySysUserId(user.getId());
     }
 }

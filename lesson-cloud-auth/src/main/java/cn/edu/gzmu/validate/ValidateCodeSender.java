@@ -10,8 +10,8 @@ public interface ValidateCodeSender {
     /**
      * 发送验证码
      *
-     * @param phone 手机号
+     * @param receive 接收方
      * @param code   验证码
      */
-    void send(String phone, String code);
+    void send(String receive, ValidateCode code);
 }

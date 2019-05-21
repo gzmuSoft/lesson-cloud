@@ -50,10 +50,12 @@ public class SubMailUtils {
         HttpResponse resp;
         try {
             resp = HTTP_CLIENT.execute(httpPost);
-            log.info(EntityUtils.toString(resp.getEntity(), "UTF-8"));
-            return resp.getStatusLine().getStatusCode() == 200;
+            String response = EntityUtils.toString(resp.getEntity(), "UTF-8");
+            JSONObject result = JSONObject.parseObject(response);
+            return resp.getStatusLine().getStatusCode() == 200 && "success".equals(result.getString("status"));
         } catch (IOException e) {
             e.printStackTrace();
+            log.error(e.getMessage());
             return false;
         }
     }

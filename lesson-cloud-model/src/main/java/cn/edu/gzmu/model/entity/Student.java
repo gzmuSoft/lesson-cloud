@@ -3,6 +3,7 @@ package cn.edu.gzmu.model.entity;
 import cn.edu.gzmu.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -20,10 +21,11 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-13 22:20:23
+ * @date 2019-5-21 16:03:37
  */
 @Data
 @Cacheable
+@ToString(callSuper = true)
 @Table(name = "student")
 @Entity(name = "student")
 @Where(clause = "is_enable = 1")
@@ -40,33 +42,53 @@ public class Student extends BaseEntity implements Serializable {
     /**
      * 学校编号
      */
+    @javax.validation.constraints.NotNull(message = "schoolId 学校编号 为必填项")
     private java.lang.Long schoolId;
 
     /**
      * 学院编号
      */
+    @javax.validation.constraints.NotNull(message = "collegeId 学院编号 为必填项")
     private java.lang.Long collegeId;
 
     /**
      * 系部编号
      */
+    @javax.validation.constraints.NotNull(message = "depId 系部编号 为必填项")
     private java.lang.Long depId;
 
     /**
      * 专业编号
      */
+    @javax.validation.constraints.NotNull(message = "specialtyId 专业编号 为必填项")
     private java.lang.Long specialtyId;
 
     /**
      * 班级编号
      */
+    @javax.validation.constraints.NotNull(message = "classId 班级编号 为必填项")
     private java.lang.Long classId;
+
+    /**
+     * 学号
+     */
+    @javax.validation.constraints.NotNull(message = "no 学号 为必填项")
+    @Size(max = 20, message = "no 不能大于 20 位")
+    private java.lang.String no;
 
     /**
      * 性别
      */
+    @javax.validation.constraints.NotNull(message = "gender 性别 为必填项")
     @Size(max = 255, message = "gender 不能大于 255 位")
     private java.lang.String gender;
+
+    /**
+     * 身份证号码
+     */
+    @javax.validation.constraints.NotNull(message = "idNumber 身份证号码 为必填项")
+    @Size(max = 18, message = "idNumber 不能大于 18 位")
+    private java.lang.String idNumber;
 
     /**
      * 出生日期

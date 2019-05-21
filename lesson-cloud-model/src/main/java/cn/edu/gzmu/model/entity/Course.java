@@ -3,6 +3,7 @@ package cn.edu.gzmu.model.entity;
 import cn.edu.gzmu.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -20,10 +21,11 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-13 22:20:22
+ * @date 2019-5-21 16:03:37
  */
 @Data
 @Cacheable
+@ToString(callSuper = true)
 @Table(name = "course")
 @Entity(name = "course")
 @Where(clause = "is_enable = 1")
@@ -35,19 +37,19 @@ public class Course extends BaseEntity implements Serializable {
     /**
      * 基础学时
      */
-    @javax.validation.constraints.NotNull(message = "period 为必填项")
+    @javax.validation.constraints.NotNull(message = "period 基础学时 为必填项")
     private java.lang.Short period;
 
     /**
      * 基础学分
      */
-    @javax.validation.constraints.NotNull(message = "credit 为必填项")
+    @javax.validation.constraints.NotNull(message = "credit 基础学分 为必填项")
     private java.lang.Float credit;
 
     /**
      * 课程性质
      */
-    @javax.validation.constraints.NotNull(message = "type 为必填项")
+    @javax.validation.constraints.NotNull(message = "type 课程性质 为必填项")
     @Size(max = 255, message = "type 不能大于 255 位")
     private java.lang.String type;
 }

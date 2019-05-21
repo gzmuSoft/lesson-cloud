@@ -39,4 +39,14 @@ public interface SysUserRepository extends BaseRepository<SysUser, Long> {
     @RestResource(path = "phone", rel = "phone", description = @Description("通过手机号查询用户信息"))
     Optional<SysUser> findFirstByPhone(String phone);
 
+    /**
+     * 通过邮箱号查询用户，并非模糊查询。
+     * 每次获取均需要通过非空判断。
+     *
+     * @param email 邮箱号
+     * @return 结果
+     */
+    @RestResource(path = "email", rel = "email", description = @Description("通过邮箱号查询用户信息"))
+    Optional<SysUser> findFirstByEmail(String email);
+
 }

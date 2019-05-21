@@ -2,16 +2,19 @@ package cn.edu.gzmu.config.oauth2;
 
 import cn.edu.gzmu.auth.user.UserDetailsServiceImpl;
 import cn.edu.gzmu.properties.Oauth2Properties;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import java.time.Duration;
 
@@ -30,14 +33,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private final UserDetailsServiceImpl userDetailsService;
     private final TokenStore tokenStore;
     private final Oauth2Properties oauth2Properties;
-    private final JwtAccessTokenConverter jwtAccessTokenConverter;
 
-    public AuthorizationServerConfig(AuthenticationManager authenticationManager, UserDetailsServiceImpl userDetailsService, TokenStore tokenStore, Oauth2Properties oauth2Properties, JwtAccessTokenConverter jwtAccessTokenConverter) {
+    public AuthorizationServerConfig(AuthenticationManager authenticationManager, UserDetailsServiceImpl userDetailsService, TokenStore tokenStore, Oauth2Properties oauth2Properties) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.tokenStore = tokenStore;
         this.oauth2Properties = oauth2Properties;
-        this.jwtAccessTokenConverter = jwtAccessTokenConverter;
     }
 
     /**
@@ -49,10 +50,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints.authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService)
-                .tokenStore(tokenStore);
-        if (jwtAccessTokenConverter != null){
-            endpoints.accessTokenConverter(jwtAccessTokenConverter);
-        }
+                .tokenStore(tokenStore)
+                .tokenStore(jwtTokenStore())
+                .accessTokenConverter(jwtAccessTokenConverter());
     }
 
     /**
@@ -78,4 +78,31 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         security.tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()");
     }
+
+    /**
+     * TokenServices
+     *
+     * @return Token 配置
+     */
+    @Bean
+    @Primary
+    public DefaultTokenServices defaultTokenServices() {
+        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        defaultTokenServices.setTokenStore(jwtTokenStore());
+        return defaultTokenServices;
+    }
+
+    @Bean
+    public JwtTokenStore jwtTokenStore() {
+        return new JwtTokenStore(jwtAccessTokenConverter());
+    }
+
+    @Bean
+    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+        JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
+        accessTokenConverter.setSigningKey(oauth2Properties.getJwtSigningKey());
+        return accessTokenConverter;
+    }
+
+
 }

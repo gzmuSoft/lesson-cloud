@@ -3,6 +3,7 @@ package cn.edu.gzmu.model.entity;
 import cn.edu.gzmu.model.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -20,10 +21,11 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-13 22:20:22
+ * @date 2019-5-21 16:03:37
  */
 @Data
 @Cacheable
+@ToString(callSuper = true)
 @Table(name = "exam_history")
 @Entity(name = "exam_history")
 @Where(clause = "is_enable = 1")
