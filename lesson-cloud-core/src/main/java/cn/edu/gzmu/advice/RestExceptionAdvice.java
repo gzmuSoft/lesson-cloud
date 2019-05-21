@@ -1,5 +1,9 @@
 package cn.edu.gzmu.advice;
 
+import cn.edu.gzmu.model.exception.ResourceNotFoundException;
+import cn.edu.gzmu.model.exception.UserNotFoundException;
+import cn.edu.gzmu.model.resource.ExceptionResource;
+import cn.edu.gzmu.validate.exception.ValidateCodeException;
 import com.alibaba.fastjson.JSONArray;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -19,8 +23,7 @@ import javax.validation.ConstraintViolationException;
 public class RestExceptionAdvice {
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public HttpEntity<?> handle(ConstraintViolationException exception){
+    public HttpEntity<?> handle(ConstraintViolationException exception) {
         JSONArray errors = new JSONArray();
         exception.getConstraintViolations().forEach(item -> {
             errors.add(item.getMessage());
@@ -28,4 +31,14 @@ public class RestExceptionAdvice {
         return ResponseEntity.badRequest().body(errors);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public HttpEntity<?> handle(Exception exception) {
+        return ResponseEntity.badRequest().body(new ExceptionResource(exception.getMessage()));
+    }
+
+    @ExceptionHandler({ResourceNotFoundException.class, UserNotFoundException.class})
+    public HttpEntity<?> resourceNotFound(Exception exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ExceptionResource(exception.getMessage()));
+    }
 }

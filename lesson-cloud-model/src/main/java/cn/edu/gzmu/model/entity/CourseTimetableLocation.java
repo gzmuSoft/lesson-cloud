@@ -21,7 +21,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-20 11:34:28
+ * @date 2019-5-21 16:03:37
  */
 @Data
 @Cacheable
@@ -37,7 +37,7 @@ public class CourseTimetableLocation extends BaseEntity implements Serializable 
     /**
      * 逻辑班级编号
      */
-    @javax.validation.constraints.NotNull(message = "logicClassId 为必填项")
+    @javax.validation.constraints.NotNull(message = "logicClassId 逻辑班级编号 为必填项")
     private java.lang.Long logicClassId;
 
     /**

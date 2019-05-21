@@ -21,7 +21,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-20 11:34:28
+ * @date 2019-5-21 16:03:37
  */
 @Data
 @Cacheable
@@ -43,18 +43,18 @@ public class Section extends BaseEntity implements Serializable {
     /**
      * 课程编号
      */
-    @javax.validation.constraints.NotNull(message = "courseId 为必填项")
+    @javax.validation.constraints.NotNull(message = "courseId 课程编号 为必填项")
     private java.lang.Long courseId;
 
     /**
      * 0，代表无上级，即：课程的第一个章节
      */
-    @javax.validation.constraints.NotNull(message = "parentId 为必填项")
+    @javax.validation.constraints.NotNull(message = "parentId 0，代表无上级，即：课程的第一个章节 为必填项")
     private java.lang.Long parentId;
 
     /**
      * 类型，0：章，1：节
      */
-    @javax.validation.constraints.NotNull(message = "type 为必填项")
+    @javax.validation.constraints.NotNull(message = "type 类型，0：章，1：节 为必填项")
     private java.lang.Byte type;
 }

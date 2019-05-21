@@ -21,7 +21,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-20 11:34:28
+ * @date 2019-5-21 16:03:37
  */
 @Data
 @Cacheable
@@ -63,6 +63,6 @@ public class ExamRule extends BaseEntity implements Serializable {
     /**
      * 每题分值
      */
-    @javax.validation.constraints.NotNull(message = "eachValue 为必填项")
+    @javax.validation.constraints.NotNull(message = "eachValue 每题分值 为必填项")
     private java.lang.Float eachValue;
 }

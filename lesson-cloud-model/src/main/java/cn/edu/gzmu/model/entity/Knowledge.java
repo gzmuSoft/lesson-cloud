@@ -21,7 +21,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-20 11:34:28
+ * @date 2019-5-21 16:03:37
  */
 @Data
 @Cacheable
@@ -43,18 +43,18 @@ public class Knowledge extends BaseEntity implements Serializable {
     /**
      * 0，代表无上级，即：课程的顶层知识点
      */
-    @javax.validation.constraints.NotNull(message = "parentId 为必填项")
+    @javax.validation.constraints.NotNull(message = "parentId 0，代表无上级，即：课程的顶层知识点 为必填项")
     private java.lang.Long parentId;
 
     /**
      * 课程编号
      */
-    @javax.validation.constraints.NotNull(message = "courseId 为必填项")
+    @javax.validation.constraints.NotNull(message = "courseId 课程编号 为必填项")
     private java.lang.Long courseId;
 
     /**
      * 章节编号
      */
-    @javax.validation.constraints.NotNull(message = "sectionId 为必填项")
+    @javax.validation.constraints.NotNull(message = "sectionId 章节编号 为必填项")
     private java.lang.Long sectionId;
 }

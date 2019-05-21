@@ -21,7 +21,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-20 11:34:28
+ * @date 2019-5-21 16:03:37
  */
 @Data
 @Cacheable
@@ -42,7 +42,7 @@ public class LogicClass extends BaseEntity implements Serializable {
     /**
      * 学校编号
      */
-    @javax.validation.constraints.NotNull(message = "schoolId 为必填项")
+    @javax.validation.constraints.NotNull(message = "schoolId 学校编号 为必填项")
     private java.lang.Long schoolId;
 
     /**

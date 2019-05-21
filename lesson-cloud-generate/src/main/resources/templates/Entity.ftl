@@ -39,7 +39,7 @@ public class ${class_name} extends BaseEntity implements Serializable {
      * ${column.columnComment}
      */
     <#if !column.nullAble>
-    @javax.validation.constraints.NotNull(message = "${column.columnName} 为必填项")
+    @javax.validation.constraints.NotNull(message = "${column.columnName} ${column.columnComment} 为必填项")
     </#if>
     <#if column.columnType == 'java.lang.String'>
     @Size(max = ${column.columnSize?c}, message = "${column.columnName} 不能大于 ${column.columnSize?c} 位")

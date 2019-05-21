@@ -21,7 +21,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-20 11:34:29
+ * @date 2019-5-21 16:03:38
  */
 @Data
 @Cacheable
@@ -37,12 +37,12 @@ public class SysUserRole extends BaseEntity implements Serializable {
     /**
      * 用户编号
      */
-    @javax.validation.constraints.NotNull(message = "userId 为必填项")
+    @javax.validation.constraints.NotNull(message = "userId 用户编号 为必填项")
     private java.lang.Long userId;
 
     /**
      * 角色编号
      */
-    @javax.validation.constraints.NotNull(message = "roleId 为必填项")
+    @javax.validation.constraints.NotNull(message = "roleId 角色编号 为必填项")
     private java.lang.Long roleId;
 }

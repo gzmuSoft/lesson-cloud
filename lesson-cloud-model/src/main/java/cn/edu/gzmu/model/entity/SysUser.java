@@ -21,7 +21,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-20 11:34:29
+ * @date 2019-5-21 16:03:38
  */
 @Data
 @Cacheable
@@ -47,6 +47,7 @@ public class SysUser extends BaseEntity implements Serializable {
     /**
      * 密码
      */
+    @javax.validation.constraints.NotNull(message = "pwd 密码 为必填项")
     @Size(max = 255, message = "pwd 不能大于 255 位")
     @com.fasterxml.jackson.annotation.JsonIgnore
     private java.lang.String pwd;
@@ -54,7 +55,7 @@ public class SysUser extends BaseEntity implements Serializable {
     /**
      * 1：正常、2：锁定一小时、3：禁用
      */
-    @javax.validation.constraints.NotNull(message = "status 为必填项")
+    @javax.validation.constraints.NotNull(message = "status 1：正常、2：锁定一小时、3：禁用 为必填项")
     private java.lang.Integer status;
 
     /**
@@ -66,6 +67,7 @@ public class SysUser extends BaseEntity implements Serializable {
     /**
      * 电子邮箱
      */
+    @javax.validation.constraints.NotNull(message = "email 电子邮箱 为必填项")
     @Size(max = 255, message = "email 不能大于 255 位")
     @javax.validation.constraints.Email(message = "email不合法，请输入正确的邮箱地址")
     private java.lang.String email;
@@ -73,6 +75,7 @@ public class SysUser extends BaseEntity implements Serializable {
     /**
      * 联系电话
      */
+    @javax.validation.constraints.NotNull(message = "phone 联系电话 为必填项")
     @Size(max = 20, message = "phone 不能大于 20 位")
     private java.lang.String phone;
 

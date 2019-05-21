@@ -21,7 +21,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-20 11:34:29
+ * @date 2019-5-21 16:03:38
  */
 @Data
 @Cacheable
@@ -37,28 +37,28 @@ public class UserConnection extends BaseEntity implements Serializable {
     /**
      * 
      */
-    @javax.validation.constraints.NotNull(message = "userId 为必填项")
+    @javax.validation.constraints.NotNull(message = "userId  为必填项")
     @Size(max = 255, message = "userId 不能大于 255 位")
     private java.lang.String userId;
 
     /**
      * 
      */
-    @javax.validation.constraints.NotNull(message = "providerId 为必填项")
+    @javax.validation.constraints.NotNull(message = "providerId  为必填项")
     @Size(max = 255, message = "providerId 不能大于 255 位")
     private java.lang.String providerId;
 
     /**
      * 
      */
-    @javax.validation.constraints.NotNull(message = "providerUserId 为必填项")
+    @javax.validation.constraints.NotNull(message = "providerUserId  为必填项")
     @Size(max = 255, message = "providerUserId 不能大于 255 位")
     private java.lang.String providerUserId;
 
     /**
      * 
      */
-    @javax.validation.constraints.NotNull(message = "rank 为必填项")
+    @javax.validation.constraints.NotNull(message = "rank  为必填项")
     private java.lang.Integer rank;
 
     /**
@@ -82,7 +82,7 @@ public class UserConnection extends BaseEntity implements Serializable {
     /**
      * 
      */
-    @javax.validation.constraints.NotNull(message = "accessToken 为必填项")
+    @javax.validation.constraints.NotNull(message = "accessToken  为必填项")
     @Size(max = 512, message = "accessToken 不能大于 512 位")
     private java.lang.String accessToken;
 
