@@ -3,3 +3,19 @@ application:
     app-id: 35223
     app-key: e7eede1811867421882df861a20ed26e
     action-template: RhXa
+spring:
+  mail:
+    host: smtp.exmail.qq.com
+    port: 465
+    username: lessonCloud@japoul.cn
+    password: lessonC2019
+    properties:
+      mail:
+        debug: true
+        smtp:
+          auth: true
+          starttls:
+            required: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+    test-connection: false

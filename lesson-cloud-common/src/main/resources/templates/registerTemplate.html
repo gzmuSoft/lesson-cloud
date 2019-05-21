@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Title</title>
+    <style>
+        #content p {
+            font-size: 15px;
+            color: grey;
+        }
+        #content p b {
+            font-weight: bolder;
+            font-size: 25px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div id="content">
+    <!--/*@thymesVar id="user" type="java.lang.String"*/-->
+    <p><b th:text="${user}">admin</b> 感谢您使用云课程学习平台： </p>
+    <!--/*@thymesVar id="code" type="java.lang.String"*/-->
+    <p>lesson-cloud云课程注册激活码： <b th:text="${code}">123456</b> <br>注册码3秒内有效哦～！</p>
+</div>
+</body>
+</html>
