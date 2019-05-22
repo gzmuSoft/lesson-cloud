@@ -160,7 +160,7 @@ public class GenUtil {
     @SuppressWarnings("all")
     public static List<String> getConstraints(String columnName, String remarks) {
         ArrayList<String> other = new ArrayList<>();
-        if (columnName.contains("mail")) {
+        if (columnName.contains("email")) {
             other.add("@javax.validation.constraints.Email(message = \"" + columnName + "不合法，请输入正确的邮箱地址\")");
         }
         if (columnName.contains("birthday")) {

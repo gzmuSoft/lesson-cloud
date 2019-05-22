@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @ConfigurationProperties(prefix = "spring.mail")
-public class MailConfig {
+public class EmailConfig {
     /**
      * host
      */

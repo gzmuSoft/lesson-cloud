@@ -6,7 +6,6 @@ import cn.edu.gzmu.service.SysResService;
 import cn.edu.gzmu.service.SysRoleService;
 import cn.edu.gzmu.service.SysUserService;
 import com.alibaba.fastjson.JSONObject;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

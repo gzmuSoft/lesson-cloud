@@ -28,7 +28,6 @@ public class SubMailUtilsTest {
         jsonObject.put("action", "登录");
         jsonObject.put("code", "123456");
         jsonObject.put("time", "123");
-        boolean b = subMailUtils.sendActionMessage("121", jsonObject);
-        assertTrue(b);
+        subMailUtils.sendActionMessage("121", jsonObject);
     }
 }

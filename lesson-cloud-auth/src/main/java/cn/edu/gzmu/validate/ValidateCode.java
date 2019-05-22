@@ -20,7 +20,10 @@ public class ValidateCode implements Serializable {
      * 过期时间
      */
     private LocalDateTime expireTime;
-
+    /**
+     * 有效期
+     */
+    private int expireIn;
     /**
      * 构造
      */
@@ -36,6 +39,7 @@ public class ValidateCode implements Serializable {
     public ValidateCode(String code, int expireIn) {
         this.code = code;
         this.expireTime = LocalDateTime.now().plusSeconds(expireIn);
+        this.expireIn = expireIn;
     }
 
     /**

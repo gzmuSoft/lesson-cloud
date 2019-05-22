@@ -10,9 +10,12 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.concurrent.Future;
 
 /**
  * sub mail 工具类
@@ -38,10 +41,11 @@ public class SubMailUtils {
     /**
      * 发送一条信息
      *
-     * @param to     接收人
-     * @param vars   模板变量
+     * @param to   接收人
+     * @param vars 模板变量
      */
-    public boolean sendActionMessage(String to, JSONObject vars) {
+    @Async
+    public Future<String> sendActionMessage(String to, JSONObject vars) {
         HttpPost httpPost = new HttpPost(X_SEND);
         JSONObject jsonParam = appInfo(messageConfig.getActionTemplate());
         jsonParam.put("to", to);
@@ -51,12 +55,16 @@ public class SubMailUtils {
         try {
             resp = HTTP_CLIENT.execute(httpPost);
             String response = EntityUtils.toString(resp.getEntity(), "UTF-8");
+            log.debug(response);
             JSONObject result = JSONObject.parseObject(response);
-            return resp.getStatusLine().getStatusCode() == 200 && "success".equals(result.getString("status"));
+            String res = String.format("向 %s 发送短信结果： %s", to, resp.getStatusLine().getStatusCode() == 200 &&
+                    "success".equals(result.getString("status")) ? "成功" : "失败");
+            log.debug(res);
+            return new AsyncResult<>(res);
         } catch (IOException e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            return false;
+            return new AsyncResult<>("短信发送失败：" + e.getMessage());
         }
     }
 
@@ -73,12 +81,6 @@ public class SubMailUtils {
         entity.setContentEncoding("UTF-8");
         entity.setContentType("application/json");
         return entity;
-    }
-
-    private JSONObject copyJson(JSONObject old) {
-        JSONObject copy = new JSONObject();
-        old.forEach(copy::put);
-        return copy;
     }
 
 }

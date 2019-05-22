@@ -1,4 +1,4 @@
-package cn.edu.gzmu.config;
+package cn.edu.gzmu.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

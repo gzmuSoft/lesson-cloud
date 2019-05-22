@@ -65,7 +65,21 @@ spring:
         javax:
           cache:
             missing_cache_strategy: create
-
+  mail:
+    host: smtp.exmail.qq.com
+    port: 465
+    username: lessonCloud@japoul.cn
+    password: lessonC2019
+    properties:
+      mail:
+        debug: true
+        smtp:
+          auth: true
+          starttls:
+            required: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+    test-connection: false
   redis:
     host: 127.0.0.1
     password:

@@ -1,7 +1,8 @@
 package cn.edu.gzmu.validate;
 
-import cn.edu.gzmu.config.SmsProperties;
+import cn.edu.gzmu.util.EmailUtils;
 import cn.edu.gzmu.util.SubMailUtils;
+import cn.edu.gzmu.validate.email.EmailCodeSender;
 import cn.edu.gzmu.validate.sms.SmsCodeSender;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,15 +16,21 @@ import org.springframework.context.annotation.Configuration;
 public class ValidateCodeConfig {
 
     private final SubMailUtils subMailUtils;
-    private final SmsProperties smsProperties;
+    private final EmailUtils emailUtils;
 
-    public ValidateCodeConfig(SubMailUtils subMailUtils, SmsProperties smsProperties) {
+    public ValidateCodeConfig(SubMailUtils subMailUtils, EmailUtils emailUtils) {
         this.subMailUtils = subMailUtils;
-        this.smsProperties = smsProperties;
+        this.emailUtils = emailUtils;
     }
 
     @Bean
-    public ValidateCodeSender smsCodeSender(){
-        return new SmsCodeSender(subMailUtils, smsProperties);
+    public ValidateCodeSender smsCodeSender() {
+        return new SmsCodeSender(subMailUtils);
     }
+
+    @Bean
+    public ValidateCodeSender mailCodeSender() {
+        return new EmailCodeSender(emailUtils);
+    }
+
 }

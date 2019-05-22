@@ -322,17 +322,10 @@ image::img/rbac.jpg[title="rbac 模型", alt="Sunset"]
 | sms
 | -
 | 手机号
-|===
 
-- 请求体：
-
-[cols="1,4,2", options="header"]
-.请求头
-|===
-|参数 |值 | 描述
-|sms
-|-
-|手机验证码
+| code
+| -
+| 验证码
 |===
 
 - 正确响应：
@@ -535,13 +528,13 @@ spring security oauth2 提供了其他路径进行帮助。
 
 这两个地方我没有去看，所以原理我也不太清楚。。。
 
-= 授权
+== 授权
 
 对于授权，我们需要动态配置，所以需要知道两个核心的类，`AccessDecisionManager` 和 `FilterInvocationSecurityMetadataSource`。对于所有的请求，这两个类都会进行拦截，其中 先经过 `AccessDecisionManager` 再到 `SecurityMetadataSource`，所以分别继承于这两个类，然后前一个类进行角色查询控制，第二个进行权限的控制。
 
 具体查看 `cn.edu.gzmu.auth.res` 下的两个实现类，里面都有注释。
 
-= 请求资源
+== 请求资源
 
 对于所有需要授权的资源，都必须在请求头中携带你通过 密码/手机验证 获取到的 access_token 进行访问，方式如图：
 
@@ -550,6 +543,6 @@ image::img/auth.png[title="携带 token", alt="携带 token"]
 
 携带了这个 access_token 访问以后，才能够对用户身份进行鉴别。
 
-= 总结
+== 总结
 
 其实大多数我用的都是他自带的，难点就在于手机验证码登录和动态权限认证。大家多打打断点 debug，流程跑一下应该就能明白了。

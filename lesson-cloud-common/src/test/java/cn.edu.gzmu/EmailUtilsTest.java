@@ -1,7 +1,7 @@
 package cn.edu.gzmu;
 
-import cn.edu.gzmu.util.MailUtils;
-import com.alibaba.fastjson.JSONObject;
+import cn.edu.gzmu.util.EmailUtils;
+import cn.edu.gzmu.util.RandomCode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
+import java.util.concurrent.Future;
 
 import static org.junit.Assert.assertTrue;
 
@@ -19,21 +20,21 @@ import static org.junit.Assert.assertTrue;
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class MailUtilsTest {
+public class EmailUtilsTest {
 
     @Autowired
-    private MailUtils mailUtils;
+    private EmailUtils emailUtils;
 
     @Test
-    public void application() {
-        HashMap<String, String> values = new HashMap<String, String>();
-        values.put("code", "hvuiwhiu%%D7bfhb7fasdbgjh");
-        values.put("user", "Echo");
+    public void application() throws InterruptedException {
+        HashMap<String, Object> values = new HashMap<>();
+        values.put("code", RandomCode.random(6, false));
+        values.put("time", 10);
         String toEmail = "lizhongyue248@163.com";
         String type = "注册";
         String subject = "云课程注册邮件";
         String template = "registerTemplate.html";
-        boolean res = mailUtils.sendTemplateMail(toEmail, type, subject, template, values);
-        assertTrue(res);
+        Future<String> res = emailUtils.sendTemplateMail(toEmail, type, subject, template, values);
+        assertTrue(res.isDone());
     }
 }

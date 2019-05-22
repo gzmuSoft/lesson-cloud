@@ -1,21 +1,22 @@
 package cn.edu.gzmu.util;
 
-import cn.edu.gzmu.config.MailConfig;
+import cn.edu.gzmu.config.EmailConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Component;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Future;
 
 /**
  * @author Japoul
@@ -25,28 +26,28 @@ import java.util.HashMap;
 @Component
 @Async
 @Slf4j
-public class MailUtils {
+public class EmailUtils {
 
     private final JavaMailSender javaMailSender;
-    private final MailConfig mailConfig;
+    private final EmailConfig emailConfig;
     private final TemplateEngine templateEngine;
 
-    @Autowired(required = false)
-    public MailUtils(JavaMailSender javaMailSender, MailConfig mailConfig, TemplateEngine templateEngine) {
+    public EmailUtils(JavaMailSender javaMailSender, EmailConfig emailConfig, TemplateEngine templateEngine) {
         this.javaMailSender = javaMailSender;
-        this.mailConfig = mailConfig;
+        this.emailConfig = emailConfig;
         this.templateEngine = templateEngine;
     }
 
     /**
      * 简单文字邮件发送
+     *
      * @param toEmail 接收者邮箱
      * @param subject 邮件主题
      * @param content 邮件内容
      */
     public void sendSimpleMail(String toEmail, String subject, String content) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(mailConfig.getUsername());
+        message.setFrom(emailConfig.getUsername());
         message.setTo(toEmail);
         message.setSubject(subject);
         message.setText(content);
@@ -55,30 +56,33 @@ public class MailUtils {
 
     /**
      * 发送带模板的邮件
-     * @param toEmail 接收者邮箱
-     * @param type 邮件类型
-     * @param subject 邮件主题
-     * @param template 邮件模板名称(默认资源路径下)
-     * @param values 模板内变量集合
+     *
+     * @param toEmail   接收者邮箱
+     * @param type      邮件类型
+     * @param subject   邮件主题
+     * @param template  邮件模板名称(默认资源路径下)
+     * @param variables 模板内变量集合
      */
-    public Boolean sendTemplateMail(String toEmail, String type, String subject, String template, HashMap values) {
+    public Future<String> sendTemplateMail(String toEmail, String type, String subject,
+                                           String template, Map<String, Object> variables) {
         MimeMessage message = javaMailSender.createMimeMessage();
         Context context = new Context();
-        values.forEach((k,v)->context.setVariable((String) k, v));;
+        variables.forEach(context::setVariable);
+        context.setVariable("type", type);
         String content = templateEngine.process(template, context);
         try {
             MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
-            messageHelper.setFrom(mailConfig.getUsername());
+            messageHelper.setFrom(emailConfig.getUsername());
             messageHelper.setTo(toEmail);
             messageHelper.setSubject(subject);
             messageHelper.setText(content, true);
             javaMailSender.send(message);
-            log.info("向" + toEmail + type + "邮件发送成功");
-            return true;
+            log.info("向 {} 发送 {} 邮件成功", toEmail, type);
+            return new AsyncResult<>("邮件发送成功");
         } catch (MessagingException e) {
             e.printStackTrace();
-            log.warn("向" + toEmail + type + "邮件发送失败");
-            return false;
+            log.warn("向 {} 发送 {} 邮件失败", toEmail, type);
+            return new AsyncResult<>("邮件发送失败");
         }
     }
 }

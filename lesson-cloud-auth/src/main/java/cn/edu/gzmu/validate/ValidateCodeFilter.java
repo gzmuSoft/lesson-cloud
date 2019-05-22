@@ -50,6 +50,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
         super.afterPropertiesSet();
         // 路径拦截
         urlMap.put(SecurityConstants.LOGIN_PROCESSING_URL_SMS, ValidateCodeType.SMS);
+        urlMap.put(SecurityConstants.REGISTER_PROCESSING_URL_EMAIL, ValidateCodeType.EMAIL);
     }
 
     @Override
@@ -58,9 +59,9 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
         ValidateCodeType validateCodeType = getValidateCodeType(request);
         if (validateCodeType != null) {
             try {
-                log.info("是登录请求！验证请求：" + request.getRequestURI() + "验证类型：" + validateCodeType);
+                log.info("请求需要验证！验证请求：" + request.getRequestURI() + "验证类型：" + validateCodeType);
                 validateCodeProcessorHolder.findValidateCodeProcessor(validateCodeType)
-                    .validate(new ServletWebRequest(request, response));
+                        .validate(new ServletWebRequest(request, response));
                 logger.info("验证码通过！");
             } catch (ValidateCodeException e) {
                 // 授权失败处理器接受处理
@@ -81,8 +82,8 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
     private ValidateCodeType getValidateCodeType(HttpServletRequest request) {
         if (StringUtils.endsWithIgnoreCase(request.getMethod(), HttpMethod.POST.name())) {
             Set<String> urls = urlMap.keySet();
-            for (String url : urls){
-                if (antPathMatcher.match(url, request.getRequestURI())){
+            for (String url : urls) {
+                if (antPathMatcher.match(url, request.getRequestURI())) {
                     return urlMap.get(url);
                 }
             }

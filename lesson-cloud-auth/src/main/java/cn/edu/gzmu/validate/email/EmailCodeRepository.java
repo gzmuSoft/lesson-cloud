@@ -1,4 +1,4 @@
-package cn.edu.gzmu.validate.sms;
+package cn.edu.gzmu.validate.email;
 
 import cn.edu.gzmu.constant.SecurityConstants;
 import cn.edu.gzmu.constant.ValidateCodeType;
@@ -11,18 +11,16 @@ import org.springframework.web.context.request.ServletWebRequest;
 /**
  * @author echo
  * @version 1.0
- * @date 19-4-17 11:04
+ * @date 19-5-22 9:02
  */
-@Component("smsValidateCodeRepository")
-public class SmsCodeRepository extends AbstractValidateCodeRepository {
-
+@Component("emailValidateCodeRepository")
+public class EmailCodeRepository extends AbstractValidateCodeRepository {
     @Override
     protected String buildKey(ServletWebRequest request, ValidateCodeType type) {
-        String deviceId = request.getHeader(SecurityConstants.PARAMETER_SMS);
-        if (StringUtils.isBlank(deviceId)) {
-            throw new ValidateCodeException("请求中不存在设备号");
+        String email = request.getHeader(SecurityConstants.PARAMETER_EMAIL);
+        if (StringUtils.isBlank(email)) {
+            throw new ValidateCodeException("请求中不存在邮箱号");
         }
-        return "code:" + type.toString().toLowerCase() + ":" + deviceId;
+        return "code:" + type.toString().toLowerCase() + ":" + email;
     }
-
 }

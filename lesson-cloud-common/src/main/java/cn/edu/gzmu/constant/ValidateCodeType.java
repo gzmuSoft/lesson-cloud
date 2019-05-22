@@ -14,6 +14,12 @@ public enum  ValidateCodeType {
         public String getParamNameOnValidate() {
             return SecurityConstants.PARAMETER_SMS;
         }
+    },
+    EMAIL {
+        @Override
+        public String getParamNameOnValidate() {
+            return SecurityConstants.PARAMETER_EMAIL;
+        }
     };
     public abstract String getParamNameOnValidate();
 }

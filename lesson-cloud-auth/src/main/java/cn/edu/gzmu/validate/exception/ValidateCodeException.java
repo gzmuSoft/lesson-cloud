@@ -10,6 +10,10 @@ import org.springframework.security.core.AuthenticationException;
  * @date 19-4-14 11:14
  */
 public class ValidateCodeException extends AuthenticationException {
+    public ValidateCodeException(){
+        super("验证码异常");
+    }
+
     /**
      * Constructs an {@code AuthenticationException} with the specified message and root
      * cause.
