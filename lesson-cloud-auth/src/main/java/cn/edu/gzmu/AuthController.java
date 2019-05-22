@@ -51,7 +51,8 @@ public class AuthController {
 
     @PostMapping("/register")
     @VerifyParameter(
-            required = {"user.name", "student.id", "student.name",
+            required = {
+                    "user.name", "student.id", "student.name",
                     "user.email", "user.phone", "school.id"
             },
             equal = {"school.type|1"}
@@ -64,14 +65,4 @@ public class AuthController {
         );
     }
 
-    @PostMapping("/test")
-    @VerifyParameter(
-            required = {"user.name", "student.id", "student.name",
-                    "user.email", "user.phone", "school.id"
-            },
-            equal = {"school.type|1"}
-    )
-    public HttpEntity<?> registerTest(@NotNull @RequestBody JSONObject params) {
-        return ResponseEntity.ok().build();
-    }
 }
