@@ -72,7 +72,7 @@ spring:
     password: lessonC2019
     properties:
       mail:
-        debug: true
+        debug: false
         smtp:
           auth: true
           starttls:

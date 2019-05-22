@@ -1,6 +1,6 @@
 package cn.edu.gzmu;
 
-import cn.edu.gzmu.model.constant.SysDataEnum;
+import cn.edu.gzmu.model.annoection.VerifyParameter;
 import cn.edu.gzmu.model.entity.*;
 import cn.edu.gzmu.service.SysResService;
 import cn.edu.gzmu.service.SysRoleService;
@@ -11,13 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 授权信息
@@ -43,7 +40,7 @@ public class AuthController {
 
     @GetMapping("/me")
     public HttpEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
-        Map<String, Object> me = new ConcurrentHashMap<>(3);
+        JSONObject me = new JSONObject();
         List<SysRole> roles = sysRoleService.searchByUsername(userDetails.getUsername());
         me.put("user", userDetails);
         me.put("roles", roles);
@@ -53,17 +50,28 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @VerifyParameter(
+            required = {"user.name", "student.id", "student.name",
+                    "user.email", "user.phone", "school.id"
+            },
+            equal = {"school.type|1"}
+    )
     public HttpEntity<?> register(@NotNull @RequestBody JSONObject params) {
-        SysUser user = params.getObject("user", SysUser.class);
-        Student student = params.getObject("student", Student.class);
-        SysData school = params.getObject("school", SysData.class);
-        Assert.notNull(user, "请求中不存在用户信息");
-        Assert.notNull(student, "请求中不存在学生信息");
-        Assert.notNull(student.getId(), "找不到对应的学生信息");
-        Assert.notNull(school, "请求中不存在学校信息");
-        Assert.notNull(school.getId(), "找不到对应的学校信息");
-        Assert.notNull(school.getType(), "请求中不存在学校类型！");
-        Assert.isTrue(SysDataEnum.match(SysDataEnum.SCHOOL, school.getType()), "并非学校类型");
-        return ResponseEntity.status(HttpStatus.CREATED).body(sysUserService.register(user, student, school));
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                sysUserService.register(params.getObject("user", SysUser.class),
+                        params.getObject("student", Student.class),
+                        params.getObject("school", SysData.class))
+        );
+    }
+
+    @PostMapping("/test")
+    @VerifyParameter(
+            required = {"user.name", "student.id", "student.name",
+                    "user.email", "user.phone", "school.id"
+            },
+            equal = {"school.type|1"}
+    )
+    public HttpEntity<?> registerTest(@NotNull @RequestBody JSONObject params) {
+        return ResponseEntity.ok().build();
     }
 }

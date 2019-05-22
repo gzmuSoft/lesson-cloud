@@ -26,8 +26,11 @@
  * 默认情况下主要通过 {@link cn.edu.gzmu.constant.ValidateCodeType} 的枚举作为键来获取请求体中对应的验证码
  * 验证方法为 <code>validate</code> ，子类可以自由覆盖并修改验证规则。
  *
+ * 现在一有两种验证码实现，参见 {@link cn.edu.gzmu.validate.email} 和  {@link cn.edu.gzmu.validate.sms}
+ *
  * @author echo
  * @version 1.0
  * @date 19-4-20 15:05
+ * @date 19-5-22 11:53
  */
 package cn.edu.gzmu.validate;

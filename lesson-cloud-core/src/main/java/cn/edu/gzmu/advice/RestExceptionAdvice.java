@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 
 /**
  * @author echo
@@ -27,7 +28,7 @@ public class RestExceptionAdvice {
         return ResponseEntity.badRequest().body(errors);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler({IllegalArgumentException.class, ValidationException.class})
     public HttpEntity<?> handle(Exception exception) {
         return ResponseEntity.badRequest().body(new ExceptionResource(exception.getMessage()));
     }
