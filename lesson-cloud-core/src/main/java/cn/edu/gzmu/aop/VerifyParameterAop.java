@@ -27,7 +27,9 @@ import java.util.stream.Stream;
 @Aspect
 @Component
 public class VerifyParameterAop {
-    private static final String MARK = "|";
+    private static final String FIELD_MARK = "|";
+    private static final String CONDITION_MARK = "-";
+    private static final String TIP_MARK = "#";
 
     private JSONObject param;
 
@@ -50,25 +52,26 @@ public class VerifyParameterAop {
         Method method = target.getClass().getMethod(joinPoint.getSignature().getName(), JSONObject.class);
         param = (JSONObject) joinPoint.getArgs()[0];
         VerifyParameter annotation = method.getAnnotation(VerifyParameter.class);
-        check(annotation.required(), (expression, value) -> Objects.nonNull(value), () -> " 为必填项！");
-        check(annotation.range(), (expression, value) -> value instanceof Long
-                && ((Long) value > getConditionMin(expression)
-                && (Long) value < getConditionMax(expression)), () -> " 不存在或不在指定大小范围内！");
-        check(annotation.size(), (expression, value) -> Objects.nonNull(value)
-                        && value.toString().length() < getConditionMax(expression)
-                        && value.toString().length() > getConditionMin(expression),
+        check(annotation.required(), (condition, value) -> Objects.nonNull(value), () -> " 为必填项！");
+        check(annotation.range(), (condition, value) -> value instanceof Long
+                        && ((Long) value > getRangeLeft(condition)
+                        && (Long) value < getRangeRight(condition)),
+                () -> " 不存在或不在指定大小范围内！");
+        check(annotation.size(), (condition, value) -> Objects.nonNull(value)
+                        && value.toString().length() < getRangeRight(condition)
+                        && value.toString().length() > getRangeLeft(condition),
                 () -> " 不存在或长度不合法！");
-        check(annotation.max(), (expression, value) -> Objects.nonNull(value)
-                        && Long.parseLong(value.toString()) < getMax(expression),
+        check(annotation.max(), (condition, value) -> Objects.nonNull(value)
+                        && Long.parseLong(value.toString()) < getMax(condition),
                 () -> " 不存在或数值过大！");
-        check(annotation.min(), (expression, value) -> Objects.nonNull(value)
-                        && Long.parseLong(value.toString()) < getMin(expression),
+        check(annotation.min(), (condition, value) -> Objects.nonNull(value)
+                        && Long.parseLong(value.toString()) < getMin(condition),
                 () -> " 不存在或数值过小！");
-        check(annotation.number(), (expression, value) -> Objects.nonNull(value)
+        check(annotation.number(), (condition, value) -> Objects.nonNull(value)
                         && StringUtils.isNumeric(value.toString()),
                 () -> " 不存在或不为数字类型！");
-        check(annotation.equal(), (expression, value) -> Objects.nonNull(value)
-                        && value.toString().equals(getCondition(expression)),
+        check(annotation.equal(), (condition, value) -> Objects.nonNull(value)
+                        && value.toString().equals(getCondition(condition)),
                 () -> " 的值不合法！");
     }
 
@@ -77,18 +80,21 @@ public class VerifyParameterAop {
      *
      * @param expressions 检查的表达式
      * @param condition   条件
-     * @param handle      异常抛出信息
+     * @param defaultTip  默认提示信息
      */
     private void check(String[] expressions, VerifyParameterPredicate<String, Object> condition,
-                       Supplier<String> handle) {
+                       Supplier<String> defaultTip) {
         for (String expression : expressions) {
             if (StringUtils.isEmpty(expression)) {
                 continue;
             }
             String field = getField(expression);
             Object value = getValue(field);
-            if (!condition.test(expression, value)) {
-                throw new ValidationException(field + handle.get());
+            String tip = getTip(expression.trim());
+            if (!condition.test(getCondition(expression), value)) {
+                throw new ValidationException(Objects.isNull(tip)
+                        ? field + defaultTip.get()
+                        : tip);
             }
         }
     }
@@ -100,20 +106,39 @@ public class VerifyParameterAop {
      * @return 字段
      */
     private String getField(String expression) {
-        return expression.contains(MARK)
-                ? StringUtils.substringBefore(expression, MARK)
-                : expression;
+        return (StringUtils.substringBefore
+                (StringUtils.substringBefore(
+                        expression,
+                        FIELD_MARK),
+                        TIP_MARK)).trim();
     }
 
     /**
-     * 获取去表达式中的条件
+     * 获取表达式中的条件
      *
      * @param expression 表达式
      * @return 条件
      */
     private String getCondition(String expression) {
-        return expression.contains(MARK)
-                ? StringUtils.substringAfter(expression, MARK)
+        return (expression.contains(FIELD_MARK) || expression.contains(TIP_MARK))
+                ?
+                (StringUtils.substringAfter
+                        (StringUtils.substringBefore(
+                                expression,
+                                TIP_MARK),
+                                FIELD_MARK)).trim()
+                : null;
+    }
+
+    /**
+     * 获取表达式中的自定义提示信息
+     *
+     * @param expression 表达式
+     * @return 提示信息
+     */
+    private String getTip(String expression) {
+        return expression.contains(TIP_MARK)
+                ? StringUtils.substringAfterLast(expression, TIP_MARK).trim()
                 : null;
     }
 
@@ -135,46 +160,66 @@ public class VerifyParameterAop {
     }
 
     /**
-     * 获取表达式中最大的长度，为 Integer 类型
+     * 获取表达式中右侧条件
      *
-     * @param expression 表达式
+     * @param condition 条件表达式
      * @return 结果
      */
-    private Integer getConditionMax(String expression) {
-        String after = StringUtils.substringAfter(getCondition(expression), "-");
+    private String getConditionRight(String condition) {
+        return StringUtils.substringAfter(condition, CONDITION_MARK);
+    }
+
+    /**
+     * 获取表达式中左侧条件
+     *
+     * @param condition 条件表达式
+     * @return 结果
+     */
+    private String getConditionLeft(String condition) {
+        return StringUtils.substringBefore(condition, CONDITION_MARK);
+    }
+
+    /**
+     * 获取表达式中最大的长度，为 Integer 类型
+     *
+     * @param condition 条件表达式
+     * @return 结果
+     */
+    private Integer getRangeRight(String condition) {
+        String after = getConditionRight(condition);
         return StringUtils.isNumeric(after) ? Integer.parseInt(after) : 0;
     }
 
     /**
      * 获取表达式中最小的长度，为 Integer 类型
      *
-     * @param expression 表达式
+     * @param condition 条件表达式
      * @return 结果
      */
-    private Integer getConditionMin(String expression) {
-        String before = StringUtils.substringBefore(getCondition(expression), "-");
+    private Integer getRangeLeft(String condition) {
+        String before = getConditionLeft(condition);
         return StringUtils.isNumeric(before) ? Integer.parseInt(before) : 0;
     }
 
     /**
      * 获取表达式中最大的值，为 Long 类型
      *
-     * @param expression 表达式
+     * @param condition 条件表达式
      * @return 结果
      */
-    private Long getMax(String expression) {
-        String max = StringUtils.substringAfter(getCondition(expression), "-");
+    private Long getMax(String condition) {
+        String max = getConditionRight(condition);
         return StringUtils.isNumeric(max) ? Long.parseLong(max) : Long.MAX_VALUE;
     }
 
     /**
      * 获取表达式中最小的值，为 Long 类型
      *
-     * @param expression 表达式
+     * @param condition 条件表达式
      * @return 结果
      */
-    private Long getMin(String expression) {
-        String min = StringUtils.substringAfter(getCondition(expression), "-");
+    private Long getMin(String condition) {
+        String min = getConditionLeft(condition);
         return StringUtils.isNumeric(min) ? Long.parseLong(min) : Long.MIN_VALUE;
     }
 }
