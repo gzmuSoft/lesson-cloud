@@ -16,7 +16,7 @@ import java.util.Optional;
  * @version 1.0
  * @date 2019-5-7 11:05:31
  */
-@RepositoryRestResource(path = "/sysUsers")
+@RepositoryRestResource(path = "/sysUser")
 public interface SysUserRepository extends BaseRepository<SysUser, Long> {
 
     /**

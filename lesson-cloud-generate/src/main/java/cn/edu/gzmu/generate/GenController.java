@@ -69,7 +69,7 @@ public class GenController implements ApplicationRunner {
             String className = GenUtil.underlineToHump(table, true);
             data.put("entity_path", genEntityConfig.getPackageName() + "." + className);
             data.put("service_class", genServiceConfig.getPackageName() + "." + className);
-            data.put("rest_path", GenUtil.toPlural(table));
+            data.put("rest_path", GenUtil.underlineToHump(table));
             data.put("class_name", className);
             File file = new File(GenUtil.generateDir(genControllerConfig.getModuleName(), genControllerConfig.getPackageName())
                     + className + "Controller" + GenUtil.SUFFIX);

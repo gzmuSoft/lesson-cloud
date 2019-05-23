@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-20 9:18:57
+ * @date 2019-5-23 17:38:14
  */
 @RepositoryRestController
-@RequestMapping("/multiSels/search")
+@RequestMapping("/multiSel/search")
 public class MultiSelController extends BaseController<MultiSel, MultiSelService, Long> {
 
 }

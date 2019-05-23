@@ -10,9 +10,9 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-20 9:18:57
+ * @date 2019-5-23 17:38:13
  */
-@RepositoryRestResource(path = "/courseTimetableLocations")
+@RepositoryRestResource(path = "/courseTimetableLocation")
 public interface CourseTimetableLocationRepository extends BaseRepository<CourseTimetableLocation, Long> {
 
 }

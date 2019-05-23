@@ -12,7 +12,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @version 1.0
  * @date 2019-5-7 11:05:31
  */
-@RepositoryRestResource(path = "/sysRoleReses")
+@RepositoryRestResource(path = "/sysRoleRes")
 public interface SysRoleResRepository extends BaseRepository<SysRoleRes, Long> {
 
 }

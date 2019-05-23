@@ -136,19 +136,6 @@ public class GenUtil {
         return dirPathContact(generateDir(moduleName, packageName), String.join(File.separator, other));
     }
 
-    /**
-     * 下划线转驼峰并简单添加复数
-     *
-     * @param name 名称
-     * @return 结果
-     */
-    public static String toPlural(String name) {
-        String result = underlineToHump(name);
-        if (result.matches(".*[^aeiou]y$")) {
-            return result.substring(0, result.length() - 1) + "ies";
-        }
-        return result.endsWith("s") ? result + "es" : result + "s";
-    }
 
     /**
      * 从 列名和备注中 读取其他的条件

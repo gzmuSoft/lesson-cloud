@@ -10,9 +10,9 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-7 11:05:31
+ * @date 2019-5-23 17:38:13
  */
-@RepositoryRestResource(path = "/paperDetails")
+@RepositoryRestResource(path = "/paperDetail")
 public interface PaperDetailRepository extends BaseRepository<PaperDetail, Long> {
 
 }

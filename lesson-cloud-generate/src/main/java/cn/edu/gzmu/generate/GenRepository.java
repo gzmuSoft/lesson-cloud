@@ -70,7 +70,7 @@ public class GenRepository implements ApplicationRunner {
             String entityClassName = GenUtil.underlineToHump(table, true);
             data.put("entity_path", genEntityConfig.getPackageName() + "." + entityClassName);
             data.put("table_name", table);
-            data.put("rest_path", GenUtil.toPlural(table));
+            data.put("rest_path", GenUtil.underlineToHump(table));
             data.put("class_name", entityClassName);
             File file = new File(GenUtil.generateDir(genRepositoryConfig.getModuleName(), genRepositoryConfig.getPackageName())
                     + GenUtil.underlineToHump(table, true) + "Repository" + GenUtil.SUFFIX);
