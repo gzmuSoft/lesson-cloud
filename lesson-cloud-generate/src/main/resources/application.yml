@@ -32,6 +32,6 @@ gzmu:
       module-name: lesson-cloud-service
       overwrite: false
     gen-controller: true
-    gen-repository: true
+    gen-repository: false
     gen-entity: false
     gen-service: false

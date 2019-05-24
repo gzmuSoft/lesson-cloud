@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-23 17:38:14
+ * @date 2019-5-24 14:18:22
  */
 @RepositoryRestController
 @RequestMapping("/teacher/search")

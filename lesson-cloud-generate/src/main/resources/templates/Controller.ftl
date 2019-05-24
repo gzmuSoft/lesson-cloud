@@ -2,7 +2,6 @@ package ${package_name};
 
 import ${entity_path};
 import ${service_class}Service;
-import ${base_controller};
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
