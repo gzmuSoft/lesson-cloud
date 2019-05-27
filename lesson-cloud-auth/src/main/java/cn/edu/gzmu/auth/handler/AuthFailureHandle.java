@@ -2,6 +2,8 @@ package cn.edu.gzmu.auth.handler;
 
 import cn.edu.gzmu.model.resource.ExceptionResource;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -22,12 +24,9 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class AuthFailureHandle implements AuthenticationFailureHandler {
-    private final ObjectMapper objectMapper;
-
-    public AuthFailureHandle(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
+    private final @NonNull ObjectMapper objectMapper;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,

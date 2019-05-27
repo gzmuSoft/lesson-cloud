@@ -4,6 +4,8 @@ import cn.edu.gzmu.model.entity.SysRole;
 import cn.edu.gzmu.model.entity.SysUser;
 import cn.edu.gzmu.service.SysRoleService;
 import cn.edu.gzmu.service.SysUserService;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,20 +33,14 @@ import java.util.stream.Collectors;
  * @see cn.edu.gzmu.config.oauth2.AuthorizationServerConfig
  */
 @Slf4j
+@RequiredArgsConstructor
 @Component("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService, SocialUserDetailsService,
         SmsUserDetailsService {
 
-    private final PasswordEncoder passwordEncoder;
-    private final SysUserService sysUserService;
-    private final SysRoleService sysRoleService;
-
-    public UserDetailsServiceImpl(PasswordEncoder passwordEncoder, SysUserService sysUserService,
-                                  SysRoleService sysRoleService) {
-        this.passwordEncoder = passwordEncoder;
-        this.sysUserService = sysUserService;
-        this.sysRoleService = sysRoleService;
-    }
+    private final @NonNull PasswordEncoder passwordEncoder;
+    private final @NonNull SysUserService sysUserService;
+    private final @NonNull SysRoleService sysRoleService;
 
     /**
      * 通过用户名查找用户，这是对密码登录的仅有支持。

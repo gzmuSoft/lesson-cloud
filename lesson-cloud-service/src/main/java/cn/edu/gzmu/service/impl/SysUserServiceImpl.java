@@ -11,6 +11,8 @@ import cn.edu.gzmu.repository.entity.StudentRepository;
 import cn.edu.gzmu.repository.entity.SysUserRepository;
 import cn.edu.gzmu.repository.entity.TeacherRepository;
 import cn.edu.gzmu.service.SysUserService;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,19 +31,14 @@ import org.springframework.util.Assert;
  * @date 2019-5-7 11:33:57
  */
 @Service
+@RequiredArgsConstructor
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserRepository, SysUser, Long>
         implements SysUserService {
 
-    private final SysUserRepository sysUserRepository;
-    private final StudentRepository studentRepository;
-    private final TeacherRepository teacherRepository;
+    private final @NonNull SysUserRepository sysUserRepository;
+    private final @NonNull StudentRepository studentRepository;
+    private final @NonNull TeacherRepository teacherRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
-    public SysUserServiceImpl(SysUserRepository sysUserRepository, StudentRepository studentRepository, TeacherRepository teacherRepository) {
-        this.sysUserRepository = sysUserRepository;
-        this.studentRepository = studentRepository;
-        this.teacherRepository = teacherRepository;
-    }
 
     @Override
     public SysUser searchByAll(String user) {

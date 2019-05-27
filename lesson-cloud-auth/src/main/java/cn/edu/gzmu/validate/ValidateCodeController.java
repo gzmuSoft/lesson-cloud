@@ -1,6 +1,8 @@
 package cn.edu.gzmu.validate;
 
 import cn.edu.gzmu.constant.SecurityConstants;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,13 +19,10 @@ import javax.servlet.http.HttpServletResponse;
  * @date 19-4-14 13:59
  */
 @RestController
+@RequiredArgsConstructor
 public class ValidateCodeController {
 
-    private final ValidateCodeProcessorHolder validateCodeProcessorHolder;
-
-    public ValidateCodeController(ValidateCodeProcessorHolder validateCodeProcessorHolder) {
-        this.validateCodeProcessorHolder = validateCodeProcessorHolder;
-    }
+    private final @NonNull ValidateCodeProcessorHolder validateCodeProcessorHolder;
 
     /**
      * 通过 type 进行查询到对对应的处理器

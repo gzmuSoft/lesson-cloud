@@ -2,6 +2,8 @@ package cn.edu.gzmu.validate;
 
 import cn.edu.gzmu.constant.ValidateCodeType;
 import cn.edu.gzmu.validate.exception.ValidateCodeException;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -17,12 +19,9 @@ import java.util.Map;
  * @date 19-4-14 16:22
  */
 @Component
+@RequiredArgsConstructor
 public class ValidateCodeProcessorHolder {
-    private final Map<String, ValidateCodeProcessor> validateCodeProcessors;
-
-    public ValidateCodeProcessorHolder(Map<String, ValidateCodeProcessor> validateCodeProcessors) {
-        this.validateCodeProcessors = validateCodeProcessors;
-    }
+    private final @NonNull Map<String, ValidateCodeProcessor> validateCodeProcessors;
 
     /**
      * 通过验证码类型查找

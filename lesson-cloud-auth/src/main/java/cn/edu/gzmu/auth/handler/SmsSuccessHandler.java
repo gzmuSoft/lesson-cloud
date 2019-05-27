@@ -1,6 +1,8 @@
 package cn.edu.gzmu.auth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -33,20 +35,14 @@ import java.util.UUID;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class SmsSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final ObjectMapper objectMapper;
-    private final ClientDetailsService clientDetailsService;
-    private final TokenStore jwtTokenStore;
-    private final JwtAccessTokenConverter jwtAccessTokenConverter;
+    private final @NonNull ObjectMapper objectMapper;
+    private final @NonNull ClientDetailsService clientDetailsService;
+    private final @NonNull TokenStore jwtTokenStore;
+    private final @NonNull JwtAccessTokenConverter jwtAccessTokenConverter;
 
-    public SmsSuccessHandler(ObjectMapper objectMapper, ClientDetailsService clientDetailsService,
-                             TokenStore jwtTokenStore, JwtAccessTokenConverter jwtAccessTokenConverter) {
-        this.objectMapper = objectMapper;
-        this.clientDetailsService = clientDetailsService;
-        this.jwtTokenStore = jwtTokenStore;
-        this.jwtAccessTokenConverter = jwtAccessTokenConverter;
-    }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,

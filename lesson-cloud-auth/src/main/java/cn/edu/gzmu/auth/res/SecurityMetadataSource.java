@@ -6,6 +6,8 @@ import cn.edu.gzmu.model.entity.SysRole;
 import cn.edu.gzmu.properties.Oauth2Properties;
 import cn.edu.gzmu.repository.entity.SysResRepository;
 import cn.edu.gzmu.repository.entity.SysRoleRepository;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,18 +34,13 @@ import java.util.stream.Collectors;
  * @date 19-4-20 16:15
  */
 @Component
+@RequiredArgsConstructor
 public class SecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
-    private final SysResRepository sysResRepository;
-    private final SysRoleRepository sysRoleRepository;
-    private final Oauth2Properties oauth2Properties;
+    private final @NonNull SysResRepository sysResRepository;
+    private final @NonNull SysRoleRepository sysRoleRepository;
+    private final @NonNull Oauth2Properties oauth2Properties;
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
-
-    public SecurityMetadataSource(SysResRepository sysResRepository, SysRoleRepository sysRoleRepository, Oauth2Properties oauth2Properties) {
-        this.sysResRepository = sysResRepository;
-        this.sysRoleRepository = sysRoleRepository;
-        this.oauth2Properties = oauth2Properties;
-    }
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {

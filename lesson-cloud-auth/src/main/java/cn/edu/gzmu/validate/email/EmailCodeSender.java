@@ -3,6 +3,8 @@ package cn.edu.gzmu.validate.email;
 import cn.edu.gzmu.util.EmailUtils;
 import cn.edu.gzmu.validate.ValidateCode;
 import cn.edu.gzmu.validate.ValidateCodeSender;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
@@ -14,13 +16,10 @@ import java.util.HashMap;
  * @date 19-5-21 23:52
  */
 @Slf4j
+@RequiredArgsConstructor
 public class EmailCodeSender implements ValidateCodeSender {
 
-    private final EmailUtils emailUtils;
-
-    public EmailCodeSender(EmailUtils emailUtils) {
-        this.emailUtils = emailUtils;
-    }
+    private final @NonNull EmailUtils emailUtils;
 
     @Override
     public void send(String receive, ValidateCode code) {

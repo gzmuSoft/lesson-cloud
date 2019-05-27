@@ -6,6 +6,8 @@ import cn.edu.gzmu.service.SysResService;
 import cn.edu.gzmu.service.SysRoleService;
 import cn.edu.gzmu.service.SysUserService;
 import com.alibaba.fastjson.JSONObject;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,18 +27,12 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    private final SysRoleService sysRoleService;
-    private final SysResService sysResService;
-    private final SysUserService sysUserService;
-
-    public AuthController(SysRoleService sysRoleService, SysResService sysResService,
-                          SysUserService sysUserService) {
-        this.sysRoleService = sysRoleService;
-        this.sysResService = sysResService;
-        this.sysUserService = sysUserService;
-    }
+    private final @NonNull SysRoleService sysRoleService;
+    private final @NonNull SysResService sysResService;
+    private final @NonNull SysUserService sysUserService;
 
     @GetMapping("/me")
     public HttpEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {

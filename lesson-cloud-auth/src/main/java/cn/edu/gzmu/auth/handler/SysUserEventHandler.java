@@ -1,7 +1,8 @@
 package cn.edu.gzmu.auth.handler;
 
 import cn.edu.gzmu.model.entity.SysUser;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.HandleBeforeSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
@@ -17,14 +18,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RepositoryEventHandler
+@RequiredArgsConstructor
 public class SysUserEventHandler {
 
-    private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public SysUserEventHandler(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final @NonNull PasswordEncoder passwordEncoder;
 
     /**
      * 创建用户之前，对密码进行加密

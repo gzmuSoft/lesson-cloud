@@ -4,6 +4,8 @@ import cn.edu.gzmu.util.SubMailUtils;
 import cn.edu.gzmu.validate.ValidateCode;
 import cn.edu.gzmu.validate.ValidateCodeSender;
 import com.alibaba.fastjson.JSONObject;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
@@ -19,13 +21,10 @@ import java.time.Duration;
  * @date 19-4-14 14:13
  */
 @Slf4j
+@RequiredArgsConstructor
 public class SmsCodeSender implements ValidateCodeSender {
 
-    private final SubMailUtils subMailUtils;
-
-    public SmsCodeSender(SubMailUtils subMailUtils) {
-        this.subMailUtils = subMailUtils;
-    }
+    private final @NonNull SubMailUtils subMailUtils;
 
     /**
      * 发送验证码

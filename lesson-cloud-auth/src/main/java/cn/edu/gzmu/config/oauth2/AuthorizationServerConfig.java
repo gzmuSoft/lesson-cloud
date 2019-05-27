@@ -2,6 +2,8 @@ package cn.edu.gzmu.config.oauth2;
 
 import cn.edu.gzmu.auth.user.UserDetailsServiceImpl;
 import cn.edu.gzmu.properties.Oauth2Properties;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -27,19 +29,13 @@ import java.time.Duration;
  */
 @Configuration
 @EnableAuthorizationServer
+@RequiredArgsConstructor
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserDetailsServiceImpl userDetailsService;
-    private final TokenStore tokenStore;
-    private final Oauth2Properties oauth2Properties;
-
-    public AuthorizationServerConfig(AuthenticationManager authenticationManager, UserDetailsServiceImpl userDetailsService, TokenStore tokenStore, Oauth2Properties oauth2Properties) {
-        this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
-        this.tokenStore = tokenStore;
-        this.oauth2Properties = oauth2Properties;
-    }
+    private final @NonNull AuthenticationManager authenticationManager;
+    private final @NonNull UserDetailsServiceImpl userDetailsService;
+    private final @NonNull TokenStore tokenStore;
+    private final @NonNull Oauth2Properties oauth2Properties;
 
     /**
      * 端点配置，在这里配置 token 存储以及用户处理

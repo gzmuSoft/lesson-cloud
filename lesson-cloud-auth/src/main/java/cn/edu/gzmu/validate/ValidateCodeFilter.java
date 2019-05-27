@@ -3,6 +3,8 @@ package cn.edu.gzmu.validate;
 import cn.edu.gzmu.constant.SecurityConstants;
 import cn.edu.gzmu.constant.ValidateCodeType;
 import cn.edu.gzmu.validate.exception.ValidateCodeException;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -33,17 +35,14 @@ import java.util.Set;
  */
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class ValidateCodeFilter extends OncePerRequestFilter {
 
-    private final AuthenticationFailureHandler authFailureHandle;
-    private final ValidateCodeProcessorHolder validateCodeProcessorHolder;
+    private final @NonNull AuthenticationFailureHandler authFailureHandle;
+    private final @NonNull ValidateCodeProcessorHolder validateCodeProcessorHolder;
     private Map<String, ValidateCodeType> urlMap = new HashMap<>();
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
-    public ValidateCodeFilter(AuthenticationFailureHandler authFailureHandle, ValidateCodeProcessorHolder validateCodeProcessorHolder) {
-        this.authFailureHandle = authFailureHandle;
-        this.validateCodeProcessorHolder = validateCodeProcessorHolder;
-    }
 
     @Override
     public void afterPropertiesSet() throws ServletException {
