@@ -1,6 +1,7 @@
 package cn.edu.gzmu.model.entity;
 
 import cn.edu.gzmu.model.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -9,10 +10,10 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Where;
 
-
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -21,7 +22,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-21 16:03:38
+ * @date 2019-5-27 10:59:09
  */
 @Data
 @Cacheable
@@ -32,6 +33,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @Cache(region = "sys_user", usage = CacheConcurrencyStrategy.READ_WRITE)
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "fieldHandler"})
 public class SysUser extends BaseEntity implements Serializable {
 
     /**
@@ -83,4 +85,16 @@ public class SysUser extends BaseEntity implements Serializable {
      * 在线状态  1-在线 0-离线
      */
     private java.lang.Boolean onlineStatus;
+
+    /**
+     * 学生信息
+     */
+    @Transient
+    private Student student;
+
+    /**
+     * 教师信息
+     */
+    @Transient
+    private Teacher teacher;
 }

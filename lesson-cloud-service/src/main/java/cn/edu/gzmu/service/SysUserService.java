@@ -3,6 +3,8 @@ package cn.edu.gzmu.service;
 import cn.edu.gzmu.model.entity.Student;
 import cn.edu.gzmu.model.entity.SysData;
 import cn.edu.gzmu.model.entity.SysUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import javax.validation.constraints.NotNull;
 
@@ -39,5 +41,13 @@ public interface SysUserService extends BaseService<SysUser, Long> {
      * @param school  学校
      * @return 是否注册成功
      */
-    SysUser register(@NotNull SysUser user,@NotNull Student student,@NotNull SysData school);
+    SysUser register(@NotNull SysUser user, @NotNull Student student, @NotNull SysData school);
+
+    /**
+     * 分页查询所有学生完整信息
+     *
+     * @param pageable 分页
+     * @return 结果
+     */
+    Page<SysUser> searchAll(Pageable pageable);
 }

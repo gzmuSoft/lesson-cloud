@@ -1,6 +1,7 @@
 package cn.edu.gzmu.model.entity;
 
 import cn.edu.gzmu.model.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -8,7 +9,6 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Where;
-
 
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
@@ -21,7 +21,7 @@ import java.io.Serializable;
  *
  * @author echo
  * @version 1.0
- * @date 2019-5-21 16:03:37
+ * @date 2019-5-27 10:59:08
  */
 @Data
 @Cacheable
@@ -32,6 +32,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @Cache(region = "student", usage = CacheConcurrencyStrategy.READ_WRITE)
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "fieldHandler"})
 public class Student extends BaseEntity implements Serializable {
 
     /**
@@ -120,7 +121,7 @@ public class Student extends BaseEntity implements Serializable {
 
     /**
      * 最后学历所学专业（若最后学历是高中，则不需要填写
-若最后学历是大专，则需要填写）
+     * 若最后学历是大专，则需要填写）
      */
     @Size(max = 255, message = "originalMajor 不能大于 255 位")
     private java.lang.String originalMajor;

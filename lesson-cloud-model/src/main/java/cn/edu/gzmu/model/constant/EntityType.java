@@ -16,11 +16,24 @@ public enum EntityType {
 
     private Integer value;
 
-    EntityType(int i) {
+    EntityType(Integer i) {
         value = i;
     }
 
     public Integer value() {
         return value;
+    }
+
+
+    public static boolean isStudent(Integer id) {
+        return STUDENT.value.equals(id);
+    }
+
+    public static boolean isTeacher(Integer id) {
+        return TEACHER.value.equals(id);
+    }
+
+    public static boolean isAdmin(Integer id) {
+        return ADMIN.value.equals(id);
     }
 }

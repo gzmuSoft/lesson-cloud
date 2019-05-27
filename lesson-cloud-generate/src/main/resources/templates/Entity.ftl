@@ -1,6 +1,7 @@
 package ${package_name};
 
 import ${base_entity};
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -8,7 +9,6 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Where;
-
 
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
@@ -32,6 +32,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @Cache(region = "${table_name}", usage = CacheConcurrencyStrategy.READ_WRITE)
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "fieldHandler"})
 public class ${class_name} extends BaseEntity implements Serializable {
 <#list columns as column>
 

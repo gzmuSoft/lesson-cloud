@@ -9,8 +9,11 @@ import cn.edu.gzmu.model.exception.ResourceNotFoundException;
 import cn.edu.gzmu.model.exception.UserNotFoundException;
 import cn.edu.gzmu.repository.entity.StudentRepository;
 import cn.edu.gzmu.repository.entity.SysUserRepository;
+import cn.edu.gzmu.repository.entity.TeacherRepository;
 import cn.edu.gzmu.service.SysUserService;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,11 +34,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserRepository, SysUs
 
     private final SysUserRepository sysUserRepository;
     private final StudentRepository studentRepository;
+    private final TeacherRepository teacherRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-    public SysUserServiceImpl(SysUserRepository sysUserRepository, StudentRepository studentRepository) {
+    public SysUserServiceImpl(SysUserRepository sysUserRepository, StudentRepository studentRepository, TeacherRepository teacherRepository) {
         this.sysUserRepository = sysUserRepository;
         this.studentRepository = studentRepository;
+        this.teacherRepository = teacherRepository;
     }
 
     @Override
@@ -80,6 +85,17 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserRepository, SysUs
         return save;
     }
 
+    @Override
+    public Page<SysUser> searchAll(Pageable pageable) {
+        return sysUserRepository.findAll(pageable).map(sysUser -> {
+            if (EntityType.isStudent(sysUser.getEntityType())) {
+                sysUser.setStudent(studentRepository.getOne(sysUser.getEntityId()));
+            } else if (EntityType.isTeacher(sysUser.getEntityType())) {
+                sysUser.setTeacher(teacherRepository.getOne(sysUser.getEntityId()));
+            }
+            return sysUser;
+        });
+    }
 
     private boolean existUser(SysUser user) {
         Assert.notNull(user.getName(), "用户名不能为空");

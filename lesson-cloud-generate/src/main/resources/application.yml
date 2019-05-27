@@ -31,7 +31,7 @@ gzmu:
       base-service-impl: cn.edu.gzmu.base.impl.BaseServiceImpl
       module-name: lesson-cloud-service
       overwrite: false
-    gen-controller: true
+    gen-controller: false
     gen-repository: false
-    gen-entity: false
+    gen-entity: true
     gen-service: false
