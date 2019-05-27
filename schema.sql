@@ -529,15 +529,6 @@ CREATE TABLE `sys_log`
   COLLATE = utf8_general_ci COMMENT = '系统日志表'
   ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of sys_log
--- ----------------------------
-INSERT INTO `sys_log`
-VALUES (1, '123', '123', '123', '123', '123', '1232', '123', '1', 1, NULL, '2019-04-13 15:03:34', NULL,
-        '2019-04-13 15:18:52', NULL, 0x31);
-INSERT INTO `sys_log`
-VALUES (2, '123', '123', '123', '123', '123', '1232', '123', '1', 1, NULL, '2019-04-13 15:03:34', NULL,
-        '2019-04-13 15:03:42', NULL, 0x31);
 
 -- ----------------------------
 -- Table structure for sys_res
