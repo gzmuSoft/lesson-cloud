@@ -1,5 +1,6 @@
 package cn.edu.gzmu.controller;
 
+import cn.edu.gzmu.model.constant.LessonResource;
 import cn.edu.gzmu.model.entity.SysUser;
 import cn.edu.gzmu.service.SysUserService;
 import lombok.NonNull;
@@ -22,15 +23,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping("/sysUser/search")
+@RequestMapping(LessonResource.SYS_USER)
 public class SysUserController extends BaseController<SysUser, SysUserService, Long> {
-    private final static String RESOURCE = "/sysUser/search/";
     private final @NonNull SysUserService sysUserService;
-    private final PagedResourcesAssembler<SysUser> myPagedResourcesAssembler;
 
     @GetMapping(COMPLETE)
     public HttpEntity<?> resources(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(pagedResources(RESOURCE, sysUserService.searchAll(pageable)));
+        return ResponseEntity.ok(pagedResources(LessonResource.SYS_USER, sysUserService.searchAll(pageable)));
     }
 
 }

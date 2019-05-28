@@ -71,6 +71,7 @@ public class GenController implements ApplicationRunner {
             data.put("service_class", genServiceConfig.getPackageName() + "." + className);
             data.put("rest_path", GenUtil.underlineToHump(table));
             data.put("class_name", className);
+            data.put("table", table);
             File file = new File(GenUtil.generateDir(genControllerConfig.getModuleName(), genControllerConfig.getPackageName())
                     + className + "Controller" + GenUtil.SUFFIX);
             if (file.exists() && !genControllerConfig.isOverwrite()) {

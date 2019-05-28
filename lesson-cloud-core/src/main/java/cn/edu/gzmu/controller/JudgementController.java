@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * Judgement Controller
  *
- * @author echo
+ * @author yxf
  * @version 1.0
- * @date 2019-5-28 10:48:37
+ * @date 2019-5-28 17:48:37
  */
 @RequiredArgsConstructor
 @RepositoryRestController
