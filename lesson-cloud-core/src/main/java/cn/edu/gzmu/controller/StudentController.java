@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RepositoryRestController
 @RequestMapping(LessonResource.STUDENT)
 public class StudentController extends BaseController<Student, StudentService, Long> {
-    private final static String RESOURCE = "/student/search/";
     private final @NonNull StudentService studentService;
 
     /**
@@ -35,7 +34,7 @@ public class StudentController extends BaseController<Student, StudentService, L
      */
     @GetMapping(COMPLETE)
     public HttpEntity<?> resources(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(pagedResources(RESOURCE, studentService.searchAll(pageable)));
+        return ResponseEntity.ok(pagedResources(LessonResource.STUDENT, studentService.searchAll(pageable)));
     }
 
 }
