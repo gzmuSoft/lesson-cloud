@@ -13,6 +13,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -131,4 +132,40 @@ public class Student extends BaseEntity implements Serializable {
      */
     @Size(max = 2048, message = "resume 不能大于 2048 位")
     private java.lang.String resume;
+
+    /**
+     * 谢谢哦啊跑
+     */
+    @Transient
+    private SysData school;
+
+    /**
+     * 学院
+     */
+    @Transient
+    private SysData college;
+
+    /**
+     * 系部
+     */
+    @Transient
+    private SysData dep;
+
+    /**
+     * 专业
+     */
+    @Transient
+    private SysData specialty;
+
+    /**
+     * 班级
+     */
+    @Transient
+    private SysData classes;
+
+    /**
+     * 用户
+     */
+    @Transient
+    private SysUser user;
 }

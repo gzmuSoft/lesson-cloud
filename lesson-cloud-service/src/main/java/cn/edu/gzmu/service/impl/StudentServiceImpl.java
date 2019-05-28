@@ -2,6 +2,8 @@ package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.entity.Student;
 import cn.edu.gzmu.repository.entity.StudentRepository;
+import cn.edu.gzmu.repository.entity.SysDataRepository;
+import cn.edu.gzmu.repository.entity.SysUserRepository;
 import cn.edu.gzmu.service.StudentService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,34 @@ public class StudentServiceImpl extends BaseServiceImpl<StudentRepository, Stude
         implements StudentService {
 
     private final @NonNull StudentRepository studentRepository;
+    private final @NonNull SysDataRepository sysDataRepository;
+    private final @NonNull SysUserRepository sysUserRepository;
 
     @Override
     public Page<Student> searchAll(Pageable pageable) {
-        return studentRepository.findAll(pageable);
+        return studentRepository.findAll(pageable).map(student -> {
+            // 我真的不喜欢那么多 if
+            // 然而三元表达式又难以理解
+            // 无奈无奈 (；′⌒`)
+            if (student.getSchoolId() != null) {
+                student.setSchool(sysDataRepository.getOne(student.getSchoolId()));
+            }
+            if (student.getCollegeId() != null) {
+                student.setCollege(sysDataRepository.getOne(student.getSchoolId()));
+            }
+            if (student.getDepId() != null) {
+                student.setDep(sysDataRepository.getOne(student.getDepId()));
+            }
+            if (student.getSpecialtyId() != null) {
+                student.setSpecialty(sysDataRepository.getOne(student.getSpecialtyId()));
+            }
+            if (student.getClassId() != null) {
+                student.setClasses(sysDataRepository.getOne(student.getClassId()));
+            }
+            if (student.getUserId() != null) {
+                student.setUser(sysUserRepository.getOne(student.getUserId()));
+            }
+            return student;
+        });
     }
 }
