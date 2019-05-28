@@ -1,5 +1,6 @@
 package cn.edu.gzmu.controller;
 
+import cn.edu.gzmu.model.constant.LessonResource;
 import cn.edu.gzmu.model.entity.Student;
 import cn.edu.gzmu.service.StudentService;
 import lombok.NonNull;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping("/student/search")
+@RequestMapping(LessonResource.STUDENT)
 public class StudentController extends BaseController<Student, StudentService, Long> {
     private final static String RESOURCE = "/student/search/";
     private final @NonNull StudentService studentService;

@@ -5,6 +5,7 @@ import cn.edu.gzmu.generate.config.GenEntityConfig;
 import cn.edu.gzmu.generate.util.ColumnClass;
 import cn.edu.gzmu.generate.util.GenDatabaseUtil;
 import cn.edu.gzmu.generate.util.GenUtil;
+import cn.edu.gzmu.generate.util.TableClass;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,11 +65,17 @@ public class GenEntity implements ApplicationRunner {
         data.put("now_version", genConfig.getVersion());
         GenUtil.createDir(GenUtil.generateDir(genEntityConfig.getModuleName(), genEntityConfig.getPackageName()));
         FileWriter fileWriter;
+        List<TableClass> tableClasses = new ArrayList<>();
         for (String table : tables) {
             List<ColumnClass> columns = genDatabaseUtil.getColumns(table);
             data.put("table_name", table);
             data.put("class_name", GenUtil.underlineToHump(table, true));
             data.put("columns", columns);
+            TableClass tableClass = new TableClass();
+            tableClass.setTableName(table);
+            tableClass.setClassName(GenUtil.underlineToHump(table, true));
+            tableClass.setClassNameNew(GenUtil.underlineToHump(table));
+            tableClasses.add(tableClass);
             File file = new File(GenUtil.generateDir(genEntityConfig.getModuleName(), genEntityConfig.getPackageName())
                     + GenUtil.underlineToHump(table, true) + GenUtil.SUFFIX);
             if (file.exists() && !genEntityConfig.isOverwrite()) {
@@ -78,8 +86,13 @@ public class GenEntity implements ApplicationRunner {
             entityTemplate.process(data, fileWriter);
             log.info("Table {} Entity generate succeed!", table);
         }
+        entityTemplate = configuration.getTemplate("LessonResource.ftl");
+        data = new HashMap<>(1);
+        data.put("tables", tableClasses);
+        fileWriter = new FileWriter(GenUtil.generateDir(genEntityConfig.getModuleName(), "cn.edu.gzmu.model.constant")
+                + "LessonResource" + GenUtil.SUFFIX);
+        entityTemplate.process(data, fileWriter);
         log.info("Entity generate succeed!");
     }
-
 
 }

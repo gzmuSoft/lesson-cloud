@@ -11,7 +11,7 @@ import java.util.List;
  * @author echo
  */
 @Data
-@AllArgsConstructor()
+@AllArgsConstructor
 @NoArgsConstructor
 public class ColumnClass {
     /**
