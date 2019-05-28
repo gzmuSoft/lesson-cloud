@@ -32,7 +32,7 @@ public class StudentController extends BaseController<Student, StudentService, L
      * @param pageable 接收分页参数
      * @return http 实体
      */
-    @GetMapping("/complete")
+    @GetMapping(COMPLETE)
     public HttpEntity<?> resources(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
         return ResponseEntity.ok(pagedResources(RESOURCE, studentService.searchAll(pageable)));
     }
