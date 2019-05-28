@@ -26,7 +26,6 @@ public class StudentServiceImpl extends BaseServiceImpl<StudentRepository, Stude
 
     @Override
     public Page<Student> searchAll(Pageable pageable) {
-        Page<Student> page = studentRepository.findAll(pageable);
-        return page;
+        return studentRepository.findAll(pageable);
     }
 }

@@ -4,11 +4,9 @@ import cn.edu.gzmu.model.entity.Student;
 import cn.edu.gzmu.service.StudentService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RepositoryRestController
 @RequestMapping("/student/search")
 public class StudentController extends BaseController<Student, StudentService, Long> {
-
+    private final static String RESOURCE = "/student/search/";
     private final @NonNull StudentService studentService;
 
     /**
@@ -36,9 +34,7 @@ public class StudentController extends BaseController<Student, StudentService, L
      */
     @GetMapping("/complete")
     public HttpEntity<?> resources(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        Page<Student> page = studentService.searchAll(pageable);
-        return ResponseEntity.ok(new PagedResources<>(page.getContent(),
-                toPageMetadata(page)));
+        return ResponseEntity.ok(pagedResources(RESOURCE, studentService.searchAll(pageable)));
     }
 
 }

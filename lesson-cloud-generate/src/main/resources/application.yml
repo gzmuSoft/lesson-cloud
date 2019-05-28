@@ -24,14 +24,14 @@ gzmu:
       package-name: cn.edu.gzmu.controller
       base-controller: cn.edu.gzmu.controller.BaseController
       module-name: lesson-cloud-core
-      overwrite: true
+      overwrite: false
     service:
       package-name: cn.edu.gzmu.service
       base-service: cn.edu.gzmu.base.BaseService
       base-service-impl: cn.edu.gzmu.base.impl.BaseServiceImpl
       module-name: lesson-cloud-service
       overwrite: false
-    gen-controller: false
+    gen-controller: true
     gen-repository: false
-    gen-entity: true
+    gen-entity: false
     gen-service: false
