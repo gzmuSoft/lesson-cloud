@@ -1,5 +1,6 @@
 package cn.edu.gzmu.controller;
 
+import cn.edu.gzmu.model.constant.LessonResource;
 import cn.edu.gzmu.model.entity.Judgement;
 import cn.edu.gzmu.service.JudgementService;
 import lombok.NonNull;
@@ -22,9 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping("/judgement/search")
+@RequestMapping(LessonResource.JUDGEMENT)
 public class JudgementController extends BaseController<Judgement, JudgementService, Long> {
-    private final static String RESOURCE = "/judgement/search";
     private final @NonNull JudgementService judgementService;
 
     /**
@@ -35,6 +35,6 @@ public class JudgementController extends BaseController<Judgement, JudgementServ
      */
     @GetMapping(COMPLETE)
     public HttpEntity<?> resources(@PageableDefault(sort = {"sort","id"}) Pageable pageable){
-        return ResponseEntity.ok(pagedResources(RESOURCE,judgementService.searchAll(pageable)));
+        return ResponseEntity.ok(pagedResources(LessonResource.JUDGEMENT,judgementService.searchAll(pageable)));
     }
 }

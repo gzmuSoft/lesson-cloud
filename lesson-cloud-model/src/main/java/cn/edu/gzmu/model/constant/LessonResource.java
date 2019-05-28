@@ -1,5 +1,12 @@
 package cn.edu.gzmu.model.constant;
 
+
+/**
+ *
+ * @author echo
+ * @version 1.0
+ * @date 19-5-28 17:39
+ */
 @SuppressWarnings("all")
 public interface LessonResource {
 
