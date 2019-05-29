@@ -1,8 +1,9 @@
 package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.entity.Knowledge;
-import cn.edu.gzmu.repository.entity.KnowledgeRepository;
+import cn.edu.gzmu.repository.entity.*;
 import cn.edu.gzmu.service.KnowledgeService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,13 @@ import org.springframework.stereotype.Service;
 public class KnowledgeServiceImpl extends BaseServiceImpl<KnowledgeRepository, Knowledge, Long>
         implements KnowledgeService {
 
+    private final @NonNull CourseRepository courseRepository;
+    private final @NonNull SectionRepository sectionRepository;
+
     @Override
     public Knowledge completeEntity(Knowledge entity) {
+        entity.setCourse(courseRepository.getOne(entity.getCourseId()));
+        entity.setSection(sectionRepository.getOne(entity.getSectionId()));
         return entity;
     }
 }
