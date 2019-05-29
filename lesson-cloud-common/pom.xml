@@ -6,13 +6,12 @@
     <parent>
         <artifactId>lesson-cloud</artifactId>
         <groupId>cn.edu.gzmu</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <!--项目基本信息-->
     <modelVersion>4.0.0</modelVersion>
     <artifactId>lesson-cloud-common</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
 
     <dependencies>
         <dependency>

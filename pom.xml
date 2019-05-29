@@ -25,25 +25,23 @@
     <packaging>pom</packaging>
     <groupId>cn.edu.gzmu</groupId>
     <artifactId>lesson-cloud</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>lesson-cloud</name>
     <description>云课程——智能在线考试平台</description>
 
     <!--pom基本配置-->
     <properties>
-        <spring-security-jwt.version>1.0.10.RELEASE</spring-security-jwt.version>
-        <spring-security-oauth.version>2.2.4.RELEASE</spring-security-oauth.version>
         <spring-social.version>1.1.6.RELEASE</spring-social.version>
         <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.io.platform.version>Cairo-SR8</spring.io.platform.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <spring.boot.version>2.1.4.RELEASE</spring.boot.version>
-        <lesson.cloud.version>0.0.1-SNAPSHOT</lesson.cloud.version>
+        <spring.boot.version>2.1.5.RELEASE</spring.boot.version>
+        <lesson.cloud.version>1.0.0-SNAPSHOT</lesson.cloud.version>
         <hibernate.version>5.4.2.Final</hibernate.version>
-        <redisson.version>3.10.6</redisson.version>
-        <druid.version>1.1.16</druid.version>
+        <redisson.version>3.10.7</redisson.version>
+        <druid.version>1.1.17</druid.version>
     </properties>
 
     <!--相关依赖-->
