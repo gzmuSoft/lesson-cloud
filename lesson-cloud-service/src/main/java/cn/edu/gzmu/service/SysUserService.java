@@ -43,11 +43,4 @@ public interface SysUserService extends BaseService<SysUser, Long> {
      */
     SysUser register(@NotNull SysUser user, @NotNull Student student, @NotNull SysData school);
 
-    /**
-     * 分页查询所有学生完整信息
-     *
-     * @param pageable 分页
-     * @return 结果
-     */
-    Page<SysUser> searchAll(Pageable pageable);
 }

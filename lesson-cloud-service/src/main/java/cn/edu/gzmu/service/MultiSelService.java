@@ -1,8 +1,6 @@
 package cn.edu.gzmu.service;
 
 import cn.edu.gzmu.model.entity.MultiSel;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 
 /**
@@ -14,11 +12,4 @@ import org.springframework.data.domain.Pageable;
  */
 public interface MultiSelService extends BaseService<MultiSel, Long> {
 
-    /**
-     * 查询所有多项选择题分页信息
-     *
-     * @param pageable 分页
-     * @return 分页结果
-     */
-    Page<MultiSel> searchAll(Pageable pageable);
 }

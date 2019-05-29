@@ -13,6 +13,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -107,4 +108,10 @@ public class Paper extends BaseEntity implements Serializable {
      */
     @Size(max = 512, message = "programIds 不能大于 512 位")
     private java.lang.String programIds;
+
+    /**
+     * 测试
+     */
+    @Transient
+    private Exam exam;
 }

@@ -3,6 +3,7 @@ package cn.edu.gzmu.service.impl;
 import cn.edu.gzmu.model.entity.Essay;
 import cn.edu.gzmu.repository.entity.EssayRepository;
 import cn.edu.gzmu.service.EssayService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
  * @date 2019-5-7 11:33:57
  */
 @Service
+@RequiredArgsConstructor
 public class EssayServiceImpl extends BaseServiceImpl<EssayRepository, Essay, Long>
         implements EssayService {
 
