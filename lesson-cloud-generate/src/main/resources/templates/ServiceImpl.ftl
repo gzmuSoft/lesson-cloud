@@ -17,4 +17,9 @@ import org.springframework.stereotype.Service;
 public class ${class_name}ServiceImpl extends BaseServiceImpl<${class_name}Repository, ${class_name}, Long>
         implements ${class_name}Service {
 
+    @Override
+    public ${class_name} completeEntity(${class_name} entity) {
+        return entity;
+    }
+
 }
