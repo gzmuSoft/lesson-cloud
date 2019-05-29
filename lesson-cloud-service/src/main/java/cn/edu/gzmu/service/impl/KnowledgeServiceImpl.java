@@ -19,8 +19,4 @@ import org.springframework.stereotype.Service;
 public class KnowledgeServiceImpl extends BaseServiceImpl<KnowledgeRepository, Knowledge, Long>
         implements KnowledgeService {
 
-    @Override
-    public Knowledge completeEntity(Knowledge entity) {
-        return entity;
-    }
 }

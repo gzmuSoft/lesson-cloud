@@ -19,8 +19,4 @@ import org.springframework.stereotype.Service;
 public class EssayServiceImpl extends BaseServiceImpl<EssayRepository, Essay, Long>
         implements EssayService {
 
-    @Override
-    public Essay completeEntity(Essay entity) {
-        return entity;
-    }
 }

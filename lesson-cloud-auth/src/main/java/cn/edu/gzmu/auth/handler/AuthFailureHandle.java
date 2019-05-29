@@ -1,6 +1,6 @@
 package cn.edu.gzmu.auth.handler;
 
-import cn.edu.gzmu.model.resource.ExceptionResource;
+import cn.edu.gzmu.model.exception.ResourceException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +35,6 @@ public class AuthFailureHandle implements AuthenticationFailureHandler {
         response.setContentType("application/json;charset=utf-8");
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.getWriter().write(objectMapper.writeValueAsString(
-                new ExceptionResource(exception.getLocalizedMessage())));
+                new ResourceException(exception.getLocalizedMessage())));
     }
 }

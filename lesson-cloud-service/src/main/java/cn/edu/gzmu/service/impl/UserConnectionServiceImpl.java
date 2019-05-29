@@ -19,9 +19,4 @@ import org.springframework.stereotype.Service;
 public class UserConnectionServiceImpl extends BaseServiceImpl<UserConnectionRepository, UserConnection, Long>
         implements UserConnectionService {
 
-    @Override
-    public UserConnection completeEntity(UserConnection entity) {
-        return entity;
-    }
-
 }

@@ -68,8 +68,8 @@ public class Student extends BaseEntity implements Serializable {
     /**
      * 班级编号
      */
-    @javax.validation.constraints.NotNull(message = "classId 班级编号 为必填项")
-    private java.lang.Long classId;
+    @javax.validation.constraints.NotNull(message = "classesId 班级编号 为必填项")
+    private java.lang.Long classesId;
 
     /**
      * 学号

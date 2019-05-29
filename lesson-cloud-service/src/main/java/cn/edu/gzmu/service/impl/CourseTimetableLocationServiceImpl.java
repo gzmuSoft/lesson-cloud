@@ -19,8 +19,4 @@ import org.springframework.stereotype.Service;
 public class CourseTimetableLocationServiceImpl extends BaseServiceImpl<CourseTimetableLocationRepository, CourseTimetableLocation, Long>
         implements CourseTimetableLocationService {
 
-    @Override
-    public CourseTimetableLocation completeEntity(CourseTimetableLocation entity) {
-        return entity;
-    }
 }

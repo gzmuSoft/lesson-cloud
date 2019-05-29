@@ -19,8 +19,4 @@ import org.springframework.stereotype.Service;
 public class TeacherServiceImpl extends BaseServiceImpl<TeacherRepository, Teacher, Long>
         implements TeacherService {
 
-    @Override
-    public Teacher completeEntity(Teacher entity) {
-        return entity;
-    }
 }

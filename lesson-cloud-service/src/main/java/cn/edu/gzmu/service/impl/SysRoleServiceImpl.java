@@ -36,8 +36,4 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleRepository, SysRo
         return sysRoleRepository.searchBySysUserId(user.getId());
     }
 
-    @Override
-    public SysRole completeEntity(SysRole entity) {
-        return entity;
-    }
 }

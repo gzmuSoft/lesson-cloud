@@ -2,7 +2,7 @@ package cn.edu.gzmu.advice;
 
 import cn.edu.gzmu.model.exception.ResourceNotFoundException;
 import cn.edu.gzmu.model.exception.UserNotFoundException;
-import cn.edu.gzmu.model.resource.ExceptionResource;
+import cn.edu.gzmu.model.exception.ResourceException;
 import com.alibaba.fastjson.JSONArray;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -30,12 +30,12 @@ public class RestExceptionAdvice {
 
     @ExceptionHandler({IllegalArgumentException.class, ValidationException.class})
     public HttpEntity<?> handle(Exception exception) {
-        return ResponseEntity.badRequest().body(new ExceptionResource(exception.getMessage()));
+        return ResponseEntity.badRequest().body(new ResourceException(exception.getMessage()));
     }
 
     @ExceptionHandler({ResourceNotFoundException.class, UserNotFoundException.class})
     public HttpEntity<?> resourceNotFound(Exception exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ExceptionResource(exception.getMessage()));
+                .body(new ResourceException(exception.getMessage()));
     }
 }

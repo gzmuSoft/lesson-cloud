@@ -19,8 +19,5 @@ import org.springframework.stereotype.Service;
 public class LogicClassServiceImpl extends BaseServiceImpl<LogicClassRepository, LogicClass, Long>
         implements LogicClassService {
 
-    @Override
-    public LogicClass completeEntity(LogicClass entity) {
-        return entity;
-    }
+
 }

@@ -19,8 +19,4 @@ import org.springframework.stereotype.Service;
 public class SysRoleResServiceImpl extends BaseServiceImpl<SysRoleResRepository, SysRoleRes, Long>
         implements SysRoleResService {
 
-    @Override
-    public SysRoleRes completeEntity(SysRoleRes entity) {
-        return entity;
-    }
 }
