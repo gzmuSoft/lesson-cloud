@@ -14,7 +14,7 @@
 | GET | /{resource}/{id} | - | 获取指定的一条数据
 | POST| /{resource} | json 对象 | 新增一条数据
 | PUT | /{resource}/{id} | 修改后的 json 对象 | 修改指定对象，提供所有字段
-| PATCH | /{resource}/{id} | 修改后的 json 对象 |修改指定对象，提供部分字段 |
+| PATCH | /{resource}/{id} | 修改后的 json 对象 |修改指定对象，提供部分字段 
 | GET | /{resource}/search | - | 获取指定资源的其他操作方法
 |===
 
