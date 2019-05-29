@@ -35,4 +35,9 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleRepository, SysRo
                         new UserNotFoundException(String.format("The user %s not found!", username)));
         return sysRoleRepository.searchBySysUserId(user.getId());
     }
+
+    @Override
+    public SysRole completeEntity(SysRole entity) {
+        return entity;
+    }
 }

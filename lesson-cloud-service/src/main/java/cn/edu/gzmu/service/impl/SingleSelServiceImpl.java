@@ -25,18 +25,15 @@ import org.springframework.stereotype.Service;
 public class SingleSelServiceImpl extends BaseServiceImpl<SingleSelRepository, SingleSel, Long>
         implements SingleSelService {
 
-    private final @NonNull SingleSelRepository singleSelRepository;
     private final @NonNull CourseRepository courseRepository;
     private final @NonNull SectionRepository sectionRepository;
     private final @NonNull KnowledgeRepository knowledgeRepository;
 
     @Override
-    public Page<SingleSel> searchAll(Pageable pageable) {
-        return singleSelRepository.findAll(pageable).map(singleSel -> {
-            singleSel.setCourse(courseRepository.getOne(singleSel.getCourseId()));
-            singleSel.setSection(sectionRepository.getOne(singleSel.getSectionId()));
-            singleSel.setKnowledge(knowledgeRepository.getOne(singleSel.getKnowledgeId()));
-            return singleSel;
-        });
+    public SingleSel completeEntity(SingleSel entity) {
+        entity.setCourse(courseRepository.getOne(entity.getCourseId()));
+        entity.setSection(sectionRepository.getOne(entity.getSectionId()));
+        entity.setKnowledge(knowledgeRepository.getOne(entity.getKnowledgeId()));
+        return entity;
     }
 }

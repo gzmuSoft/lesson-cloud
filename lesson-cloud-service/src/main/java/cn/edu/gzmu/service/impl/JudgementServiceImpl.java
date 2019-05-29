@@ -8,8 +8,6 @@ import cn.edu.gzmu.repository.entity.SectionRepository;
 import cn.edu.gzmu.service.JudgementService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
@@ -25,18 +23,16 @@ import org.springframework.stereotype.Service;
 public class JudgementServiceImpl extends BaseServiceImpl<JudgementRepository, Judgement, Long>
         implements JudgementService {
 
-    private final @NonNull JudgementRepository judgementRepository;
     private final @NonNull CourseRepository courseRepository;
     private final @NonNull SectionRepository sectionRepository;
     private final @NonNull KnowledgeRepository knowledgeRepository;
 
     @Override
-    public Page<Judgement> searchAll(Pageable pageable) {
-        return judgementRepository.findAll(pageable).map(judgement -> {
-            judgement.setCourse(courseRepository.getOne(judgement.getCourseId()));
-            judgement.setSection(sectionRepository.getOne(judgement.getSectionId()));
-            judgement.setKnowledge(knowledgeRepository.getOne(judgement.getKnowledgeId()));
-            return judgement;
-        });
+    public Judgement completeEntity(Judgement entity) {
+        entity.setCourse(courseRepository.getOne(entity.getCourseId()));
+        entity.setSection(sectionRepository.getOne(entity.getSectionId()));
+        entity.setKnowledge(knowledgeRepository.getOne(entity.getKnowledgeId()));
+        return entity;
     }
+
 }

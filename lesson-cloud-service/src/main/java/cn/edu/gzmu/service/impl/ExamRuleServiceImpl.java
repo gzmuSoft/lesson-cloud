@@ -4,11 +4,9 @@ import cn.edu.gzmu.model.entity.ExamRule;
 import cn.edu.gzmu.repository.entity.ExamRepository;
 import cn.edu.gzmu.repository.entity.ExamRuleRepository;
 import cn.edu.gzmu.service.ExamRuleService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 
 /**
@@ -23,14 +21,12 @@ import lombok.NonNull;
 public class ExamRuleServiceImpl extends BaseServiceImpl<ExamRuleRepository, ExamRule, Long>
         implements ExamRuleService {
 
-    private final @NonNull ExamRuleRepository examRuleRepository;
     private final @NonNull ExamRepository examRepository;
 
     @Override
-    public Page<ExamRule> searchAll(Pageable pageable) {
-        return examRuleRepository.findAll(pageable).map(examRule -> {
-            examRule.setExam(examRepository.getOne(examRule.getExamId()));
-            return examRule;
-        });
+    public ExamRule completeEntity(ExamRule entity) {
+        entity.setExam(examRepository.getOne(entity.getExamId()));
+        return entity;
     }
+
 }

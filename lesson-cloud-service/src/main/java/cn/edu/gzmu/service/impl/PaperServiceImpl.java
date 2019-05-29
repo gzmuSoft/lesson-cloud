@@ -6,8 +6,6 @@ import cn.edu.gzmu.repository.entity.PaperRepository;
 import cn.edu.gzmu.service.PaperService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
@@ -25,11 +23,9 @@ public class PaperServiceImpl extends BaseServiceImpl<PaperRepository, Paper, Lo
     private final @NonNull ExamRepository examRepository;
 
     @Override
-    public Page<Paper> searchAll(Pageable pageable) {
-        return super.searchAll(pageable).map(paper -> {
-            paper.setExam(examRepository.getOne(paper.getExamId()));
-            return paper;
-        });
+    public Paper completeEntity(Paper entity) {
+        entity.setExam(examRepository.getOne(entity.getExamId()));
+        return entity;
     }
 
 }

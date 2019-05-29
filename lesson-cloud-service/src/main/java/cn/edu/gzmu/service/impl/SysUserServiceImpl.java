@@ -14,8 +14,6 @@ import cn.edu.gzmu.service.SysUserService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -83,15 +81,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserRepository, SysUs
     }
 
     @Override
-    public Page<SysUser> searchAll(Pageable pageable) {
-        return sysUserRepository.findAll(pageable).map(sysUser -> {
-            if (EntityType.isStudent(sysUser.getEntityType())) {
-                sysUser.setStudent(studentRepository.getOne(sysUser.getEntityId()));
-            } else if (EntityType.isTeacher(sysUser.getEntityType())) {
-                sysUser.setTeacher(teacherRepository.getOne(sysUser.getEntityId()));
-            }
-            return sysUser;
-        });
+    public SysUser completeEntity(SysUser entity) {
+        if (EntityType.isStudent(entity.getEntityType())) {
+            entity.setStudent(studentRepository.getOne(entity.getEntityId()));
+        } else if (EntityType.isTeacher(entity.getEntityType())) {
+            entity.setTeacher(teacherRepository.getOne(entity.getEntityId()));
+        }
+        return entity;
     }
 
     private boolean existUser(SysUser user) {

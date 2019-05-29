@@ -19,4 +19,9 @@ import org.springframework.stereotype.Service;
 public class AppealServiceImpl extends BaseServiceImpl<AppealRepository, Appeal, Long>
         implements AppealService {
 
+    @Override
+    public Appeal completeEntity(Appeal entity) {
+        return entity;
+    }
+
 }

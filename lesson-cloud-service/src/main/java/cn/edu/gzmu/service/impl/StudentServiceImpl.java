@@ -1,6 +1,7 @@
 package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.entity.Student;
+import cn.edu.gzmu.model.exception.ResourceNotFoundException;
 import cn.edu.gzmu.repository.entity.StudentRepository;
 import cn.edu.gzmu.repository.entity.SysDataRepository;
 import cn.edu.gzmu.repository.entity.SysUserRepository;
@@ -24,23 +25,18 @@ import org.springframework.stereotype.Service;
 public class StudentServiceImpl extends BaseServiceImpl<StudentRepository, Student, Long>
         implements StudentService {
 
-    private final @NonNull StudentRepository studentRepository;
     private final @NonNull SysDataRepository sysDataRepository;
     private final @NonNull SysUserRepository sysUserRepository;
 
     @Override
-    public Page<Student> searchAll(Pageable pageable) {
-        return studentRepository.findAll(pageable).map(student -> {
-            // 我真的不喜欢那么多 if
-            // 然而三元表达式又难以理解
-            // 无奈无奈 (；′⌒`)
-            student.setSchool(sysDataRepository.getOne(student.getSchoolId()));
-            student.setCollege(sysDataRepository.getOne(student.getSchoolId()));
-            student.setDep(sysDataRepository.getOne(student.getDepId()));
-            student.setSpecialty(sysDataRepository.getOne(student.getSpecialtyId()));
-            student.setClasses(sysDataRepository.getOne(student.getClassId()));
-            student.setUser(sysUserRepository.getOne(student.getUserId()));
-            return student;
-        });
+    public Student completeEntity(Student entity) {
+        entity.setSchool(sysDataRepository.getOne(entity.getSchoolId()));
+        entity.setCollege(sysDataRepository.getOne(entity.getSchoolId()));
+        entity.setDep(sysDataRepository.getOne(entity.getDepId()));
+        entity.setSpecialty(sysDataRepository.getOne(entity.getSpecialtyId()));
+        entity.setClasses(sysDataRepository.getOne(entity.getClassId()));
+        entity.setUser(sysUserRepository.getOne(entity.getUserId()));
+        return entity;
     }
+
 }
