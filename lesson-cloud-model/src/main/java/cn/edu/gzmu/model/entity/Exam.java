@@ -13,6 +13,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -70,4 +71,11 @@ public class Exam extends BaseEntity implements Serializable {
      * 可以考试的次数限制（正数，0代表可以无限次考试）
      */
     private java.lang.Integer allowTimes;
+
+    /**
+     * 课程实体
+     * */
+    @Transient
+    private Course course;
+
 }
