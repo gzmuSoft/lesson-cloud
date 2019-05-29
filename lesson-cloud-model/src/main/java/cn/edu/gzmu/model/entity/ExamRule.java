@@ -13,6 +13,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -66,4 +67,10 @@ public class ExamRule extends BaseEntity implements Serializable {
      */
     @javax.validation.constraints.NotNull(message = "eachValue 每题分值 为必填项")
     private java.lang.Float eachValue;
+
+    /**
+     * 考试编号
+     */
+    @Transient
+    private Exam exam;
 }
