@@ -33,10 +33,10 @@
 
 所以我们的任务就是单独写一个接口来完成数据完整性的封装。已经完成的是 `Student` 表，为了完成这个功能我修改了如下的类：
 
-* `cn.edu.gzmu.controller.StudentController`
 * `cn.edu.gzmu.model.entity.Student`
 * `cn.edu.gzmu.service.StudentService`
-* `cn.edu.gzmu.service.impl.StudentServiceImpl`
+
+现在只用改两个类了，更简单了。
 
 具体过程非常简单，仔细看看就可以发现其实代码真的很少，从 `Controller -> Service -> Repository`。需要写得顶多二十行代码，以及够简单了。。。
 
@@ -71,7 +71,7 @@ ____
 | program | 编程题 | 待认领 | 未完成
 | section | 章节 | 刘传锦 | 未完成
 | sel_options | 单/多项选择题/填空题的选项信息表 | 待认领 | 未完成
-| semester | 学期 | 待认领 | 未完成
+| semester | 学期 | 黄子良 | 未完成
 | single_sel | 单项选择题 |  严宪法 | 未完成
 | student | 学生信息表 | 李中月 | 已完成
 | sys_data | 系统基本数据表 | 待认领 | 未完成

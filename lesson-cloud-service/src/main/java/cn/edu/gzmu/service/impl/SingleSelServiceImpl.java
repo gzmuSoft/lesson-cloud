@@ -20,8 +20,8 @@ import org.springframework.stereotype.Service;
  * @version 1.0
  * @date 2019-5-7 11:33:57
  */
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class SingleSelServiceImpl extends BaseServiceImpl<SingleSelRepository, SingleSel, Long>
         implements SingleSelService {
 
@@ -33,15 +33,9 @@ public class SingleSelServiceImpl extends BaseServiceImpl<SingleSelRepository, S
     @Override
     public Page<SingleSel> searchAll(Pageable pageable) {
         return singleSelRepository.findAll(pageable).map(singleSel -> {
-            if (singleSel.getCourseId() != null) {
-                singleSel.setCourse(courseRepository.getOne(singleSel.getCourseId()));
-            }
-            if (singleSel.getSectionId() != null) {
-                singleSel.setSection(sectionRepository.getOne(singleSel.getSectionId()));
-            }
-            if (singleSel.getKnowledgeId() != null) {
-                singleSel.setKnowledge(knowledgeRepository.getOne(singleSel.getKnowledgeId()));
-            }
+            singleSel.setCourse(courseRepository.getOne(singleSel.getCourseId()));
+            singleSel.setSection(sectionRepository.getOne(singleSel.getSectionId()));
+            singleSel.setKnowledge(knowledgeRepository.getOne(singleSel.getKnowledgeId()));
             return singleSel;
         });
     }

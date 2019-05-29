@@ -1,8 +1,6 @@
 package cn.edu.gzmu.service;
 
 import cn.edu.gzmu.model.entity.Judgement;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 
 /**
@@ -14,11 +12,4 @@ import org.springframework.data.domain.Pageable;
  */
 public interface JudgementService extends BaseService<Judgement, Long> {
 
-    /**
-     * 分页查询所有判断题
-     *
-     * @param pageable 分页信息
-     * @return 分页结果
-     */
-    Page<Judgement> searchAll(Pageable pageable);
 }

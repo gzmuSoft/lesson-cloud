@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service;
  * @version 1.0
  * @date 2019-5-7 11:33:57
  */
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
         implements ExamService {
 
@@ -29,9 +29,7 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
     @Override
     public Page<Exam> searchAll(Pageable pageable) {
         return examRepository.findAll(pageable).map(exam -> {
-            if (exam.getCourseId() != null) {
-                exam.setCourse(courseRepository.getOne(exam.getCourseId()));
-            }
+            exam.setCourse(courseRepository.getOne(exam.getCourseId()));
             return exam;
         });
     }

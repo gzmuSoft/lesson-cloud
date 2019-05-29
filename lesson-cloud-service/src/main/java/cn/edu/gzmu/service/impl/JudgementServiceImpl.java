@@ -20,8 +20,8 @@ import org.springframework.stereotype.Service;
  * @version 1.0
  * @date 2019-5-7 11:33:57
  */
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class JudgementServiceImpl extends BaseServiceImpl<JudgementRepository, Judgement, Long>
         implements JudgementService {
 
@@ -33,15 +33,9 @@ public class JudgementServiceImpl extends BaseServiceImpl<JudgementRepository, J
     @Override
     public Page<Judgement> searchAll(Pageable pageable) {
         return judgementRepository.findAll(pageable).map(judgement -> {
-            if (judgement.getCourseId() != null) {
-                judgement.setCourse(courseRepository.getOne(judgement.getCourseId()));
-            }
-            if (judgement.getSectionId() != null) {
-                judgement.setSection(sectionRepository.getOne(judgement.getSectionId()));
-            }
-            if (judgement.getKnowledgeId() != null) {
-                judgement.setKnowledge(knowledgeRepository.getOne(judgement.getKnowledgeId()));
-            }
+            judgement.setCourse(courseRepository.getOne(judgement.getCourseId()));
+            judgement.setSection(sectionRepository.getOne(judgement.getSectionId()));
+            judgement.setKnowledge(knowledgeRepository.getOne(judgement.getKnowledgeId()));
             return judgement;
         });
     }

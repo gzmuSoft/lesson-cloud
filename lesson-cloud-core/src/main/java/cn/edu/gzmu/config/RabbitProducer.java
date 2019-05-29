@@ -66,7 +66,7 @@ public class RabbitProducer {
      * getRemoteHost()：客户端电脑名，若失败，则返回来源ip
      */
     @Around("annotationRepositoryController() || restController() || annotationRestController()")
-    public Object logMessageGenerate(ProceedingJoinPoint joinPoint) {
+    public Object logMessageGenerate(ProceedingJoinPoint joinPoint) throws Throwable {
         SysLog sysLog = new SysLog();
         sysLog.setArgs(StringUtils.left(
                 Stream.of(joinPoint.getArgs())
@@ -78,18 +78,10 @@ public class RabbitProducer {
                 .setFromUrl(httpServletRequest.getRequestURL().toString())
                 .setUrl(httpServletRequest.getRequestURI())
                 .setOperation(httpServletRequest.getMethod());
-        Object proceed = null;
-        try {
-            proceed = joinPoint.proceed();
-            sysLog.setStatus("1")
-                    .setResult(StringUtils.left(proceed.toString(), 10240));
-        } catch (Throwable throwable) {
-            sysLog.setStatus("0")
-                    .setResult(StringUtils.left(throwable.getMessage(), 10240));
-            throwable.printStackTrace();
-        } finally {
-            rabbitmqTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_KEY, sysLog);
-        }
+        Object proceed = joinPoint.proceed();
+        sysLog.setStatus("1")
+                .setResult(StringUtils.left(proceed.toString(), 10240));
+        rabbitmqTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_KEY, sysLog);
         return proceed;
     }
 }
