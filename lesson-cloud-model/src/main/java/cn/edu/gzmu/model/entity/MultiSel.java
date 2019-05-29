@@ -13,6 +13,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -70,4 +71,22 @@ public class MultiSel extends BaseEntity implements Serializable {
      */
     @javax.validation.constraints.NotNull(message = "knowledgeId 知识点编号 为必填项")
     private java.lang.Long knowledgeId;
+
+    /**
+     * 课程实体
+     * */
+    @Transient
+    private Course course;
+
+    /**
+     * 章节实体
+     * */
+    @Transient
+    private Section section;
+
+    /**
+     * 知识点编号
+     * */
+    @Transient
+    private Knowledge knowledge;
 }
