@@ -15,4 +15,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(path = "/sysLog")
 public interface SysLogRepository extends BaseRepository<SysLog, Long> {
 
+
+
 }

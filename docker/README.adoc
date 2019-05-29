@@ -3,7 +3,6 @@ EchoCow <lizhongyue248@163.com>
 v1.0, 2019-4-22
 :toc: right
 
-
 = lesson-cloud 环境部署
 
 为了方便后端环境的搭建以及统一，国睿学长和我商量了后决定使用 docker 进行环境搭建
