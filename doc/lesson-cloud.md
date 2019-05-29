@@ -81,7 +81,7 @@
 | GET | / |  -  |  获取所有资源简单概述 |
 | GET | /profile | - | 获取所有资源的详细概述 |
 | GET | /{resource}| - |  获取分页后的数据 |
-| GET | /{resource}/profile | - | 获取指定资源的概述 |
+| GET | /profile/{resource} | - | 获取指定资源的概述 |
 | GET | /{resource}/{id} | - | 获取指定的一条数据 |
 | POST| /{resource} | json 对象 | 新增一条数据 |
 | PUT | /{resource}/{id} | 修改后的 json 对象 | 修改指定对象，提供所有字段 |
