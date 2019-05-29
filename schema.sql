@@ -438,6 +438,34 @@ CREATE TABLE `sel_options`
   ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for semester
+-- ----------------------------
+DROP TABLE IF EXISTS `semester`;
+CREATE TABLE `semester`
+(
+    `id`          bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
+    `name`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称',
+    `spell`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
+    `school_id`   bigint(20)                                              NOT NULL COMMENT '学校编号',
+    `startDate`   date                                                    NULL     DEFAULT NULL COMMENT '起始日期',
+    `endDate`     date                                                    NULL     DEFAULT NULL COMMENT '结束日期',
+    `sort`        smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
+    `create_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
+    `create_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
+    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
+    `modify_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
+    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
+    `is_enable`   binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `FK_school` (`school_id`) USING BTREE,
+    CONSTRAINT `semester_school_ibfk` FOREIGN KEY (`school_id`) REFERENCES `sys_data` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  CHARACTER SET = utf8
+  COLLATE = utf8_general_ci COMMENT = '学期'
+  ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for single_sel
 -- ----------------------------
 DROP TABLE IF EXISTS `single_sel`;
@@ -473,6 +501,43 @@ CREATE TABLE `single_sel`
   ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for student
+-- ----------------------------
+DROP TABLE IF EXISTS `student`;
+CREATE TABLE `student`
+(
+    `id`                   bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
+    `name`                 varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称',
+    `spell`                varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称的全拼',
+    `user_id`              bigint(20)                                               NULL     DEFAULT NULL COMMENT '用户编号',
+    `school_id`            bigint(20)                                               NULL     DEFAULT NULL COMMENT '学校编号',
+    `college_id`           bigint(20)                                               NULL     DEFAULT NULL COMMENT '学院编号',
+    `dep_id`               bigint(20)                                               NULL     DEFAULT NULL COMMENT '系部编号',
+    `specialty_id`         bigint(20)                                               NULL     DEFAULT NULL COMMENT '专业编号',
+    `class_id`             bigint(20)                                               NULL     DEFAULT NULL COMMENT '班级编号',
+    `gender`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '性别',
+    `birthday`             date                                                     NULL     DEFAULT NULL COMMENT '出生日期',
+    `enter_date`           date                                                     NULL     DEFAULT NULL COMMENT '入校时间',
+    `academic`             varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '最后学历',
+    `graduation_date`      date                                                     NULL     DEFAULT NULL COMMENT '最后学历毕业时间',
+    `graduate_institution` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '最后学历毕业院校',
+    `original_major`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '最后学历所学专业（若最后学历是高中，则不需要填写\r\n若最后学历是大专，则需要填写）',
+    `resume`               varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '个人简历',
+    `sort`                 smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
+    `create_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
+    `create_time`          datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
+    `modify_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
+    `modify_time`          datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
+    `remark`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
+    `is_enable`            binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  CHARACTER SET = utf8
+  COLLATE = utf8_general_ci COMMENT = '学生信息表'
+  ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for sys_data
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_data`;
@@ -504,24 +569,22 @@ CREATE TABLE `sys_data`
 DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE `sys_log`
 (
-    `id`          bigint(20)                                                NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`        varchar(55) CHARACTER SET utf8 COLLATE utf8_general_ci    NULL     DEFAULT NULL COMMENT '名称',
-    `spell`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT '' COMMENT '名称的全拼',
-    `browser`     varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '浏览器',
-    `operation`   varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci    NULL     DEFAULT NULL COMMENT '操作方式：GET/POST',
-    `from_url`    varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '访问的实际url地址',
-    `ip`          varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '来源ip地址',
-    `url`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '访问url相对地址',
-    `args`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci   null     DEFAULT NULL comment '请求参数',
-    `result`      varchar(10240) CHARACTER SET utf8 COLLATE utf8_general_ci null     DEFAULT NULL comment '返回结果',
-    `status`      varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci     NULL     DEFAULT '1' COMMENT '1-记录',
-    `sort`        int(11)                                                   NULL     DEFAULT 1,
-    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time` datetime(0)                                               NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time` datetime(0)                                               NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`   binary(1)                                                 NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
+    `id`          bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
+    `name`        varchar(55) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '名称',
+    `spell`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT '' COMMENT '名称的全拼',
+    `browser`     varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '浏览器',
+    `operation`   varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '操作方式：GET/POST',
+    `from_url`    varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '访问的实际url地址',
+    `ip`          varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '来源ip地址',
+    `url`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '访问url相对地址',
+    `status`      varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci    NULL     DEFAULT '1' COMMENT '1-记录',
+    `sort`        int(11)                                                  NULL     DEFAULT 1,
+    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
+    `create_time` datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
+    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
+    `modify_time` datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
+    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
+    `is_enable`   binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 3
@@ -733,155 +796,6 @@ CREATE TABLE `sys_user_role`
 INSERT INTO `sys_user_role`
 VALUES (1, '管理员权限赋予管理员', NULL, 1, 1, NULL, NULL, '2019-04-20 17:23:12', NULL, '2019-04-20 17:23:12', NULL, 0x31);
 
-/*
-调整说明：
-1、增加用户申诉表appeal、逻辑班级表logic_class
-2、修改semester表中原先误写的3个字段名
-3、student表增加学号no和身份证号id_number字段
-4、teacher表删除多余的phone和e-mail字段
-5、userconnection表更名为user_connection，以便统一命名方式
-*/
-
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for appeal
--- ----------------------------
-DROP TABLE IF EXISTS `appeal`;
-CREATE TABLE `appeal`
-(
-    `id`                bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`              varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称',
-    `spell`             varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `school_id`         bigint(20)                                              NOT NULL COMMENT '学校编号',
-    `student_no`        varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '学号',
-    `student_name`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '学生姓名',
-    `id_number`         varchar(18) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '学生身份证号',
-    `email`             varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '申诉邮箱，用于接收申诉处理结果',
-    `id_path`           varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '上传的身份证照片保存路径',
-    `student_card_path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '上传的学生证照片保存路径',
-    `sort`              smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`       datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`       datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`            varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`         binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_school` (`school_id`) USING BTREE,
-    CONSTRAINT `appeal_ibfk_1` FOREIGN KEY (`school_id`) REFERENCES `sys_data` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '用户申诉'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for logic_class
--- ----------------------------
-DROP TABLE IF EXISTS `logic_class`;
-CREATE TABLE `logic_class`
-(
-    `id`           bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称',
-    `spell`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `type`         binary(1)                                               NULL     DEFAULT NULL COMMENT '0：物理班级(class_id值为实体班级id)，1：学生个体(student_id为学生实体id)',
-    `school_id`    bigint(20)                                              NOT NULL COMMENT '学校编号',
-    `college_id`   bigint(20)                                              NULL     DEFAULT NULL COMMENT '学院编号',
-    `dep_id`       bigint(20)                                              NULL     DEFAULT NULL COMMENT '系部编号',
-    `specialty_id` bigint(20)                                              NULL     DEFAULT NULL COMMENT '专业编号',
-    `class_id`     bigint(20)                                              NULL     DEFAULT NULL COMMENT '实体班级id，type为0值，本字段值才有效',
-    `student_id`   bigint(20)                                              NULL     DEFAULT NULL COMMENT '学生实体id，type为1值，本字段值才有效',
-    `teacher_id`   bigint(20)                                              NULL     DEFAULT NULL COMMENT '教师编号',
-    `semester_id`  bigint(20)                                              NULL     DEFAULT NULL COMMENT '学期编号',
-    `course_id`    bigint(20)                                              NULL     DEFAULT NULL COMMENT '课程编号',
-    `period`       smallint(6)                                             NULL     DEFAULT NULL COMMENT '学时',
-    `credit`       float                                                   NULL     DEFAULT NULL COMMENT '学分',
-    `course_type`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '课程性质',
-    `sort`         smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`  datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`  datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`    binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_school` (`school_id`) USING BTREE,
-    CONSTRAINT `logic_class_ibfk_1` FOREIGN KEY (`school_id`) REFERENCES `sys_data` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '逻辑班级'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for semester
--- ----------------------------
-DROP TABLE IF EXISTS `semester`;
-CREATE TABLE `semester`
-(
-    `id`          bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称',
-    `spell`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `school_id`   bigint(20)                                              NOT NULL COMMENT '学校编号',
-    `start_date`  date                                                    NULL     DEFAULT NULL COMMENT '起始日期',
-    `end_date`    date                                                    NULL     DEFAULT NULL COMMENT '结束日期',
-    `sort`        smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`   binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_school` (`school_id`) USING BTREE,
-    CONSTRAINT `semester_school_ibfk` FOREIGN KEY (`school_id`) REFERENCES `sys_data` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '学期'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for student
--- ----------------------------
-DROP TABLE IF EXISTS `student`;
-CREATE TABLE `student`
-(
-    `id`                   bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`                 varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称',
-    `spell`                varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `user_id`              bigint(20)                                               NULL     DEFAULT NULL COMMENT '用户编号',
-    `school_id`            bigint(20)                                               NULL     DEFAULT NULL COMMENT '学校编号',
-    `college_id`           bigint(20)                                               NULL     DEFAULT NULL COMMENT '学院编号',
-    `dep_id`               bigint(20)                                               NULL     DEFAULT NULL COMMENT '系部编号',
-    `specialty_id`         bigint(20)                                               NULL     DEFAULT NULL COMMENT '专业编号',
-    `class_id`             bigint(20)                                               NULL     DEFAULT NULL COMMENT '班级编号',
-    `no`                   varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '学号',
-    `gender`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '性别',
-    `id_number`            varchar(18) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '身份证号码',
-    `birthday`             date                                                     NULL     DEFAULT NULL COMMENT '出生日期',
-    `enter_date`           date                                                     NULL     DEFAULT NULL COMMENT '入校时间',
-    `academic`             varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '最后学历',
-    `graduation_date`      date                                                     NULL     DEFAULT NULL COMMENT '最后学历毕业时间',
-    `graduate_institution` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '最后学历毕业院校',
-    `original_major`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '最后学历所学专业（若最后学历是高中，则不需要填写\r\n若最后学历是大专，则需要填写）',
-    `resume`               varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '个人简历',
-    `sort`                 smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`          datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`          datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`            binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '学生信息表'
-  ROW_FORMAT = Dynamic;
-
 -- ----------------------------
 -- Table structure for teacher
 -- ----------------------------
@@ -911,6 +825,8 @@ CREATE TABLE `teacher`
     `is_academic_leader`   binary(1)                                                NULL     DEFAULT NULL COMMENT '是否学术学科带头人',
     `subject_category`     varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '所属学科门类',
     `id_number`            varchar(18) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '身份证号码',
+    `phone`                varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '联系电话',
+    `e-mail`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '邮箱',
     `sort`                 smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
     `create_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
     `create_time`          datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
@@ -926,10 +842,10 @@ CREATE TABLE `teacher`
   ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for user_connection
+-- Table structure for userconnection
 -- ----------------------------
-DROP TABLE IF EXISTS `user_connection`;
-CREATE TABLE `user_connection`
+DROP TABLE IF EXISTS `userconnection`;
+CREATE TABLE `userconnection`
 (
     `userId`         varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     `providerId`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -947,38 +863,6 @@ CREATE TABLE `user_connection`
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
-  ROW_FORMAT = Dynamic;
-
-SET FOREIGN_KEY_CHECKS = 1;
-
--- ----------------------------
--- Table structure for course_timetable_location
--- ----------------------------
-DROP TABLE IF EXISTS `course_timetable_location`;
-CREATE TABLE `course_timetable_location`
-(
-    `id`             bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`           varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称',
-    `spell`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `logic_class_id` bigint(20)                                              NOT NULL COMMENT '逻辑班级编号',
-    `weeks`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '以逗号作为分隔符的各个周序号，例如：1,3,5,7代表第1周、第3周、第5周和第7周上课',
-    `location`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '上课地点',
-    `weekday`        smallint(6)                                             NULL     DEFAULT NULL COMMENT '星期几，1：星期一，2：星期二，3：星期三，4：星期四，5：星期五，6：星期六，7：星期天',
-    `class_section`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '上课是第几节，例如：第1节和第2节上课记录为1~2，第1节至第3节上课记录为1~2~3。如果同一天有多个分开的时间段，则以分号作为分隔符。例如：1~2;7~8',
-    `sort`           smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`    datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`    datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`      binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_school` (`logic_class_id`) USING BTREE,
-    CONSTRAINT `course_timetable_location_ibfk_1` FOREIGN KEY (`logic_class_id`) REFERENCES `logic_class` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '逻辑班级（课程）上课时间表及地点信息'
   ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
