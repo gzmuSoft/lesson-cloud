@@ -19,4 +19,8 @@ import org.springframework.stereotype.Service;
 public class SelOptionsServiceImpl extends BaseServiceImpl<SelOptionsRepository, SelOptions, Long>
         implements SelOptionsService {
 
+    @Override
+    public SelOptions completeEntity(SelOptions entity) {
+        return entity;
+    }
 }

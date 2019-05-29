@@ -21,5 +21,11 @@ public interface BaseService<T extends BaseEntity, ID> {
      */
     Page<T> searchAll(Pageable pageable);
 
+    /**
+     * 根据 ID 查询
+     *
+     * @param id id
+     * @return 结果
+     */
     T searchById(ID id);
 }

@@ -19,4 +19,8 @@ import org.springframework.stereotype.Service;
 public class SysUserRoleServiceImpl extends BaseServiceImpl<SysUserRoleRepository, SysUserRole, Long>
         implements SysUserRoleService {
 
+    @Override
+    public SysUserRole completeEntity(SysUserRole entity) {
+        return entity;
+    }
 }

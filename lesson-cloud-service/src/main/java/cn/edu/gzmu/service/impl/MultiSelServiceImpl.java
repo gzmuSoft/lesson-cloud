@@ -25,18 +25,15 @@ import org.springframework.stereotype.Service;
 public class MultiSelServiceImpl extends BaseServiceImpl<MultiSelRepository, MultiSel, Long>
         implements MultiSelService {
 
-    private final @NonNull MultiSelRepository multiSelRepository;
     private final @NonNull CourseRepository courseRepository;
     private final @NonNull SectionRepository sectionRepository;
     private final @NonNull KnowledgeRepository knowledgeRepository;
 
     @Override
-    public Page<MultiSel> searchAll(Pageable pageable) {
-        return multiSelRepository.findAll(pageable).map(multiSel -> {
-            multiSel.setCourse(courseRepository.getOne(multiSel.getCourseId()));
-            multiSel.setSection(sectionRepository.getOne(multiSel.getSectionId()));
-            multiSel.setKnowledge(knowledgeRepository.getOne(multiSel.getKnowledgeId()));
-            return multiSel;
-        });
+    public MultiSel completeEntity(MultiSel entity) {
+        entity.setCourse(courseRepository.getOne(entity.getCourseId()));
+        entity.setSection(sectionRepository.getOne(entity.getSectionId()));
+        entity.setKnowledge(knowledgeRepository.getOne(entity.getKnowledgeId()));
+        return entity;
     }
 }

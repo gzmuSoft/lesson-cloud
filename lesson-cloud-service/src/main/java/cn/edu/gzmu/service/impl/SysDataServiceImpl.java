@@ -19,4 +19,8 @@ import org.springframework.stereotype.Service;
 public class SysDataServiceImpl extends BaseServiceImpl<SysDataRepository, SysData, Long>
         implements SysDataService {
 
+    @Override
+    public SysData completeEntity(SysData entity) {
+        return entity;
+    }
 }

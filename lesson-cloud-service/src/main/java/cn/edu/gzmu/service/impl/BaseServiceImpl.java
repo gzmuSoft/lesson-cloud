@@ -23,14 +23,23 @@ public abstract class BaseServiceImpl<R extends BaseRepository<T, ID>, T extends
 
     @Override
     public Page<T> searchAll(Pageable pageable) {
-        return baseRepository.findAll(pageable);
+        return baseRepository.findAll(pageable).map(this::completeEntity);
     }
 
     @Override
     public T searchById(ID id) {
-        return baseRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException(String.format("the resource by id %s not found!", id))
-        );
+        return completeEntity(baseRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new));
     }
+
+    /**
+     * 实体的封装
+     * 对于子类来说，不同的仅仅是他的实体类的封装方式，我们需要子类自己去定义他的实现
+     * 通过他的实现来完成收集以及封装操作
+     *
+     * @param entity 实体
+     * @return 封装完整信息的实体
+     */
+    public abstract T completeEntity(T entity);
 
 }

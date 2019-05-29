@@ -19,4 +19,8 @@ import org.springframework.stereotype.Service;
 public class ProgramServiceImpl extends BaseServiceImpl<ProgramRepository, Program, Long>
         implements ProgramService {
 
+    @Override
+    public Program completeEntity(Program entity) {
+        return entity;
+    }
 }

@@ -19,4 +19,8 @@ import org.springframework.stereotype.Service;
 public class SemesterServiceImpl extends BaseServiceImpl<SemesterRepository, Semester, Long>
         implements SemesterService {
 
+    @Override
+    public Semester completeEntity(Semester entity) {
+        return entity;
+    }
 }

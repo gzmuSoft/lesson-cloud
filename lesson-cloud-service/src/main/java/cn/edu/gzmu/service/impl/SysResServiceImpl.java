@@ -30,4 +30,9 @@ public class SysResServiceImpl extends BaseServiceImpl<SysResRepository, SysRes,
         return sysResRepository.searchBySysRoleIds(roles.stream()
                 .map(SysRole::getId).toArray(Long[]::new));
     }
+
+    @Override
+    public SysRes completeEntity(SysRes entity) {
+        return entity;
+    }
 }
