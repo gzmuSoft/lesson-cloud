@@ -29,7 +29,7 @@ public class SysUserController extends BaseController<SysUser, SysUserService, L
 
     @GetMapping(COMPLETE)
     public HttpEntity<?> resources(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(pagedResources(LessonResource.SYS_USER, sysUserService.searchAll(pageable)));
+        return ResponseEntity.ok(pagedResources(sysUserService.searchAll(pageable)));
     }
 
 }

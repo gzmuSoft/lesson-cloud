@@ -36,7 +36,7 @@ public class SingleSelController extends BaseController<SingleSel, SingleSelServ
      */
     @GetMapping(COMPLETE)
     public HttpEntity<?> resources(@PageableDefault(sort = {"sort","id"}) Pageable pageable){
-        return ResponseEntity.ok(pagedResources(LessonResource.SINGLE_SEL,singleSelService.searchAll(pageable)));
+        return ResponseEntity.ok(pagedResources(singleSelService.searchAll(pageable)));
     }
 
 

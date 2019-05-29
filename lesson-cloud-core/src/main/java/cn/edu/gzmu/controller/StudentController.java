@@ -34,7 +34,7 @@ public class StudentController extends BaseController<Student, StudentService, L
      */
     @GetMapping(COMPLETE)
     public HttpEntity<?> resources(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(pagedResources(LessonResource.STUDENT, studentService.searchAll(pageable)));
+        return ResponseEntity.ok(pagedResources(studentService.searchAll(pageable)));
     }
 
 }

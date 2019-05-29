@@ -35,6 +35,6 @@ public class JudgementController extends BaseController<Judgement, JudgementServ
      */
     @GetMapping(COMPLETE)
     public HttpEntity<?> resources(@PageableDefault(sort = {"sort","id"}) Pageable pageable){
-        return ResponseEntity.ok(pagedResources(LessonResource.JUDGEMENT,judgementService.searchAll(pageable)));
+        return ResponseEntity.ok(pagedResources(judgementService.searchAll(pageable)));
     }
 }

@@ -35,7 +35,7 @@ public class MultiSelController extends BaseController<MultiSel, MultiSelService
      */
     @GetMapping(COMPLETE)
     public HttpEntity<?> resources(@PageableDefault(sort = {"sort","id"}) Pageable pageable){
-        return ResponseEntity.ok(pagedResources(LessonResource.SINGLE_SEL,multiSelService.searchAll(pageable)));
+        return ResponseEntity.ok(pagedResources(multiSelService.searchAll(pageable)));
     }
 
 }
