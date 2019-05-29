@@ -12,17 +12,17 @@ services:
     command: 
       redis-server
     restart: always
-#  lesson-cloud-mysql:
-#    container_name: mysql-dev
-#    image: mysql:8
-#    ports:
-#      - 3306:3306
-#    volumes:
-#      - "${MYSQL_DIR}/data:/var/lib/mysql"
-#      - "${MYSQL_DIR}/conf.d:/etc/mysql/conf.d"
-#    environment:
-#      # environment variables
-#      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+  lesson-cloud-mysql:
+    container_name: mysql-dev
+    image: mysql:8
+    ports:
+      - 3306:3306
+    volumes:
+      - "${MYSQL_DIR}/data:/var/lib/mysql"
+      - "${MYSQL_DIR}/conf.d:/etc/mysql/conf.d"
+    environment:
+      # environment variables
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
   lesson-cloud-rabbitmq:
     container_name: rabbitmq-dev
     build: ./rabbitmq/
