@@ -5,10 +5,8 @@ import cn.edu.gzmu.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.mvc.BasicLinkBuilder;
 
 
 /**
@@ -43,25 +41,8 @@ public class BaseController<E extends BaseEntity, S extends BaseService, ID> {
                 page.getTotalPages());
     }
 
-    PagedResources<Resource<E>> pagedResources(String resource, String info, Page<E> page) {
-        PagedResources<Resource<E>> pagedResources = myPagedResourcesAssembler.toResource(page);
-        int number = page.getNumber();
-        final String path = resource + info + "?page=%s&size=%s";
-        if (page.hasNext()) {
-            pagedResources.add(BasicLinkBuilder.linkToCurrentMapping()
-                    .slash(String.format(path, number + 1, page.getSize()))
-                    .withRel(Link.REL_NEXT));
-        }
-        if (page.hasPrevious()) {
-            pagedResources.add(BasicLinkBuilder.linkToCurrentMapping()
-                    .slash(String.format(path, number - 1, page.getSize()))
-                    .withRel(Link.REL_PREVIOUS));
-        }
-        return pagedResources;
-    }
-
-    PagedResources<Resource<E>> pagedResources(String resource, Page<E> page) {
-        return pagedResources(resource, COMPLETE, page);
+    PagedResources<Resource<E>> pagedResources( Page<E> page) {
+        return myPagedResourcesAssembler.toResource(page);
     }
 
 }
