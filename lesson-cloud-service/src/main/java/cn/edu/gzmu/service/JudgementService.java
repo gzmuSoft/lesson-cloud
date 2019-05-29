@@ -15,7 +15,7 @@ import org.springframework.data.domain.Pageable;
 public interface JudgementService extends BaseService<Judgement, Long> {
 
     /**
-     * 分页查询所有
+     * 分页查询所有判断题
      *
      * @param pageable 分页信息
      * @return 分页结果
