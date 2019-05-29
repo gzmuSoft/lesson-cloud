@@ -27,9 +27,7 @@ public class PaperServiceImpl extends BaseServiceImpl<PaperRepository, Paper, Lo
     @Override
     public Page<Paper> searchAll(Pageable pageable) {
         return super.searchAll(pageable).map(paper -> {
-            if (paper.getExamId() != null) {
-                paper.setExam(examRepository.getOne(paper.getExamId()));
-            }
+            paper.setExam(examRepository.getOne(paper.getExamId()));
             return paper;
         });
     }

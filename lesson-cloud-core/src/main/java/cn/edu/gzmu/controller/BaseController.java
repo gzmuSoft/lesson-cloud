@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @version 1.0
  * @date 2019-4-11 14:50:46
  */
-//@SuppressWarnings({"all", "unchecked"})
+@SuppressWarnings({"all", "unchecked"})
 public abstract class BaseController<E extends BaseEntity, S extends BaseService<E, ID>, ID> {
     private static final String COMPLETE = "/complete";
     private static final String COMPLETE_ONE = COMPLETE + "/{id}";

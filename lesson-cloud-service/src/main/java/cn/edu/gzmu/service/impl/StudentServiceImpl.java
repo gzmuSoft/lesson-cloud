@@ -34,24 +34,12 @@ public class StudentServiceImpl extends BaseServiceImpl<StudentRepository, Stude
             // 我真的不喜欢那么多 if
             // 然而三元表达式又难以理解
             // 无奈无奈 (；′⌒`)
-            if (student.getSchoolId() != null) {
-                student.setSchool(sysDataRepository.getOne(student.getSchoolId()));
-            }
-            if (student.getCollegeId() != null) {
-                student.setCollege(sysDataRepository.getOne(student.getSchoolId()));
-            }
-            if (student.getDepId() != null) {
-                student.setDep(sysDataRepository.getOne(student.getDepId()));
-            }
-            if (student.getSpecialtyId() != null) {
-                student.setSpecialty(sysDataRepository.getOne(student.getSpecialtyId()));
-            }
-            if (student.getClassId() != null) {
-                student.setClasses(sysDataRepository.getOne(student.getClassId()));
-            }
-            if (student.getUserId() != null) {
-                student.setUser(sysUserRepository.getOne(student.getUserId()));
-            }
+            student.setSchool(sysDataRepository.getOne(student.getSchoolId()));
+            student.setCollege(sysDataRepository.getOne(student.getSchoolId()));
+            student.setDep(sysDataRepository.getOne(student.getDepId()));
+            student.setSpecialty(sysDataRepository.getOne(student.getSpecialtyId()));
+            student.setClasses(sysDataRepository.getOne(student.getClassId()));
+            student.setUser(sysUserRepository.getOne(student.getUserId()));
             return student;
         });
     }

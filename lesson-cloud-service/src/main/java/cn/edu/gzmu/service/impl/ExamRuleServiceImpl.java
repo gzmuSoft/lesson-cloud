@@ -29,9 +29,7 @@ public class ExamRuleServiceImpl extends BaseServiceImpl<ExamRuleRepository, Exa
     @Override
     public Page<ExamRule> searchAll(Pageable pageable) {
         return examRuleRepository.findAll(pageable).map(examRule -> {
-            if (examRule.getExamId() != null){
-                examRule.setExam(examRepository.getOne(examRule.getExamId()));
-            }
+            examRule.setExam(examRepository.getOne(examRule.getExamId()));
             return examRule;
         });
     }

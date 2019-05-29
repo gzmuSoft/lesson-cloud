@@ -33,15 +33,9 @@ public class SingleSelServiceImpl extends BaseServiceImpl<SingleSelRepository, S
     @Override
     public Page<SingleSel> searchAll(Pageable pageable) {
         return singleSelRepository.findAll(pageable).map(singleSel -> {
-            if (singleSel.getCourseId() != null) {
-                singleSel.setCourse(courseRepository.getOne(singleSel.getCourseId()));
-            }
-            if (singleSel.getSectionId() != null) {
-                singleSel.setSection(sectionRepository.getOne(singleSel.getSectionId()));
-            }
-            if (singleSel.getKnowledgeId() != null) {
-                singleSel.setKnowledge(knowledgeRepository.getOne(singleSel.getKnowledgeId()));
-            }
+            singleSel.setCourse(courseRepository.getOne(singleSel.getCourseId()));
+            singleSel.setSection(sectionRepository.getOne(singleSel.getSectionId()));
+            singleSel.setKnowledge(knowledgeRepository.getOne(singleSel.getKnowledgeId()));
             return singleSel;
         });
     }
