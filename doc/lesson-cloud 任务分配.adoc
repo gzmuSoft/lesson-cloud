@@ -1,0 +1,86 @@
+= lesson-cloud 任务分配
+
+后端任务分配都在这里进行分配。现在的后端已经有了所有的基本的增删改查操作，那么我们就不需要再去写了，现在已经有的如下：
+
+[cols="1,1,1,1", options="header"]
+.已有的资源表
+|===
+|请求方式 | 请求路径 | 请求参数 | 描述
+
+| GET | / |  -  |  获取所有资源简单概述
+| GET | /profile | - | 获取所有资源的详细概述
+| GET | /{resource}| - |  获取分页后的数据
+| GET | /profile/{resource} | - | 获取指定资源的概述
+| GET | /{resource}/{id} | - | 获取指定的一条数据
+| POST| /{resource} | json 对象 | 新增一条数据
+| PUT | /{resource}/{id} | 修改后的 json 对象 | 修改指定对象，提供所有字段
+| PATCH | /{resource}/{id} | 修改后的 json 对象 |修改指定对象，提供部分字段 |
+| GET | /{resource}/search | - | 获取指定资源的其他操作方法
+|===
+
+但是功能都是单表操作，所以我们需要对他进行扩展。需要扩展的表为与其他表具有关联性质的表，例如 `student` 表和 `sys_data` 表进行关联，那么我们需要把他的相应的实体进行关联，再详细点，我们现在的接口请求数据如下
+
+
+.数据请求
+----
+{
+    //...
+    schoolId: 1  // <1>
+    //...
+}
+----
+<1> 我们希望的是得到一个具体的学校信息而不只是一个 id
+
+所以我们的任务就是单独写一个接口来完成数据完整性的封装。已经完成的是 `Student` 表，为了完成这个功能我修改了如下的类：
+
+* `cn.edu.gzmu.controller.StudentController`
+* `cn.edu.gzmu.model.entity.Student`
+* `cn.edu.gzmu.service.StudentService`
+* `cn.edu.gzmu.service.impl.StudentServiceImpl`
+
+具体过程非常简单，仔细看看就可以发现其实代码真的很少，从 `Controller -> Service -> Repository`。需要写得顶多二十行代码，以及够简单了。。。
+
+____
+如果写完后想要扩展学习，可以去看看 `cn.edu.gzmu.service.impl.SysUserServiceImpl` 里面具有更加详细和复杂的数据库查询方式。
+____
+
+____
+以及我们自己封装的参数校验注解 `cn.edu.gzmu.model.annoection.VerifyParameter` 和他的使用 `cn.edu.gzmu.AuthController`
+____
+
+== 目前任务：
+
+现在分配一批任务，同时也要各自认领的一些任务。
+
+[cols="2,2,1,1", options="header"]
+.任务表
+|===
+| 表名 | 简述 |  任务分配 | 完成情况
+| appeal | 用户申诉 | 樊国睿 | 未完成
+| course_timetable_location | 上课时间表以及地点信息 | 待认领 | 未完成
+| essay | 问答题 | 谢印 | 未完成
+| exam | 考试 | 刘传锦 | 未完成
+| exam_history | 考试试卷历史记录 | 樊国睿 | 未完成
+| exam_rule | 试卷组卷规则 | 冯鑫 | 未完成
+| judgement | 判断题 | 严宪法 | 已完成
+| knowledge | 知识点 | 谢印 | 未完成
+| logic_class | 逻辑班级 | 待认领 | 未完成
+| multi_sel | 多项选择题 | 严宪法 | 未完成
+| paper | 试卷 | 李中月 | 未完成
+| paper_detail | 试卷详情及阅卷信息 | 待认领 | 未完成
+| program | 编程题 | 待认领 | 未完成
+| section | 章节 | 待认领 | 未完成
+| sel_options | 单/多项选择题/填空题的选项信息表 | 待认领 | 未完成
+| semester | 学期 | 待认领 | 未完成
+| single_sel | 单项选择题 |  严宪法 | 未完成
+| student | 学生信息表 | 李中月 | 已完成
+| sys_data | 系统基本数据表 | 待认领 | 未完成
+| sys_res | 权限资源 | 待认领 | 未完成
+| sys_role | 系统角色表 | 待认领 | 未完成
+| sys_role_res | 角色权限关联 |  待认领 | 未完成
+| sys_user | 系统用户表 | 李中月 | 已完成
+| sys_user_role | 用户角色关联 | 待认领 | 未完成
+| teacher  | 教师信息表 | 于朋鑫 | 未完成
+
+|===
+
