@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 public interface BaseService<T extends BaseEntity, ID> {
 
     /**
-     * 查询所有学生分页信息
+     * 查询资源数据分页信息
      *
      * @param pageable 分页
      * @return 分页结果
