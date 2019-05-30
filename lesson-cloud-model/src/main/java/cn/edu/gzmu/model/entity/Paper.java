@@ -1,6 +1,7 @@
 package cn.edu.gzmu.model.entity;
 
 import cn.edu.gzmu.model.BaseEntity;
+import cn.edu.gzmu.model.annoection.FieldRepository;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -71,8 +72,8 @@ public class Paper extends BaseEntity implements Serializable {
     /**
      * 单项选择题选项乱序之后的顺序列表（以分号作为分隔符，一个题的多个选项以逗号作为分隔符）
      */
-    @Size(max = 1024, message = "singleSelOpts 不能大于 1024 位")
-    private java.lang.String singleSelOpts;
+    @Size(max = 1024, message = "singleSelOptionIds 不能大于 1024 位")
+    private java.lang.String singleSelOptionIds;
 
     /**
      * 多项选择题id列表
@@ -83,8 +84,8 @@ public class Paper extends BaseEntity implements Serializable {
     /**
      * 多项选择题选项乱序之后的顺序列表（以分号作为分隔符，一个题的多个选项以逗号作为分隔符）
      */
-    @Size(max = 1024, message = "multiSelOpts 不能大于 1024 位")
-    private java.lang.String multiSelOpts;
+    @Size(max = 1024, message = "multiSelOptionIds 不能大于 1024 位")
+    private java.lang.String multiSelOptionIds;
 
     /**
      * 判断题id列表
@@ -95,8 +96,8 @@ public class Paper extends BaseEntity implements Serializable {
     /**
      * 判断题选项乱序之后的顺序列表（以分号作为分隔符，一个题的多个选项以逗号作为分隔符）
      */
-    @Size(max = 1024, message = "judgementOpts 不能大于 1024 位")
-    private java.lang.String judgementOpts;
+    @Size(max = 1024, message = "judgementOptionIds 不能大于 1024 位")
+    private java.lang.String judgementOptionIds;
 
     /**
      * 问答题id列表
@@ -138,6 +139,15 @@ public class Paper extends BaseEntity implements Serializable {
     private List<Program> program;
 
     @Transient
-    private List<SelOptions> singleSelOptions;
+    @FieldRepository("selOptionsRepository")
+    private List<SelOptions> singleSelOption;
+
+    @Transient
+    @FieldRepository("selOptionsRepository")
+    private List<SelOptions> multiSelOption;
+
+    @Transient
+    @FieldRepository("selOptionsRepository")
+    private List<SelOptions> judgementOption;
 
 }

@@ -1,6 +1,7 @@
 package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.BaseEntity;
+import cn.edu.gzmu.model.annoection.FieldRepository;
 import cn.edu.gzmu.model.exception.ResourceException;
 import cn.edu.gzmu.model.exception.ResourceNotFoundException;
 import cn.edu.gzmu.repository.BaseRepository;
@@ -83,13 +84,16 @@ public abstract class BaseServiceImpl<R extends BaseRepository<T, ID>, T extends
             Class<?> fieldType = field.getType();
             Method setMethod = entityClass.getMethod("set" + WordUtils.capitalize(field.getName()), fieldType);
             if (fieldType.isAssignableFrom(List.class)) {
-                BaseRepository repository = repositoryMap.get(field.getName() + "Repository");
+                FieldRepository fieldRepository = field.getAnnotation(FieldRepository.class);
+                BaseRepository repository = fieldRepository == null
+                        ? repositoryMap.get(field.getName() + "Repository")
+                        : repositoryMap.get(fieldRepository.value());
                 Method getIdsMethod = entityClass.getMethod("get" + WordUtils.capitalize(field.getName()) + "Ids");
                 Object getIds = getIdsMethod.invoke(entity);
                 if (getIds == null) {
                     return;
                 }
-                List<String> ids = Splitter.on(";").trimResults().splitToList(getIds.toString());
+                List<String> ids = Splitter.on(",").trimResults().splitToList(getIds.toString());
                 setMethod.invoke(entity, repository.searchAllByIds(ids));
                 return;
             }
@@ -98,7 +102,6 @@ public abstract class BaseServiceImpl<R extends BaseRepository<T, ID>, T extends
             setMethod.invoke(entity, repository.getOne(getIdMethod.invoke(entity)));
         } catch (NoSuchMethodException | NullPointerException e) {
             log.debug(e.getMessage());
-            return;
         } catch (IllegalAccessException | InvocationTargetException e) {
             log.error(e.getMessage());
             throw new ResourceException();
