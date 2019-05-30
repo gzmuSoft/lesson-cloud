@@ -19,4 +19,9 @@ import org.springframework.stereotype.Service;
 public class PaperServiceImpl extends BaseServiceImpl<PaperRepository, Paper, Long>
         implements PaperService {
 
+    @Override
+    protected Paper completeEntity(Paper entity) {
+        return super.completeEntity(entity);
+    }
+
 }

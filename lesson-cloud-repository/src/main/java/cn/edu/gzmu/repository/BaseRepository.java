@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * 基类
@@ -23,6 +24,7 @@ import javax.transaction.Transactional;
  * @date 2019-4-11 11:59:46
  */
 @NoRepositoryBean
+@SuppressWarnings({"all", "uncheck"})
 public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<T, ID>, JpaSpecificationExecutor<T> {
 
     /**
@@ -35,6 +37,17 @@ public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<
     @Query(value = "select * from #{#entityName} ", countQuery = "select count(*) from #{#entityName}", nativeQuery = true)
     Page<T> findAllExist(Pageable pageable);
 
+
+    /**
+     * 通过 id 列表查询
+     *
+     * @param ids id 列表
+     * @return 结果
+     */
+    @RestResource(exported = false)
+    @Query(value = "select * from #{#entityName}  where id in (:ids) and is_enable = 1 ", nativeQuery = true)
+    List<T> searchAllByIds(@Param("ids") List<Object> ids);
+
     /**
      * 真正删除一个数据
      *
@@ -43,7 +56,6 @@ public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<
     @Modifying
     @RestResource(exported = false)
     @Transactional(rollbackOn = Exception.class)
-    @SuppressWarnings("all")
     @Query(value = "delete from #{#entityName} where id = :id", nativeQuery = true)
     void deleteExistById(@Param("id") ID id);
 

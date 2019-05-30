@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * paper
@@ -114,4 +115,29 @@ public class Paper extends BaseEntity implements Serializable {
      */
     @Transient
     private Exam exam;
+
+    /**
+     * 学生
+     */
+    @Transient
+    private Student student;
+
+    @Transient
+    private List<SingleSel> singleSel;
+
+    @Transient
+    private List<MultiSel> multiSel;
+
+    @Transient
+    private List<Judgement> judgement;
+
+    @Transient
+    private List<Essay> essay;
+
+    @Transient
+    private List<Program> program;
+
+    @Transient
+    private List<SelOptions> singleSelOptions;
+
 }
