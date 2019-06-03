@@ -81,7 +81,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserRepository, SysUs
     }
 
     @Override
-    public SysUser completeEntity(SysUser entity) {
+    protected SysUser completeEntity(SysUser entity) {
         if (EntityType.isStudent(entity.getEntityType())) {
             entity.setStudent(studentRepository.getOne(entity.getEntityId()));
         } else if (EntityType.isTeacher(entity.getEntityType())) {
@@ -90,6 +90,12 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserRepository, SysUs
         return entity;
     }
 
+    /**
+     * 是否存在用户
+     *
+     * @param user 用户
+     * @return 结果
+     */
     private boolean existUser(SysUser user) {
         Assert.notNull(user.getName(), "用户名不能为空");
         SysUser sysUser = new SysUser();

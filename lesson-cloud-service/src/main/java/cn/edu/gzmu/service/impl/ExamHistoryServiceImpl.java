@@ -19,8 +19,4 @@ import org.springframework.stereotype.Service;
 public class ExamHistoryServiceImpl extends BaseServiceImpl<ExamHistoryRepository, ExamHistory, Long>
         implements ExamHistoryService {
 
-    @Override
-    public ExamHistory completeEntity(ExamHistory entity) {
-        return entity;
-    }
 }

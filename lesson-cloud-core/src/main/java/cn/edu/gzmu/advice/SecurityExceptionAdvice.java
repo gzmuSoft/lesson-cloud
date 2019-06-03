@@ -1,6 +1,6 @@
 package cn.edu.gzmu.advice;
 
-import cn.edu.gzmu.model.resource.ExceptionResource;
+import cn.edu.gzmu.model.exception.ResourceException;
 import cn.edu.gzmu.validate.exception.ValidateCodeException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class SecurityExceptionAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public HttpEntity<?> handle(ValidateCodeException exception){
-        return ResponseEntity.badRequest().body(new ExceptionResource(exception.getMessage()));
+        return ResponseEntity.badRequest().body(new ResourceException(exception.getMessage()));
     }
 
 }

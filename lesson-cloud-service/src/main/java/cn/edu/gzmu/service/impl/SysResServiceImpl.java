@@ -31,8 +31,4 @@ public class SysResServiceImpl extends BaseServiceImpl<SysResRepository, SysRes,
                 .map(SysRole::getId).toArray(Long[]::new));
     }
 
-    @Override
-    public SysRes completeEntity(SysRes entity) {
-        return entity;
-    }
 }

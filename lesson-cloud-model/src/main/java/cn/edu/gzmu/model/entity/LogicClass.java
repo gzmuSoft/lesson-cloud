@@ -64,7 +64,7 @@ public class LogicClass extends BaseEntity implements Serializable {
     /**
      * 实体班级id，type为0值，本字段值才有效
      */
-    private java.lang.Long classId;
+    private java.lang.Long classesId;
 
     /**
      * 学生实体id，type为1值，本字段值才有效

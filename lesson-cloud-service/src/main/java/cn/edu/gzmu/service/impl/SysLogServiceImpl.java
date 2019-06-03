@@ -19,8 +19,4 @@ import org.springframework.stereotype.Service;
 public class SysLogServiceImpl extends BaseServiceImpl<SysLogRepository, SysLog, Long>
         implements SysLogService {
 
-    @Override
-    public SysLog completeEntity(SysLog entity) {
-        return entity;
-    }
 }

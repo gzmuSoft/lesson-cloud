@@ -24,6 +24,10 @@ public class RepositoryAop {
     public void repositoryGetOne() {
     }
 
+    @Pointcut("execution(* cn.edu.gzmu.repository.BaseRepository.searchAllByIds(..))")
+    public void repositorySearchAllByIds() {
+    }
+
     /**
      * 解决太多 if 的操作，让他不抛出异常
      *
@@ -31,7 +35,7 @@ public class RepositoryAop {
      * @return 结果
      * @throws Throwable 异常
      */
-    @Around("repositoryGetOne()")
+    @Around("repositoryGetOne() || repositorySearchAllByIds()")
     public Object logMessageGenerate(ProceedingJoinPoint joinPoint) throws Throwable {
         Object arg = joinPoint.getArgs()[0];
         if (Objects.isNull(arg)) {

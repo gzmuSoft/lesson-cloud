@@ -19,8 +19,4 @@ import org.springframework.stereotype.Service;
 public class SectionServiceImpl extends BaseServiceImpl<SectionRepository, Section, Long>
         implements SectionService {
 
-    @Override
-    public Section completeEntity(Section entity) {
-        return entity;
-    }
 }
