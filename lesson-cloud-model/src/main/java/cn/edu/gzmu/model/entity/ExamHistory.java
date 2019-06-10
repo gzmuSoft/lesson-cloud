@@ -13,6 +13,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -46,6 +47,12 @@ public class ExamHistory extends BaseEntity implements Serializable {
     private java.lang.Long studentId;
 
     /**
+     * 学生信息
+     */
+    @Transient
+    private Student student;
+
+    /**
      * 最高得分
      */
     private java.lang.Float maxScore;
@@ -54,6 +61,12 @@ public class ExamHistory extends BaseEntity implements Serializable {
      * 得分最高的试卷编号
      */
     private java.lang.Long paperId;
+
+    /**
+     * 得分最高的试卷编号
+     */
+    @Transient
+    private Paper paper;
 
     /**
      * 得分最高的考试的开始时间
