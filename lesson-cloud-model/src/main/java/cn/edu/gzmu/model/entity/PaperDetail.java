@@ -13,6 +13,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -43,7 +44,7 @@ public class PaperDetail extends BaseEntity implements Serializable {
     /**
      * 0：单项选择题，1：多项选择题，2：判断题，3：填空题，4：简答题，5：编程题
      */
-    private java.lang.Short questionType;
+    private java.lang.Integer questionType;
 
     /**
      * 问题编号
@@ -71,4 +72,40 @@ public class PaperDetail extends BaseEntity implements Serializable {
      * 用户得分
      */
     private java.lang.Float obtainValue;
+
+    /**
+     * 单项选择题
+     */
+    @Transient
+    private SingleSel singleSel;
+
+    /**
+     * 多项选择题
+     */
+    @Transient
+    private MultiSel multiSel;
+
+    /**
+     * 判断题
+     */
+    @Transient
+    private Judgement judgement;
+
+    /**
+     * 填空题
+     * 暂时不写
+     */
+//    private BUG;
+
+    /**
+     * 简答题
+     */
+    @Transient
+    private Essay essay;
+
+    /**
+     * 编程题
+     */
+    @Transient
+    private Program program;
 }
