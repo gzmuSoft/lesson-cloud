@@ -25,6 +25,6 @@ public class UsernamePasswordSuccessHandler implements AuthenticationSuccessHand
         // TODO: 刷新令牌操作 —— 待完成
         // 最讨厌的一些东西就是某些时候解决不了，后面却可以轻松解决
         // 永远不知道第一次在写的时候想什么
-        log.info("login ~~~~~~~~~~~~");
+        log.debug("login ~~~~~~~~~~~~");
     }
 }

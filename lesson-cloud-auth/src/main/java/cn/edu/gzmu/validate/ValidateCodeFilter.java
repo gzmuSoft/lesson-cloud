@@ -58,10 +58,10 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
         ValidateCodeType validateCodeType = getValidateCodeType(request);
         if (validateCodeType != null) {
             try {
-                log.info("请求需要验证！验证请求：" + request.getRequestURI() + "验证类型：" + validateCodeType);
+                log.debug("请求需要验证！验证请求：" + request.getRequestURI() + "验证类型：" + validateCodeType);
                 validateCodeProcessorHolder.findValidateCodeProcessor(validateCodeType)
                         .validate(new ServletWebRequest(request, response));
-                logger.info("验证码通过！");
+                log.debug("验证码通过！");
             } catch (ValidateCodeException e) {
                 // 授权失败处理器接受处理
                 authFailureHandle.onAuthenticationFailure(request, response, e);

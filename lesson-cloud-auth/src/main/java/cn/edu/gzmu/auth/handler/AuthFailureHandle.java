@@ -31,7 +31,7 @@ public class AuthFailureHandle implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
-        log.info("Login failed!");
+        log.debug("Login failed!");
         response.setContentType("application/json;charset=utf-8");
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.getWriter().write(objectMapper.writeValueAsString(

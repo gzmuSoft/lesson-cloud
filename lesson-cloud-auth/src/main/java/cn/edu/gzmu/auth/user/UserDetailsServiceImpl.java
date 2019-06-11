@@ -55,7 +55,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, SocialUserDet
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("password login user: {}", username);
+        log.debug("password login user: {}", username);
         // 由于用户不复杂所以不在去自己构建 UserDetails 的实现类了。
         return loadUser(() -> sysUserService.searchByAll(username));
     }
@@ -73,7 +73,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, SocialUserDet
      */
     @Override
     public UserDetails loadUserBySms(String sms) throws SmsNotFoundException {
-        log.info("sms login user: {}", sms);
+        log.debug("sms login user: {}", sms);
         return loadUser(() -> sysUserService.searchByPhone(sms));
     }
 
@@ -101,7 +101,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, SocialUserDet
      */
     @Override
     public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
-        log.info("social login user: {}", userId);
+        log.debug("social login user: {}", userId);
         return new SocialUser(userId, passwordEncoder.encode("123456"),
                 AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_user"));
     }

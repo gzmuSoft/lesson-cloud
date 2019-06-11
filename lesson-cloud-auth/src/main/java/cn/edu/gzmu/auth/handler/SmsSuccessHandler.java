@@ -47,7 +47,7 @@ public class SmsSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
-        log.info("Login succeed！");
+        log.debug("Login succeed！");
         String header = request.getHeader("Authorization");
         if (header == null || !header.toLowerCase().startsWith("basic ")) {
             throw new UnapprovedClientAuthenticationException("请求头中无客户端信息");
