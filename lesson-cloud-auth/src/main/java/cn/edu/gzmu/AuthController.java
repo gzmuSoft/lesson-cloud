@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -43,6 +44,11 @@ public class AuthController {
         List<SysRes> res = sysResService.searchByRoles(roles);
         me.put("res", res);
         return ResponseEntity.ok(me);
+    }
+
+    @GetMapping("/user")
+    public HttpEntity<?> userInfo(Principal principal) {
+        return ResponseEntity.ok(principal);
     }
 
     @PostMapping("/register")
