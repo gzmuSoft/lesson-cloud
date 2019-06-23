@@ -4,6 +4,8 @@ import cn.edu.gzmu.model.entity.SysRoleRes;
 import cn.edu.gzmu.repository.BaseRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.util.List;
+
 
 /**
  * SysRoleRes Repository
@@ -14,5 +16,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  */
 @RepositoryRestResource(path = "/sysRoleRes")
 public interface SysRoleResRepository extends BaseRepository<SysRoleRes, Long> {
+
+    List<SysRoleRes> findAllByResId(Long resId);
 
 }

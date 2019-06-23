@@ -74,6 +74,11 @@
         <!--    <artifactId>spring-boot-devtools</artifactId>-->
         <!--    <scope>runtime</scope>-->
         <!--</dependency>-->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>17.0.0</version>
+        </dependency>
     </dependencies>
 
     <!--依赖管理-->

@@ -12,6 +12,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.jwt.crypto.sign.RsaVerifier;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -41,9 +42,12 @@ import java.util.Map;
 @EnableResourceServer
 @RequiredArgsConstructor
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-    private @NonNull final FilterInvocationSecurityMetadataSource securityMetadataSource;
-    private @NonNull final AuthAccessDecisionManager authAccessDecisionManager;
-    private @NonNull final ResourceServerProperties resourceServerProperties;
+    private @NonNull
+    final FilterInvocationSecurityMetadataSource securityMetadataSource;
+    private @NonNull
+    final AuthAccessDecisionManager authAccessDecisionManager;
+    private @NonNull
+    final ResourceServerProperties resourceServerProperties;
 
     private static final String DEMO_RESOURCE_ID = "lesson-cloud";
 
@@ -55,6 +59,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
+
         http.formLogin()
                 .and()
                 .authorizeRequests()
@@ -79,7 +84,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setVerifierKey(getPubKey());
+        String pubKey = getPubKey();
+        JwtKey.publicKey = pubKey;
+        converter.setVerifierKey(pubKey);
+        converter.setVerifier(new RsaVerifier(pubKey));
         return converter;
     }
 
@@ -117,5 +125,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private String encodeClient() {
         return "Basic " + Base64.getEncoder().encodeToString((resourceServerProperties.getClientId()
                 + ":" + resourceServerProperties.getClientSecret()).getBytes());
+    }
+
+    public static class JwtKey {
+        public static String publicKey;
     }
 }
