@@ -154,6 +154,7 @@ lesson-cloud-core | 核心模块
 lesson-cloud-generate | 代码生成模块
 lesson-cloud-model | model 模块
 lesson-cloud-repository | 资源模块
+lesson-cloud-service | 业务逻辑模块
 
 ## 前端
 
