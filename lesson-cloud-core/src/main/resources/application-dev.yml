@@ -91,7 +91,7 @@ management:
 
 application:
   security:
-    enabled: true
+    enabled: false
   message:
     app-id: 35223
     app-key: e7eede1811867421882df861a20ed26e
@@ -116,12 +116,10 @@ security:
         key-uri: http://localhost:8888/oauth/token_key
     client:
       access-token-uri: http://localhost:8888/oauth/token
-      client-id: client
-      client-secret: secret
-      grant-type: password
-      scope: web
-    authorization:
-      check-token-access: http://localhost:8888/oauth/check_token
+      client-id: lesson-cloud
+      client-secret: lesson-cloud-secret
+      grant-type: password,sms,authorization_code
+      scope: all
 
 
 logging:

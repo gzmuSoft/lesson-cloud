@@ -2,8 +2,6 @@ package cn.edu.gzmu;
 
 import cn.edu.gzmu.model.annoection.VerifyParameter;
 import cn.edu.gzmu.model.entity.*;
-import cn.edu.gzmu.service.SysResService;
-import cn.edu.gzmu.service.SysRoleService;
 import cn.edu.gzmu.service.SysUserService;
 import com.alibaba.fastjson.JSONObject;
 import lombok.NonNull;
@@ -11,13 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.security.Principal;
-import java.util.List;
 
 /**
  * 授权信息
@@ -31,20 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final @NonNull SysRoleService sysRoleService;
-    private final @NonNull SysResService sysResService;
     private final @NonNull SysUserService sysUserService;
-
-    @GetMapping("/me")
-    public HttpEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
-        JSONObject me = new JSONObject();
-        List<SysRole> roles = sysRoleService.searchByUsername(userDetails.getUsername());
-        me.put("user", userDetails);
-        me.put("roles", roles);
-        List<SysRes> res = sysResService.searchByRoles(roles);
-        me.put("res", res);
-        return ResponseEntity.ok(me);
-    }
 
     @GetMapping("/user")
     public HttpEntity<?> userInfo(Principal principal) {

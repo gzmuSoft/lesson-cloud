@@ -58,7 +58,7 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
         HttpServletRequest httpRequest = ((FilterInvocation) object).getHttpRequest();
-        decodeUserDetails();
+//        decodeUserDetails();
         String method = httpRequest.getMethod();
         String requestUrl = httpRequest.getServletPath();
         if (isRoleAdmin() || !oauth2Properties.isEnabled()) {
@@ -124,12 +124,17 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
      * 通过 <code>SecurityContextHolder.getContext().getAuthentication().getDetails()</code>
      * 获取当前 {@link UserContext} 实例，需要强转
      * 通过 {@link UserContext#getSysUser()} 获取当前用户
+     *
+     * @deprecated 不再进行解析
      */
+    @Deprecated
     private void decodeUserDetails() {
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getDetails();
         String authorization = details.getTokenValue();
         if (StringUtils.isNotBlank(authorization)) {
+            // 已经标记过时的类
+            // 需要启用请注入 JwtAccessTokenConverter 进行解密和认证
             Jwt decode = JwtHelper.decodeAndVerify(authorization,
                     new RsaVerifier(ResourceServerConfig.JwtKey.publicKey));
             String claims = decode.getClaims();
@@ -144,7 +149,9 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
      *
      * @param jwtInfo jwt 解密信息
      * @return 用户上下文对象
+     * @deprecated 不再进行解析
      */
+    @Deprecated
     private UserContext userDetails(@NotNull JSONObject jwtInfo) {
         UserContext userContext = new UserContext();
         SysUser user = jwtInfo.getObject("user_info", SysUser.class);

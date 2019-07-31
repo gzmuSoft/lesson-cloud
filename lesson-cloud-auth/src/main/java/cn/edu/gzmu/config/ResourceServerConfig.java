@@ -53,8 +53,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
-        resources.resourceId(DEMO_RESOURCE_ID).stateless(true)
-                .tokenServices(tokenServices());
+        resources.resourceId(DEMO_RESOURCE_ID);
     }
 
     @Override
@@ -76,35 +75,48 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     }
 
 
-    @Bean
-    public TokenStore tokenStore() {
-        return new JwtTokenStore(jwtAccessTokenConverter());
-    }
+//    @Bean
+//    public TokenStore tokenStore() {
+//        return new JwtTokenStore(jwtAccessTokenConverter());
+//    }
+//
+//    @Bean
+//    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+//        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+//        String pubKey = getPubKey();
+//        JwtKey.publicKey = pubKey;
+//        converter.setVerifierKey(pubKey);
+//        converter.setVerifier(new RsaVerifier(pubKey));
+//        return converter;
+//    }
 
-    @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        String pubKey = getPubKey();
-        JwtKey.publicKey = pubKey;
-        converter.setVerifierKey(pubKey);
-        converter.setVerifier(new RsaVerifier(pubKey));
-        return converter;
-    }
+//    @Bean
+//    @Primary
+//    @Deprecated
+//    public DefaultTokenServices tokenServices() {
+//        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+//        defaultTokenServices.setTokenStore(tokenStore());
+//        return defaultTokenServices;
+//    }
 
-    @Bean
-    @Primary
-    public DefaultTokenServices tokenServices() {
-        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-        defaultTokenServices.setTokenStore(tokenStore());
-        return defaultTokenServices;
-    }
-
+    /**
+     *
+     * @return pub key
+     * @deprecated 通过自动配置实现
+     */
+    @Deprecated
     private String getPubKey() {
         return StringUtils.isEmpty(resourceServerProperties.getJwt().getKeyValue())
                 ? getKeyFromAuthorizationServer()
                 : resourceServerProperties.getJwt().getKeyValue();
     }
 
+    /**
+     *
+     * @return getPubKey
+     * @deprecated 通过自动配置实现
+     */
+    @Deprecated
     private String getKeyFromAuthorizationServer() {
         ObjectMapper objectMapper = new ObjectMapper();
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -122,11 +134,20 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         return null;
     }
 
+    /**
+     * @return client
+     * @deprecated 不再进行解析
+     */
+    @Deprecated
     private String encodeClient() {
         return "Basic " + Base64.getEncoder().encodeToString((resourceServerProperties.getClientId()
                 + ":" + resourceServerProperties.getClientSecret()).getBytes());
     }
 
+    /**
+     * @deprecated 不再进行解析
+     */
+    @Deprecated
     public static class JwtKey {
         public static String publicKey;
     }
