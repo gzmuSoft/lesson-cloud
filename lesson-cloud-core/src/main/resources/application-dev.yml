@@ -101,7 +101,7 @@ application:
 security:
   oauth2:
     resource:
-      token-info-uri: http://localhost:8888/oauth/check_token
+      token-info-uri: http://118.24.1.170:8888/oauth/check_token
       jwt:
         key-value: |
           -----BEGIN PUBLIC KEY-----
@@ -113,9 +113,9 @@ security:
           j6YHPihuc3fA96yri+c51PRjqPeS7SXCjyqjdbvsYKSCL4Z7XNJ7izsx9Prn6N4J
           awIDAQAB
           -----END PUBLIC KEY-----
-        key-uri: http://localhost:8888/oauth/token_key
+        key-uri: http://118.24.1.170:8888/oauth/token_key
     client:
-      access-token-uri: http://localhost:8888/oauth/token
+      access-token-uri: http://118.24.1.170:8888/oauth/token
       client-id: lesson-cloud
       client-secret: lesson-cloud-secret
       grant-type: password,sms,authorization_code
