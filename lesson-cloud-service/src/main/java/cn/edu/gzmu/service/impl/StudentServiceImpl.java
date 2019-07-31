@@ -1,7 +1,5 @@
 package cn.edu.gzmu.service.impl;
 
-import cn.edu.gzmu.model.entity.Student;
-import cn.edu.gzmu.repository.entity.StudentRepository;
 import cn.edu.gzmu.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class StudentServiceImpl extends BaseServiceImpl<StudentRepository, Student, Long>
-        implements StudentService {
+public class StudentServiceImpl implements StudentService {
 
 }

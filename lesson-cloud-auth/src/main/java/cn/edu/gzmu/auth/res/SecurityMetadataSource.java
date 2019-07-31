@@ -1,7 +1,8 @@
 package cn.edu.gzmu.auth.res;
 
-import cn.edu.gzmu.config.ResourceServerConfig;
+import cn.edu.gzmu.auth.helper.UserContext;
 import cn.edu.gzmu.constant.HttpMethod;
+import cn.edu.gzmu.model.constant.EntityType;
 import cn.edu.gzmu.model.entity.*;
 import cn.edu.gzmu.properties.Oauth2Properties;
 import cn.edu.gzmu.repository.entity.SysResRepository;
@@ -14,13 +15,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
@@ -31,8 +33,9 @@ import org.springframework.util.CollectionUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static org.springframework.security.oauth2.provider.token.AccessTokenConverter.*;
 
 /**
  * 动态权限配置核心，将会对请求进行进行匹配
@@ -46,25 +49,23 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class SecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
-    private final static String STUDENT_IDENTIFICATION = "enter_date";
-    private final static String TEACHER_IDENTIFICATION = "degree";
-    private final static String ADMIN_IDENTIFICATION = "ROLE_ADMIN";
     private final static Long ROLE_PUBLIC_ID = -1L;
     private final @NonNull SysResRepository sysResRepository;
     private final @NonNull SysRoleResRepository sysRoleResRepository;
     private final @NonNull Oauth2Properties oauth2Properties;
+    private final @NonNull JwtAccessTokenConverter jwtAccessTokenConverter;
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
         HttpServletRequest httpRequest = ((FilterInvocation) object).getHttpRequest();
-//        decodeUserDetails();
         String method = httpRequest.getMethod();
         String requestUrl = httpRequest.getServletPath();
         if (isRoleAdmin() || !oauth2Properties.isEnabled()) {
             // 对于管理员角色和不启用的情况，开放所有资源
             return SecurityConfig.createList("ROLE_PUBLIC");
         }
+        decodeUserDetails();
         List<SysRes> sysRes = sysResRepository.findAll();
         for (SysRes res : sysRes) {
             // 路径匹配
@@ -124,23 +125,26 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
      * 通过 <code>SecurityContextHolder.getContext().getAuthentication().getDetails()</code>
      * 获取当前 {@link UserContext} 实例，需要强转
      * 通过 {@link UserContext#getSysUser()} 获取当前用户
-     *
-     * @deprecated 不再进行解析
      */
-    @Deprecated
     private void decodeUserDetails() {
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getDetails();
-        String authorization = details.getTokenValue();
-        if (StringUtils.isNotBlank(authorization)) {
+        String tokenValue = details.getTokenValue();
+        if (StringUtils.isNotBlank(tokenValue)) {
             // 已经标记过时的类
             // 需要启用请注入 JwtAccessTokenConverter 进行解密和认证
-            Jwt decode = JwtHelper.decodeAndVerify(authorization,
-                    new RsaVerifier(ResourceServerConfig.JwtKey.publicKey));
-            String claims = decode.getClaims();
-            JSONObject oauth = JSONObject.parseObject(claims);
-            AbstractAuthenticationToken authentication = (AbstractAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-            authentication.setDetails(userDetails(oauth));
+            // Jwt decode = JwtHelper.decodeAndVerify(tokenValue,
+            //         new RsaVerifier(ResourceServerConfig.JwtKey.publicKey));
+            Jwt decode = JwtHelper.decodeAndVerify(tokenValue,
+                    new RsaVerifier(jwtAccessTokenConverter.getKey().get("value")));
+            JSONObject oauth = JSONObject.parseObject(decode.getClaims());
+            if (oauth.containsKey(EXP) && oauth.get(AccessTokenConverter.EXP) instanceof Integer) {
+                Integer intValue = (Integer) oauth.get(EXP);
+                oauth.put(EXP, new Long(intValue));
+            }
+            details.setDecodedDetails(userDetails(oauth));
+//            AbstractAuthenticationToken authentication = (AbstractAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+//            authentication.setDetails(userDetails(oauth));
         }
     }
 
@@ -149,32 +153,32 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
      *
      * @param jwtInfo jwt 解密信息
      * @return 用户上下文对象
-     * @deprecated 不再进行解析
      */
-    @Deprecated
     private UserContext userDetails(@NotNull JSONObject jwtInfo) {
         UserContext userContext = new UserContext();
         SysUser user = jwtInfo.getObject("user_info", SysUser.class);
         Assert.notNull(user, "The user info no found！");
         userContext.setSysUser(user);
         JSONArray roles = jwtInfo.getJSONArray("role_info");
-        if (Objects.nonNull(roles)) {
-            List<SysRole> sysRoles = roles.toJavaList(SysRole.class);
-            userContext.setSysRoles(sysRoles);
-        }
+        List<SysRole> sysRoles = roles.toJavaList(SysRole.class);
+        userContext.setSysRoles(sysRoles);
         String entityInfo = jwtInfo.getString("entity_info");
-        if (StringUtils.isBlank(entityInfo)) {
-            return userContext;
-        }
-        if (entityInfo.contains(STUDENT_IDENTIFICATION)) {
-            Teacher teacher = JSONObject.parseObject(entityInfo, Teacher.class);
-            userContext.entity(teacher);
-        } else if (entityInfo.contains(TEACHER_IDENTIFICATION)) {
-            Student student = JSONObject.parseObject(entityInfo, Student.class);
-            userContext.entity(student);
-        } else if (entityInfo.equals(ADMIN_IDENTIFICATION)) {
-            userContext.setAdmin(true);
-        }
+        sysRoles.forEach(role -> {
+            if (EntityType.isAdmin(role.getName())) {
+                userContext.setAdmin(true);
+            }
+            if (StringUtils.isBlank(entityInfo)) {
+                return;
+            }
+            if (EntityType.isTeacher(role.getName())) {
+                Teacher teacher = JSONObject.parseObject(entityInfo, Teacher.class);
+                userContext.entity(teacher);
+            }
+            if (EntityType.isStudent(role.getName())) {
+                Student student = JSONObject.parseObject(entityInfo, Student.class);
+                userContext.entity(student);
+            }
+        });
         return userContext;
     }
 
