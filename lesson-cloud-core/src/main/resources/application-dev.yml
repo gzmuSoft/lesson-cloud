@@ -118,7 +118,7 @@ security:
       access-token-uri: http://118.24.1.170:8888/oauth/token
       client-id: lesson-cloud
       client-secret: lesson-cloud-secret
-      grant-type: password,sms,authorization_code
+      grant-type: password,refresh_token,sms,email,authorization_code
       scope: all
 
 
