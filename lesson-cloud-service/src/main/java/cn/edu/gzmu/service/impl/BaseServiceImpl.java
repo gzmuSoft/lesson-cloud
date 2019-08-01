@@ -1,26 +1,15 @@
 package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.BaseEntity;
-import cn.edu.gzmu.model.annoection.FieldRepository;
-import cn.edu.gzmu.model.exception.ResourceException;
 import cn.edu.gzmu.model.exception.ResourceNotFoundException;
 import cn.edu.gzmu.repository.BaseRepository;
 import cn.edu.gzmu.service.BaseService;
-import com.google.common.base.Splitter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import javax.persistence.Transient;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * BaseService
@@ -62,16 +51,19 @@ public abstract class BaseServiceImpl<R extends BaseRepository<T, ID>, T extends
      * @return 封装完整信息的实体
      */
     protected T completeEntity(T entity) {
-        entityClass = entity.getClass();
-        List<Field> fields = Arrays.stream(entityClass.getDeclaredFields())
-                .filter(field -> field.isAnnotationPresent(Transient.class))
-                .collect(Collectors.toList());
-        if (fields.size() == 0) {
-            return entity;
-        }
-        fields.forEach(field -> fieldHandle(entity, field));
         return entity;
-    }
+    };
+//    protected T completeEntity(T entity) {
+//        entityClass = entity.getClass();
+//        List<Field> fields = Arrays.stream(entityClass.getDeclaredFields())
+//                .filter(field -> field.isAnnotationPresent(Transient.class))
+//                .collect(Collectors.toList());
+//        if (fields.size() == 0) {
+//            return entity;
+//        }
+//        fields.forEach(field -> fieldHandle(entity, field));
+//        return entity;
+//    }
 
     /**
      * 字段处理
@@ -79,32 +71,32 @@ public abstract class BaseServiceImpl<R extends BaseRepository<T, ID>, T extends
      * @param entity 实体类
      * @param field  字段
      */
-    private void fieldHandle(T entity, Field field) {
-        try {
-            Class<?> fieldType = field.getType();
-            Method setMethod = entityClass.getMethod("set" + WordUtils.capitalize(field.getName()), fieldType);
-            if (fieldType.isAssignableFrom(List.class)) {
-                FieldRepository fieldRepository = field.getAnnotation(FieldRepository.class);
-                BaseRepository repository = fieldRepository == null
-                        ? repositoryMap.get(field.getName() + "Repository")
-                        : repositoryMap.get(fieldRepository.value());
-                Method getIdsMethod = entityClass.getMethod("get" + WordUtils.capitalize(field.getName()) + "Ids");
-                Object getIds = getIdsMethod.invoke(entity);
-                if (getIds == null) {
-                    return;
-                }
-                List<String> ids = Splitter.on(",").trimResults().splitToList(getIds.toString());
-                setMethod.invoke(entity, repository.searchAllByIds(ids));
-                return;
-            }
-            BaseRepository repository = repositoryMap.get(WordUtils.uncapitalize(fieldType.getSimpleName()) + "Repository");
-            Method getIdMethod = entityClass.getMethod("get" + WordUtils.capitalize(field.getName()) + "Id");
-            setMethod.invoke(entity, repository.getOne(getIdMethod.invoke(entity)));
-        } catch (NoSuchMethodException | NullPointerException e) {
-            log.debug(e.getMessage());
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            log.error(e.getMessage());
-            throw new ResourceException();
-        }
-    }
+//    private void fieldHandle(T entity, Field field) {
+//        try {
+//            Class<?> fieldType = field.getType();
+//            Method setMethod = entityClass.getMethod("set" + WordUtils.capitalize(field.getName()), fieldType);
+//            if (fieldType.isAssignableFrom(List.class)) {
+//                FieldRepository fieldRepository = field.getAnnotation(FieldRepository.class);
+//                BaseRepository repository = fieldRepository == null
+//                        ? repositoryMap.get(field.getName() + "Repository")
+//                        : repositoryMap.get(fieldRepository.value());
+//                Method getIdsMethod = entityClass.getMethod("get" + WordUtils.capitalize(field.getName()) + "Ids");
+//                Object getIds = getIdsMethod.invoke(entity);
+//                if (getIds == null) {
+//                    return;
+//                }
+//                List<String> ids = Splitter.on(",").trimResults().splitToList(getIds.toString());
+//                setMethod.invoke(entity, repository.searchAllByIds(ids));
+//                return;
+//            }
+//            BaseRepository repository = repositoryMap.get(WordUtils.uncapitalize(fieldType.getSimpleName()) + "Repository");
+//            Method getIdMethod = entityClass.getMethod("get" + WordUtils.capitalize(field.getName()) + "Id");
+//            setMethod.invoke(entity, repository.getOne(getIdMethod.invoke(entity)));
+//        } catch (NoSuchMethodException | NullPointerException e) {
+//            log.debug(e.getMessage());
+//        } catch (IllegalAccessException | InvocationTargetException e) {
+//            log.error(e.getMessage());
+//            throw new ResourceException();
+//        }
+//    }
 }

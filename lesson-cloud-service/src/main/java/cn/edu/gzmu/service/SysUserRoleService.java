@@ -1,7 +1,5 @@
 package cn.edu.gzmu.service;
 
-import cn.edu.gzmu.model.entity.SysUserRole;
-
 
 /**
  * SysUserRole Service
@@ -10,6 +8,6 @@ import cn.edu.gzmu.model.entity.SysUserRole;
  * @version 1.0
  * @date 2019-5-7 11:33:57
  */
-public interface SysUserRoleService extends BaseService<SysUserRole, Long> {
+public interface SysUserRoleService {
 
 }

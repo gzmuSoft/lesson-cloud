@@ -1,6 +1,8 @@
 package cn.edu.gzmu.auth.res;
 
+import cn.edu.gzmu.auth.helper.UserContext;
 import cn.edu.gzmu.constant.HttpMethod;
+import cn.edu.gzmu.model.constant.EntityType;
 import cn.edu.gzmu.model.entity.*;
 import cn.edu.gzmu.properties.Oauth2Properties;
 import cn.edu.gzmu.repository.entity.SysResRepository;
@@ -31,7 +33,6 @@ import org.springframework.util.CollectionUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.springframework.security.oauth2.provider.token.AccessTokenConverter.*;
@@ -48,9 +49,6 @@ import static org.springframework.security.oauth2.provider.token.AccessTokenConv
 @Component
 @RequiredArgsConstructor
 public class SecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
-    private final static String STUDENT_IDENTIFICATION = "enter_date";
-    private final static String TEACHER_IDENTIFICATION = "degree";
-    private final static String ADMIN_IDENTIFICATION = "ROLE_ADMIN";
     private final static Long ROLE_PUBLIC_ID = -1L;
     private final @NonNull SysResRepository sysResRepository;
     private final @NonNull SysRoleResRepository sysRoleResRepository;
@@ -162,23 +160,25 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
         Assert.notNull(user, "The user info no found！");
         userContext.setSysUser(user);
         JSONArray roles = jwtInfo.getJSONArray("role_info");
-        if (Objects.nonNull(roles)) {
-            List<SysRole> sysRoles = roles.toJavaList(SysRole.class);
-            userContext.setSysRoles(sysRoles);
-        }
+        List<SysRole> sysRoles = roles.toJavaList(SysRole.class);
+        userContext.setSysRoles(sysRoles);
         String entityInfo = jwtInfo.getString("entity_info");
-        if (StringUtils.isBlank(entityInfo)) {
-            return userContext;
-        }
-        if (entityInfo.contains(STUDENT_IDENTIFICATION)) {
-            Teacher teacher = JSONObject.parseObject(entityInfo, Teacher.class);
-            userContext.entity(teacher);
-        } else if (entityInfo.contains(TEACHER_IDENTIFICATION)) {
-            Student student = JSONObject.parseObject(entityInfo, Student.class);
-            userContext.entity(student);
-        } else if (entityInfo.equals(ADMIN_IDENTIFICATION)) {
-            userContext.setAdmin(true);
-        }
+        sysRoles.forEach(role -> {
+            if (EntityType.isAdmin(role.getName())) {
+                userContext.setAdmin(true);
+            }
+            if (StringUtils.isBlank(entityInfo)) {
+                return;
+            }
+            if (EntityType.isTeacher(role.getName())) {
+                Teacher teacher = JSONObject.parseObject(entityInfo, Teacher.class);
+                userContext.entity(teacher);
+            }
+            if (EntityType.isStudent(role.getName())) {
+                Student student = JSONObject.parseObject(entityInfo, Student.class);
+                userContext.entity(student);
+            }
+        });
         return userContext;
     }
 

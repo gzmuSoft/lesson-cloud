@@ -25,15 +25,9 @@ import java.io.Serializable;
  * @date 2019-5-27 10:59:08
  */
 @Data
-@Cacheable
 @ToString(callSuper = true)
-@Table(name = "student")
-@Entity(name = "student")
-@Where(clause = "is_enable = 1")
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@Cache(region = "student", usage = CacheConcurrencyStrategy.READ_WRITE)
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "fieldHandler"})
 public class Student extends BaseEntity implements Serializable {
 
     /**

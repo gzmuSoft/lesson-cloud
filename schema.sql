@@ -1,984 +1,592 @@
-/*
- Navicat Premium Data Transfer
-
- Source Server         : mysql
- Source Server Type    : MySQL
- Source Server Version : 50722
- Source Host           : localhost:3306
- Source Schema         : lesson-cloud
-
- Target Server Type    : MySQL
- Target Server Version : 50722
- File Encoding         : 65001
-
- Date: 13/05/2019 21:33:58
-*/
-
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for course
--- ----------------------------
-DROP TABLE IF EXISTS `course`;
-CREATE TABLE `course`
+create table if not exists course
 (
-    `id`          bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称',
-    `spell`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `period`      smallint(6)                                             NOT NULL DEFAULT 16 COMMENT '基础学时',
-    `credit`      float                                                   NOT NULL DEFAULT 1 COMMENT '基础学分',
-    `type`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '专业必修' COMMENT '课程性质',
-    `sort`        smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`   binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '课程'
-  ROW_FORMAT = Dynamic;
+    id          bigint auto_increment comment '编号'
+        primary key,
+    name        varchar(255)                           null comment '名称',
+    spell       varchar(255)                           null comment '名称的全拼',
+    period      smallint(6)  default 16                not null comment '基础学时',
+    credit      float        default 1                 not null comment '基础学分',
+    type        varchar(255) default '专业必修'            not null comment '课程性质',
+    sort        smallint(6)                            null comment '排序',
+    create_user varchar(255)                           null comment '创建用户名称',
+    create_time datetime     default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user varchar(255)                           null comment '末次更新用户名称',
+    modify_time datetime     default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark      varchar(255)                           null comment '备注',
+    is_enable   binary(1)    default 0x31              not null comment '是否可用，1：可用，0：不可用'
+)
+    comment '课程' charset = utf8;
 
--- ----------------------------
--- Table structure for essay
--- ----------------------------
-DROP TABLE IF EXISTS `essay`;
-CREATE TABLE `essay`
+create table if not exists exam
 (
-    `id`             bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`           varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '题目',
-    `spell`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '题目的全拼',
-    `difficult_rate` float                                                    NOT NULL DEFAULT 0.1 COMMENT '难度系数，介于0~1之间',
-    `answer`         varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '参考答案（可能包含图片）',
-    `explanation`    varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '答案解析',
-    `course_id`      bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '课程编号',
-    `section_id`     bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '章节编号',
-    `knowledge_id`   bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '知识点编号',
-    `sort`           smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`    datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`    datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`      binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_essay_course` (`course_id`) USING BTREE,
-    INDEX `FK_essay_knowledge` (`knowledge_id`) USING BTREE,
-    INDEX `FK_essay_section` (`section_id`) USING BTREE,
-    CONSTRAINT `essay_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `essay_ibfk_2` FOREIGN KEY (`knowledge_id`) REFERENCES `knowledge` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `essay_ibfk_3` FOREIGN KEY (`section_id`) REFERENCES `section` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '问答题'
-  ROW_FORMAT = Dynamic;
+    id             bigint auto_increment comment '编号'
+        primary key,
+    name           varchar(255)                        null comment '名称',
+    spell          varchar(255)                        null comment '名称的全拼',
+    start_time     datetime                            null comment '开始时间',
+    end_time       datetime                            null comment '结束时间',
+    total_use_time int                                 null comment '考试总用时限制（正数，如：60分钟）',
+    total_score    float                               null comment '满分分值',
+    course_id      bigint(255)                         null comment '课程编号',
+    classes_ids    varchar(512)                        null comment '参与考试的班级id列表，以逗号作为分隔符',
+    allow_times    int                                 null comment '可以考试的次数限制（正数，0代表可以无限次考试）',
+    sort           smallint(6)                         null comment '排序',
+    create_user    varchar(255)                        null comment '创建用户名称',
+    create_time    datetime  default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user    varchar(255)                        null comment '末次更新用户名称',
+    modify_time    datetime  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark         varchar(255)                        null comment '备注',
+    is_enable      binary(1) default 0x31              not null comment '是否可用，1：可用，0：不可用'
+)
+    comment '考试' charset = utf8;
 
--- ----------------------------
--- Table structure for exam
--- ----------------------------
-DROP TABLE IF EXISTS `exam`;
-CREATE TABLE `exam`
+create table if not exists exam_rule
 (
-    `id`             bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`           varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称',
-    `spell`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `start_time`     datetime(0)                                             NULL     DEFAULT NULL COMMENT '开始时间',
-    `end_time`       datetime(0)                                             NULL     DEFAULT NULL COMMENT '结束时间',
-    `total_use_time` int(11)                                                 NULL     DEFAULT NULL COMMENT '考试总用时限制（正数，如：60分钟）',
-    `total_score`    float                                                   NULL     DEFAULT NULL COMMENT '满分分值',
-    `course_id`      bigint(255)                                             NULL     DEFAULT NULL COMMENT '课程编号',
-    `classes_ids`    varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '参与考试的班级id列表，以逗号作为分隔符',
-    `allow_times`    int(11)                                                 NULL     DEFAULT NULL COMMENT '可以考试的次数限制（正数，0代表可以无限次考试）',
-    `sort`           smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`    datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`    datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`      binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '考试'
-  ROW_FORMAT = Dynamic;
+    id                   bigint auto_increment comment '编号'
+        primary key,
+    name                 varchar(255)                        null comment '名称',
+    spell                varchar(255)                        null comment '名称的全拼',
+    exam_id              bigint                              null comment '考试编号',
+    question_type        varchar(255)                        null comment '题型（单项选择题、多项选择题、判断题、填空题、编程题）',
+    question_count       int(255)                            null comment '题量',
+    start_difficult_rate float                               null comment '起始难度系数',
+    end_difficult_rate   float                               null comment '终止难度系数',
+    each_value           float                               not null comment '每题分值',
+    sort                 smallint(6)                         null comment '排序',
+    create_user          varchar(255)                        null comment '创建用户名称',
+    create_time          datetime  default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user          varchar(255)                        null comment '末次更新用户名称',
+    modify_time          datetime  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark               varchar(255)                        null comment '备注',
+    is_enable            binary(1) default 0x31              not null comment '是否可用，1：可用，0：不可用',
+    constraint exam_rule_fk
+        foreign key (exam_id) references exam (id)
+)
+    comment '试卷组卷规则' charset = utf8;
 
--- ----------------------------
--- Table structure for exam_history
--- ----------------------------
-DROP TABLE IF EXISTS `exam_history`;
-CREATE TABLE `exam_history`
+create table if not exists logic_class
 (
-    `id`          bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称',
-    `spell`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `exam_id`     bigint(20)                                              NULL     DEFAULT NULL COMMENT '考试编号',
-    `student_id`  bigint(20)                                              NULL     DEFAULT NULL COMMENT '学生编号',
-    `max_score`   float                                                   NULL     DEFAULT NULL COMMENT '最高得分',
-    `paper_id`    bigint(20)                                              NULL     DEFAULT NULL COMMENT '得分最高的试卷编号',
-    `exam_time`   datetime(0)                                             NULL     DEFAULT NULL COMMENT '得分最高的考试的开始时间',
-    `times`       int(11)                                                 NULL     DEFAULT 0 COMMENT '已考次数（生成paper时就计数+1）',
-    `sort`        smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`   binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `exam_history_exam_fk` (`exam_id`) USING BTREE,
-    INDEX `exam_history_student_fk` (`student_id`) USING BTREE,
-    INDEX `exam_history_paper_fk` (`paper_id`) USING BTREE,
-    CONSTRAINT `exam_history_exam_fk` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-    CONSTRAINT `exam_history_paper_fk` FOREIGN KEY (`paper_id`) REFERENCES `paper` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-    CONSTRAINT `exam_history_student_fk` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '考试试卷历史记录'
-  ROW_FORMAT = Dynamic;
+    id           bigint auto_increment comment '编号'
+        primary key,
+    name         varchar(255)                        null comment '名称',
+    spell        varchar(255)                        null comment '名称的全拼',
+    type         binary(1)                           null comment '0：物理班级(classes_id值为实体班级id)，1：学生个体(student_id为学生实体id)',
+    school_id    bigint                              not null comment '学校编号',
+    college_id   bigint                              null comment '学院编号',
+    dep_id       bigint                              null comment '系部编号',
+    specialty_id bigint                              null comment '专业编号',
+    classes_id   bigint                              null comment '实体班级id，type为0值，本字段值才有效',
+    student_id   bigint                              null comment '学生实体id，type为1值，本字段值才有效',
+    teacher_id   bigint                              null comment '教师编号',
+    semester_id  bigint                              null comment '学期编号',
+    course_id    bigint                              null comment '课程编号',
+    period       smallint(6)                         null comment '学时',
+    credit       float                               null comment '学分',
+    course_type  varchar(255)                        null comment '课程性质',
+    sort         smallint(6)                         null comment '排序',
+    create_user  varchar(255)                        null comment '创建用户名称',
+    create_time  datetime  default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user  varchar(255)                        null comment '末次更新用户名称',
+    modify_time  datetime  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark       varchar(255)                        null comment '备注',
+    is_enable    binary(1) default 0x31              not null comment '是否可用，1：可用，0：不可用'
+)
+    comment '逻辑班级' charset = utf8;
 
--- ----------------------------
--- Table structure for exam_rule
--- ----------------------------
-DROP TABLE IF EXISTS `exam_rule`;
-CREATE TABLE `exam_rule`
+create table if not exists course_timetable_location
 (
-    `id`                   bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`                 varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称',
-    `spell`                varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `exam_id`              bigint(20)                                              NULL     DEFAULT NULL COMMENT '考试编号',
-    `question_type`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '题型（单项选择题、多项选择题、判断题、填空题、编程题）',
-    `question_count`       int(255)                                                NULL     DEFAULT NULL COMMENT '题量',
-    `start_difficult_rate` float                                                   NULL     DEFAULT NULL COMMENT '起始难度系数',
-    `end_difficult_rate`   float                                                   NULL     DEFAULT NULL COMMENT '终止难度系数',
-    `each_value`           float                                                   NOT NULL COMMENT '每题分值',
-    `sort`                 smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`          datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`          datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`            binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `exam_rule_fk` (`exam_id`) USING BTREE,
-    CONSTRAINT `exam_rule_fk` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '试卷组卷规则'
-  ROW_FORMAT = Dynamic;
+    id             bigint auto_increment comment '编号'
+        primary key,
+    name           varchar(255)                        null comment '名称',
+    spell          varchar(255)                        null comment '名称的全拼',
+    logic_class_id bigint                              not null comment '逻辑班级编号',
+    weeks          varchar(255)                        null comment '以逗号作为分隔符的各个周序号，例如：1,3,5,7代表第1周、第3周、第5周和第7周上课',
+    location       varchar(255)                        null comment '上课地点',
+    weekday        smallint(6)                         null comment '星期几，1：星期一，2：星期二，3：星期三，4：星期四，5：星期五，6：星期六，7：星期天',
+    class_section  varchar(255)                        null comment '上课是第几节，例如：第1节和第2节上课记录为1~2，第1节至第3节上课记录为1~2~3。如果同一天有多个分开的时间段，则以逗号作为分隔符。例如：1~2;7~8',
+    sort           smallint(6)                         null comment '排序',
+    create_user    varchar(255)                        null comment '创建用户名称',
+    create_time    datetime  default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user    varchar(255)                        null comment '末次更新用户名称',
+    modify_time    datetime  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark         varchar(255)                        null comment '备注',
+    is_enable      binary(1) default 0x31              not null comment '是否可用，1：可用，0：不可用',
+    constraint course_timetable_location_ibfk_1
+        foreign key (logic_class_id) references logic_class (id)
+            on update cascade on delete cascade
+)
+    comment '逻辑班级（课程）上课时间表及地点信息' charset = utf8;
 
--- ----------------------------
--- Table structure for judgement
--- ----------------------------
-DROP TABLE IF EXISTS `judgement`;
-CREATE TABLE `judgement`
+create index FK_school
+    on course_timetable_location (logic_class_id);
+
+create index FK_school
+    on logic_class (school_id);
+
+create table if not exists paper
 (
-    `id`             bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`           varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '题目',
-    `spell`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '题目的全拼',
-    `difficult_rate` float                                                    NOT NULL DEFAULT 0.1 COMMENT '难度系数，介于0~1之间',
-    `answer`         binary(1)                                                NOT NULL DEFAULT 1 COMMENT '参考答案（1：正确，0：错误）',
-    `explanation`    varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '答案解析',
-    `course_id`      bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '课程编号',
-    `section_id`     bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '章节编号',
-    `knowledge_id`   bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '知识点编号',
-    `sort`           smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`    datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`    datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`      binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_single_course` (`course_id`) USING BTREE,
-    INDEX `FK_single_knowledge` (`knowledge_id`) USING BTREE,
-    INDEX `FK_single_section` (`section_id`) USING BTREE,
-    CONSTRAINT `judgement_course_fk` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `judgement_knowledge_fk` FOREIGN KEY (`knowledge_id`) REFERENCES `knowledge` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `judgement_section_fk` FOREIGN KEY (`section_id`) REFERENCES `section` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '判断题'
-  ROW_FORMAT = Dynamic;
+    id                    bigint auto_increment comment '编号'
+        primary key,
+    name                  varchar(255)                        null comment '名称',
+    spell                 varchar(255)                        null comment '名称的全拼',
+    exam_id               bigint                              null comment '考试编号',
+    student_id            bigint                              null comment '学生编号',
+    start_time            datetime                            null comment '考试开始时间',
+    submit_time           datetime                            null comment '考试交卷时间',
+    score                 float                               null comment '考试成绩',
+    single_sel_ids        varchar(512)                        null comment '单项选择题id列表',
+    single_sel_option_ids varchar(1024)                       null comment '单项选择题选项乱序之后的顺序列表（以逗号作为分隔符）',
+    multi_sel_ids         varchar(512)                        null comment '多项选择题id列表',
+    multi_sel_option_ids  varchar(1024)                       null comment '多项选择题选项乱序之后的顺序列表（以逗号作为分隔符）',
+    judgement_ids         varchar(512)                        null comment '判断题id列表',
+    judgement_option_ids  varchar(1024)                       null comment '判断题选项乱序之后的顺序列表（以逗号作为分隔符）',
+    essay_ids             varchar(512)                        null comment '问答题id列表',
+    program_ids           varchar(512)                        null comment '编程题id列表',
+    sort                  smallint(6)                         null comment '排序',
+    create_user           varchar(255)                        null comment '创建用户名称',
+    create_time           datetime  default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user           varchar(255)                        null comment '末次更新用户名称',
+    modify_time           datetime  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark                varchar(255)                        null comment '备注',
+    is_enable             binary(1) default 0x31              not null comment '是否可用，1：可用，0：不可用',
+    constraint paper_exam_fk
+        foreign key (exam_id) references exam (id)
+)
+    comment '试卷' charset = utf8;
 
--- ----------------------------
--- Table structure for knowledge
--- ----------------------------
-DROP TABLE IF EXISTS `knowledge`;
-CREATE TABLE `knowledge`
+create table if not exists exam_history
 (
-    `id`          bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称',
-    `spell`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `intro`       varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '内容简介',
-    `parent_id`   bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '0，代表无上级，即：课程的顶层知识点',
-    `course_id`   bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '课程编号',
-    `section_id`  bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '章节编号',
-    `sort`        smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
-    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time` datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time` datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`   binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_knowledge_course` (`course_id`) USING BTREE,
-    INDEX `FK_knowledge_section` (`section_id`) USING BTREE,
-    CONSTRAINT `knowledge_course_ibfk` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `knowledge_section_ibfk` FOREIGN KEY (`section_id`) REFERENCES `section` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '知识点'
-  ROW_FORMAT = Dynamic;
+    id          bigint auto_increment comment '编号'
+        primary key,
+    name        varchar(255)                        null comment '名称',
+    spell       varchar(255)                        null comment '名称的全拼',
+    exam_id     bigint                              null comment '考试编号',
+    student_id  bigint                              null comment '学生编号',
+    max_score   float                               null comment '最高得分',
+    paper_id    bigint                              null comment '得分最高的试卷编号',
+    exam_time   datetime                            null comment '得分最高的考试的开始时间',
+    times       int       default 0                 null comment '已考次数（生成paper时就计数+1）',
+    sort        smallint(6)                         null comment '排序',
+    create_user varchar(255)                        null comment '创建用户名称',
+    create_time datetime  default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user varchar(255)                        null comment '末次更新用户名称',
+    modify_time datetime  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark      varchar(255)                        null comment '备注',
+    is_enable   binary(1) default 0x31              not null comment '是否可用，1：可用，0：不可用',
+    constraint exam_history_exam_fk
+        foreign key (exam_id) references exam (id),
+    constraint exam_history_paper_fk
+        foreign key (paper_id) references paper (id)
+)
+    comment '考试试卷历史记录' charset = utf8;
 
--- ----------------------------
--- Table structure for multi_sel
--- ----------------------------
-DROP TABLE IF EXISTS `multi_sel`;
-CREATE TABLE `multi_sel`
+create index exam_history_student_fk
+    on exam_history (student_id);
+
+create index paper_student_fk
+    on paper (student_id);
+
+create table if not exists paper_detail
 (
-    `id`             bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`           varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '题目',
-    `spell`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '题目的全拼',
-    `difficult_rate` float                                                    NOT NULL DEFAULT 0.1 COMMENT '难度系数，介于0~1之间',
-    `answer`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '参考答案对应的选项在此题选项列表中的顺序，多个选项的以英文逗号分隔',
-    `explanation`    varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '答案解析',
-    `course_id`      bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '课程编号',
-    `section_id`     bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '章节编号',
-    `knowledge_id`   bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '知识点编号',
-    `sort`           smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`    datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`    datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`      binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_multi_course` (`course_id`) USING BTREE,
-    INDEX `FK_multi_knowledge` (`knowledge_id`) USING BTREE,
-    INDEX `FK_multi_section` (`section_id`) USING BTREE,
-    CONSTRAINT `multi_course_ibfk` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `multi_knowledge_ibfk` FOREIGN KEY (`knowledge_id`) REFERENCES `knowledge` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `multi_section_ibfk` FOREIGN KEY (`section_id`) REFERENCES `section` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '多项选择题'
-  ROW_FORMAT = Dynamic;
+    id            bigint auto_increment comment '编号'
+        primary key,
+    name          varchar(255)                        null comment '名称',
+    spell         varchar(255)                        null comment '名称的全拼',
+    paper_id      bigint                              null comment '试卷编号',
+    question_type smallint(6)                         null comment '0：单项选择题，1：多项选择题，2：判断题，3：填空题，4：简答题，5：编程题',
+    question_id   bigint                              null comment '问题编号',
+    ref_answer    varchar(255)                        null comment '参考答案（仅记录单项、多项、判断题这些客观题的参考答案，其他题的答案直接从题库中读取）',
+    user_answer   varchar(2048)                       null comment '用户答案',
+    org_value     float                               null comment '原始分值',
+    obtain_value  float                               null comment '用户得分',
+    sort          smallint(6)                         null comment '排序',
+    create_user   varchar(255)                        null comment '创建用户名称',
+    create_time   datetime  default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user   varchar(255)                        null comment '末次更新用户名称',
+    modify_time   datetime  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark        varchar(255)                        null comment '备注',
+    is_enable     binary(1) default 0x31              not null comment '是否可用，1：可用，0：不可用',
+    constraint paper_detail_paper_fk
+        foreign key (paper_id) references paper (id)
+            on update cascade on delete cascade
+)
+    comment '试卷详情及阅卷信息' charset = utf8;
 
--- ----------------------------
--- Table structure for paper
--- ----------------------------
-DROP TABLE IF EXISTS `paper`;
-CREATE TABLE `paper`
+create index paper_essay_essay_fk
+    on paper_detail (question_id);
+
+create table if not exists section
 (
-    `id`                     bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`                   varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称',
-    `spell`                  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `exam_id`                bigint(20)                                               NULL     DEFAULT NULL COMMENT '考试编号',
-    `student_id`             bigint(20)                                               NULL     DEFAULT NULL COMMENT '学生编号',
-    `start_time`             datetime(0)                                              NULL     DEFAULT NULL COMMENT '考试开始时间',
-    `submit_time`            datetime(0)                                              NULL     DEFAULT NULL COMMENT '考试交卷时间',
-    `score`                  float                                                    NULL     DEFAULT NULL COMMENT '考试成绩',
-    `single_sel_ids`         varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '单项选择题id列表',
-    `single_sel_option_ids` varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '单项选择题选项乱序之后的顺序列表（以逗号作为分隔符）',
-    `multi_sel_ids`          varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '多项选择题id列表',
-    `multi_sel_option_ids`  varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '多项选择题选项乱序之后的顺序列表（以逗号作为分隔符）',
-    `judgement_ids`          varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '判断题id列表',
-    `judgement_option_ids`  varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '判断题选项乱序之后的顺序列表（以逗号作为分隔符）',
-    `essay_ids`              varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '问答题id列表',
-    `program_ids`            varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '编程题id列表',
-    `sort`                   smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`            varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`            datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`            varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`            datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`                 varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`              binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `paper_exam_fk` (`exam_id`) USING BTREE,
-    INDEX `paper_student_fk` (`student_id`) USING BTREE,
-    CONSTRAINT `paper_exam_fk` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-    CONSTRAINT `paper_student_fk` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '试卷'
-  ROW_FORMAT = Dynamic;
+    id          bigint auto_increment comment '编号'
+        primary key,
+    name        varchar(255)                        null comment '名称',
+    spell       varchar(255)                        null comment '名称的全拼',
+    intro       varchar(1024)                       null comment '内容简介',
+    course_id   bigint    default 0                 not null comment '课程编号',
+    parent_id   bigint    default 0                 not null comment '0，代表无上级，即：课程的第一个章节',
+    type        binary(1) default 0x31              not null comment '类型，0：章，1：节',
+    sort        smallint(6)                         null comment '排序',
+    create_user varchar(255)                        null comment '创建用户名称',
+    create_time datetime  default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user varchar(255)                        null comment '末次更新用户名称',
+    modify_time datetime  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark      varchar(255)                        null comment '备注',
+    is_enable   binary(1) default 0x31              not null comment '是否可用，1：可用，0：不可用',
+    constraint section_course_ibfk
+        foreign key (course_id) references course (id)
+            on update cascade on delete cascade
+)
+    comment '章节' charset = utf8;
 
--- ----------------------------
--- Table structure for paper_detail
--- ----------------------------
-DROP TABLE IF EXISTS `paper_detail`;
-CREATE TABLE `paper_detail`
+create table if not exists knowledge
 (
-    `id`            bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称',
-    `spell`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `paper_id`      bigint(20)                                               NULL     DEFAULT NULL COMMENT '试卷编号',
-    `question_type` smallint(6)                                              NULL     DEFAULT NULL COMMENT '0：单项选择题，1：多项选择题，2：判断题，3：填空题，4：简答题，5：编程题',
-    `question_id`   bigint(20)                                               NULL     DEFAULT NULL COMMENT '问题编号',
-    `ref_answer`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '参考答案（仅记录单项、多项、判断题这些客观题的参考答案，其他题的答案直接从题库中读取）',
-    `user_answer`   varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '用户答案',
-    `org_value`     float                                                    NULL     DEFAULT NULL COMMENT '原始分值',
-    `obtain_value`  float                                                    NULL     DEFAULT NULL COMMENT '用户得分',
-    `sort`          smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`   varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`   datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`   varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`   datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`     binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `paper_essay_essay_fk` (`question_id`) USING BTREE,
-    INDEX `paper_detail_paper_fk` (`paper_id`) USING BTREE,
-    CONSTRAINT `paper_detail_paper_fk` FOREIGN KEY (`paper_id`) REFERENCES `paper` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '试卷详情及阅卷信息'
-  ROW_FORMAT = Dynamic;
+    id          bigint auto_increment comment '编号'
+        primary key,
+    name        varchar(255)                        null comment '名称',
+    spell       varchar(255)                        null comment '名称的全拼',
+    intro       varchar(1024)                       null comment '内容简介',
+    parent_id   bigint    default 0                 not null comment '0，代表无上级，即：课程的顶层知识点',
+    course_id   bigint    default 0                 not null comment '课程编号',
+    section_id  bigint    default 0                 not null comment '章节编号',
+    sort        smallint(6)                         null comment '排序',
+    create_user varchar(255)                        null comment '创建用户名称',
+    create_time datetime  default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user varchar(255)                        null comment '末次更新用户名称',
+    modify_time datetime  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark      varchar(255)                        null comment '备注',
+    is_enable   binary(1) default 0x31              not null comment '是否可用，1：可用，0：不可用',
+    constraint knowledge_course_ibfk
+        foreign key (course_id) references course (id)
+            on update cascade on delete cascade,
+    constraint knowledge_section_ibfk
+        foreign key (section_id) references section (id)
+            on update cascade on delete cascade
+)
+    comment '知识点' charset = utf8;
 
--- ----------------------------
--- Table structure for program
--- ----------------------------
-DROP TABLE IF EXISTS `program`;
-CREATE TABLE `program`
+create table if not exists essay
 (
-    `id`             bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`           varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '题目',
-    `spell`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '题目的全拼',
-    `difficult_rate` float                                                    NOT NULL DEFAULT 0.1 COMMENT '难度系数，介于0~1之间',
-    `answer`         varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '参考答案',
-    `explanation`    varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '答案解析',
-    `course_id`      bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '课程编号',
-    `section_id`     bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '章节编号',
-    `knowledge_id`   bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '知识点编号',
-    `sort`           smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`    datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`    datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`      binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_single_course` (`course_id`) USING BTREE,
-    INDEX `FK_single_knowledge` (`knowledge_id`) USING BTREE,
-    INDEX `FK_single_section` (`section_id`) USING BTREE,
-    CONSTRAINT `program_course_fk` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `program_knowledge_fk` FOREIGN KEY (`knowledge_id`) REFERENCES `knowledge` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `program_section_fk` FOREIGN KEY (`section_id`) REFERENCES `section` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '编程题'
-  ROW_FORMAT = Dynamic;
+    id             bigint auto_increment comment '编号'
+        primary key,
+    name           varchar(255)                            null comment '题目',
+    spell          varchar(255)                            null comment '题目的全拼',
+    difficult_rate float         default 0.1               not null comment '难度系数，介于0~1之间',
+    answer         varchar(2048) default '1'               not null comment '参考答案（可能包含图片）',
+    explanation    varchar(2048)                           null comment '答案解析',
+    course_id      bigint        default 0                 not null comment '课程编号',
+    section_id     bigint        default 0                 not null comment '章节编号',
+    knowledge_id   bigint        default 0                 not null comment '知识点编号',
+    sort           smallint(6)                             null comment '排序',
+    create_user    varchar(255)                            null comment '创建用户名称',
+    create_time    datetime      default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user    varchar(255)                            null comment '末次更新用户名称',
+    modify_time    datetime      default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark         varchar(255)                            null comment '备注',
+    is_enable      binary(1)     default 0x31              not null comment '是否可用，1：可用，0：不可用',
+    constraint essay_ibfk_1
+        foreign key (course_id) references course (id)
+            on update cascade on delete cascade,
+    constraint essay_ibfk_2
+        foreign key (knowledge_id) references knowledge (id)
+            on update cascade on delete cascade,
+    constraint essay_ibfk_3
+        foreign key (section_id) references section (id)
+            on update cascade on delete cascade
+)
+    comment '问答题' charset = utf8;
 
--- ----------------------------
--- Table structure for section
--- ----------------------------
-DROP TABLE IF EXISTS `section`;
-CREATE TABLE `section`
+create index FK_essay_course
+    on essay (course_id);
+
+create index FK_essay_knowledge
+    on essay (knowledge_id);
+
+create index FK_essay_section
+    on essay (section_id);
+
+create table if not exists judgement
 (
-    `id`          bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称',
-    `spell`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `intro`       varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '内容简介',
-    `course_id`   bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '课程编号',
-    `parent_id`   bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '0，代表无上级，即：课程的第一个章节',
-    `type`        binary(1)                                                NOT NULL DEFAULT 1 COMMENT '类型，0：章，1：节',
-    `sort`        smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
-    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time` datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time` datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`   binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_section_course` (`course_id`) USING BTREE,
-    CONSTRAINT `section_course_ibfk` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '章节'
-  ROW_FORMAT = Dynamic;
+    id             bigint auto_increment comment '编号'
+        primary key,
+    name           varchar(255)                        null comment '题目',
+    spell          varchar(255)                        null comment '题目的全拼',
+    difficult_rate float     default 0.1               not null comment '难度系数，介于0~1之间',
+    answer         binary(1) default 0x31              not null comment '参考答案（1：正确，0：错误）',
+    explanation    varchar(2048)                       null comment '答案解析',
+    course_id      bigint    default 0                 not null comment '课程编号',
+    section_id     bigint    default 0                 not null comment '章节编号',
+    knowledge_id   bigint    default 0                 not null comment '知识点编号',
+    sort           smallint(6)                         null comment '排序',
+    create_user    varchar(255)                        null comment '创建用户名称',
+    create_time    datetime  default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user    varchar(255)                        null comment '末次更新用户名称',
+    modify_time    datetime  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark         varchar(255)                        null comment '备注',
+    is_enable      binary(1) default 0x31              not null comment '是否可用，1：可用，0：不可用',
+    constraint judgement_course_fk
+        foreign key (course_id) references course (id)
+            on update cascade on delete cascade,
+    constraint judgement_knowledge_fk
+        foreign key (knowledge_id) references knowledge (id)
+            on update cascade on delete cascade,
+    constraint judgement_section_fk
+        foreign key (section_id) references section (id)
+            on update cascade on delete cascade
+)
+    comment '判断题' charset = utf8;
 
--- ----------------------------
--- Table structure for sel_options
--- ----------------------------
-DROP TABLE IF EXISTS `sel_options`;
-CREATE TABLE `sel_options`
+create index FK_single_course
+    on judgement (course_id);
+
+create index FK_single_knowledge
+    on judgement (knowledge_id);
+
+create index FK_single_section
+    on judgement (section_id);
+
+create index FK_knowledge_course
+    on knowledge (course_id);
+
+create index FK_knowledge_section
+    on knowledge (section_id);
+
+create table if not exists multi_sel
 (
-    `id`          bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '选项值',
-    `spell`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '选项值的全拼',
-    `question_id` bigint(20)                                              NOT NULL DEFAULT 0 COMMENT '题目编号',
-    `type`        smallint(6)                                             NOT NULL DEFAULT 0 COMMENT '题目类型，0：单项选择题，1：多项选择题，2：填空题',
-    `sort`        smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`   binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '单项选择题、多项选择题、填空题的选项信息表，一个题目的选项可以有多个，不局限于4个选项'
-  ROW_FORMAT = Dynamic;
+    id             bigint auto_increment comment '编号'
+        primary key,
+    name           varchar(255)                        null comment '题目',
+    spell          varchar(255)                        null comment '题目的全拼',
+    difficult_rate float     default 0.1               not null comment '难度系数，介于0~1之间',
+    answer         varchar(255)                        null comment '参考答案对应的选项在此题选项列表中的顺序，多个选项的以英文逗号分隔',
+    explanation    varchar(2048)                       null comment '答案解析',
+    course_id      bigint    default 0                 not null comment '课程编号',
+    section_id     bigint    default 0                 not null comment '章节编号',
+    knowledge_id   bigint    default 0                 not null comment '知识点编号',
+    sort           smallint(6)                         null comment '排序',
+    create_user    varchar(255)                        null comment '创建用户名称',
+    create_time    datetime  default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user    varchar(255)                        null comment '末次更新用户名称',
+    modify_time    datetime  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark         varchar(255)                        null comment '备注',
+    is_enable      binary(1) default 0x31              not null comment '是否可用，1：可用，0：不可用',
+    constraint multi_course_ibfk
+        foreign key (course_id) references course (id)
+            on update cascade on delete cascade,
+    constraint multi_knowledge_ibfk
+        foreign key (knowledge_id) references knowledge (id)
+            on update cascade on delete cascade,
+    constraint multi_section_ibfk
+        foreign key (section_id) references section (id)
+            on update cascade on delete cascade
+)
+    comment '多项选择题' charset = utf8;
 
--- ----------------------------
--- Table structure for single_sel
--- ----------------------------
-DROP TABLE IF EXISTS `single_sel`;
-CREATE TABLE `single_sel`
+create index FK_multi_course
+    on multi_sel (course_id);
+
+create index FK_multi_knowledge
+    on multi_sel (knowledge_id);
+
+create index FK_multi_section
+    on multi_sel (section_id);
+
+create table if not exists program
 (
-    `id`             bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`           varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '题目',
-    `spell`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '题目的全拼',
-    `difficult_rate` float                                                    NOT NULL DEFAULT 0.1 COMMENT '难度系数，介于0~1之间',
-    `answer`         smallint(6)                                              NOT NULL DEFAULT 1 COMMENT '参考答案对应的选项在此题选项列表中的顺序',
-    `explanation`    varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '答案解析',
-    `course_id`      bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '课程编号',
-    `section_id`     bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '章节编号',
-    `knowledge_id`   bigint(20)                                               NOT NULL DEFAULT 0 COMMENT '知识点编号',
-    `sort`           smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`    datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`    datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`      binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_single_course` (`course_id`) USING BTREE,
-    INDEX `FK_single_knowledge` (`knowledge_id`) USING BTREE,
-    INDEX `FK_single_section` (`section_id`) USING BTREE,
-    CONSTRAINT `single_course_ibfk` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `single_knowledge_ibfk` FOREIGN KEY (`knowledge_id`) REFERENCES `knowledge` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `single_section_ibfk` FOREIGN KEY (`section_id`) REFERENCES `section` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '单项选择题'
-  ROW_FORMAT = Dynamic;
+    id             bigint auto_increment comment '编号'
+        primary key,
+    name           varchar(255)                            null comment '题目',
+    spell          varchar(255)                            null comment '题目的全拼',
+    difficult_rate float         default 0.1               not null comment '难度系数，介于0~1之间',
+    answer         varchar(2048) default '1'               not null comment '参考答案',
+    explanation    varchar(2048)                           null comment '答案解析',
+    course_id      bigint        default 0                 not null comment '课程编号',
+    section_id     bigint        default 0                 not null comment '章节编号',
+    knowledge_id   bigint        default 0                 not null comment '知识点编号',
+    sort           smallint(6)                             null comment '排序',
+    create_user    varchar(255)                            null comment '创建用户名称',
+    create_time    datetime      default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user    varchar(255)                            null comment '末次更新用户名称',
+    modify_time    datetime      default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark         varchar(255)                            null comment '备注',
+    is_enable      binary(1)     default 0x31              not null comment '是否可用，1：可用，0：不可用',
+    constraint program_course_fk
+        foreign key (course_id) references course (id)
+            on update cascade on delete cascade,
+    constraint program_knowledge_fk
+        foreign key (knowledge_id) references knowledge (id)
+            on update cascade on delete cascade,
+    constraint program_section_fk
+        foreign key (section_id) references section (id)
+            on update cascade on delete cascade
+)
+    comment '编程题' charset = utf8;
 
--- ----------------------------
--- Table structure for sys_data
--- ----------------------------
-DROP TABLE IF EXISTS `sys_data`;
-CREATE TABLE `sys_data`
+create index FK_single_course
+    on program (course_id);
+
+create index FK_single_knowledge
+    on program (knowledge_id);
+
+create index FK_single_section
+    on program (section_id);
+
+create index FK_section_course
+    on section (course_id);
+
+create table if not exists sel_options
 (
-    `id`          bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`        varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci   NOT NULL COMMENT '名称',
-    `spell`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `parent_id`   bigint(20)                                               NULL     DEFAULT 0 COMMENT '0，代表无上级，即：学校',
-    `brief`       varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '简介',
-    `type`        tinyint(4)                                               NULL     DEFAULT 0 COMMENT '0：学校，1：学院，2：系部，3：专业，4：班级，5：性别，6：学历，7：学位，8：教师毕业专业，9：民族，10：研究方向，11：职称',
-    `sort`        smallint(6)                                              NULL     DEFAULT 1 COMMENT '同一type数据（如：学校）的排序顺序，值大于等于1',
-    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time` datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time` datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`   binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '系统基本数据表'
-  ROW_FORMAT = Dynamic;
+    id          bigint auto_increment comment '编号'
+        primary key,
+    name        varchar(255)                          null comment '选项值',
+    spell       varchar(255)                          null comment '选项值的全拼',
+    question_id bigint      default 0                 not null comment '题目编号',
+    type        smallint(6) default 0                 not null comment '题目类型，0：单项选择题，1：多项选择题，2：填空题',
+    sort        smallint(6)                           null comment '排序',
+    create_user varchar(255)                          null comment '创建用户名称',
+    create_time datetime    default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user varchar(255)                          null comment '末次更新用户名称',
+    modify_time datetime    default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark      varchar(255)                          null comment '备注',
+    is_enable   binary(1)   default 0x31              not null comment '是否可用，1：可用，0：不可用'
+)
+    comment '单项选择题、多项选择题、填空题的选项信息表，一个题目的选项可以有多个，不局限于4个选项' charset = utf8;
 
--- ----------------------------
--- Table structure for sys_log
--- ----------------------------
-DROP TABLE IF EXISTS `sys_log`;
-CREATE TABLE `sys_log`
+create table if not exists single_sel
 (
-    `id`          bigint(20)                                                NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`        varchar(55) CHARACTER SET utf8 COLLATE utf8_general_ci    NULL     DEFAULT NULL COMMENT '名称',
-    `spell`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT '' COMMENT '名称的全拼',
-    `browser`     varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '浏览器',
-    `operation`   varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci    NULL     DEFAULT NULL COMMENT '操作方式：GET/POST',
-    `from_url`    varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '访问的实际url地址',
-    `ip`          varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '来源ip地址',
-    `url`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '访问url相对地址',
-    `args`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci   null     DEFAULT NULL comment '请求参数',
-    `result`      varchar(10240) CHARACTER SET utf8 COLLATE utf8_general_ci null     DEFAULT NULL comment '返回结果',
-    `status`      varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci     NULL     DEFAULT '1' COMMENT '1-记录',
-    `sort`        int(11)                                                   NULL     DEFAULT 1,
-    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time` datetime(0)                                               NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time` datetime(0)                                               NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`   binary(1)                                                 NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 3
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '系统日志表'
-  ROW_FORMAT = Dynamic;
+    id             bigint auto_increment comment '编号'
+        primary key,
+    name           varchar(255)                          null comment '题目',
+    spell          varchar(255)                          null comment '题目的全拼',
+    difficult_rate float       default 0.1               not null comment '难度系数，介于0~1之间',
+    answer         smallint(6) default 1                 not null comment '参考答案对应的选项在此题选项列表中的顺序',
+    explanation    varchar(2048)                         null comment '答案解析',
+    course_id      bigint      default 0                 not null comment '课程编号',
+    section_id     bigint      default 0                 not null comment '章节编号',
+    knowledge_id   bigint      default 0                 not null comment '知识点编号',
+    sort           smallint(6)                           null comment '排序',
+    create_user    varchar(255)                          null comment '创建用户名称',
+    create_time    datetime    default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user    varchar(255)                          null comment '末次更新用户名称',
+    modify_time    datetime    default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark         varchar(255)                          null comment '备注',
+    is_enable      binary(1)   default 0x31              not null comment '是否可用，1：可用，0：不可用',
+    constraint single_course_ibfk
+        foreign key (course_id) references course (id)
+            on update cascade on delete cascade,
+    constraint single_knowledge_ibfk
+        foreign key (knowledge_id) references knowledge (id)
+            on update cascade on delete cascade,
+    constraint single_section_ibfk
+        foreign key (section_id) references section (id)
+            on update cascade on delete cascade
+)
+    comment '单项选择题' charset = utf8;
 
+create index FK_single_course
+    on single_sel (course_id);
 
--- ----------------------------
--- Table structure for sys_res
--- ----------------------------
-DROP TABLE IF EXISTS `sys_res`;
-CREATE TABLE `sys_res`
+create index FK_single_knowledge
+    on single_sel (knowledge_id);
+
+create index FK_single_section
+    on single_sel (section_id);
+
+create table if not exists sys_log
 (
-    `id`          bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称',
-    `spell`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `parent_id`   bigint(20)                                               NULL     DEFAULT NULL COMMENT '父权限资源编号',
-    `des`         varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '描述',
-    `match_url`   varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci  NOT NULL COMMENT 'url 匹配',
-    `router`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '路由路径',
-    `component`   varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '组件名称',
-    `icon_cls`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '图标',
-    `level`       int(11)                                                  NULL     DEFAULT NULL COMMENT '层级',
-    `method`      varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '允许使用的方法：GET、POST、PUT、PATCH、DELETE、ALL',
-    `type`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '类型：1 功能 2 权限',
-    `sort`        smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
-    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time` datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time` datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`   binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 7
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '权限资源'
-  ROW_FORMAT = Dynamic;
+    id          bigint auto_increment comment '编号'
+        primary key,
+    name        varchar(55)                            null comment '名称',
+    spell       varchar(255) default ''                null comment '名称的全拼',
+    browser     varchar(255)                           null comment '浏览器',
+    operation   varchar(20)                            null comment '操作方式：GET/POST',
+    from_url    varchar(1000)                          null comment '访问的实际url地址',
+    ip          varchar(200)                           null comment '来源ip地址',
+    url         varchar(255)                           null comment '访问url相对地址',
+    args        varchar(255)                           null comment '请求参数',
+    result      varchar(10240)                         null comment '返回结果',
+    status      varchar(2)   default '1'               null comment '1-记录',
+    sort        int          default 1                 null,
+    create_user varchar(255)                           null comment '创建用户名称',
+    create_time datetime     default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user varchar(255)                           null comment '末次更新用户名称',
+    modify_time datetime     default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark      varchar(255)                           null comment '备注',
+    is_enable   binary(1)    default 0x31              not null comment '是否可用，1：可用，0：不可用'
+)
+    comment '系统日志表' charset = utf8;
 
--- ----------------------------
--- Records of sys_res
--- ----------------------------
-INSERT INTO `sys_res`
-VALUES (1, '手机登录', NULL, NULL, 'oauth 手机登录', '/oauth/sms', '-', '-', '-', 0, 'GET', NULL, NULL, NULL,
-        '2019-04-20 17:11:01', NULL, '2019-04-20 17:20:33', NULL, 0x31);
-INSERT INTO `sys_res`
-VALUES (2, '日志管理', NULL, NULL, '获取日志信息', '/sysLogs/**', '/sysLogs', 'sysLogs', NULL, 0, 'GET', NULL, NULL, NULL,
-        '2019-04-20 17:11:55', NULL, '2019-04-20 17:22:54', NULL, 0x31);
-INSERT INTO `sys_res`
-VALUES (3, '日志管理-新增', NULL, NULL, '新增日志信息', '/sysLogs/**', NULL, NULL, NULL, 2, 'POST', NULL, NULL, NULL,
-        '2019-04-20 17:21:09', NULL, '2019-04-20 17:22:54', NULL, 0x31);
-INSERT INTO `sys_res`
-VALUES (4, '日志管理-删除', NULL, NULL, '删除日志信息', '/sysLogs/**', NULL, NULL, NULL, 2, 'DELETE', NULL, NULL, NULL,
-        '2019-04-20 17:22:54', NULL, '2019-04-20 17:22:54', NULL, 0x31);
-INSERT INTO `sys_res`
-VALUES (5, '日志管理-编辑', NULL, NULL, '编辑日志信息', '/sysLogs/**', NULL, NULL, NULL, 2, 'PUT', NULL, NULL, NULL,
-        '2019-04-20 17:22:54', NULL, '2019-04-20 17:22:54', NULL, 0x31);
-INSERT INTO `sys_res`
-VALUES (6, '用户管理', NULL, NULL, '获取用户信息', '/sysLogs/**', NULL, NULL, NULL, 0, 'GET', NULL, NULL, NULL,
-        '2019-04-20 17:22:54', NULL, '2019-04-20 17:22:54', NULL, 0x31);
-
--- ----------------------------
--- Table structure for sys_role
--- ----------------------------
-DROP TABLE IF EXISTS `sys_role`;
-CREATE TABLE `sys_role`
+create table if not exists sys_res
 (
-    `id`          bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
-    `spell`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `des`         varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '描述',
-    `icon_cls`    varchar(55) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT 'status_online' COMMENT '图标',
-    `parent_id`   bigint(20)                                              NOT NULL DEFAULT 0 COMMENT '父角色编号',
-    `sort`        smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`   binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 5
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '系统角色表'
-  ROW_FORMAT = Dynamic;
+    id          bigint auto_increment comment '编号'
+        primary key,
+    name        varchar(255)                        null comment '名称',
+    spell       varchar(255)                        null comment '名称的全拼',
+    parent_id   bigint                              null comment '父权限资源编号',
+    des         varchar(1024)                       null comment '描述',
+    match_url   varchar(512)                        not null comment 'url 匹配',
+    router      varchar(255)                        null comment '路由路径',
+    component   varchar(255)                        null comment '组件名称',
+    icon_cls    varchar(255)                        null comment '图标',
+    level       int                                 null comment '层级',
+    method      varchar(50)                         null comment '允许使用的方法：GET、POST、PUT、PATCH、DELETE、ALL',
+    type        varchar(255)                        null comment '类型：1 功能 2 权限',
+    sort        smallint(6)                         null comment '排序',
+    create_user varchar(255)                        null comment '创建用户名称',
+    create_time datetime  default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user varchar(255)                        null comment '末次更新用户名称',
+    modify_time datetime  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark      varchar(255)                        null comment '备注',
+    is_enable   binary(1) default 0x31              not null comment '是否可用，1：可用，0：不可用'
+)
+    comment '权限资源' charset = utf8;
 
--- ----------------------------
--- Records of sys_role
--- ----------------------------
-INSERT INTO `sys_role`
-VALUES (1, 'ROLE_ADMIN', '管理员', '开放所有资源访问权限', 'status_online', 0, 1, 'admin', '2019-04-19 22:48:15', 'admin',
-        '2019-04-20 17:08:39', NULL, 0x31);
-INSERT INTO `sys_role`
-VALUES (2, 'ROLE_ANONYMOUS', '匿名资源', '无需任何认证即可访问', 'status_online', 0, 3, 'admin', '2019-04-20 16:58:45', 'admin',
-        '2019-04-20 17:09:39', NULL, 0x31);
-INSERT INTO `sys_role`
-VALUES (3, 'ROLE_TEACHER', '教师', '开放部分权限', 'status_online', 0, 2, 'admin', '2019-04-19 22:48:25', 'admin',
-        '2019-04-20 17:09:38', NULL, 0x31);
-INSERT INTO `sys_role`
-VALUES (4, 'ROLE_STUDENT', '学生', '开放部分资源', 'status_online', 0, 4, 'admin', '2019-04-20 17:10:10', 'admin',
-        '2019-04-20 17:10:10', NULL, 0x31);
-
--- ----------------------------
--- Table structure for sys_role_res
--- ----------------------------
-DROP TABLE IF EXISTS `sys_role_res`;
-CREATE TABLE `sys_role_res`
+create table if not exists sys_role_res
 (
-    `id`          bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称',
-    `spell`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `role_id`     bigint(20)                                              NULL     DEFAULT NULL COMMENT '角色编号',
-    `res_id`      bigint(20)                                              NULL     DEFAULT NULL COMMENT '权限资源编号',
-    `sort`        smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`   binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_roleRes_res` (`res_id`) USING BTREE,
-    INDEX `FK_userAuth_ur` (`role_id`) USING BTREE,
-    CONSTRAINT `sys_role_res_ibfk_1` FOREIGN KEY (`res_id`) REFERENCES `sys_res` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-    CONSTRAINT `sys_role_res_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '角色权限关联'
-  ROW_FORMAT = Dynamic;
+    id          bigint auto_increment comment '编号'
+        primary key,
+    name        varchar(255)                        null comment '名称',
+    spell       varchar(255)                        null comment '名称的全拼',
+    role_id     bigint                              null comment '角色编号',
+    res_id      bigint                              null comment '权限资源编号',
+    sort        smallint(6)                         null comment '排序',
+    create_user varchar(255)                        null comment '创建用户名称',
+    create_time datetime  default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user varchar(255)                        null comment '末次更新用户名称',
+    modify_time datetime  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark      varchar(255)                        null comment '备注',
+    is_enable   binary(1) default 0x31              not null comment '是否可用，1：可用，0：不可用',
+    constraint sys_role_res_ibfk_1
+        foreign key (res_id) references sys_res (id)
+)
+    comment '角色权限关联' charset = utf8;
 
--- ----------------------------
--- Table structure for sys_user
--- ----------------------------
-DROP TABLE IF EXISTS `sys_user`;
-CREATE TABLE `sys_user`
-(
-    `id`            bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`          varchar(55) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称',
-    `spell`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT '' COMMENT '名称的全拼',
-    `entity_id`     bigint(20)                                              NULL     DEFAULT NULL COMMENT '用户主体编号',
-    `entity_type`   int(4)                                                  NULL     DEFAULT NULL COMMENT '0：系统管理员、1：教务管理员、2：课程管理员、3：教师、4：学生',
-    `pwd`           varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '密码',
-    `status`        int(2)                                                  NOT NULL DEFAULT 1 COMMENT '1：正常、2：锁定一小时、3：禁用',
-    `icon`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT '图标：images/guest.jpg' COMMENT '图标',
-    `email`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '电子邮箱',
-    `phone`         varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '联系电话',
-    `online_status` bit(1)                                                  NULL     DEFAULT b'0' COMMENT '在线状态  1-在线 0-离线',
-    `sort`          smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`   varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`   datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`   varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`   datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`     tinyint(1)                                              NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `sys_user_email_uindex` (`email`) USING BTREE,
-    UNIQUE INDEX `sys_user_name_uindex` (`name`) USING BTREE,
-    UNIQUE INDEX `sys_user_phone_uindex` (`phone`) USING BTREE,
-    INDEX `entity_id` (`entity_id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 2
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '系统用户表'
-  ROW_FORMAT = Dynamic;
+create index FK_roleRes_res
+    on sys_role_res (res_id);
 
--- ----------------------------
--- Records of sys_user
--- ----------------------------
-INSERT INTO `sys_user`
-VALUES (1, 'admin', '', NULL, 0, '$2a$10$TtwVLF9OMb5/LhZYgC1mAepnQMPoG.rdNWKIrUvn6NlzHvD.jRITW', 1,
-        '图标：images/guest.jpg', 'lizhongyue248@163.com', '13765308262', b'0', 1, 'admin', '2019-04-20 17:07:50', 'admin',
-        '2019-04-20 17:12:45', NULL, 1);
+create index FK_userAuth_ur
+    on sys_role_res (role_id);
 
--- ----------------------------
--- Table structure for sys_user_role
--- ----------------------------
-DROP TABLE IF EXISTS `sys_user_role`;
-CREATE TABLE `sys_user_role`
-(
-    `id`          bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`        varchar(254) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称',
-    `spell`       varchar(254) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `user_id`     bigint(20)                                              NOT NULL COMMENT '用户编号',
-    `role_id`     bigint(20)                                              NOT NULL COMMENT '角色编号',
-    `sort`        smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`   binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_ur_role` (`role_id`) USING BTREE,
-    INDEX `FK_ur_user` (`user_id`) USING BTREE,
-    CONSTRAINT `FK_ur_role` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-    CONSTRAINT `FK_ur_user` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 2
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '用户角色关联'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of sys_user_role
--- ----------------------------
-INSERT INTO `sys_user_role`
-VALUES (1, '管理员权限赋予管理员', NULL, 1, 1, NULL, NULL, '2019-04-20 17:23:12', NULL, '2019-04-20 17:23:12', NULL, 0x31);
-
-/*
-调整说明：
-1、增加用户申诉表appeal、逻辑班级表logic_class
-2、修改semester表中原先误写的3个字段名
-3、student表增加学号no和身份证号id_number字段
-4、teacher表删除多余的phone和e-mail字段
-5、userconnection表更名为user_connection，以便统一命名方式
-*/
-
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for appeal
--- ----------------------------
-DROP TABLE IF EXISTS `appeal`;
-CREATE TABLE `appeal`
-(
-    `id`                bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`              varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称',
-    `spell`             varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `school_id`         bigint(20)                                              NOT NULL COMMENT '学校编号',
-    `student_no`        varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '学号',
-    `student_name`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '学生姓名',
-    `id_number`         varchar(18) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '学生身份证号',
-    `email`             varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '申诉邮箱，用于接收申诉处理结果',
-    `id_path`           varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '上传的身份证照片保存路径',
-    `student_card_path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '上传的学生证照片保存路径',
-    `sort`              smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`       datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`       datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`            varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`         binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_school` (`school_id`) USING BTREE,
-    CONSTRAINT `appeal_ibfk_1` FOREIGN KEY (`school_id`) REFERENCES `sys_data` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '用户申诉'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for logic_class
--- ----------------------------
-DROP TABLE IF EXISTS `logic_class`;
-CREATE TABLE `logic_class`
-(
-    `id`           bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称',
-    `spell`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `type`         binary(1)                                               NULL     DEFAULT NULL COMMENT '0：物理班级(classes_id值为实体班级id)，1：学生个体(student_id为学生实体id)',
-    `school_id`    bigint(20)                                              NOT NULL COMMENT '学校编号',
-    `college_id`   bigint(20)                                              NULL     DEFAULT NULL COMMENT '学院编号',
-    `dep_id`       bigint(20)                                              NULL     DEFAULT NULL COMMENT '系部编号',
-    `specialty_id` bigint(20)                                              NULL     DEFAULT NULL COMMENT '专业编号',
-    `classes_id`   bigint(20)                                              NULL     DEFAULT NULL COMMENT '实体班级id，type为0值，本字段值才有效',
-    `student_id`   bigint(20)                                              NULL     DEFAULT NULL COMMENT '学生实体id，type为1值，本字段值才有效',
-    `teacher_id`   bigint(20)                                              NULL     DEFAULT NULL COMMENT '教师编号',
-    `semester_id`  bigint(20)                                              NULL     DEFAULT NULL COMMENT '学期编号',
-    `course_id`    bigint(20)                                              NULL     DEFAULT NULL COMMENT '课程编号',
-    `period`       smallint(6)                                             NULL     DEFAULT NULL COMMENT '学时',
-    `credit`       float                                                   NULL     DEFAULT NULL COMMENT '学分',
-    `course_type`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '课程性质',
-    `sort`         smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`  datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`  datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`    binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_school` (`school_id`) USING BTREE,
-    CONSTRAINT `logic_class_ibfk_1` FOREIGN KEY (`school_id`) REFERENCES `sys_data` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '逻辑班级'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for semester
--- ----------------------------
-DROP TABLE IF EXISTS `semester`;
-CREATE TABLE `semester`
-(
-    `id`          bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`        varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称',
-    `spell`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `school_id`   bigint(20)                                              NOT NULL COMMENT '学校编号',
-    `start_date`  date                                                    NULL     DEFAULT NULL COMMENT '起始日期',
-    `end_date`    date                                                    NULL     DEFAULT NULL COMMENT '结束日期',
-    `sort`        smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time` datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`      varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`   binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_school` (`school_id`) USING BTREE,
-    CONSTRAINT `semester_school_ibfk` FOREIGN KEY (`school_id`) REFERENCES `sys_data` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '学期'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for student
--- ----------------------------
-DROP TABLE IF EXISTS `student`;
-CREATE TABLE `student`
-(
-    `id`                   bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`                 varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称',
-    `spell`                varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `user_id`              bigint(20)                                               NULL     DEFAULT NULL COMMENT '用户编号',
-    `school_id`            bigint(20)                                               NULL     DEFAULT NULL COMMENT '学校编号',
-    `college_id`           bigint(20)                                               NULL     DEFAULT NULL COMMENT '学院编号',
-    `dep_id`               bigint(20)                                               NULL     DEFAULT NULL COMMENT '系部编号',
-    `specialty_id`         bigint(20)                                               NULL     DEFAULT NULL COMMENT '专业编号',
-    `classes_id`           bigint(20)                                               NULL     DEFAULT NULL COMMENT '班级编号',
-    `no`                   varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '学号',
-    `gender`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '性别',
-    `id_number`            varchar(18) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '身份证号码',
-    `birthday`             date                                                     NULL     DEFAULT NULL COMMENT '出生日期',
-    `enter_date`           date                                                     NULL     DEFAULT NULL COMMENT '入校时间',
-    `academic`             varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '最后学历',
-    `graduation_date`      date                                                     NULL     DEFAULT NULL COMMENT '最后学历毕业时间',
-    `graduate_institution` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '最后学历毕业院校',
-    `original_major`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '最后学历所学专业（若最后学历是高中，则不需要填写\r\n若最后学历是大专，则需要填写）',
-    `resume`               varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '个人简历',
-    `sort`                 smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`          datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`          datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`            binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '学生信息表'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for teacher
--- ----------------------------
-DROP TABLE IF EXISTS `teacher`;
-CREATE TABLE `teacher`
-(
-    `id`                   bigint(20)                                               NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`                 varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称',
-    `spell`                varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `user_id`              bigint(20)                                               NULL     DEFAULT NULL COMMENT '用户编号',
-    `school_id`            bigint(20)                                               NULL     DEFAULT NULL COMMENT '学校编号',
-    `college_id`           bigint(20)                                               NULL     DEFAULT NULL COMMENT '学院编号',
-    `dep_id`               bigint(20)                                               NULL     DEFAULT NULL COMMENT '系部编号',
-    `gender`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '性别',
-    `birthday`             date                                                     NULL     DEFAULT NULL COMMENT '出生日期',
-    `nation`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '民族',
-    `degree`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '学位',
-    `academic`             varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '最后学历',
-    `graduation_date`      date                                                     NULL     DEFAULT NULL COMMENT '最后学历毕业时间',
-    `major`                varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '最后学历所学专业',
-    `graduate_institution` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '最后学历毕业院校',
-    `major_research`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '主要研究方向',
-    `resume`               varchar(2048) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '个人简历',
-    `work_date`            date                                                     NULL     DEFAULT NULL COMMENT '参加工作时间',
-    `prof_title`           varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '职称',
-    `prof_title_ass_date`  date                                                     NULL     DEFAULT NULL COMMENT '职称评定时间',
-    `is_academic_leader`   binary(1)                                                NULL     DEFAULT NULL COMMENT '是否学术学科带头人',
-    `subject_category`     varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '所属学科门类',
-    `id_number`            varchar(18) CHARACTER SET utf8 COLLATE utf8_general_ci   NULL     DEFAULT NULL COMMENT '身份证号码',
-    `sort`                 smallint(6)                                              NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`          datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`          datetime(0)                                              NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`               varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci  NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`            binary(1)                                                NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '教师信息表'
-  ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for user_connection
--- ----------------------------
-DROP TABLE IF EXISTS `user_connection`;
-CREATE TABLE `user_connection`
-(
-    `userId`         varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-    `providerId`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-    `providerUserId` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-    `rank`           int(11)                                                       NOT NULL,
-    `displayName`    varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-    `profileUrl`     varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-    `imageUrl`       varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-    `accessToken`    varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-    `secret`         varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-    `refreshToken`   varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-    `expireTime`     bigint(20)                                                    NULL DEFAULT NULL,
-    PRIMARY KEY (`userId`, `providerId`, `providerUserId`) USING BTREE,
-    UNIQUE INDEX `UserConnectionRank` (`userId`, `providerId`, `rank`) USING BTREE
-) ENGINE = InnoDB
-  CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci
-  ROW_FORMAT = Dynamic;
-
-SET FOREIGN_KEY_CHECKS = 1;
-
--- ----------------------------
--- Table structure for course_timetable_location
--- ----------------------------
-DROP TABLE IF EXISTS `course_timetable_location`;
-CREATE TABLE `course_timetable_location`
-(
-    `id`             bigint(20)                                              NOT NULL AUTO_INCREMENT COMMENT '编号',
-    `name`           varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称',
-    `spell`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '名称的全拼',
-    `logic_class_id` bigint(20)                                              NOT NULL COMMENT '逻辑班级编号',
-    `weeks`          varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '以逗号作为分隔符的各个周序号，例如：1,3,5,7代表第1周、第3周、第5周和第7周上课',
-    `location`       varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '上课地点',
-    `weekday`        smallint(6)                                             NULL     DEFAULT NULL COMMENT '星期几，1：星期一，2：星期二，3：星期三，4：星期四，5：星期五，6：星期六，7：星期天',
-    `class_section`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '上课是第几节，例如：第1节和第2节上课记录为1~2，第1节至第3节上课记录为1~2~3。如果同一天有多个分开的时间段，则以逗号作为分隔符。例如：1~2;7~8',
-    `sort`           smallint(6)                                             NULL     DEFAULT NULL COMMENT '排序',
-    `create_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '创建用户名称',
-    `create_time`    datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建日期',
-    `modify_user`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '末次更新用户名称',
-    `modify_time`    datetime(0)                                             NULL     DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '末次更新时间',
-    `remark`         varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `is_enable`      binary(1)                                               NOT NULL DEFAULT 1 COMMENT '是否可用，1：可用，0：不可用',
-    PRIMARY KEY (`id`) USING BTREE,
-    INDEX `FK_school` (`logic_class_id`) USING BTREE,
-    CONSTRAINT `course_timetable_location_ibfk_1` FOREIGN KEY (`logic_class_id`) REFERENCES `logic_class` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  CHARACTER SET = utf8
-  COLLATE = utf8_general_ci COMMENT = '逻辑班级（课程）上课时间表及地点信息'
-  ROW_FORMAT = Dynamic;
-
-SET FOREIGN_KEY_CHECKS = 1;
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (3, null, null, 'PostmanRuntime/7.15.0', 'GET', 'http://127.0.0.1:8080/', '127.0.0.1', '/', '', '<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>', '1', null, null, '2019-06-23 09:06:50', null, '2019-06-23 09:06:50', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (4, null, null, 'PostmanRuntime/7.15.0', 'GET', 'http://127.0.0.1:8080/', '127.0.0.1', '/', '', '<200 OK OK,links: [<http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles"],[]>', '1', null, null, '2019-06-23 09:10:51', null, '2019-06-23 09:10:51', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (5, null, null, 'PostmanRuntime/7.15.0', 'GET', 'http://127.0.0.1:8080/', '127.0.0.1', '/', '', '<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>', '1', null, null, '2019-06-23 13:19:39', null, '2019-06-23 13:19:39', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (6, null, null, 'PostmanRuntime/7.15.0', 'GET', 'http://127.0.0.1:8080/', '127.0.0.1', '/', '', '<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>', '1', null, null, '2019-06-23 13:21:49', null, '2019-06-23 13:21:49', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (7, null, null, 'PostmanRuntime/7.15.0', 'GET', 'http://127.0.0.1:8080/', '127.0.0.1', '/', '', '<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>', '1', null, null, '2019-06-23 13:23:20', null, '2019-06-23 13:23:20', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (8, null, null, 'PostmanRuntime/7.15.0', 'GET', 'http://127.0.0.1:8080/', '127.0.0.1', '/', '', '<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>', '1', null, null, '2019-06-23 13:23:37', null, '2019-06-23 13:23:37', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (9, null, null, 'PostmanRuntime/7.15.0', 'GET', 'http://127.0.0.1:8080/', '127.0.0.1', '/', '', '<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>', '1', null, null, '2019-06-23 13:23:53', null, '2019-06-23 13:23:53', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (10, null, null, 'PostmanRuntime/7.15.0', 'GET', 'http://127.0.0.1:8080/', '127.0.0.1', '/', '', '<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>', '1', null, null, '2019-06-23 13:24:04', null, '2019-06-23 13:24:04', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (11, null, null, 'PostmanRuntime/7.15.0', 'GET', 'http://127.0.0.1:8080/', '127.0.0.1', '/', '', '<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>', '1', null, null, '2019-06-23 13:24:32', null, '2019-06-23 13:24:32', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (12, null, null, 'PostmanRuntime/7.15.0', 'GET', 'http://127.0.0.1:8080/', '127.0.0.1', '/', '', '<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>', '1', null, null, '2019-06-23 13:48:40', null, '2019-06-23 13:48:40', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (13, null, null, 'PostmanRuntime/7.15.0', 'GET', 'http://127.0.0.1:8080/', '127.0.0.1', '/', '', '<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>', '1', null, null, '2019-06-23 13:52:25', null, '2019-06-23 13:52:25', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (14, null, null, 'PostmanRuntime/7.15.0', 'GET', 'http://127.0.0.1:8080/', '127.0.0.1', '/', '', '<200 OK OK,links: [<http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>', '1', null, null, '2019-06-23 13:53:25', null, '2019-06-23 13:53:25', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (15, null, null, 'PostmanRuntime/7.15.0', 'GET', 'http://127.0.0.1:8080/', '127.0.0.1', '/', '', '<200 OK OK,links: [<http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers"],[]>', '1', null, null, '2019-06-23 13:55:03', null, '2019-06-23 13:55:03', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (16, null, null, 'PostmanRuntime/7.15.0', 'GET', 'http://127.0.0.1:8080/', '127.0.0.1', '/', '', '<200 OK OK,links: [<http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers"],[]>', '1', null, null, '2019-06-23 13:55:32', null, '2019-06-23 13:55:32', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (17, null, null, 'PostmanRuntime/7.15.2', 'GET', 'http://127.0.0.1:8080/sysLog', '127.0.0.1', '/sysLog', 'org.springframework.data.rest.webmvc.RootResourceInformation@250e7b7b,org.springframework.data.rest.webmvc.support.DefaultedPageable@4571fa7,UNSORTED,org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler@38d14ced', 'PagedResource { content: [Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@498085bd, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/3>;rel="self", <http://127.0.0.1:8080/sysLog/3>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@b949b410, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/4>;rel="self", <http://127.0.0.1:8080/sysLog/4>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@7c721cf5, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/5>;rel="self", <http://127.0.0.1:8080/sysLog/5>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@f151e4c0, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/6>;rel="self", <http://127.0.0.1:8080/sysLog/6>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@cb570b9e, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,s', '1', null, null, '2019-07-31 14:31:52', null, '2019-07-31 14:31:52', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (18, null, null, 'PostmanRuntime/7.15.2', 'GET', 'http://127.0.0.1:8080/sysLog', '127.0.0.1', '/sysLog', 'org.springframework.data.rest.webmvc.RootResourceInformation@29b498c0,org.springframework.data.rest.webmvc.support.DefaultedPageable@6cb61392,UNSORTED,org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler@28a3bcc7', 'PagedResource { content: [Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@284e01eb, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/3>;rel="self", <http://127.0.0.1:8080/sysLog/3>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@32c2b30b, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/4>;rel="self", <http://127.0.0.1:8080/sysLog/4>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@5959dee7, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/5>;rel="self", <http://127.0.0.1:8080/sysLog/5>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@ce148c2, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/6>;rel="self", <http://127.0.0.1:8080/sysLog/6>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@d7622891, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,si', '1', null, null, '2019-07-31 15:12:21', null, '2019-07-31 15:12:21', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (19, null, null, 'PostmanRuntime/7.15.2', 'GET', 'http://127.0.0.1:8080/sysLog', '127.0.0.1', '/sysLog', 'org.springframework.data.rest.webmvc.RootResourceInformation@397e1b08,org.springframework.data.rest.webmvc.support.DefaultedPageable@2c9384fd,UNSORTED,org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler@41c3fb45', 'PagedResource { content: [Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@47e1f189, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/3>;rel="self", <http://127.0.0.1:8080/sysLog/3>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@1cb72488, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/4>;rel="self", <http://127.0.0.1:8080/sysLog/4>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@9c93b133, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/5>;rel="self", <http://127.0.0.1:8080/sysLog/5>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@47feddef, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/6>;rel="self", <http://127.0.0.1:8080/sysLog/6>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@15a1d5b2, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,s', '1', null, null, '2019-07-31 15:13:09', null, '2019-07-31 15:13:09', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_log (id, name, spell, browser, operation, from_url, ip, url, args, result, status, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (20, null, null, 'PostmanRuntime/7.15.2', 'GET', 'http://127.0.0.1:8080/sysLog', '127.0.0.1', '/sysLog', 'org.springframework.data.rest.webmvc.RootResourceInformation@32b65264,org.springframework.data.rest.webmvc.support.DefaultedPageable@524390c,UNSORTED,org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler@2f3292ab', 'PagedResource { content: [Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@27ec2a9b, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/3>;rel="self", <http://127.0.0.1:8080/sysLog/3>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@71c7addb, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/4>;rel="self", <http://127.0.0.1:8080/sysLog/4>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@650c79d8, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/5>;rel="self", <http://127.0.0.1:8080/sysLog/5>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@8d21c97e, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,size,sort}>;rel="sysUsers", <http://127.0.0.1:8080/sysLog{?page,size,sort}>;rel="sysLogs", <http://127.0.0.1:8080/sysRoleRes{?page,size,sort}>;rel="sysRoleReses", <http://127.0.0.1:8080/course{?page,size,sort}>;rel="courses", <http://127.0.0.1:8080/student{?page,size,sort}>;rel="students", <http://127.0.0.1:8080/selOptions{?page,size,sort}>;rel="selOptionses", <http://127.0.0.1:8080/multiSel{?page,size,sort}>;rel="multiSels", <http://127.0.0.1:8080/singleSel{?page,size,sort}>;rel="singleSels", <http://127.0.0.1:8080/exam{?page,size,sort}>;rel="exams", <http://127.0.0.1:8080/examHistory{?page,size,sort}>;rel="examHistories", <http://127.0.0.1:8080/userConnection{?page,size,sort}>;rel="userConnections", <http://127.0.0.1:8080/semester{?page,size,sort}>;rel="semesters", <http://127.0.0.1:8080/sysRole{?page,size,sort}>;rel="sysRoles"],[]>, status=1), links: [<http://127.0.0.1:8080/sysLog/6>;rel="self", <http://127.0.0.1:8080/sysLog/6>;rel="sysLog"] }, Resource { content: SysLog(super=cn.edu.gzmu.model.entity.SysLog@c8969a35, browser=PostmanRuntime/7.15.0, operation=GET, fromUrl=http://127.0.0.1:8080/, ip=127.0.0.1, url=/, args=, result=<200 OK OK,links: [<http://127.0.0.1:8080/sysRes{?page,size,sort}>;rel="sysReses", <http://127.0.0.1:8080/sysUserRole{?page,size,sort}>;rel="sysUserRoles", <http://127.0.0.1:8080/section{?page,size,sort}>;rel="sections", <http://127.0.0.1:8080/courseTimetableLocation{?page,size,sort}>;rel="courseTimetableLocations", <http://127.0.0.1:8080/knowledge{?page,size,sort}>;rel="knowledges", <http://127.0.0.1:8080/judgement{?page,size,sort}>;rel="judgements", <http://127.0.0.1:8080/appeal{?page,size,sort}>;rel="appeals", <http://127.0.0.1:8080/examRule{?page,size,sort}>;rel="examRules", <http://127.0.0.1:8080/program{?page,size,sort}>;rel="programs", <http://127.0.0.1:8080/essay{?page,size,sort}>;rel="essays", <http://127.0.0.1:8080/teacher{?page,size,sort}>;rel="teachers", <http://127.0.0.1:8080/sysData{?page,size,sort}>;rel="sysDatas", <http://127.0.0.1:8080/logicClass{?page,size,sort}>;rel="logicClasses", <http://127.0.0.1:8080/paper{?page,size,sort}>;rel="papers", <http://127.0.0.1:8080/paperDetail{?page,size,sort}>;rel="paperDetails", <http://127.0.0.1:8080/sysUser{?page,s', '1', null, null, '2019-07-31 15:14:44', null, '2019-07-31 15:14:44', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_res (id, name, spell, parent_id, des, match_url, router, component, icon_cls, level, method, type, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (1, '手机登录', null, null, 'oauth 手机登录', '/oauth/sms', '-', '-', '-', 0, 'GET', null, null, null, '2019-04-20 17:11:01', null, '2019-04-20 17:20:33', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_res (id, name, spell, parent_id, des, match_url, router, component, icon_cls, level, method, type, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (2, '日志管理', null, null, '获取日志信息', '/sysLogs/**', '/sysLogs', 'sysLogs', null, 0, 'GET', null, null, null, '2019-04-20 17:11:55', null, '2019-04-20 17:22:54', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_res (id, name, spell, parent_id, des, match_url, router, component, icon_cls, level, method, type, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (3, '日志管理-新增', null, null, '新增日志信息', '/sysLogs/**', null, null, null, 2, 'POST', null, null, null, '2019-04-20 17:21:09', null, '2019-04-20 17:22:54', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_res (id, name, spell, parent_id, des, match_url, router, component, icon_cls, level, method, type, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (4, '日志管理-删除', null, null, '删除日志信息', '/sysLogs/**', null, null, null, 2, 'DELETE', null, null, null, '2019-04-20 17:22:54', null, '2019-04-20 17:22:54', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_res (id, name, spell, parent_id, des, match_url, router, component, icon_cls, level, method, type, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (5, '日志管理-编辑', null, null, '编辑日志信息', '/sysLogs/**', null, null, null, 2, 'PUT', null, null, null, '2019-04-20 17:22:54', null, '2019-04-20 17:22:54', null, 0x31);
+INSERT INTO `lesson-cloud`.sys_res (id, name, spell, parent_id, des, match_url, router, component, icon_cls, level, method, type, sort, create_user, create_time, modify_user, modify_time, remark, is_enable) VALUES (6, '用户管理', null, null, '获取用户信息', '/sysLogs/**', null, null, null, 0, 'GET', null, null, null, '2019-04-20 17:22:54', null, '2019-04-20 17:22:54', null, 0x31);

@@ -1,8 +1,6 @@
 package cn.edu.gzmu.controller;
 
 import cn.edu.gzmu.model.constant.LessonResource;
-import cn.edu.gzmu.model.entity.Teacher;
-import cn.edu.gzmu.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RepositoryRestController
 @RequestMapping(LessonResource.TEACHER)
-public class TeacherController extends BaseController<Teacher, TeacherService, Long> {
+public class TeacherController {
 
 }

@@ -1,5 +1,6 @@
-package cn.edu.gzmu.auth.res;
+package cn.edu.gzmu.auth.helper;
 
+import cn.edu.gzmu.auth.res.SecurityMetadataSource;
 import cn.edu.gzmu.model.entity.Student;
 import cn.edu.gzmu.model.entity.SysRole;
 import cn.edu.gzmu.model.entity.SysUser;
@@ -21,6 +22,7 @@ import java.util.function.Predicate;
  * @date 19-6-23 下午7:08
  */
 @Data
+@SuppressWarnings("all")
 @ParametersAreNonnullByDefault
 public class UserContext {
     private SysUser sysUser;
@@ -36,7 +38,8 @@ public class UserContext {
      * @return 结果
      */
     public boolean hasRole(SysRole sysRole) {
-        Assert.notNull(sysRole.getName(), "The role name is not null!");
+        Assert.notNull(sysRole, "The role can not be null!");
+        Assert.notNull(sysRole.getName(), "The role name can not be null!");
         return hasRole(sysRole.getName());
     }
 
