@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.provider.authentication.OAuth2Authent
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 
 /**
@@ -26,7 +27,7 @@ public class OauthHelper {
      * @return 当前用户
      */
     public static SysUser currentUser() {
-        return userContext().currentUser();
+        return excludeNull(UserContext::currentUser);
     }
 
     /**
@@ -36,7 +37,7 @@ public class OauthHelper {
      * @return 是否拥有
      */
     public boolean hasRole(@NotNull String roleName) {
-        return userContext().hasRole(roleName);
+        return excludeNull(false, userContext -> userContext.hasRole(roleName));
     }
 
     /**
@@ -46,7 +47,7 @@ public class OauthHelper {
      * @return 是否拥有
      */
     public boolean hasRole(@NotNull SysRole sysRole) {
-        return userContext().hasRole(sysRole);
+        return excludeNull(false, userContext -> userContext.hasRole(sysRole));
     }
 
     /**
@@ -55,7 +56,7 @@ public class OauthHelper {
      * @return 角色列表
      */
     public static List<SysRole> currentRoles() {
-        return userContext().currentRoles();
+        return excludeNull(UserContext::currentRoles);
     }
 
     /**
@@ -64,7 +65,7 @@ public class OauthHelper {
      * @return 结果
      */
     public static boolean isTeacher() {
-        return userContext().isTeacher();
+        return excludeNull(false, UserContext::isTeacher);
     }
 
     /**
@@ -73,7 +74,7 @@ public class OauthHelper {
      * @return 结果
      */
     public static boolean isStudent() {
-        return userContext().isStudent();
+        return excludeNull(false, UserContext::isStudent);
     }
 
     /**
@@ -82,7 +83,7 @@ public class OauthHelper {
      * @return 结果
      */
     public static boolean isAdmin() {
-        return userContext().isAdmin();
+        return excludeNull(false, UserContext::isAdmin);
     }
 
     /**
@@ -91,7 +92,7 @@ public class OauthHelper {
      * @return 教师实体
      */
     public static Teacher teacher() {
-        return userContext().getTeacher();
+        return excludeNull(UserContext::getTeacher);
     }
 
     /**
@@ -100,8 +101,9 @@ public class OauthHelper {
      * @return 学生实体
      */
     public static Student student() {
-        return userContext().getStudent();
+        return excludeNull(UserContext::getStudent);
     }
+
 
     /**
      * 获取实体
@@ -111,6 +113,9 @@ public class OauthHelper {
     @Nullable
     public static Object entity() {
         UserContext userContext = userContext();
+        if (Objects.isNull(userContext) || isAnonymousUser()) {
+            return null;
+        }
         if (userContext.isTeacher()) {
             return userContext.getTeacher();
         } else if (userContext.isStudent()) {
@@ -127,14 +132,55 @@ public class OauthHelper {
      *
      * @return 用户信息
      */
+    @Nullable
     private static UserContext userContext() {
-        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) SecurityContextHolder.getContext()
-                .getAuthentication().getDetails();
+        Object current = SecurityContextHolder.getContext().getAuthentication().getDetails();
+        if (isAnonymousUser() || !(current instanceof OAuth2AuthenticationDetails)) {
+            return null;
+        }
+        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) current;
         UserContext userContext = (UserContext) details.getDecodedDetails();
         if (Objects.isNull(userContext)) {
             throw new UserNotFoundException("Can not find the user context of the user.");
         }
         return userContext;
+    }
+
+    /**
+     * 是否是匿名用户
+     *
+     * @return 结果
+     */
+    public static boolean isAnonymousUser() {
+        final String anonymousUser = "anonymousUser";
+        return SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals(anonymousUser);
+    }
+
+
+    /**
+     * 非空排除
+     *
+     * @param defaultValue 默认值
+     * @param fun          函数型接口
+     * @param <T>          类型
+     * @return 结果
+     */
+    private static <T> T excludeNull(T defaultValue, Function<UserContext, T> fun) {
+        UserContext userContext = userContext();
+        return Objects.isNull(userContext)
+                ? defaultValue
+                : fun.apply(userContext);
+    }
+
+    /**
+     * 非空排除
+     *
+     * @param fun 函数型接口
+     * @param <T> 类型
+     * @return 结果
+     */
+    private static <T> T excludeNull(Function<UserContext, T> fun) {
+        return excludeNull(null, fun);
     }
 
 }

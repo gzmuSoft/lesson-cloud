@@ -1,5 +1,6 @@
 package cn.edu.gzmu.auth.res;
 
+import cn.edu.gzmu.auth.helper.OauthHelper;
 import cn.edu.gzmu.auth.helper.UserContext;
 import cn.edu.gzmu.constant.HttpMethod;
 import cn.edu.gzmu.model.constant.EntityType;
@@ -127,8 +128,11 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
      * 通过 {@link UserContext#getSysUser()} 获取当前用户
      */
     private void decodeUserDetails() {
-        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) SecurityContextHolder.getContext()
-                .getAuthentication().getDetails();
+        Object current = SecurityContextHolder.getContext().getAuthentication().getDetails();
+        if (OauthHelper.isAnonymousUser() || !(current instanceof OAuth2AuthenticationDetails)) {
+            return;
+        }
+        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) current;
         String tokenValue = details.getTokenValue();
         if (StringUtils.isNotBlank(tokenValue)) {
             // 已经标记过时的类
