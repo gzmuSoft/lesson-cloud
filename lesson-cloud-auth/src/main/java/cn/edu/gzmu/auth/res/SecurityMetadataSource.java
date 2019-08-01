@@ -60,13 +60,13 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
         HttpServletRequest httpRequest = ((FilterInvocation) object).getHttpRequest();
+        decodeUserDetails();
         String method = httpRequest.getMethod();
         String requestUrl = httpRequest.getServletPath();
         if (isRoleAdmin() || !oauth2Properties.isEnabled()) {
             // 对于管理员角色和不启用的情况，开放所有资源
             return SecurityConfig.createList("ROLE_PUBLIC");
         }
-        decodeUserDetails();
         List<SysRes> sysRes = sysResRepository.findAll();
         for (SysRes res : sysRes) {
             // 路径匹配
