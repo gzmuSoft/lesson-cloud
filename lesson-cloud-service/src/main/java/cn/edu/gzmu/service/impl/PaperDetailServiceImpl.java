@@ -17,6 +17,13 @@ import org.springframework.stereotype.Service;
  * @author echo
  * @version 1.0
  * @date 2019-5-7 11:33:57
+ *
+ *
+ * PaperDetail 与 Paper 为多对一关系
+ * 根据 paperDetail 的 QuestionType 和 QuestionId 获取问题的信息
+ *
+ * @author YMS
+ * @date 2019-5-7
  */
 @Service
 @RequiredArgsConstructor
@@ -30,18 +37,18 @@ public class PaperDetailServiceImpl extends BaseServiceImpl<PaperDetailRepositor
     private final @NonNull ProgramRepository programRepository;
 
     @Override
-    public Page<PaperDetail> searchAll(Pageable pageable){
+    public Page<PaperDetail> searchAll(Pageable pageable) {
         return paperDetailRepository.findAll(pageable).map(paperDetail -> {
             if (QuestionType.isSingleSel(paperDetail.getQuestionType())) {
-                paperDetail.setSingleSel(singleSelRepository.getOne(paperDetail.getPaperId()));
+                paperDetail.setSingleSel(singleSelRepository.getOne(paperDetail.getQuestionId()));
             } else if (QuestionType.isMultiSel(paperDetail.getQuestionType())) {
-                paperDetail.setMultiSel(multiSelRepository.getOne(paperDetail.getPaperId()));
-            } else if (QuestionType.isJudgement(paperDetail.getQuestionType())){
-                paperDetail.setJudgement(judgementRepository.getOne(paperDetail.getPaperId()));
-            } else if (QuestionType.isEssay(paperDetail.getQuestionType())){
-                paperDetail.setEssay(essayRepository.getOne(paperDetail.getPaperId()));
-            } else if (QuestionType.isProgram(paperDetail.getQuestionType())){
-                paperDetail.setProgram(programRepository.getOne(paperDetail.getPaperId()));
+                paperDetail.setMultiSel(multiSelRepository.getOne(paperDetail.getQuestionId()));
+            } else if (QuestionType.isJudgement(paperDetail.getQuestionType())) {
+                paperDetail.setJudgement(judgementRepository.getOne(paperDetail.getQuestionId()));
+            } else if (QuestionType.isEssay(paperDetail.getQuestionType())) {
+                paperDetail.setEssay(essayRepository.getOne(paperDetail.getQuestionId()));
+            } else if (QuestionType.isProgram(paperDetail.getQuestionType())) {
+                paperDetail.setProgram(programRepository.getOne(paperDetail.getQuestionId()));
             }
             return paperDetail;
         });
