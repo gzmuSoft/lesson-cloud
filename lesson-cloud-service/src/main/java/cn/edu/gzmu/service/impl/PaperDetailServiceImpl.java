@@ -2,6 +2,7 @@ package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.constant.QuestionType;
 import cn.edu.gzmu.model.entity.PaperDetail;
+import cn.edu.gzmu.model.exception.ResourceNotFoundException;
 import cn.edu.gzmu.repository.entity.*;
 import cn.edu.gzmu.service.PaperDetailService;
 import lombok.NonNull;
@@ -19,11 +20,10 @@ import org.springframework.stereotype.Service;
  * @date 2019-5-7 11:33:57
  *
  *
- * PaperDetail 与 Paper 为多对一关系
  * 根据 paperDetail 的 QuestionType 和 QuestionId 获取问题的信息
  *
  * @author YMS
- * @date 2019-5-7
+ * @date 2019-8-2
  */
 @Service
 @RequiredArgsConstructor
@@ -40,15 +40,25 @@ public class PaperDetailServiceImpl extends BaseServiceImpl<PaperDetailRepositor
     public Page<PaperDetail> searchAll(Pageable pageable) {
         return paperDetailRepository.findAll(pageable).map(paperDetail -> {
             if (QuestionType.isSingleSel(paperDetail.getQuestionType())) {
-                paperDetail.setSingleSel(singleSelRepository.getOne(paperDetail.getQuestionId()));
+                return paperDetail.setSingleSel(singleSelRepository.findById(paperDetail.getQuestionId()).orElseThrow(
+                        () -> new ResourceNotFoundException("SingleSel can not be find!")
+                ));
             } else if (QuestionType.isMultiSel(paperDetail.getQuestionType())) {
-                paperDetail.setMultiSel(multiSelRepository.getOne(paperDetail.getQuestionId()));
+                return paperDetail.setMultiSel(multiSelRepository.findById(paperDetail.getQuestionId()).orElseThrow(
+                        () -> new ResourceNotFoundException("MultiSel can not be find!")
+                ));
             } else if (QuestionType.isJudgement(paperDetail.getQuestionType())) {
-                paperDetail.setJudgement(judgementRepository.getOne(paperDetail.getQuestionId()));
+                return paperDetail.setJudgement(judgementRepository.findById(paperDetail.getQuestionId()).orElseThrow(
+                        () -> new ResourceNotFoundException("Judgement can not be find!")
+                ));
             } else if (QuestionType.isEssay(paperDetail.getQuestionType())) {
-                paperDetail.setEssay(essayRepository.getOne(paperDetail.getQuestionId()));
+                return paperDetail.setEssay(essayRepository.findById(paperDetail.getQuestionId()).orElseThrow(
+                        ()-> new ResourceNotFoundException("Essay can not be find!")
+                ));
             } else if (QuestionType.isProgram(paperDetail.getQuestionType())) {
-                paperDetail.setProgram(programRepository.getOne(paperDetail.getQuestionId()));
+                return paperDetail.setProgram(programRepository.findById(paperDetail.getQuestionId()).orElseThrow(
+                        ()-> new ResourceNotFoundException("Program can not be find!")
+                ));
             }
             return paperDetail;
         });
