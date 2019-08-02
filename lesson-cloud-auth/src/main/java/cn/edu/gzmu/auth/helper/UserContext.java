@@ -6,7 +6,9 @@ import cn.edu.gzmu.model.entity.SysRole;
 import cn.edu.gzmu.model.entity.SysUser;
 import cn.edu.gzmu.model.entity.Teacher;
 import lombok.Data;
+import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.util.Assert;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -22,7 +24,7 @@ import java.util.function.Predicate;
  * @date 19-6-23 下午7:08
  */
 @Data
-@SuppressWarnings("all")
+//@SuppressWarnings("all")
 @ParametersAreNonnullByDefault
 public class UserContext {
     private SysUser sysUser;

@@ -92,6 +92,7 @@ management:
 application:
   security:
     enabled: false
+    authorization-server-url: http://118.24.1.170:8888
   message:
     app-id: 35223
     app-key: e7eede1811867421882df861a20ed26e

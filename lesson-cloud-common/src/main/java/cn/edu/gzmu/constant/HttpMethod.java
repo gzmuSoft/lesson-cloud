@@ -23,9 +23,13 @@ public enum HttpMethod {
      */
     PATCH,
     /**
-     * DELETE FANGFA
+     * DELETE 方法
      */
     DELETE,
+    /**
+     * OPTION 方法
+     */
+    OPTIONS,
     /**
      * 所有方法
      */
