@@ -19,9 +19,8 @@ import org.springframework.stereotype.Service;
  * @version 1.0
  * @date 2019-5-7 11:33:57
  *
- *
  * 根据 paperDetail 的 QuestionType 和 QuestionId 获取问题的信息
- *
+ * 
  * @author YMS
  * @date 2019-8-2
  */
@@ -53,11 +52,11 @@ public class PaperDetailServiceImpl extends BaseServiceImpl<PaperDetailRepositor
                 ));
             } else if (QuestionType.isEssay(paperDetail.getQuestionType())) {
                 return paperDetail.setEssay(essayRepository.findById(paperDetail.getQuestionId()).orElseThrow(
-                        ()-> new ResourceNotFoundException("Essay can not be find!")
+                        () -> new ResourceNotFoundException("Essay can not be find!")
                 ));
             } else if (QuestionType.isProgram(paperDetail.getQuestionType())) {
                 return paperDetail.setProgram(programRepository.findById(paperDetail.getQuestionId()).orElseThrow(
-                        ()-> new ResourceNotFoundException("Program can not be find!")
+                        () -> new ResourceNotFoundException("Program can not be find!")
                 ));
             }
             return paperDetail;
