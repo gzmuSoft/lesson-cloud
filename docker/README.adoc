@@ -219,29 +219,31 @@ Docker Compose在Linux上的使用，同样需要先安装有Docker引擎。
 
 下面的示例是一条写成多行的命令，如果要将其合并为一行，请删掉反斜杠（\）。
 
-====
+....
 $ curl -L \
  https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`\
 uname -s`-`uname -m` \
  -o /usr/local/bin/docker-compose
+
+
 % Total   % Received    Time    Time    Time    Current
                         Total   Spent   Left    Speed
 100   617    0   617    0 --:--:-- --:--:-- --:--:-- 1047
 100 8280k  100 8280k    0  0:00:03  0:00:03 --:--:-- 4069k
-====
+....
 
 下载docker-compose二进制文件后，使用如下命令使其可执行。
 
-====
+....
 $ chmod +x /usr/local/bin/docker-compose
-====
+....
 
 检查安装情况以及版本。
 
-====
+....
 $ docker-compose --version
 docker-compose version 1.18.0, build 8dd22a9
-====
+....
 
 现在就可以在Linux上使用Docker Compose了。
 

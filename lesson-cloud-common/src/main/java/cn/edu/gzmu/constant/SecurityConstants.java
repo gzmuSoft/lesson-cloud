@@ -28,4 +28,5 @@ public interface SecurityConstants {
      */
     String PARAMETER_EMAIL = "email";
 
+    String PUBLIC_KEY = "";
 }

@@ -13,6 +13,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -63,4 +64,10 @@ public class CourseTimetableLocation extends BaseEntity implements Serializable 
      */
     @Size(max = 255, message = "classSection 不能大于 255 位")
     private java.lang.String classSection;
+
+    /**
+     * 逻辑班级实体类
+     */
+    @Transient
+    private LogicClass logicClass;
 }

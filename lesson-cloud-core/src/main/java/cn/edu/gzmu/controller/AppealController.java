@@ -1,8 +1,6 @@
 package cn.edu.gzmu.controller;
 
 import cn.edu.gzmu.model.constant.LessonResource;
-import cn.edu.gzmu.model.entity.Appeal;
-import cn.edu.gzmu.service.AppealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RepositoryRestController
 @RequestMapping(LessonResource.APPEAL)
-public class AppealController extends BaseController<Appeal, AppealService, Long> {
+public class AppealController {
 
 }

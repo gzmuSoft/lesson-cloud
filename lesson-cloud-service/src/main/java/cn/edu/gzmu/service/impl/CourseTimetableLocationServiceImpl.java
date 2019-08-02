@@ -1,8 +1,11 @@
 package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.entity.CourseTimetableLocation;
+import cn.edu.gzmu.model.exception.ResourceNotFoundException;
 import cn.edu.gzmu.repository.entity.CourseTimetableLocationRepository;
+import cn.edu.gzmu.repository.entity.LogicClassRepository;
 import cn.edu.gzmu.service.CourseTimetableLocationService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,5 +21,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CourseTimetableLocationServiceImpl extends BaseServiceImpl<CourseTimetableLocationRepository, CourseTimetableLocation, Long>
         implements CourseTimetableLocationService {
+    private final @NonNull LogicClassRepository logicClassRepository;
 
+    @Override
+    protected CourseTimetableLocation completeEntity(CourseTimetableLocation entity) {
+        return entity.setLogicClass(
+                logicClassRepository.findById(entity.getLogicClassId()).orElseThrow(
+                        () -> new ResourceNotFoundException("Logic class can not be find!")
+                )
+        );
+    }
 }

@@ -8,13 +8,11 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Component;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.Map;
 import java.util.concurrent.Future;
 
@@ -77,7 +75,7 @@ public class EmailUtils {
             messageHelper.setSubject(subject);
             messageHelper.setText(content, true);
             javaMailSender.send(message);
-            log.info("向 {} 发送 {} 邮件成功", toEmail, type);
+            log.debug("向 {} 发送 {} 邮件成功", toEmail, type);
             return new AsyncResult<>("邮件发送成功");
         } catch (MessagingException e) {
             e.printStackTrace();

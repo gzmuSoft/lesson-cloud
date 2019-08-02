@@ -11,11 +11,11 @@ public enum QuestionType {
     /**
      * 单项选择题
      */
-    SINGLESEL(0),
+    SINGLE_SEL(0),
     /**
      * 多项选择题
      */
-    MULTISEL(1),
+    MULTI_SEL(1),
     /**
      * 判断题
      */
@@ -39,11 +39,11 @@ public enum QuestionType {
     }
 
     public static boolean isSingleSel(Integer id) {
-        return SINGLESEL.value.equals(id);
+        return SINGLE_SEL.value.equals(id);
     }
 
     public static boolean isMultiSel(Integer id) {
-        return MULTISEL.value.equals(id);
+        return MULTI_SEL.value.equals(id);
     }
 
     public static boolean isJudgement(Integer id) {

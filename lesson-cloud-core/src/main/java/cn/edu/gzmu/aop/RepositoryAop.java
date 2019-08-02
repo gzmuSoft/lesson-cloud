@@ -20,8 +20,9 @@ public class RepositoryAop {
     /**
      * 切点
      */
-    @Pointcut("execution(* org.springframework.data.jpa.repository.JpaRepository.getOne(..))")
-    public void repositoryGetOne() {
+    @Pointcut("execution(* org.springframework.data.jpa.repository.JpaRepository.getOne(..))" +
+            "|| execution(* org.springframework.data.jpa.repository.JpaRepository.findById(..))")
+    public void repositoryMethod() {
     }
 
     @Pointcut("execution(* cn.edu.gzmu.repository.BaseRepository.searchAllByIds(..))")
@@ -35,7 +36,7 @@ public class RepositoryAop {
      * @return 结果
      * @throws Throwable 异常
      */
-    @Around("repositoryGetOne() || repositorySearchAllByIds()")
+    @Around("repositoryMethod() || repositorySearchAllByIds()")
     public Object logMessageGenerate(ProceedingJoinPoint joinPoint) throws Throwable {
         Object arg = joinPoint.getArgs()[0];
         if (Objects.isNull(arg)) {

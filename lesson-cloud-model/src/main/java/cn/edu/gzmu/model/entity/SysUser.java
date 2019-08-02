@@ -1,21 +1,14 @@
 package cn.edu.gzmu.model.entity;
 
 import cn.edu.gzmu.model.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.Cacheable;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 
 /**
  * sys_user
@@ -25,26 +18,10 @@ import java.io.Serializable;
  * @date 2019-5-27 10:59:09
  */
 @Data
-@Cacheable
 @ToString(callSuper = true)
-@Table(name = "sys_user")
-@Entity(name = "sys_user")
-@Where(clause = "is_enable = 1")
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@Cache(region = "sys_user", usage = CacheConcurrencyStrategy.READ_WRITE)
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "fieldHandler"})
-public class SysUser extends BaseEntity implements Serializable {
-
-    /**
-     * 用户主体编号
-     */
-    private java.lang.Long entityId;
-
-    /**
-     * 0：系统管理员、1：教务管理员、2：课程管理员、3：教师、4：学生
-     */
-    private java.lang.Integer entityType;
+public class SysUser extends BaseEntity {
 
     /**
      * 密码

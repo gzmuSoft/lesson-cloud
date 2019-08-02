@@ -20,22 +20,21 @@
             <artifactId>lesson-cloud-service</artifactId>
             <version>${lesson.cloud.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-security</artifactId>
-            <version>${spring-social.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-config</artifactId>
-            <version>${spring-social.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-core</artifactId>
-            <version>${spring-social.version}</version>
-        </dependency>
-
+        <!--<dependency>-->
+        <!--    <groupId>org.springframework.social</groupId>-->
+        <!--    <artifactId>spring-social-security</artifactId>-->
+        <!--    <version>${spring-social.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--    <groupId>org.springframework.social</groupId>-->
+        <!--    <artifactId>spring-social-config</artifactId>-->
+        <!--    <version>${spring-social.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--    <groupId>org.springframework.social</groupId>-->
+        <!--    <artifactId>spring-social-core</artifactId>-->
+        <!--    <version>${spring-social.version}</version>-->
+        <!--</dependency>-->
         <!--security的token依赖-->
         <!--        <dependency>-->
         <!--            <groupId>org.springframework.security</groupId>-->
@@ -63,6 +62,11 @@
         <dependency>
             <groupId>org.springframework.security.oauth.boot</groupId>
             <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
     </dependencies>
