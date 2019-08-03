@@ -25,10 +25,6 @@ public class CourseTimetableLocationServiceImpl extends BaseServiceImpl<CourseTi
 
     @Override
     protected CourseTimetableLocation completeEntity(CourseTimetableLocation entity) {
-        return entity.setLogicClass(
-                logicClassRepository.findById(entity.getLogicClassId()).orElseThrow(
-                        () -> new ResourceNotFoundException("Logic class can not be find!")
-                )
-        );
+        return entity.setLogicClass(logicClassRepository.findById(entity.getLogicClassId()).orElse(null));
     }
 }

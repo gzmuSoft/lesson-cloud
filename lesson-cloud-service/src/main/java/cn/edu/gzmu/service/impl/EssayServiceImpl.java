@@ -27,23 +27,13 @@ public class EssayServiceImpl extends BaseServiceImpl<EssayRepository, Essay, Lo
     private final @NonNull CourseRepository courseRepository;
     private final @NonNull SectionRepository sectionRepository;
     private final @NonNull KnowledgeRepository knowledgeRepository;
+
     @Override
     protected Essay completeEntity(Essay entity) {
-        entity.setCourse(
-                courseRepository.findById(entity.getCourseId()).orElseThrow(
-                        () -> new ResourceNotFoundException("Course class can not be find!")
-                )
-        );
-        entity.setKnowledge(
-                knowledgeRepository.findById(entity.getKnowledgeId()).orElseThrow(
-                        () -> new ResourceNotFoundException("Parent class can not be find!")
-                )
-        );
-        return entity.setSection(
-                sectionRepository.findById(entity.getSectionId()).orElseThrow(
-                        () -> new ResourceNotFoundException("Section class can not be find!")
-                )
-        );
+        return entity
+                .setCourse(courseRepository.findById(entity.getCourseId()).orElse(null))
+                .setKnowledge(knowledgeRepository.findById(entity.getKnowledgeId()).orElse(null))
+                .setSection(sectionRepository.findById(entity.getSectionId()).orElse(null));
 
     }
 

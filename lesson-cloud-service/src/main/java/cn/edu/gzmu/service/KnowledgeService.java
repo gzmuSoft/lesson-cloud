@@ -1,7 +1,6 @@
 package cn.edu.gzmu.service;
 
 import cn.edu.gzmu.model.entity.Knowledge;
-import org.springframework.data.domain.Pageable;
 
 /**
  * Knowledge Service
@@ -11,6 +10,5 @@ import org.springframework.data.domain.Pageable;
  * @date 2019-5-7 11:33:57
  */
 public interface KnowledgeService extends BaseService<Knowledge, Long> {
-
 
 }

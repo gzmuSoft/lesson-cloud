@@ -20,8 +20,7 @@ public class RepositoryAop {
     /**
      * 切点
      */
-    @Pointcut("execution(* org.springframework.data.jpa.repository.JpaRepository.getOne(..))" +
-            "|| execution(* org.springframework.data.jpa.repository.JpaRepository.findById(..))")
+    @Pointcut("execution(* org.springframework.data.jpa.repository.JpaRepository.getOne(..))")
     public void repositoryMethod() {
     }
 

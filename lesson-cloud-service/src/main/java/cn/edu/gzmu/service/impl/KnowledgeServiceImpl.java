@@ -1,18 +1,12 @@
 package cn.edu.gzmu.service.impl;
 
-import cn.edu.gzmu.model.entity.Course;
-import cn.edu.gzmu.model.entity.CourseTimetableLocation;
 import cn.edu.gzmu.model.entity.Knowledge;
-import cn.edu.gzmu.model.entity.Section;
-import cn.edu.gzmu.model.exception.ResourceNotFoundException;
 import cn.edu.gzmu.repository.entity.CourseRepository;
 import cn.edu.gzmu.repository.entity.KnowledgeRepository;
-import cn.edu.gzmu.repository.entity.LogicClassRepository;
 import cn.edu.gzmu.repository.entity.SectionRepository;
 import cn.edu.gzmu.service.KnowledgeService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.loader.plan.spi.Return;
 import org.springframework.stereotype.Service;
 
 
@@ -30,23 +24,13 @@ public class KnowledgeServiceImpl extends BaseServiceImpl<KnowledgeRepository, K
     private final @NonNull CourseRepository courseRepository;
     private final @NonNull SectionRepository sectionRepository;
     private final @NonNull KnowledgeRepository knowledgeRepository;
+
     @Override
     protected Knowledge completeEntity(Knowledge entity) {
-         entity.setCourse(
-                courseRepository.findById(entity.getCourseId()).orElseThrow(
-                        () -> new ResourceNotFoundException("Course class can not be find!")
-                )
-        );
-         entity.setParent(
-                 knowledgeRepository.findById(entity.getParentId()).orElseThrow(
-                         () -> new ResourceNotFoundException("Parent class can not be find!")
-                 )
-         );
-        return entity.setSection(
-                 sectionRepository.findById(entity.getSectionId()).orElseThrow(
-                         () -> new ResourceNotFoundException("Section class can not be find!")
-                 )
-       );
+        return entity
+                .setCourse(courseRepository.findById(entity.getCourseId()).orElse(null))
+                .setParent(knowledgeRepository.findById(entity.getParentId()).orElse(null))
+                .setSection(sectionRepository.findById(entity.getSectionId()).orElse(null));
 
     }
 
