@@ -23,6 +23,9 @@ import java.io.Serializable;
  * @author echo
  * @version 1.0
  * @date 2019-5-27 10:59:08
+ *
+ * @author Japoul
+ * @date 2019-8-4 23:33:57
  */
 @Data
 @Cacheable
@@ -102,6 +105,24 @@ public class LogicClass extends BaseEntity implements Serializable {
      */
     @Size(max = 255, message = "courseType 不能大于 255 位")
     private java.lang.String courseType;
+
+    /**
+     * 学生实体类
+     */
+    @Transient
+    private Student student;
+
+    /**
+     * 教师实体类
+     */
+    @Transient
+    private Teacher teacher;
+
+    /**
+     * 学期实体类
+     */
+    @Transient
+    private Semester semester;
 
     /**
      * 课程实体类

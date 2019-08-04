@@ -16,6 +16,10 @@ import org.springframework.stereotype.Service;
  * @author echo
  * @version 1.0
  * @date 2019-5-20 9:18:57
+ *
+ * 逻辑班级联查课程实体
+ * @author Japoul
+ * @date 2019-8-4 23:33:57
  */
 @Service
 @RequiredArgsConstructor
@@ -28,10 +32,7 @@ public class LogicClassServiceImpl extends BaseServiceImpl<LogicClassRepository,
     protected LogicClass completeEntity(LogicClass entity) {
         courseRepository.findById(entity.getCourseId());
         return entity.setCourse(
-                courseRepository.findById(entity.getCourseId()).orElseThrow(
-                        () -> new ResourceNotFoundException("Course can not be find!")
-                )
-        );
+                courseRepository.findById(entity.getCourseId()).orElse(null));
     }
 
 }
