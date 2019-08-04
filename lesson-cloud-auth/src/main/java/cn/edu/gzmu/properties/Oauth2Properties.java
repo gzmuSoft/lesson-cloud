@@ -17,4 +17,6 @@ public class Oauth2Properties {
      * 是否启用，启用后，不做角色认证
      */
     private boolean enabled = true;
+
+    private String authorizationServerUrl = "http://127.0.0.1:8888";
 }

@@ -71,4 +71,9 @@ public class Knowledge extends BaseEntity implements Serializable {
      */
     @Transient
     private Section section;
+    /*
+    *父级信息
+    * */
+    @Transient
+    private Knowledge parent;
 }

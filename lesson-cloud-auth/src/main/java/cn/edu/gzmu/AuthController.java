@@ -1,17 +1,10 @@
 package cn.edu.gzmu;
 
-import cn.edu.gzmu.model.annoection.VerifyParameter;
-import cn.edu.gzmu.model.entity.*;
-import cn.edu.gzmu.service.SysUserService;
-import com.alibaba.fastjson.JSONObject;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 import java.security.Principal;
 
 /**
@@ -26,7 +19,6 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final @NonNull SysUserService sysUserService;
 
     @GetMapping("/user")
     public HttpEntity<?> userInfo(Principal principal) {

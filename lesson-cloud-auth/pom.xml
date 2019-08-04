@@ -35,39 +35,9 @@
         <!--    <artifactId>spring-social-core</artifactId>-->
         <!--    <version>${spring-social.version}</version>-->
         <!--</dependency>-->
-        <!--security的token依赖-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.security</groupId>-->
-        <!--            <artifactId>spring-security-jwt</artifactId>-->
-        <!--            <version>1.0.10.RELEASE</version>-->
-        <!--        </dependency>-->
-        <!--security测试依赖-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.security</groupId>-->
-        <!--            <artifactId>spring-security-test</artifactId>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
-        <!--redis缓存依赖-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
-        <!--        </dependency>-->
-        <!--mock请求依赖-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.restdocs</groupId>-->
-        <!--            <artifactId>spring-restdocs-mockmvc</artifactId>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
-        <!--oauth2自动配置依赖-->
         <dependency>
             <groupId>org.springframework.security.oauth.boot</groupId>
             <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-            <version>${spring.boot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
-            <version>${spring.boot.version}</version>
         </dependency>
     </dependencies>
 

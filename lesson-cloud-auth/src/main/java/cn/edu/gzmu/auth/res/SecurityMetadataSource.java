@@ -1,6 +1,8 @@
 package cn.edu.gzmu.auth.res;
 
+import cn.edu.gzmu.auth.helper.BearerAuthenticationInterceptor;
 import cn.edu.gzmu.auth.helper.OauthHelper;
+import cn.edu.gzmu.auth.helper.RestHelper;
 import cn.edu.gzmu.auth.helper.UserContext;
 import cn.edu.gzmu.constant.HttpMethod;
 import cn.edu.gzmu.model.constant.EntityType;
@@ -14,6 +16,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,8 +33,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -146,9 +152,13 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
                 Integer intValue = (Integer) oauth.get(EXP);
                 oauth.put(EXP, new Long(intValue));
             }
+            RestHelper.restTemplate = new RestTemplate();
+            List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
+            interceptors.add(new BearerAuthenticationInterceptor(tokenValue));
+            RestHelper.restTemplate.setInterceptors(interceptors);
+            RestHelper.restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(oauth2Properties.getAuthorizationServerUrl()));
+            RestHelper.accessToken = tokenValue;
             details.setDecodedDetails(userDetails(oauth));
-//            AbstractAuthenticationToken authentication = (AbstractAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-//            authentication.setDetails(userDetails(oauth));
         }
     }
 

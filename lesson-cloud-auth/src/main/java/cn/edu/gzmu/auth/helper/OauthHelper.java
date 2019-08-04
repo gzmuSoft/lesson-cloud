@@ -104,7 +104,6 @@ public class OauthHelper {
         return excludeNull(UserContext::getStudent);
     }
 
-
     /**
      * 获取实体
      *
