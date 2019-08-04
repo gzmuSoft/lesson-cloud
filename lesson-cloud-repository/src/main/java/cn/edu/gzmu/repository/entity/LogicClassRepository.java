@@ -21,7 +21,7 @@ public interface LogicClassRepository extends BaseRepository<LogicClass, Long> {
     /**
      * 根据 classes id 查询所有符合条件的逻辑班级
      *
-     * @param id id
+     * @param id student id
      * @return 结果
      */
     Set<LogicClass> findDistinctByClassesId(Long id);
@@ -29,9 +29,18 @@ public interface LogicClassRepository extends BaseRepository<LogicClass, Long> {
     /**
      * 根据 student id 查询所有符合条件的逻辑班级
      *
-     * @param id id
+     * @param id student id
      * @return 结果
      */
     Set<LogicClass> findDistinctByStudentId(Long id);
+
+
+    /**
+     * 根据 teacher id 查询所有符合条件的逻辑班级
+     *
+     * @param id teacher id
+     * @return 结果
+     */
+    Set<LogicClass> findDistinctByTeacherId(Long id);
 
 }

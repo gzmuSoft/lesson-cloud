@@ -2,6 +2,7 @@ package cn.edu.gzmu.service;
 
 import cn.edu.gzmu.model.entity.Course;
 import cn.edu.gzmu.model.entity.Student;
+import cn.edu.gzmu.model.entity.Teacher;
 
 import java.util.List;
 import java.util.Set;
@@ -23,4 +24,12 @@ public interface CourseService extends BaseService<Course, Long> {
      * @return 课程信息
      */
     List<Course> searchByStudent(Student student);
+
+    /**
+     * 通过教师查找所有课程
+     *
+     * @param teacher 教师
+     * @return 课程信息
+     */
+    List<Course> searchByTeacher(Teacher teacher);
 }

@@ -3,6 +3,7 @@ package cn.edu.gzmu.service.impl;
 import cn.edu.gzmu.model.entity.Course;
 import cn.edu.gzmu.model.entity.LogicClass;
 import cn.edu.gzmu.model.entity.Student;
+import cn.edu.gzmu.model.entity.Teacher;
 import cn.edu.gzmu.repository.entity.CourseRepository;
 import cn.edu.gzmu.repository.entity.LogicClassRepository;
 import cn.edu.gzmu.service.CourseService;
@@ -37,7 +38,18 @@ public class CourseServiceImpl extends BaseServiceImpl<CourseRepository, Course,
         Set<LogicClass> logicClassesByClassesId = logicClassRepository.findDistinctByClassesId(classesId);
         Set<LogicClass> logicClassesByStudentId = logicClassRepository.findDistinctByStudentId(student.getId());
         Sets.SetView<LogicClass> logicClasses = Sets.union(logicClassesByClassesId, logicClassesByStudentId);
-        List<Long> courseIds = logicClasses.stream().map(LogicClass::getCourseId).collect(Collectors.toList());
+        List<Long> courseIds = logicClasses.stream()
+                .map(LogicClass::getCourseId)
+                .collect(Collectors.toList());
+        return courseRepository.searchAllByIds(courseIds);
+    }
+
+    @Override
+    public List<Course> searchByTeacher(Teacher teacher) {
+        Set<LogicClass> logicClasses = logicClassRepository.findDistinctByTeacherId(teacher.getId());
+        List<Long> courseIds = logicClasses.stream()
+                .map(LogicClass::getCourseId)
+                .collect(Collectors.toList());
         return courseRepository.searchAllByIds(courseIds);
     }
 
