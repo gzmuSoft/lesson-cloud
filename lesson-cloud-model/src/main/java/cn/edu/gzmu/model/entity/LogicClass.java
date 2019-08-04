@@ -13,6 +13,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -101,4 +102,12 @@ public class LogicClass extends BaseEntity implements Serializable {
      */
     @Size(max = 255, message = "courseType 不能大于 255 位")
     private java.lang.String courseType;
+
+    /**
+     * 课程实体类
+     */
+    @Transient
+    private Course course;
+
+
 }
