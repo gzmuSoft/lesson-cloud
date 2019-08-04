@@ -77,4 +77,7 @@ public class ExamHistory extends BaseEntity implements Serializable {
      * 已考次数（生成paper时就计数+1）
      */
     private java.lang.Integer times;
+
+
+
 }
