@@ -34,4 +34,5 @@ public class ProgramServiceImpl extends BaseServiceImpl<ProgramRepository, Progr
                 .setSection(sectionRepository.findById(entity.getSectionId()).orElse(null))
                 .setKnowledge(knowledgeRepository.findById(entity.getKnowledgeId()).orElse(null));
     }
+
 }
