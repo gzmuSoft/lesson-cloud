@@ -18,7 +18,7 @@ import javax.validation.ValidationException;
  * @version 1.0
  * @date 19-5-8 14:51
  */
-@RestControllerAdvice
+//@RestControllerAdvice
 public class RestExceptionAdvice {
 
     @ExceptionHandler

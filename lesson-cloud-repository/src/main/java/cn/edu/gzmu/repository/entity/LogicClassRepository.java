@@ -4,6 +4,9 @@ import cn.edu.gzmu.model.entity.LogicClass;
 import cn.edu.gzmu.repository.BaseRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.util.List;
+import java.util.Set;
+
 
 /**
  * LogicClass Repository
@@ -14,5 +17,21 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  */
 @RepositoryRestResource(path = "/logicClass")
 public interface LogicClassRepository extends BaseRepository<LogicClass, Long> {
+
+    /**
+     * 根据 classes id 查询所有符合条件的逻辑班级
+     *
+     * @param id id
+     * @return 结果
+     */
+    Set<LogicClass> findDistinctByClassesId(Long id);
+
+    /**
+     * 根据 student id 查询所有符合条件的逻辑班级
+     *
+     * @param id id
+     * @return 结果
+     */
+    Set<LogicClass> findDistinctByStudentId(Long id);
 
 }
