@@ -10,6 +10,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -31,5 +32,10 @@ public class ExamRuleServiceImpl extends BaseServiceImpl<ExamRuleRepository, Exa
     protected ExamRule completeEntity(ExamRule entity) {
         return entity
                 .setExam(examRepository.findById(entity.getExamId()).orElse(null));
+    }
+
+    @Override
+    public List<ExamRule> searchByExamId(Long id) {
+        return examRuleRepository.findAllByExamId(id);
     }
 }

@@ -4,6 +4,8 @@ import cn.edu.gzmu.model.entity.ExamRule;
 import cn.edu.gzmu.repository.BaseRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.util.List;
+
 
 /**
  * ExamRule Repository
@@ -15,4 +17,11 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(path = "/examRule")
 public interface ExamRuleRepository extends BaseRepository<ExamRule, Long> {
 
+    /**
+     * 根据 exam id 查询所有
+     *
+     * @param id examId
+     * @return 结果
+     */
+    List<ExamRule> findAllByExamId(Long id);
 }
