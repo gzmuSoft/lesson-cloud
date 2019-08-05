@@ -25,6 +25,7 @@ public class ExamHistoryServiceImpl extends BaseServiceImpl<ExamHistoryRepositor
     private final @NonNull PaperRepository paperRepository;
     private final @NonNull ExamRepository  examRepository;
 
+
     @Override
     protected ExamHistory completeEntity(ExamHistory entity) {
        return entity.setExam(examRepository.findById(entity.getExamId()).orElse(null))

@@ -47,6 +47,7 @@ public class ExamHistory extends BaseEntity implements Serializable {
     @Transient
     private Exam exam;
 
+
     /**
      * 学生编号
      */
