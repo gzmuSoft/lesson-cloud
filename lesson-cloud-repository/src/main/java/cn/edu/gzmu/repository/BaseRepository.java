@@ -46,7 +46,7 @@ public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<
      */
     @RestResource(exported = false)
     @Query(value = "select * from #{#entityName}  where id in (:ids) and is_enable = 1 ", nativeQuery = true)
-    List<T> searchAllByIds(@Param("ids") List<Object> ids);
+    List<T> searchAllByIds(@Param("ids") List<ID> ids);
 
     /**
      * 真正删除一个数据
