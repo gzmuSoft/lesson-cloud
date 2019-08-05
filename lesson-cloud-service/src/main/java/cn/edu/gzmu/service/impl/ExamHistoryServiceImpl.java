@@ -1,10 +1,13 @@
 package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.entity.ExamHistory;
-import cn.edu.gzmu.repository.entity.ExamHistoryRepository;
+import cn.edu.gzmu.repository.entity.*;
 import cn.edu.gzmu.service.ExamHistoryService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 
 /**
@@ -19,4 +22,12 @@ import org.springframework.stereotype.Service;
 public class ExamHistoryServiceImpl extends BaseServiceImpl<ExamHistoryRepository, ExamHistory, Long>
         implements ExamHistoryService {
 
+    private final @NonNull PaperRepository paperRepository;
+    private final @NonNull ExamRepository  examRepository;
+
+    @Override
+    protected ExamHistory completeEntity(ExamHistory entity) {
+       return entity.setExam(examRepository.findById(entity.getExamId()).orElse(null))
+            .setPaper(paperRepository.findById(entity.getPaperId()).orElse(null));
+    }
 }

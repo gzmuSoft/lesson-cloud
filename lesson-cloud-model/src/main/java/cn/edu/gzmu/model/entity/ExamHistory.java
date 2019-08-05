@@ -42,6 +42,12 @@ public class ExamHistory extends BaseEntity implements Serializable {
     private java.lang.Long examId;
 
     /**
+     * 考试信息
+     */
+    @Transient
+    private Exam exam;
+
+    /**
      * 学生编号
      */
     private java.lang.Long studentId;
