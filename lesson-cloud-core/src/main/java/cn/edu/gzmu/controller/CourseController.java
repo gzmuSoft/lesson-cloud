@@ -31,24 +31,28 @@ public class CourseController extends BaseController<Course, CourseService, Long
 
     /**
      * 获取当前登录学生的所有课程信息
+     * 只有当用户拥有学生角色的时候才能够访问
      *
      * @return response
      */
     @GetMapping("/student")
     @Secured("ROLE_STUDENT")
     public HttpEntity<?> coursesFromStudent() {
+        // 当前登录的学生
         Student student = OauthHelper.student();
         return ResponseEntity.ok(courseService.searchByStudent(student));
     }
 
     /**
      * 获取当前登录教师的所有课程信息
+     * 只有当用户拥有教师角色的时候才能够访问
      *
      * @return response
      */
     @GetMapping("/teacher")
     @Secured("ROLE_TEACHER")
     public HttpEntity<?> coursesFromTeacher() {
+        // 当前登录的教师
         Teacher teacher = OauthHelper.teacher();
         return ResponseEntity.ok(courseService.searchByTeacher(teacher));
     }

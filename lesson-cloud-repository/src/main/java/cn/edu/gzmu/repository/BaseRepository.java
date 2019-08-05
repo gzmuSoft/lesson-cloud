@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * 基类
  *
- * @param <T> 实体类
+ * @param <T>  实体类
  * @param <ID> 主键类型
  * @author echo
  * @version 1.0
@@ -36,6 +36,15 @@ public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<
     @RestResource(path = "all", rel = "all")
     @Query(value = "select * from #{#entityName} ", countQuery = "select count(*) from #{#entityName}", nativeQuery = true)
     Page<T> findAllExist(Pageable pageable);
+
+    /**
+     * 根据 id 分页查询
+     *
+     * @param id       id
+     * @param pageable 分页
+     * @return 结果
+     */
+    Page<T> findAllById(Long id, Pageable pageable);
 
 
     /**
@@ -66,7 +75,7 @@ public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<
      * @param id id
      */
     @Override
-    default void deleteById(ID id){
+    default void deleteById(ID id) {
         deleteExistById(id);
     }
 }

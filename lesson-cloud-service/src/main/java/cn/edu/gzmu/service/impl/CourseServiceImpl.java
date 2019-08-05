@@ -34,13 +34,19 @@ public class CourseServiceImpl extends BaseServiceImpl<CourseRepository, Course,
 
     @Override
     public List<Course> searchByStudent(Student student) {
+        // 获取当前学生的物理班级信息
         Long classesId = student.getClassesId();
+        // 查找当前学生所在物理班级的逻辑班级
         Set<LogicClass> logicClassesByClassesId = logicClassRepository.findDistinctByClassesId(classesId);
+        // 查找当前学生的逻辑班级 ———— 额外添加的情况，如跟班重修
         Set<LogicClass> logicClassesByStudentId = logicClassRepository.findDistinctByStudentId(student.getId());
+        // 合并两个 set
         Sets.SetView<LogicClass> logicClasses = Sets.union(logicClassesByClassesId, logicClassesByStudentId);
+        // 得到所有的 id
         List<Long> courseIds = logicClasses.stream()
                 .map(LogicClass::getCourseId)
                 .collect(Collectors.toList());
+        // 通过 id 得到课程
         return courseRepository.searchAllByIds(courseIds);
     }
 
