@@ -29,9 +29,7 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
 
     @Override
     protected Exam completeEntity(Exam entity) {
-        Exam exam ;
-        exam = examRepository.getOne(entity.getId());
-        exam.setCourse(courseRepository.getOne(entity.getCourseId()));
-        return exam;
+        return entity
+                .setCourse(courseRepository.findById(entity.getCourseId()).orElse(null));
     }
 }

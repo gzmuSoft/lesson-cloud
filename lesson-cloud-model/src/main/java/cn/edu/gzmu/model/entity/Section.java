@@ -13,6 +13,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -58,4 +59,10 @@ public class Section extends BaseEntity implements Serializable {
      */
     @javax.validation.constraints.NotNull(message = "type 类型，0：章，1：节 为必填项")
     private java.lang.Byte type;
+
+    @Transient
+    private Course course;
+
+    @Transient
+    private Section parent;
 }

@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
  * @author echo
  * @version 1.0
  * @date 2019-5-7 11:33:57
+ *
+ * @author LJQ
  */
 @Service
 @RequiredArgsConstructor
@@ -27,9 +29,9 @@ public class SelOptionsServiceImpl extends BaseServiceImpl<SelOptionsRepository,
 
     @Override
     protected SelOptions completeEntity(SelOptions entity) {
-        if(QuestionType.isSingleSel(entity.getType())){
+        if (QuestionType.isSingleSel(entity.getType())) {
             entity.setSingleSel(singleSelRepository.findById(entity.getQuestionId()).orElse(null));
-        }else if(QuestionType.isMultiSel(entity.getType())){
+        } else if (QuestionType.isMultiSel(entity.getType())) {
             entity.setMultiSel(multiSelRepository.findById(entity.getQuestionId()).orElse(null));
         }
         return entity;

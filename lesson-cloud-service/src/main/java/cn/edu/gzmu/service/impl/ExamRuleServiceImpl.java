@@ -29,9 +29,7 @@ public class ExamRuleServiceImpl extends BaseServiceImpl<ExamRuleRepository, Exa
 
     @Override
     protected ExamRule completeEntity(ExamRule entity) {
-        ExamRule examRule;
-        examRule = examRuleRepository.getOne(entity.getId());
-        examRule.setExam(examRepository.getOne(entity.getExamId()));
-        return examRule;
+        return entity
+                .setExam(examRepository.findById(entity.getExamId()).orElse(null));
     }
 }
