@@ -23,6 +23,9 @@ import java.io.Serializable;
  * @author echo
  * @version 1.0
  * @date 2019-5-27 10:59:08
+ *
+ * @author Japoul
+ * @date 2019-8-4 23:33:57
  */
 @Data
 @Cacheable
@@ -73,20 +76,20 @@ public class SingleSel extends BaseEntity implements Serializable {
     private java.lang.Long knowledgeId;
 
     /**
-     * 课程实体
-     * */
+     * 课程实体类
+     */
     @Transient
     private Course course;
 
     /**
      * 章节实体
-     * */
+     */
     @Transient
     private Section section;
 
     /**
      * 知识点编号
-     * */
+     */
     @Transient
     private Knowledge knowledge;
 }

@@ -1,10 +1,16 @@
 package cn.edu.gzmu.service.impl;
 
+import cn.edu.gzmu.model.entity.Exam;
 import cn.edu.gzmu.model.entity.ExamRule;
+import cn.edu.gzmu.model.exception.ResourceNotFoundException;
+import cn.edu.gzmu.repository.entity.ExamRepository;
 import cn.edu.gzmu.repository.entity.ExamRuleRepository;
 import cn.edu.gzmu.service.ExamRuleService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 /**
@@ -18,5 +24,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ExamRuleServiceImpl extends BaseServiceImpl<ExamRuleRepository, ExamRule, Long>
         implements ExamRuleService {
+    private final @NonNull ExamRuleRepository examRuleRepository;
+    private final @NonNull ExamRepository examRepository;
 
+    @Override
+    protected ExamRule completeEntity(ExamRule entity) {
+        ExamRule examRule;
+        examRule = examRuleRepository.getOne(entity.getId());
+        examRule.setExam(examRepository.getOne(entity.getExamId()));
+        return examRule;
+    }
 }

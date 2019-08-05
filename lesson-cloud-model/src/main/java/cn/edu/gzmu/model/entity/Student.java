@@ -41,6 +41,9 @@ public class Student extends BaseEntity implements Serializable {
     @javax.validation.constraints.NotNull(message = "schoolId 学校编号 为必填项")
     private java.lang.Long schoolId;
 
+    //@Transient使其字段不与数据库对应
+    @Transient
+    private Student student;
     /**
      * 学院编号
      */

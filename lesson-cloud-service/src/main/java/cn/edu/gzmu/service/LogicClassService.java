@@ -1,6 +1,8 @@
 package cn.edu.gzmu.service;
 
 import cn.edu.gzmu.model.entity.LogicClass;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 /**
@@ -12,4 +14,11 @@ import cn.edu.gzmu.model.entity.LogicClass;
  */
 public interface LogicClassService extends BaseService<LogicClass, Long> {
 
+    /**
+     * 查询所有逻辑班级分页信息
+     *
+     * @param pageable 分页
+     * @return 分页结果
+     */
+    Page<LogicClass> searchAll(Pageable pageable);
 }

@@ -1,7 +1,6 @@
 package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.entity.CourseTimetableLocation;
-import cn.edu.gzmu.model.exception.ResourceNotFoundException;
 import cn.edu.gzmu.repository.entity.CourseTimetableLocationRepository;
 import cn.edu.gzmu.repository.entity.LogicClassRepository;
 import cn.edu.gzmu.service.CourseTimetableLocationService;
