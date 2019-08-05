@@ -1,8 +1,12 @@
 package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.entity.Judgement;
+import cn.edu.gzmu.repository.entity.CourseRepository;
 import cn.edu.gzmu.repository.entity.JudgementRepository;
+import cn.edu.gzmu.repository.entity.KnowledgeRepository;
+import cn.edu.gzmu.repository.entity.SectionRepository;
 import cn.edu.gzmu.service.JudgementService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class JudgementServiceImpl extends BaseServiceImpl<JudgementRepository, Judgement, Long>
         implements JudgementService {
+    private final @NonNull CourseRepository courseRepository;
+    private final @NonNull SectionRepository sectionRepository;
+    private final @NonNull KnowledgeRepository knowledgeRepository;
 
-
+    @Override
+    protected Judgement completeEntity(Judgement entity) {
+        return entity.setCourse(courseRepository.findById(entity.getCourseId()).orElse(null))
+                .setSection(sectionRepository.findById(entity.getSectionId()).orElse(null))
+                .setKnowledge(knowledgeRepository.findById(entity.getKnowledgeId()).orElse(null));
+    }
 }
