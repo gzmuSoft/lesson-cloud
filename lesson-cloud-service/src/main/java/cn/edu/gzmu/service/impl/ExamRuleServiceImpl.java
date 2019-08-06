@@ -1,8 +1,6 @@
 package cn.edu.gzmu.service.impl;
 
-import cn.edu.gzmu.model.entity.Exam;
 import cn.edu.gzmu.model.entity.ExamRule;
-import cn.edu.gzmu.model.exception.ResourceNotFoundException;
 import cn.edu.gzmu.repository.entity.ExamRepository;
 import cn.edu.gzmu.repository.entity.ExamRuleRepository;
 import cn.edu.gzmu.service.ExamRuleService;
@@ -11,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 
 /**
