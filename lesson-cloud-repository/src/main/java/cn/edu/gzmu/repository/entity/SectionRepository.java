@@ -1,8 +1,11 @@
 package cn.edu.gzmu.repository.entity;
 
+
 import cn.edu.gzmu.model.entity.Section;
 import cn.edu.gzmu.repository.BaseRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+import java.util.List;
 
 
 /**
@@ -14,5 +17,11 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  */
 @RepositoryRestResource(path = "/section")
 public interface SectionRepository extends BaseRepository<Section, Long> {
-
+    /**
+     * 根据 exam id 查询所有
+     *
+     * @param id ClassId
+     * @return 结果
+     */
+    List<Section> findAllByCourseId(Long id);
 }

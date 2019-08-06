@@ -8,6 +8,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * Section Service Impl
@@ -28,5 +30,10 @@ public class SectionServiceImpl extends BaseServiceImpl<SectionRepository, Secti
     protected Section completeEntity(Section entity) {
         return entity.setCourse(courseRepository.findById(entity.getCourseId()).orElse(null))
                 .setParent(sectionRepository.findById(entity.getParentId()).orElse(null));
+    }
+
+    @Override
+    public List<Section> searchByCourseId(Long id) {
+        return sectionRepository.findAllByCourseId(id);
     }
 }
