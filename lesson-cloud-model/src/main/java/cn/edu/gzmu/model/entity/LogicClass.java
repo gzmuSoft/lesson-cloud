@@ -42,7 +42,7 @@ public class LogicClass extends BaseEntity implements Serializable {
     /**
      * 0：物理班级(class_id值为实体班级id)，1：学生个体(student_id为学生实体id)
      */
-    private java.lang.Byte type;
+    private java.lang.Boolean type;
 
     /**
      * 学校编号
@@ -107,7 +107,7 @@ public class LogicClass extends BaseEntity implements Serializable {
     private java.lang.String courseType;
 
     /**
-     * 学生实体类
+     * 学生实体类, type为1值，本字段值才有效
      */
     @Transient
     private Student student;
@@ -129,6 +129,36 @@ public class LogicClass extends BaseEntity implements Serializable {
      */
     @Transient
     private Course course;
+
+    /**
+     * 学校
+     */
+    @Transient
+    private SysData school;
+
+    /**
+     * 学院
+     */
+    @Transient
+    private SysData college;
+
+    /**
+     * 系部
+     */
+    @Transient
+    private SysData dep;
+
+    /**
+     * 专业
+     */
+    @Transient
+    private SysData specialty;
+
+    /**
+     * 实体班级，type为0值，本字段值才有效
+     */
+    @Transient
+    private SysData classes;
 
 
 }

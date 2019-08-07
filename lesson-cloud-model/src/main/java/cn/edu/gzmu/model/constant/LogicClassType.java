@@ -10,27 +10,27 @@ public enum LogicClassType {
     /**
      * 当前逻辑班级为正常班级
      */
-    CLASSES(0),
+    CLASSES(false),
     /**
      * 当前逻辑班级中需要添加新的学生
      */
-    STUDENT(1);
+    STUDENT(true);
 
-    private int value;
+    private Boolean value;
 
-    LogicClassType(int i) {
-        value = i;
+    LogicClassType(Boolean b) {
+        value = b;
     }
 
-    public boolean match(int type) {
-        return value == type;
+    public boolean match(Boolean type) {
+        return value ? type : !type;
     }
 
-    public boolean isClass(int type) {
-        return type == CLASSES.value;
+    public boolean isClass(Boolean type) {
+        return !type;
     }
 
-    public boolean isStudent(int type) {
-        return type == STUDENT.value;
+    public boolean isStudent(Boolean type) {
+        return type;
     }
 }

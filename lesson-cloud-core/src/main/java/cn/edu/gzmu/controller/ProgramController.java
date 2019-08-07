@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.PROGRAM)
+@RequestMapping(LessonResource.PROGRAM_SEARCH)
 public class ProgramController extends BaseController<Program, ProgramService, Long> {
 
 }

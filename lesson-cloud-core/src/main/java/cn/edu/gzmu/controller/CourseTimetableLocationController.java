@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.COURSE_TIMETABLE_LOCATION)
+@RequestMapping(LessonResource.COURSE_TIMETABLE_LOCATION_SEARCH)
 public class CourseTimetableLocationController extends BaseController<CourseTimetableLocation, CourseTimetableLocationService, Long> {
 
 }

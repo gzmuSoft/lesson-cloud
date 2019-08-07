@@ -2,7 +2,7 @@ package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.BaseEntity;
 import cn.edu.gzmu.model.entity.*;
-import cn.edu.gzmu.repository.BaseRepository;
+import cn.edu.gzmu.repository.base.BaseRepository;
 import cn.edu.gzmu.repository.entity.*;
 import cn.edu.gzmu.service.PaperService;
 import com.google.common.base.Splitter;

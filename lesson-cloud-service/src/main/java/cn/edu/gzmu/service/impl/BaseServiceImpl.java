@@ -2,7 +2,7 @@ package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.BaseEntity;
 import cn.edu.gzmu.model.exception.ResourceNotFoundException;
-import cn.edu.gzmu.repository.BaseRepository;
+import cn.edu.gzmu.repository.base.BaseRepository;
 import cn.edu.gzmu.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.LOGIC_CLASS)
+@RequestMapping(LessonResource.LOGIC_CLASS_SEARCH)
 public class LogicClassController extends BaseController<LogicClass, LogicClassService, Long> {
 
 }

@@ -5,6 +5,7 @@ import cn.edu.gzmu.model.entity.SysRole;
 import cn.edu.gzmu.model.entity.SysUser;
 import cn.edu.gzmu.model.entity.Teacher;
 import cn.edu.gzmu.model.exception.UserNotFoundException;
+import cn.edu.gzmu.service.helper.UserContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +20,7 @@ import java.util.function.Function;
  * @author <a href="https://echocow.cn">EchoCow</a>
  * @date 2019/8/1 上午11:20
  */
+@SuppressWarnings("all")
 public class OauthHelper {
 
     /**

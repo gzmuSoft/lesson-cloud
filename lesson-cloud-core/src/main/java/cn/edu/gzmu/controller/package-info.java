@@ -3,7 +3,7 @@
  *
  * <p>
  * 注意的是，在路径相同的时候，他可能会完全覆盖 spring data rest 的配置，例如路径为
- * {@code /{resource}/search/} 时，会覆盖 {@link cn.edu.gzmu.repository.BaseRepository} 中的自定义方法。
+ * {@code /{resource}/search/} 时，会覆盖 {@link cn.edu.gzmu.repository.base.BaseRepository} 中的自定义方法。
  * 所以在 此处 进行书写时，请注意路径不要覆盖以及重复的问题。
  * </p>
  *

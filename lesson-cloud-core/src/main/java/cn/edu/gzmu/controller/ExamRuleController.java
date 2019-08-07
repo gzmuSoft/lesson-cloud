@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.EXAM_RULE)
+@RequestMapping(LessonResource.EXAM_RULE_SEARCH)
 public class ExamRuleController extends BaseController<ExamRule, ExamRuleService, Long> {
 
     private final @NonNull ExamRuleService examRuleService;

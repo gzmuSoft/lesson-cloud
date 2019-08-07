@@ -11,7 +11,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -23,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.EXAM)
+@RequestMapping(LessonResource.EXAM_SEARCH)
 public class ExamController extends BaseController<Exam, ExamService, Long> {
 
     private final @NonNull ExamService examService;
@@ -31,8 +30,8 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
     /**
      * 根据班级列表和课程信息获取所有分页过后的考试信息
      *
-     * @param courseId
-     * @return
+     * @param courseId courseId
+     * @return result
      */
     @GetMapping("/classAndCourse")
     public HttpEntity<?> classAndCourse(String courseId, String classIds,

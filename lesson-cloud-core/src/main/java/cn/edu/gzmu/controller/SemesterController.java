@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.SEMESTER)
+@RequestMapping(LessonResource.SEMESTER_SEARCH)
 public class SemesterController {
 
 }

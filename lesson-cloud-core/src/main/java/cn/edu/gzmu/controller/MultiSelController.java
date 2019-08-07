@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.MULTI_SEL)
+@RequestMapping(LessonResource.MULTI_SEL_SEARCH)
 public class MultiSelController extends BaseController<MultiSel, MultiSelService, Long> {
 
 }

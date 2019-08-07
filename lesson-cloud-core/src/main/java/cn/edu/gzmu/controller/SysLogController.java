@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.SYS_LOG)
+@RequestMapping(LessonResource.SYS_LOG_SEARCH)
 public class SysLogController extends BaseController<SysLog, SysLogService, Long> {
 
 }

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.COURSE)
+@RequestMapping(LessonResource.COURSE_SEARCH)
 public class CourseController extends BaseController<Course, CourseService, Long> {
 
     private @NonNull CourseService courseService;

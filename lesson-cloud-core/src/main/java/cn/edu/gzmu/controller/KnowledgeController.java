@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.KNOWLEDGE)
+@RequestMapping(LessonResource.KNOWLEDGE_SEARCH)
 public class KnowledgeController extends BaseController<Knowledge, KnowledgeService, Long> {
 
 }

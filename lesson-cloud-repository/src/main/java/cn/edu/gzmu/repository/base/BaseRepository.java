@@ -1,4 +1,4 @@
-package cn.edu.gzmu.repository;
+package cn.edu.gzmu.repository.base;
 
 import cn.edu.gzmu.model.BaseEntity;
 import org.springframework.data.domain.Page;

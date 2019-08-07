@@ -1,10 +1,9 @@
 package cn.edu.gzmu.repository.entity;
 
 import cn.edu.gzmu.model.entity.LogicClass;
-import cn.edu.gzmu.repository.BaseRepository;
+import cn.edu.gzmu.repository.base.BaseRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import java.util.List;
 import java.util.Set;
 
 

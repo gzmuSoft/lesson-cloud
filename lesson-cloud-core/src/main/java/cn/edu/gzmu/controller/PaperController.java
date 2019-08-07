@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.PAPER)
+@RequestMapping(LessonResource.PAPER_SEARCH)
 public class PaperController extends BaseController<Paper, PaperService, Long> {
 
 }

@@ -2,8 +2,8 @@ package cn.edu.gzmu.auth.res;
 
 import cn.edu.gzmu.auth.helper.BearerAuthenticationInterceptor;
 import cn.edu.gzmu.auth.helper.OauthHelper;
-import cn.edu.gzmu.auth.helper.RestHelper;
-import cn.edu.gzmu.auth.helper.UserContext;
+import cn.edu.gzmu.service.helper.RestHelper;
+import cn.edu.gzmu.service.helper.UserContext;
 import cn.edu.gzmu.constant.HttpMethod;
 import cn.edu.gzmu.model.constant.EntityType;
 import cn.edu.gzmu.model.entity.*;
@@ -24,8 +24,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
@@ -40,6 +43,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.springframework.security.oauth2.provider.token.AccessTokenConverter.*;
@@ -61,6 +65,7 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
     private final @NonNull SysRoleResRepository sysRoleResRepository;
     private final @NonNull Oauth2Properties oauth2Properties;
     private final @NonNull JwtAccessTokenConverter jwtAccessTokenConverter;
+    private final @NonNull ResourceServerTokenServices resourceServerTokenServices;
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Override
@@ -140,26 +145,34 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
         }
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) current;
         String tokenValue = details.getTokenValue();
-        if (StringUtils.isNotBlank(tokenValue)) {
-            // 已经标记过时的类
-            // 需要启用请注入 JwtAccessTokenConverter 进行解密和认证
-            // Jwt decode = JwtHelper.decodeAndVerify(tokenValue,
-            //         new RsaVerifier(ResourceServerConfig.JwtKey.publicKey));
-            Jwt decode = JwtHelper.decodeAndVerify(tokenValue,
-                    new RsaVerifier(jwtAccessTokenConverter.getKey().get("value")));
-            JSONObject oauth = JSONObject.parseObject(decode.getClaims());
-            if (oauth.containsKey(EXP) && oauth.get(AccessTokenConverter.EXP) instanceof Integer) {
-                Integer intValue = (Integer) oauth.get(EXP);
-                oauth.put(EXP, new Long(intValue));
-            }
-            RestHelper.restTemplate = new RestTemplate();
-            List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
-            interceptors.add(new BearerAuthenticationInterceptor(tokenValue));
-            RestHelper.restTemplate.setInterceptors(interceptors);
-            RestHelper.restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(oauth2Properties.getAuthorizationServerUrl()));
-            RestHelper.accessToken = tokenValue;
-            details.setDecodedDetails(userDetails(oauth));
+        if (StringUtils.isBlank(tokenValue)) {
+            return;
         }
+        OAuth2AccessToken token = resourceServerTokenServices.readAccessToken(tokenValue);
+        if (Objects.isNull(token)) {
+            throw new InvalidTokenException("Token was not recognised");
+        }
+        if (token.isExpired()) {
+            throw new InvalidTokenException("Token has expired");
+        }
+        // 已经标记过时的类
+        // 需要启用请注入 JwtAccessTokenConverter 进行解密和认证
+        // Jwt decode = JwtHelper.decodeAndVerify(tokenValue,
+        //         new RsaVerifier(ResourceServerConfig.JwtKey.publicKey));
+        Jwt decode = JwtHelper.decodeAndVerify(tokenValue,
+                new RsaVerifier(jwtAccessTokenConverter.getKey().get("value")));
+        JSONObject oauth = JSONObject.parseObject(decode.getClaims());
+        if (oauth.containsKey(EXP) && oauth.get(AccessTokenConverter.EXP) instanceof Integer) {
+            Integer intValue = (Integer) oauth.get(EXP);
+            oauth.put(EXP, new Long(intValue));
+        }
+        RestHelper.restTemplate = new RestTemplate();
+        List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
+        interceptors.add(new BearerAuthenticationInterceptor(tokenValue));
+        RestHelper.restTemplate.setInterceptors(interceptors);
+        RestHelper.restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(oauth2Properties.getAuthorizationServerUrl()));
+        RestHelper.accessToken = tokenValue;
+        details.setDecodedDetails(userDetails(oauth));
     }
 
     /**

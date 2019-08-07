@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.ESSAY)
+@RequestMapping(LessonResource.ESSAY_SEARCH)
 public class EssayController extends BaseController<Essay, EssayService, Long> {
 
 }

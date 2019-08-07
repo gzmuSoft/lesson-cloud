@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.JUDGEMENT)
+@RequestMapping(LessonResource.JUDGEMENT_SEARCH)
 public class JudgementController extends BaseController<Judgement, JudgementService, Long> {
 
 }

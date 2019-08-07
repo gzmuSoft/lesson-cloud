@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.SINGLE_SEL)
+@RequestMapping(LessonResource.SINGLE_SEL_SEARCH)
 public class SingleSelController extends BaseController<SingleSel, SingleSelService, Long> {
 
 }

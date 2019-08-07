@@ -1,8 +1,7 @@
 package cn.edu.gzmu.repository.entity;
 
 import cn.edu.gzmu.model.entity.Exam;
-import cn.edu.gzmu.model.entity.ExamHistory;
-import cn.edu.gzmu.repository.BaseRepository;
+import cn.edu.gzmu.repository.base.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;

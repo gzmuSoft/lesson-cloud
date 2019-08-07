@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.SECTION)
+@RequestMapping(LessonResource.SECTION_SEARCH)
 public class SectionController extends BaseController<Section, SectionService, Long> {
     private final @NonNull SectionService sectionService;
     @GetMapping("/course/{id}")

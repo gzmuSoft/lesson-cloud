@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.APPEAL)
+@RequestMapping(LessonResource.APPEAL_SEARCH)
 public class AppealController {
 
 }

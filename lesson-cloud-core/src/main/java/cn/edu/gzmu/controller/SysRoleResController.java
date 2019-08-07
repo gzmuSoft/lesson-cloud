@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.SYS_ROLE_RES)
+@RequestMapping(LessonResource.SYS_ROLE_RES_SEARCH)
 public class SysRoleResController extends BaseController<SysRoleRes, SysRoleResService, Long> {
 
 }

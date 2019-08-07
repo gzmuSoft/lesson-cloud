@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.SEL_OPTIONS)
+@RequestMapping(LessonResource.SEL_OPTIONS_SEARCH)
 public class SelOptionsController extends BaseController<SelOptions, SelOptionsService, Long> {
 
 }

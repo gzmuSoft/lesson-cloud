@@ -24,7 +24,7 @@ public class RepositoryAop {
     public void repositoryMethod() {
     }
 
-    @Pointcut("execution(* cn.edu.gzmu.repository.BaseRepository.searchAllByIds(..))")
+    @Pointcut("execution(* cn.edu.gzmu.repository.base.BaseRepository.searchAllByIds(..))")
     public void repositorySearchAllByIds() {
     }
 

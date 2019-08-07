@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RepositoryRestController
-@RequestMapping(LessonResource.EXAM_HISTORY)
+@RequestMapping(LessonResource.EXAM_HISTORY_SEARCH)
 public class ExamHistoryController extends BaseController<ExamHistory, ExamHistoryService, Long> {
 
     private final @NonNull ExamHistoryService examHistoryService;
