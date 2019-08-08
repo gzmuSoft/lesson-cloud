@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * exam
@@ -78,4 +79,9 @@ public class Exam extends BaseEntity implements Serializable {
     @Transient
     private Course course;
 
+    /**
+     * 班级列表
+     */
+    @Transient
+    private List<SysData> classes;
 }

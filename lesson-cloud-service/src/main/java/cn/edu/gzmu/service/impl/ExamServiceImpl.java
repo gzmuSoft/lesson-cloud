@@ -1,6 +1,8 @@
 package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.entity.Exam;
+import cn.edu.gzmu.model.entity.SysData;
+import cn.edu.gzmu.repository.auth.SysDataRepository;
 import cn.edu.gzmu.repository.entity.CourseRepository;
 import cn.edu.gzmu.repository.entity.ExamRepository;
 import cn.edu.gzmu.service.ExamService;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static cn.edu.gzmu.service.helper.RestHelper.*;
 
 /**
  * Exam Service Impl
@@ -26,11 +29,13 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
         implements ExamService {
     private final @NonNull ExamRepository examRepository;
     private final @NonNull CourseRepository courseRepository;
+    private final @NonNull SysDataRepository sysDataRepository;
 
     @Override
     protected Exam completeEntity(Exam entity) {
         return entity
-                .setCourse(courseRepository.findById(entity.getCourseId()).orElse(null));
+                .setCourse(courseRepository.findById(entity.getCourseId()).orElse(null))
+                .setClasses(getByIdsForEntity(entity.getClassesIds(), sysDataRepository::getMorePath, SysData.class));
     }
 
 

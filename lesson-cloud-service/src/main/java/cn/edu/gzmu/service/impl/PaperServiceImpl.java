@@ -2,6 +2,7 @@ package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.BaseEntity;
 import cn.edu.gzmu.model.entity.*;
+import cn.edu.gzmu.repository.auth.StudentRepository;
 import cn.edu.gzmu.repository.base.BaseRepository;
 import cn.edu.gzmu.repository.entity.*;
 import cn.edu.gzmu.service.PaperService;
@@ -15,15 +16,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static cn.edu.gzmu.service.helper.RestHelper.*;
 
 /**
  * Paper Service Impl
  *
  * @author echo
+ * @author YMS
  * @version 1.0
  * @date 2019-5-7 11:33:57
- *
- * @author YMS
  * @date 2019-8-8
  */
 @Service
@@ -37,16 +38,18 @@ public class PaperServiceImpl extends BaseServiceImpl<PaperRepository, Paper, Lo
     private final @NonNull EssayRepository essayRepository;
     private final @NonNull ProgramRepository programRepository;
     private final @NonNull PaperRepository paperRepository;
+    private final @NonNull StudentRepository studentRepository;
 
     @Override
-    protected Paper completeEntity(Paper entity) {
-        entity.setExam(examRepository.findById(entity.getExamId()).orElse(null));
-        entity.setSingleSel(listEntity(entity.getSingleSelIds(), singleSelRepository));
-        entity.setMultiSel(listEntity(entity.getMultiSelIds(), multiSelRepository));
-        entity.setJudgement(listEntity(entity.getJudgementIds(), judgementRepository));
-        entity.setEssay(listEntity(entity.getEssayIds(), essayRepository));
-        entity.setProgram(listEntity(entity.getProgramIds(), programRepository));
-        return entity;
+    protected Paper completeEntity(Paper paper) {
+        paper.setExam(examRepository.findById(paper.getExamId()).orElse(null));
+        paper.setSingleSel(listEntity(paper.getSingleSelIds(), singleSelRepository));
+        paper.setMultiSel(listEntity(paper.getMultiSelIds(), multiSelRepository));
+        paper.setJudgement(listEntity(paper.getJudgementIds(), judgementRepository));
+        paper.setEssay(listEntity(paper.getEssayIds(), essayRepository));
+        paper.setProgram(listEntity(paper.getProgramIds(), programRepository));
+        paper.setStudent(getByIdForEntity(paper.getStudentId(), studentRepository::getOnePath, Student.class));
+        return paper;
     }
 
     private <T extends BaseEntity> List<T> listEntity(
