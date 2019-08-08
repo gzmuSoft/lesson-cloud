@@ -4,6 +4,8 @@ import cn.edu.gzmu.model.entity.Paper;
 import cn.edu.gzmu.repository.base.BaseRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.util.List;
+
 
 /**
  * Paper Repository
@@ -14,5 +16,13 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  */
 @RepositoryRestResource(path = "/paper")
 public interface PaperRepository extends BaseRepository<Paper, Long> {
+
+    /**
+     * 根据考试 id 获取所有试卷信息
+     *
+     * @param examId
+     * @return 所有id为examid的试卷
+     */
+    List<Paper> findAllByExamId(Long examId);
 
 }
