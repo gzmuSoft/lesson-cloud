@@ -63,6 +63,11 @@ public class Exam extends BaseEntity implements Serializable {
     private java.lang.Long courseId;
 
     /**
+     * 是否发布
+     */
+    private java.lang.Boolean isPublish;
+
+    /**
      * 参与考试的班级id列表，以分号作为分隔符
      */
     @Size(max = 512, message = "classesIds 不能大于 512 位")

@@ -1,4 +1,4 @@
-create table course
+create table if not exists course
 (
     id          bigint auto_increment comment '编号'
         primary key,
@@ -17,30 +17,32 @@ create table course
 )
     comment '课程' charset = utf8;
 
-create table exam
+create table if not exists exam
 (
-    id             bigint auto_increment comment '编号'
+    id bigint auto_increment comment '编号'
         primary key,
-    name           varchar(255)                        null comment '名称',
-    spell          varchar(255)                        null comment '名称的全拼',
-    start_time     datetime                            null comment '开始时间',
-    end_time       datetime                            null comment '结束时间',
-    total_use_time int                                 null comment '考试总用时限制（正数，如：60分钟）',
-    total_score    float                               null comment '满分分值',
-    course_id      bigint(255)                         null comment '课程编号',
-    classes_ids    varchar(512)                        null comment '参与考试的班级id列表，以逗号作为分隔符',
-    allow_times    int                                 null comment '可以考试的次数限制（正数，0代表可以无限次考试）',
-    sort           smallint(6)                         null comment '排序',
-    create_user    varchar(255)                        null comment '创建用户名称',
-    create_time    datetime  default CURRENT_TIMESTAMP null comment '创建日期',
-    modify_user    varchar(255)                        null comment '末次更新用户名称',
-    modify_time    datetime  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
-    remark         varchar(255)                        null comment '备注',
-    is_enable      binary(1) default 0x31              not null comment '是否可用，1：可用，0：不可用'
+    name varchar(255) null comment '名称',
+    spell varchar(255) null comment '名称的全拼',
+    start_time datetime null comment '开始时间',
+    end_time datetime null comment '结束时间',
+    total_use_time int null comment '考试总用时限制（正数，如：60分钟）',
+    total_score float null comment '满分分值',
+    course_id bigint(255) null comment '课程编号',
+    classes_ids varchar(512) null comment '参与考试的班级id列表，以逗号作为分隔符',
+    allow_times int null comment '可以考试的次数限制（正数，0代表可以无限次考试）',
+    is_publish binary(1) default 0x31 not null comment '是否发布',
+    sort smallint(6) null comment '排序',
+    create_user varchar(255) null comment '创建用户名称',
+    create_time datetime default CURRENT_TIMESTAMP null comment '创建日期',
+    modify_user varchar(255) null comment '末次更新用户名称',
+    modify_time datetime default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '末次更新时间',
+    remark varchar(255) null comment '备注',
+    is_enable binary(1) default 0x31 not null comment '是否可用，1：可用，0：不可用'
 )
-    comment '考试' charset = utf8;
+    comment '考试' charset=utf8;
 
-create table exam_rule
+
+create table if not exists exam_rule
 (
     id                   bigint auto_increment comment '编号'
         primary key,
@@ -64,7 +66,7 @@ create table exam_rule
 )
     comment '试卷组卷规则' charset = utf8;
 
-create table logic_class
+create table if not exists logic_class
 (
     id           bigint auto_increment comment '编号'
         primary key,
@@ -93,7 +95,7 @@ create table logic_class
 )
     comment '逻辑班级' charset = utf8;
 
-create table course_timetable_location
+create table if not exists course_timetable_location
 (
     id             bigint auto_increment comment '编号'
         primary key,
@@ -123,7 +125,7 @@ create index FK_school
 create index FK_school
     on logic_class (school_id);
 
-create table paper
+create table if not exists paper
 (
     id                    bigint auto_increment comment '编号'
         primary key,
@@ -154,7 +156,7 @@ create table paper
 )
     comment '试卷' charset = utf8;
 
-create table exam_history
+create table if not exists exam_history
 (
     id          bigint auto_increment comment '编号'
         primary key,
@@ -186,7 +188,7 @@ create index exam_history_student_fk
 create index paper_student_fk
     on paper (student_id);
 
-create table paper_detail
+create table if not exists paper_detail
 (
     id            bigint auto_increment comment '编号'
         primary key,
@@ -215,7 +217,7 @@ create table paper_detail
 create index paper_essay_essay_fk
     on paper_detail (question_id);
 
-create table section
+create table if not exists section
 (
     id          bigint auto_increment comment '编号'
         primary key,
@@ -238,7 +240,7 @@ create table section
 )
     comment '章节' charset = utf8;
 
-create table knowledge
+create table if not exists knowledge
 (
     id          bigint auto_increment comment '编号'
         primary key,
@@ -264,7 +266,7 @@ create table knowledge
 )
     comment '知识点' charset = utf8;
 
-create table essay
+create table if not exists essay
 (
     id             bigint auto_increment comment '编号'
         primary key,
@@ -304,7 +306,7 @@ create index FK_essay_knowledge
 create index FK_essay_section
     on essay (section_id);
 
-create table judgement
+create table if not exists judgement
 (
     id             bigint auto_increment comment '编号'
         primary key,
@@ -350,7 +352,7 @@ create index FK_knowledge_course
 create index FK_knowledge_section
     on knowledge (section_id);
 
-create table multi_sel
+create table if not exists multi_sel
 (
     id             bigint auto_increment comment '编号'
         primary key,
@@ -390,7 +392,7 @@ create index FK_multi_knowledge
 create index FK_multi_section
     on multi_sel (section_id);
 
-create table program
+create table if not exists program
 (
     id             bigint auto_increment comment '编号'
         primary key,
@@ -433,7 +435,7 @@ create index FK_single_section
 create index FK_section_course
     on section (course_id);
 
-create table sel_options
+create table if not exists sel_options
 (
     id          bigint auto_increment comment '编号'
         primary key,
@@ -451,7 +453,7 @@ create table sel_options
 )
     comment '单项选择题、多项选择题、填空题的选项信息表，一个题目的选项可以有多个，不局限于4个选项' charset = utf8;
 
-create table single_sel
+create table if not exists single_sel
 (
     id             bigint auto_increment comment '编号'
         primary key,
@@ -491,7 +493,7 @@ create index FK_single_knowledge
 create index FK_single_section
     on single_sel (section_id);
 
-create table sys_log
+create table if not exists sys_log
 (
     id          bigint auto_increment comment '编号'
         primary key,
@@ -515,7 +517,7 @@ create table sys_log
 )
     comment '系统日志表' charset = utf8;
 
-create table sys_res
+create table if not exists sys_res
 (
     id          bigint auto_increment comment '编号'
         primary key,
@@ -540,7 +542,7 @@ create table sys_res
 )
     comment '权限资源' charset = utf8;
 
-create table sys_role_res
+create table if not exists sys_role_res
 (
     id          bigint auto_increment comment '编号'
         primary key,
