@@ -68,6 +68,16 @@ public class Exam extends BaseEntity implements Serializable {
     private java.lang.Boolean isPublish;
 
     /**
+     * 出题类型：1指定题目、2顺序练习、3指定范围、4随机抽题
+     */
+    private java.lang.Integer method;
+
+    /**
+     * 成绩公布时间
+     */
+    private java.time.LocalDateTime publicationTime;
+
+    /**
      * 参与考试的班级id列表，以分号作为分隔符
      */
     @Size(max = 512, message = "classesIds 不能大于 512 位")
