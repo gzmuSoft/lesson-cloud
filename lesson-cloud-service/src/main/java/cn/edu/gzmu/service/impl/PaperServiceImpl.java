@@ -21,6 +21,9 @@ import java.util.Objects;
  * @author echo
  * @version 1.0
  * @date 2019-5-7 11:33:57
+ *
+ * @author YMS
+ * @date 2019-8-8
  */
 @Service
 @RequiredArgsConstructor
@@ -32,6 +35,7 @@ public class PaperServiceImpl extends BaseServiceImpl<PaperRepository, Paper, Lo
     private final @NonNull JudgementRepository judgementRepository;
     private final @NonNull EssayRepository essayRepository;
     private final @NonNull ProgramRepository programRepository;
+    private final @NonNull PaperRepository paperRepository;
 
     @Override
     protected Paper completeEntity(Paper entity) {
@@ -57,4 +61,8 @@ public class PaperServiceImpl extends BaseServiceImpl<PaperRepository, Paper, Lo
         return entity;
     }
 
+    @Override
+    public List<Paper> searchByExamId(Long id) {
+        return paperRepository.findAllByExamId(id);
+    }
 }
