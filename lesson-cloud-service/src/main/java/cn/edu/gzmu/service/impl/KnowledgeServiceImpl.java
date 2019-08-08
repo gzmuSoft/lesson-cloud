@@ -9,6 +9,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * Knowledge Service Impl
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Service;
  * @author echo
  * @version 1.0
  * @date 2019-5-7 11:33:57
+ *
+ * @author ypx
  */
 @Service
 @RequiredArgsConstructor
@@ -34,4 +38,8 @@ public class KnowledgeServiceImpl extends BaseServiceImpl<KnowledgeRepository, K
 
     }
 
+    @Override
+    public List<Knowledge> searchBySectionIdAndCourseId(Long sectionId,Long courseId) {
+        return knowledgeRepository.findAllBySectionIdAndCourseId(sectionId,courseId);
+    }
 }
