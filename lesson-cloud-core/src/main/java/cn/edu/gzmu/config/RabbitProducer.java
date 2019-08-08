@@ -20,6 +20,7 @@ import java.util.stream.Stream;
  * 发送和接收队列消息
  *
  * @author soul
+ * @author echo
  * @version 1.0
  * @date 19-3-25 14:51
  */
@@ -41,15 +42,20 @@ public class RabbitProducer {
         this.httpServletRequest = httpServletRequest;
     }
 
-
     @Pointcut("@annotation(org.springframework.data.rest.webmvc.RepositoryRestController)")
     public void annotationRepositoryController() {
     }
+
     @Pointcut("@annotation(org.springframework.web.bind.annotation.RestController)")
     public void annotationRestController() {
     }
+
     @Pointcut("execution(* org.springframework.data.rest.webmvc.*Controller..*(..))")
     public void restController() {
+    }
+
+    @Pointcut("execution(* cn.edu.gzmu.controller.*Controller..*(..))")
+    public void controller() {
     }
 
     /**
@@ -65,22 +71,22 @@ public class RabbitProducer {
      * getHeader("User-Agent")：浏览器信息
      * getRemoteHost()：客户端电脑名，若失败，则返回来源ip
      */
-    @Around("annotationRepositoryController() || restController() || annotationRestController()")
+    @Around("annotationRepositoryController() || restController() " +
+            "|| annotationRestController() || controller()")
     public Object logMessageGenerate(ProceedingJoinPoint joinPoint) throws Throwable {
         SysLog sysLog = new SysLog();
         sysLog.setArgs(StringUtils.left(
-                Stream.of(joinPoint.getArgs())
-                        .filter(Objects::nonNull)
-                        .map(Object::toString)
-                        .collect(Collectors.joining(",")), 255))
+                    Stream.of(joinPoint.getArgs())
+                            .filter(Objects::nonNull)
+                            .map(Object::toString)
+                            .collect(Collectors.joining(",")), 255))
                 .setBrowser(httpServletRequest.getHeader("User-Agent"))
                 .setIp(httpServletRequest.getRemoteAddr())
                 .setFromUrl(httpServletRequest.getRequestURL().toString())
                 .setUrl(httpServletRequest.getRequestURI())
                 .setOperation(httpServletRequest.getMethod());
         Object proceed = joinPoint.proceed();
-        sysLog.setStatus("1")
-                .setResult(StringUtils.left(proceed.toString(), 10240));
+        sysLog.setStatus("1").setResult(StringUtils.left(proceed.toString(), 10240));
         rabbitmqTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_KEY, sysLog);
         return proceed;
     }
