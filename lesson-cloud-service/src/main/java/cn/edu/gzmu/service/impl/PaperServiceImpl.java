@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 /**
@@ -63,6 +64,8 @@ public class PaperServiceImpl extends BaseServiceImpl<PaperRepository, Paper, Lo
 
     @Override
     public List<Paper> searchByExamId(Long id) {
-        return paperRepository.findAllByExamId(id);
+        return paperRepository.findAllByExamId(id)
+                .stream().map(this::completeEntity)
+                .collect(Collectors.toList());
     }
 }
