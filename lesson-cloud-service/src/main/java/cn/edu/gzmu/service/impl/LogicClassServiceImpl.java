@@ -7,11 +7,16 @@ import cn.edu.gzmu.repository.auth.StudentRepository;
 import cn.edu.gzmu.repository.auth.SysDataRepository;
 import cn.edu.gzmu.repository.auth.TeacherRepository;
 import cn.edu.gzmu.repository.entity.CourseRepository;
+import cn.edu.gzmu.repository.entity.CourseTimetableLocationRepository;
 import cn.edu.gzmu.repository.entity.LogicClassRepository;
 import cn.edu.gzmu.service.LogicClassService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static cn.edu.gzmu.service.helper.RestHelper.*;
 
@@ -36,6 +41,8 @@ public class LogicClassServiceImpl extends BaseServiceImpl<LogicClassRepository,
     private final @NonNull StudentRepository studentRepository;
     private final @NonNull TeacherRepository teacherRepository;
     private final @NonNull SemesterRepository semesterRepository;
+    private final @NonNull LogicClassRepository logicClassRepository;
+    private final @NonNull CourseTimetableLocationRepository courseTimetableLocationRepository;
 
     @Override
     protected LogicClass completeEntity(LogicClass logicClass) {
@@ -53,4 +60,13 @@ public class LogicClassServiceImpl extends BaseServiceImpl<LogicClassRepository,
                 .setCourse(courseRepository.findById(logicClass.getCourseId()).orElse(null));
     }
 
+
+    @Override
+    public List<LogicClass> getAllCourseTimetableLocation(LogicClass logicClass){
+        List<LogicClass> logicClasses= new ArrayList<>(logicClassRepository.findDistinctByStudentId(logicClass.getStudentId()));
+        for (LogicClass logicClass1:logicClasses){
+            logicClass1.setCourseTimetableLocationList(courseTimetableLocationRepository.findAllByLogicClassId(logicClass1.getId()));
+        }
+        return logicClasses;
+    }
 }

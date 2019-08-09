@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * logic_class
@@ -160,5 +161,10 @@ public class LogicClass extends BaseEntity implements Serializable {
     @Transient
     private SysData classes;
 
+    /**
+     * 逻辑班级上课时间及地点
+     */
+    @Transient
+    List<CourseTimetableLocation> courseTimetableLocationList;
 
 }
