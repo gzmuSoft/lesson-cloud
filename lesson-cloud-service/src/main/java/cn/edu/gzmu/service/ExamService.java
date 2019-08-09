@@ -1,7 +1,6 @@
 package cn.edu.gzmu.service;
 
 import cn.edu.gzmu.model.entity.Exam;
-import cn.edu.gzmu.model.entity.ExamHistory;
 import cn.edu.gzmu.model.entity.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +15,8 @@ import org.springframework.data.domain.Pageable;
  *
  * @author Japoul
  * @date 2019-8-06 22:38:13
+ *
+ * @author ljq
  */
 public interface ExamService extends BaseService<Exam, Long> {
 
@@ -29,4 +30,12 @@ public interface ExamService extends BaseService<Exam, Long> {
      */
     Page<Exam> searchByClassAndCourse(String courseId, String classIds, Pageable pageable);
 
+    /**
+     * 根据当前学生信息分页查询当前学生的考试信息
+     *
+     * @param student 学生信息
+     * @param pageable 分页
+     * @return 当前学生的考试信息
+     */
+    Page<Exam> searchByStudentPage(Student student, Pageable pageable);
 }
