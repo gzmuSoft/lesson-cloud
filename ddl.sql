@@ -29,7 +29,7 @@ create table if not exists exam
     total_use_time int null comment '考试总用时限制（正数，如：60分钟）',
     total_score float null comment '满分分值',
     course_id bigint(255) null comment '课程编号',
-    classes_ids varchar(512) null comment '参与考试的班级id列表，以逗号作为分隔符',
+    logic_class_ids varchar(512) null comment '参与考试的逻辑班级id列表，以逗号作为分隔符',
     method int(1) default 0 not null comment '出题类型：1指定题目、2顺序练习、3指定范围、4随机抽题',
     allow_times int null comment '可以考试的次数限制（正数，0代表可以无限次考试）',
     is_publish binary(1) default 0x31 not null comment '是否发布',

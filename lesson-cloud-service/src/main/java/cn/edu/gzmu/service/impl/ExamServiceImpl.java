@@ -1,10 +1,9 @@
 package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.entity.Exam;
-import cn.edu.gzmu.model.entity.SysData;
-import cn.edu.gzmu.repository.auth.SysDataRepository;
 import cn.edu.gzmu.repository.entity.CourseRepository;
 import cn.edu.gzmu.repository.entity.ExamRepository;
+import cn.edu.gzmu.repository.entity.LogicClassRepository;
 import cn.edu.gzmu.service.ExamService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static cn.edu.gzmu.service.helper.RestHelper.*;
 
 /**
  * Exam Service Impl
@@ -29,20 +26,19 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
         implements ExamService {
     private final @NonNull ExamRepository examRepository;
     private final @NonNull CourseRepository courseRepository;
-    private final @NonNull SysDataRepository sysDataRepository;
+    private final @NonNull LogicClassRepository logicClassRepository;
 
     @Override
     protected Exam completeEntity(Exam entity) {
-        return entity
-                .setCourse(courseRepository.findById(entity.getCourseId()).orElse(null))
-                .setClasses(getByIdsForEntity(entity.getClassesIds(), sysDataRepository::getMorePath, SysData.class));
-    }
 
+        return entity
+                .setCourse(courseRepository.findById(entity.getCourseId()).orElse(null));
+    }
 
     @Override
     public Page<Exam> searchByClassAndCourse(String courseId, String classIds, Pageable pageable) {
         //获取根据条件查询到的page
-        Page<Exam> page = examRepository.findAllByCourseIdAndClassesIds(Long.parseLong(courseId), classIds, pageable);
+        Page<Exam> page = examRepository.findAllByCourseIdAndLogicClassIds(Long.parseLong(courseId), classIds, pageable);
         //获取列表
         List<Exam> content = page.getContent();
         //遍历

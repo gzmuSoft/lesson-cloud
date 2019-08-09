@@ -23,11 +23,11 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
     /**
      * 据班级列表和课程信息分页查询考试信息
      *
-     * @param courseId
-     * @param classIds
-     * @param pageable
-     * @return
+     * @param courseId 课程
+     * @param classIds 班级列表
+     * @param pageable 分页
+     * @return 结果
      */
-    Page<Exam> findAllByCourseIdAndClassesIds(Long courseId, String classIds, Pageable pageable);
+    Page<Exam> findAllByCourseIdAndLogicClassIds(Long courseId, String classIds, Pageable pageable);
 
 }

@@ -80,8 +80,8 @@ public class Exam extends BaseEntity implements Serializable {
     /**
      * 参与考试的班级id列表，以分号作为分隔符
      */
-    @Size(max = 512, message = "classesIds 不能大于 512 位")
-    private java.lang.String classesIds;
+    @Size(max = 512, message = "logicClassIds 不能大于 512 位")
+    private java.lang.String logicClassIds;
 
     /**
      * 可以考试的次数限制（正数，0代表可以无限次考试）
@@ -98,5 +98,5 @@ public class Exam extends BaseEntity implements Serializable {
      * 班级列表
      */
     @Transient
-    private List<SysData> classes;
+    private List<LogicClass> logicClasses;
 }
