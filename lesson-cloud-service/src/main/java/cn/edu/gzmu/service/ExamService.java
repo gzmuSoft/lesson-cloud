@@ -13,9 +13,12 @@ import org.springframework.data.domain.Pageable;
  * @version 1.0
  * @date 2019-5-7 11:33:57
  *
+ * <p>
+ * 根据课程id和逻辑班级id列表查询考试信息
  * @author Japoul
  * @date 2019-8-06 22:38:13
  *
+ * <p>
  * @author ljq
  */
 public interface ExamService extends BaseService<Exam, Long> {
