@@ -10,6 +10,9 @@ import cn.edu.gzmu.service.CourseService;
 import com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,12 +54,27 @@ public class CourseServiceImpl extends BaseServiceImpl<CourseRepository, Course,
     }
 
     @Override
+    public Page<Course> searchByStudent(Student student, Pageable pageable) {
+        List<Course> courses = searchByStudent(student);
+        return new PageImpl<>(courses, pageable, courses.size());
+    }
+
+    @Override
     public List<Course> searchByTeacher(Teacher teacher) {
         Set<LogicClass> logicClasses = logicClassRepository.findDistinctByTeacherId(teacher.getId());
         List<Long> courseIds = logicClasses.stream()
                 .map(LogicClass::getCourseId)
                 .collect(Collectors.toList());
         return courseRepository.searchAllByIds(courseIds);
+    }
+
+    @Override
+    public Page<Course> searchByTeacher(Teacher teacher, Pageable pageable) {
+        Set<LogicClass> logicClasses = logicClassRepository.findDistinctByTeacherId(teacher.getId());
+        List<Long> courseIds = logicClasses.stream()
+                .map(LogicClass::getCourseId)
+                .collect(Collectors.toList());
+        return courseRepository.searchAllByIds(courseIds, pageable);
     }
 
 }

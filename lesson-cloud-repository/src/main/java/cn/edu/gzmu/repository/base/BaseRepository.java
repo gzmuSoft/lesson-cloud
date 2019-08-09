@@ -58,6 +58,17 @@ public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<
     List<T> searchAllByIds(@Param("ids") List<ID> ids);
 
     /**
+     * 通过 id 列表查询
+     *
+     * @param ids id 列表
+     * @return 结果
+     */
+    @RestResource(exported = false)
+    @Query(value = "select * from #{#entityName}  where id in (:ids) and is_enable = 1 ",
+            countQuery = "select count(*) from #{#entityName}", nativeQuery = true)
+    Page<T> searchAllByIds(@Param("ids") List<ID> ids, Pageable pageable);
+
+    /**
      * 真正删除一个数据
      *
      * @param id id
