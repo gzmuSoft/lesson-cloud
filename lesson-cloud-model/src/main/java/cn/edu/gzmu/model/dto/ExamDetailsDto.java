@@ -11,6 +11,5 @@ import lombok.*;
 @Data
 @Builder
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class ExamDetailsDto {
 }
