@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
  *
  * @author echo
  * @author Japoul
+ * @author ljq
  * @version 1.0
  * @date 2019-5-7 11:33:57
  * <p>
@@ -27,7 +28,6 @@ import java.util.stream.Collectors;
  * @date 2019-8-09 15:38:13
  *
  * <p>
- * @author ljq
  */
 @Service
 @RequiredArgsConstructor
@@ -58,19 +58,37 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
         // 将分割后的数组与前台传过来并同样分割好的数组进行比对得到匹配的数据的id列表
         String[] requestIds = logicClassIds.split(",");
         String[] classIds;
-        List ids = new ArrayList();
-        int count = 0;
+        List<Long> ids = new ArrayList<Long>();
+        // int count = 0;
         for (Map.Entry<Long, String> entry : map.entrySet()) {
             classIds = entry.getValue().split(",");
             for (String logicClassId : classIds) {
-                if (requestIds[count].equals(logicClassId)) {
-                    count++;
+                //其中一个班级存在即可
+                int flag = 0;
+                for (String requestId : requestIds) {
+                    if (requestId.equals(logicClassId)) {
+                        ids.add(entry.getKey());
+                        //标识此条数据正确
+                        flag = 1;
+                        break;
+                    }
                 }
-                if (count == requestIds.length) {
-                    ids.add(entry.getKey());
-                    count = 0;
+                // 判定此条数据正确,直接结束当前数据班级信息的循环
+                if (flag == 1) {
                     break;
                 }
+
+                /** 所有班级都存在才可
+                 *
+                 *   if (requestIds[count].equals(logicClassId)) {
+                 *
+                 *   }
+                 *   if (count == requestIds.length) {
+                 *       ids.add(entry.getKey());
+                 *      count = 0;
+                 *       break;
+                 *   }
+                 */
             }
         }
         // 获取根据条件查询到的page
