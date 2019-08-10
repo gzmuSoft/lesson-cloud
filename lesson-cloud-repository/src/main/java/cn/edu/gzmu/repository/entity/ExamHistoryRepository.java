@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.util.Optional;
+
 
 /**
  * ExamHistory Repository
@@ -25,4 +27,13 @@ public interface ExamHistoryRepository extends BaseRepository<ExamHistory, Long>
      * @return 结果
      */
     Page<ExamHistory> findAllByStudentId(Long studentId, Pageable pageable);
+
+    /**
+     * 根据学生 id 和 考试 id 查询
+     *
+     * @param examId    考试 id
+     * @param studentId 学生 id
+     * @return 结果
+     */
+    Optional<ExamHistory> findFirstByExamIdAndStudentId(Long examId, Long studentId);
 }

@@ -14,6 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -60,4 +61,16 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
                 examService.searchByStudentPage(student, pageable)
         );
     }
+
+    /**
+     * 获取当前登录的学生的指定id所有考试详细信息
+     *
+     */
+    @GetMapping("/details/student/id/{id}")
+    @Secured("ROLE_STUDENT")
+    public HttpEntity<?> examDetailsById(@PathVariable Long id) {
+        Student student = OauthHelper.student();
+        return ResponseEntity.ok(examService.searchDetailsById(student, id));
+    }
+
 }

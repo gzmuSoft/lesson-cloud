@@ -10,22 +10,23 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
  * Exam Repository
  *
  * @author echo
+ * @author Japoul
+ * @author ljq
  * @version 1.0
  * @date 2019-5-23 17:38:13
  * <p>
  * 根据课程id和逻辑班级id列表查询考试信息
  * 根据课程id查询考试信息
- * @author Japoul
  * @date 2019-8-09 15:38:13
  *
  * <p>
- * @author ljq
  */
 @RepositoryRestResource(path = "/exam")
 public interface ExamRepository extends BaseRepository<Exam, Long> {
@@ -33,7 +34,7 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
     /**
      * 根据多个id分页查询考试信息
      *
-     * @param ids id列表
+     * @param ids      id列表
      * @param pageable 分页
      * @return 结果
      */
@@ -42,8 +43,8 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
     /**
      * 根据课程id查询考试列表
      *
-     * @param courseId
-     * @return
+     * @param courseId 课程id
+     * @return 结果
      */
     List<Exam> findAllByCourseId(Long courseId);
 
@@ -58,5 +59,12 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
     @Query(value = "SELECT * FROM exam WHERE logic_class_ids in :ids", nativeQuery = true)
     Page<Exam> findAllByLogicClassIds(List<Long> ids, Pageable pageable);
 
+    /**
+     * 据考试 id 查询 “已发布” 状态的考试信息
+     *
+     * @param id id
+     * @return 考试信息
+     */
+    Optional<Exam> findFirstByIdAndIsPublishTrue(Long id);
 
 }
