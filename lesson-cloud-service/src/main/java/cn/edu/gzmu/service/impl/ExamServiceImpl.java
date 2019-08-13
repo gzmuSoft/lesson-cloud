@@ -28,7 +28,15 @@ import java.util.stream.Collectors;
  * @date 2019-8-09 15:38:13
  *
  * <p>
+ *
+ * <p>
+ *  @author hzl
+ *  @date 2019-8-13 23:48:10
+ *  获取到当前教师未发布的考试信息
+ *
+ *  </p>
  */
+
 @Service
 @RequiredArgsConstructor
 public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
@@ -120,6 +128,82 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
             completeEntity(element);
         }
         return exam;
+    }
+
+    /**
+     *
+     * 获取到当前教师未发布的考试信息
+     *
+     * 先获取到当前教师的所有逻辑班级ids
+     * 如果传入了逻辑班级ids，取跟上一步的交集
+     * 搜索出所有的未发布的exam信息，如果有课程id则增加这个条件
+     * 通过上面的条件由逻辑班级ids查询
+     */
+    @Override
+    public Page<Exam> getAllUnPublishExam(Teacher teacher,String logicClassIds,String courseId,Pageable pageable){
+        //先获取到当前教师的所有逻辑班级
+       List<LogicClass> logicClasses= new ArrayList<>(logicClassRepository.findDistinctByTeacherId(teacher.getId())) ;
+        List<Long> ids1=new ArrayList<>();
+        for (LogicClass aClass : logicClasses) {
+            ids1.add(aClass.getId());
+        }
+        //如果传入logicClassIds
+        if (logicClassIds!=null){
+            String[] requestIds = logicClassIds.split(",");
+            List<Long> ids2=new ArrayList<>();
+            for (String requestId : requestIds) {
+                ids2.add(Long.valueOf(requestId));
+            }
+            //求交集
+            ids1.retainAll(ids2);
+        }
+        List<Exam> examList;
+        //查询所有的未发布的考试信息
+        //如果没传入courseId
+        if (courseId==null){
+            examList=examRepository.findDistinctByIsPublishFalse();
+        }else {
+            examList=examRepository.findDistinctByCourseIdAndIsPublishFalse(Long.parseLong(courseId));
+        }
+
+        //以下为copy上面(searchByClassAndCourse)的
+        String[] classIds;
+        HashMap<Long, String> map = new HashMap<>();
+        List<Long> ids = new ArrayList<Long>();
+        for (Exam e : examList) {
+            map.put(e.getId(), e.getLogicClassIds());
+        }
+        for (Map.Entry<Long, String> entry : map.entrySet()) {
+            classIds = entry.getValue().split(",");
+            for (String logicClassId : classIds) {
+                //其中一个班级存在即可
+                int flag = 0;
+                for (Long id : ids1) {
+                    //for (Long requestId : ids1) {
+                    if (id == Long.parseLong(logicClassId)) {
+                        ids.add(entry.getKey());
+                        //标识此条数据正确
+                        flag = 1;
+                        break;
+                    }
+                }
+                // 判定此条数据正确,直接结束当前数据班级信息的循环
+                if (flag == 1) {
+                    break;
+                }
+            }
+        }
+        // 获取根据条件查询到的page
+        Page<Exam> page = examRepository.findAllByIdIsIn(ids, pageable);
+        // 获取列表
+        List<Exam> content = page.getContent();
+        // 遍历
+        for (Exam element : content) {
+            // 对每个数据进行完整性填充
+            completeEntity(element);
+        }
+        return page;
+
     }
 
     /**

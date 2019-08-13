@@ -4,6 +4,7 @@ import cn.edu.gzmu.auth.helper.OauthHelper;
 import cn.edu.gzmu.model.constant.LessonResource;
 import cn.edu.gzmu.model.entity.Exam;
 import cn.edu.gzmu.model.entity.Student;
+import cn.edu.gzmu.model.entity.Teacher;
 import cn.edu.gzmu.service.ExamService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @date 2019-5-28 17:24:38
  *
  * @author ljq
+ *
+ * <p>
+ * @author hzl
+ * @date 2019-8-13 23:48:10
+ * 获取到当前教师未发布的考试信息
+ * </p>
  */
 @RequiredArgsConstructor
 @RepositoryRestController
@@ -60,6 +67,20 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
         return ResponseEntity.ok(
                 examService.searchByStudentPage(student, pageable)
         );
+    }
+
+    /**
+     *获取到当前教师未发布的考试信息
+     * @param logicClassIds 逻辑班级ids
+     * @param courseId 课程id
+     * @param pageable pageable
+     * @return 。。。
+     */
+    @GetMapping("teacher/unpublish")
+    @Secured("ROLE_TEACHER")
+    public HttpEntity<?> getAllUnPublishExam(String logicClassIds,String courseId,@PageableDefault(sort = {"sort", "id"}) Pageable pageable){
+        Teacher teacher=OauthHelper.teacher();
+        return ResponseEntity.ok(examService.getAllUnPublishExam(teacher,logicClassIds,courseId,pageable));
     }
 
     /**
