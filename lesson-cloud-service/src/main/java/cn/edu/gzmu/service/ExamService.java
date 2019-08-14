@@ -51,4 +51,13 @@ public interface ExamService extends BaseService<Exam, Long> {
      * @return 考试详情
      */
     ExamDetailsDto searchDetailsById(Student student, Long id);
+    /**
+     * 获取到当前教师已发布的考试信息根据classid
+     *
+     * @param classIds 班级列表
+     * @param courseIds 课程信息
+     * @param pageable 分页
+     * @return 考试详情
+     */
+    Page<Exam> examFromPublish(String classIds,String courseIds ,Pageable pageable);
 }

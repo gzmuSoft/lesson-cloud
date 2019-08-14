@@ -19,6 +19,7 @@ import java.util.Optional;
  * @author echo
  * @author Japoul
  * @author ljq
+ * @author lxy
  * @version 1.0
  * @date 2019-5-23 17:38:13
  * <p>
@@ -60,11 +61,14 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
     Page<Exam> findAllByLogicClassIds(List<Long> ids, Pageable pageable);
 
     /**
-     * 据考试 id 查询 “已发布” 状态的考试信息
+     * 查询所有已发布课程考试
      *
-     * @param id id
-     * @return 考试信息
+     * @param pageable 分页
+     * @return 结果
      */
-    Optional<Exam> findFirstByIdAndIsPublishTrue(Long id);
+    @RestResource(path = "exam", rel = "exam", description = @Description("通过学生所在逻辑班级查询所有资源"))
+    @Query(value = "SELECT * FROM exam where is_publish=1", nativeQuery = true)
+    Page<Exam> findAllexam(Pageable pageable);
+
 
 }
