@@ -104,7 +104,7 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
      */
     @GetMapping("/details/complete")
     @Secured("ROLE_TEACHER")
-    public HttpEntity<?> examDetailsAll(@PageableDefault(sort = {"sort", "id"})Pageable pageable) {
+    public HttpEntity<?> examDetailsAll(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
         return ResponseEntity.ok(examService.searchDetailsAll(pageable));
     }
 

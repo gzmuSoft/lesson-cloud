@@ -51,4 +51,11 @@ public interface ExamService extends BaseService<Exam, Long> {
      * @return 考试详情
      */
     ExamDetailsDto searchDetailsById(Student student, Long id);
+
+    /**
+     * 获取所有考试的详细统计信息
+     *
+     * @return 考试详情
+     */
+    Page<ExamDetailsDto> searchDetailsAll(Pageable pageable);
 }
