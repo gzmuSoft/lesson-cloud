@@ -9,11 +9,13 @@ import com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Exam Service Impl
@@ -27,8 +29,18 @@ import java.util.stream.Collectors;
  * 根据课程id和逻辑班级id列表查询考试信息
  * @date 2019-8-09 15:38:13
  *
+ * @author YMS
+ * @date 2019-8-13 23:12:41
  * <p>
+ *
+ * <p>
+ *  @author hzl
+ *  @date 2019-8-13 23:48:10
+ *  获取到当前教师未发布的考试信息
+ *
+ *  </p>
  */
+
 @Service
 @RequiredArgsConstructor
 public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
@@ -123,6 +135,82 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
     }
 
     /**
+     *
+     * 获取到当前教师未发布的考试信息
+     *
+     * 先获取到当前教师的所有逻辑班级ids
+     * 如果传入了逻辑班级ids，取跟上一步的交集
+     * 搜索出所有的未发布的exam信息，如果有课程id则增加这个条件
+     * 通过上面的条件由逻辑班级ids查询
+     */
+    @Override
+    public Page<Exam> getAllUnPublishExam(Teacher teacher,String logicClassIds,String courseId,Pageable pageable){
+        //先获取到当前教师的所有逻辑班级
+       List<LogicClass> logicClasses= new ArrayList<>(logicClassRepository.findDistinctByTeacherId(teacher.getId())) ;
+        List<Long> ids1=new ArrayList<>();
+        for (LogicClass aClass : logicClasses) {
+            ids1.add(aClass.getId());
+        }
+        //如果传入logicClassIds
+        if (logicClassIds!=null){
+            String[] requestIds = logicClassIds.split(",");
+            List<Long> ids2=new ArrayList<>();
+            for (String requestId : requestIds) {
+                ids2.add(Long.valueOf(requestId));
+            }
+            //求交集
+            ids1.retainAll(ids2);
+        }
+        List<Exam> examList;
+        //查询所有的未发布的考试信息
+        //如果没传入courseId
+        if (courseId==null){
+            examList=examRepository.findDistinctByIsPublishFalse();
+        }else {
+            examList=examRepository.findDistinctByCourseIdAndIsPublishFalse(Long.parseLong(courseId));
+        }
+
+        //以下为copy上面(searchByClassAndCourse)的
+        String[] classIds;
+        HashMap<Long, String> map = new HashMap<>();
+        List<Long> ids = new ArrayList<Long>();
+        for (Exam e : examList) {
+            map.put(e.getId(), e.getLogicClassIds());
+        }
+        for (Map.Entry<Long, String> entry : map.entrySet()) {
+            classIds = entry.getValue().split(",");
+            for (String logicClassId : classIds) {
+                //其中一个班级存在即可
+                int flag = 0;
+                for (Long id : ids1) {
+                    //for (Long requestId : ids1) {
+                    if (id == Long.parseLong(logicClassId)) {
+                        ids.add(entry.getKey());
+                        //标识此条数据正确
+                        flag = 1;
+                        break;
+                    }
+                }
+                // 判定此条数据正确,直接结束当前数据班级信息的循环
+                if (flag == 1) {
+                    break;
+                }
+            }
+        }
+        // 获取根据条件查询到的page
+        Page<Exam> page = examRepository.findAllByIdIsIn(ids, pageable);
+        // 获取列表
+        List<Exam> content = page.getContent();
+        // 遍历
+        for (Exam element : content) {
+            // 对每个数据进行完整性填充
+            completeEntity(element);
+        }
+        return page;
+
+    }
+
+    /**
      * 1. 先根据考试id查询考试信息，在通过当前登录用户得出用户 id
      * 2. 通过考试id查询组卷规则得出所有题目信息，并通过每题分值字段计算所有总分，
      * 得出当前考试总分数、题目数量。注意，不可将整个考试规则返回给前端
@@ -149,81 +237,47 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
                 .count(count).examHistory(examHistory).build();
     }
 
+    /**
+     * 查询所有考试的详细统计信息
+     * 1.题目数量（通过组卷规则）
+     * 2.所有参与考试的逻辑班级名称
+     * 3.应参加考试的人数（通过当前考试关联的逻辑班级的所有班级人数以及重修人数相加）
+     * 4.考试所有信息
+     * 5.条件可能为逻辑班级id和学期id（可能没有）
+     *
+     * 未完成
+     * @author YMS
+     */
     @Override
-    public Page<Exam> examFromPublish(String courseIds,String logicClassIds,Pageable pageable) {
-        System.out.println(courseIds+"~~~~"+logicClassIds);
-        Page<Exam> page = null;
-        //在单个courseId基础上循环遍历所有的courseId
-        //声明一个集合存储符合要求Eaxm
-        List<Exam> examList =new ArrayList<>();
-        List<Long> ids = new ArrayList<Long>();//查询id集合
-        if(courseIds.equals("")&&logicClassIds.equals("")){
-            page=examRepository.findAllexam(pageable);
-            return page;
-        }
-        else {
-            String[] scourseIds = courseIds.split(",");
-            for (String courseId : scourseIds) {
-                List<Exam> listCourse = examRepository.findAllByCourseId(Long.parseLong(courseId));
-                // 遍历 list 获取 id 和 logicClassIds 存入一个 map
-                HashMap<Long, String> map = new HashMap<>();
-                for (Exam e : listCourse) {
-                    map.put(e.getId(), e.getLogicClassIds());
-                    // 遍历map获取 value 并使用逗号分割 logicClassIds，
-                    // 将分割后的数组与前台传过来并同样分割好的数组进行比对得到匹配的数据的id列表
-                    String[] requestIds = logicClassIds.split(",");
-                    String[] classIds;
-                    // int count = 0;
-                    for (Map.Entry<Long, String> entry : map.entrySet()) {
-                        classIds = entry.getValue().split(",");
-                        for (String logicClassId : classIds) {
-                            //其中一个班级存在即可
-                            int flag = 0;
-                            for (String requestId : requestIds) {
-                                if (requestId.equals(logicClassId) && e.getIsPublish()) {
-                                    //将已发布的符合要求的exam添加到集合中去
-                                    ids.add(e.getCourseId());
-                                    System.out.println("ids大小:" + ids.size() + "值为" + entry.getKey());
-                                    //标识此条数据正确
-                                    //将结果添加到集合中去
-                                    examList.add(e);
-                                    System.out.println(examList.size());
-                                    flag = 1;
-                                    break;
-                                }
-                            }
-                            // 判定此条数据正确,直接结束当前数据班级信息的循环
-                            if (flag == 1) {
-
-                                break;
-                            }
-
-                            /** 所有班级都存在才可
-                             *
-                             *   if (requestIds[count].equals(logicClassId)) {
-                             *
-                             *   }
-                             *   if (count == requestIds.length) {
-                             *       ids.add(entry.getKey());
-                             *      count = 0;
-                             *       break;
-                             *   }
-                             */
-                        }
-                    }
-                    // 获取根据条件查询到的page
-                    page = examRepository.findAllByIdIsIn(ids, pageable);
-                    // 获取列表
-
-                    // 遍历
-                    for (Exam exam : examList) {
-                        // 对每个数据进行完整性填充
-                        completeEntity(exam);
-                    }
-                }
+    public Page<ExamDetailsDto> searchDetailsAll(Pageable pageable) {
+        //1.获取所有的考试
+        Page<Exam> exams = examRepository.findAll(pageable);
+        ArrayList<ExamDetailsDto> examDetailsDtos = new ArrayList<>();
+//        Page<ExamDetailsDto> pages = ;
+        for (Exam exam : exams) {
+            //2.根据考试id获取考试规则
+            List<ExamRule> examRules = new ArrayList<>();
+            //3.考试题目数量
+            int count = examRules.stream().mapToInt(ExamRule::getQuestionCount).sum();
+            //4.所有参加的逻辑班级的名称
+            ArrayList<LogicClass> logicClasses = new ArrayList<>();
+            for (String s : exam.getLogicClassIds().split(",")) {
+                Page<LogicClass> allById = logicClassRepository.findAllById(Long.valueOf(s), pageable);
+                logicClasses.addAll(allById.getContent());
             }
-            return page;
-        }
-    }
+            String classNames = "";
+            int peopleNum = 0;
+            for (LogicClass logicClass : logicClasses) {
+                classNames += logicClass.getName();
+                //5.应参加人数
+//                peopleNum += logicClass.
+            }
 
+            examDetailsDtos.add(ExamDetailsDto.builder().exam(exam).count(count)
+                    .logicClasses(classNames).build());
+        }
+
+        //不会写，等理解了再重写，先交了再说 QAQ
+        return null;
+    }
 }

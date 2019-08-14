@@ -30,6 +30,11 @@ import static cn.edu.gzmu.service.helper.RestHelper.*;
  * <p>
  * 逻辑班级联查课程实体
  * @date 2019-8-4 23:33:57
+ *
+ * <p>
+ *  获取当前登录学生的所有逻辑班级（课程）上课时间表及地点信息，不分页
+ *  @author hzl
+ *  @date 2019-8-13 15:31</p>
  */
 @Service
 @RequiredArgsConstructor
@@ -62,11 +67,16 @@ public class LogicClassServiceImpl extends BaseServiceImpl<LogicClassRepository,
 
 
     @Override
-    public List<LogicClass> getAllCourseTimetableLocation(LogicClass logicClass){
-        List<LogicClass> logicClasses= new ArrayList<>(logicClassRepository.findDistinctByStudentId(logicClass.getStudentId()));
-        for (LogicClass logicClass1:logicClasses){
-            logicClass1.setCourseTimetableLocationList(courseTimetableLocationRepository.findAllByLogicClassId(logicClass1.getId()));
+    public List<LogicClass> getAllCourseTimetableLocation(Student student){
+        List<LogicClass> logicClass=new ArrayList<>();
+        //通过班级获取逻辑班级
+        logicClass.addAll(logicClassRepository.findDistinctByClassesId(student.getClassesId()));
+        //其他情况，重修的
+        logicClass.addAll(logicClassRepository.findDistinctByStudentId(student.getId()));
+        //根据逻辑班级id查询到上课时间地点
+        for (LogicClass aClass : logicClass) {
+            aClass.setCourseTimetableLocationList(courseTimetableLocationRepository.findDistinctByLogicClassId(aClass.getId()));
         }
-        return logicClasses;
+        return logicClass;
     }
 }

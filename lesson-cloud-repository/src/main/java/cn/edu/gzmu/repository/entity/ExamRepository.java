@@ -28,6 +28,12 @@ import java.util.Optional;
  * @date 2019-8-09 15:38:13
  *
  * <p>
+ *
+ * <p>
+ * @author hzl
+ * @date 2019-8-13 23:48:10
+ * 获取到当前教师未发布的考试信息
+ * </p>
  */
 @RepositoryRestResource(path = "/exam")
 public interface ExamRepository extends BaseRepository<Exam, Long> {
@@ -71,4 +77,16 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
     Page<Exam> findAllexam(Pageable pageable);
 
 
+    /**
+     * 找所有的未发布的考试信息
+     * @return 考试信息
+     */
+    List<Exam> findDistinctByIsPublishFalse();
+
+    /**
+     * 通过课程id找所有未发布的考试信息
+     * @param id 课程id
+     * @return 考试信息
+     */
+    List<Exam> findDistinctByCourseIdAndIsPublishFalse(Long id);
 }
