@@ -94,4 +94,18 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
         return ResponseEntity.ok(examService.searchDetailsById(student, id));
     }
 
+    /**
+     * 查询所有考试的详细统计信息，需分页
+     * 1. 获取到考试的题目数量（通过组卷规则）
+     * 2. 获取到参与考试的所有逻辑班级的名称
+     * 3. 获取到考试的应该参与的所有人数（通过当前考试关联的逻辑班级的所有班级人数以及重修人数相加）
+     * 4. 获取考试的所有信息
+     * 5. 条件可能为逻辑班级id和学期id（可能没有）
+     */
+    @GetMapping("/details/complete")
+    @Secured("ROLE_TEACHER")
+    public HttpEntity<?> examDetailsAll(@PageableDefault(sort = {"sort", "id"})Pageable pageable) {
+        return ResponseEntity.ok(examService.searchDetailsAll(pageable));
+    }
+
 }

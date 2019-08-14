@@ -34,4 +34,12 @@ public class ExamDetailsDto implements Serializable {
      * 题目数量
      */
     private Integer count;
+    /**
+     * 应参加人数
+     */
+    private Integer peopleNum;
+    /**
+     * 逻辑班级
+     */
+    private String logicClasses;
 }

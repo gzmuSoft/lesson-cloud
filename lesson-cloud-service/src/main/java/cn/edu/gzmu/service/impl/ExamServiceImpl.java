@@ -9,11 +9,13 @@ import com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Exam Service Impl
@@ -27,6 +29,8 @@ import java.util.stream.Collectors;
  * 根据课程id和逻辑班级id列表查询考试信息
  * @date 2019-8-09 15:38:13
  *
+ * @author YMS
+ * @date 2019-8-13 23:12:41
  * <p>
  *
  * <p>
@@ -231,5 +235,49 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
         ExamHistory examHistory = examHistoryRepository.findFirstByExamIdAndStudentId(id, student.getId()).orElse(null);
         return ExamDetailsDto.builder().exam(exam).allScore(allScore)
                 .count(count).examHistory(examHistory).build();
+    }
+
+    /**
+     * 查询所有考试的详细统计信息
+     * 1.题目数量（通过组卷规则）
+     * 2.所有参与考试的逻辑班级名称
+     * 3.应参加考试的人数（通过当前考试关联的逻辑班级的所有班级人数以及重修人数相加）
+     * 4.考试所有信息
+     * 5.条件可能为逻辑班级id和学期id（可能没有）
+     *
+     * 未完成
+     * @author YMS
+     */
+    @Override
+    public Page<ExamDetailsDto> searchDetailsAll(Pageable pageable) {
+        //1.获取所有的考试
+        Page<Exam> exams = examRepository.findAll(pageable);
+        ArrayList<ExamDetailsDto> examDetailsDtos = new ArrayList<>();
+//        Page<ExamDetailsDto> pages = ;
+        for (Exam exam : exams) {
+            //2.根据考试id获取考试规则
+            List<ExamRule> examRules = new ArrayList<>();
+            //3.考试题目数量
+            int count = examRules.stream().mapToInt(ExamRule::getQuestionCount).sum();
+            //4.所有参加的逻辑班级的名称
+            ArrayList<LogicClass> logicClasses = new ArrayList<>();
+            for (String s : exam.getLogicClassIds().split(",")) {
+                Page<LogicClass> allById = logicClassRepository.findAllById(Long.valueOf(s), pageable);
+                logicClasses.addAll(allById.getContent());
+            }
+            String classNames = "";
+            int peopleNum = 0;
+            for (LogicClass logicClass : logicClasses) {
+                classNames += logicClass.getName();
+                //5.应参加人数
+//                peopleNum += logicClass.
+            }
+
+            examDetailsDtos.add(ExamDetailsDto.builder().exam(exam).count(count)
+                    .logicClasses(classNames).build());
+        }
+
+        //不会写，等理解了再重写，先交了再说QAQ
+        return null;
     }
 }
