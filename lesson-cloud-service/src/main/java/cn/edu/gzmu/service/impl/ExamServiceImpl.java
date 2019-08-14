@@ -237,6 +237,83 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
                 .count(count).examHistory(examHistory).build();
     }
 
+    @Override
+    public Page<Exam> examFromPublish(String courseIds,String logicClassIds,Pageable pageable) {
+        System.out.println(courseIds+"~~~~"+logicClassIds);
+        Page<Exam> page = null;
+        //在单个courseId基础上循环遍历所有的courseId
+        //声明一个集合存储符合要求Eaxm
+        List<Exam> examList =new ArrayList<>();
+        List<Long> ids = new ArrayList<Long>();//查询id集合
+        if(courseIds.equals("")&&logicClassIds.equals("")){
+            page=examRepository.findAllexam(pageable);
+            return page;
+        }
+        else {
+            String[] scourseIds = courseIds.split(",");
+            for (String courseId : scourseIds) {
+                List<Exam> listCourse = examRepository.findAllByCourseId(Long.parseLong(courseId));
+                // 遍历 list 获取 id 和 logicClassIds 存入一个 map
+                HashMap<Long, String> map = new HashMap<>();
+                for (Exam e : listCourse) {
+                    map.put(e.getId(), e.getLogicClassIds());
+                    // 遍历map获取 value 并使用逗号分割 logicClassIds，
+                    // 将分割后的数组与前台传过来并同样分割好的数组进行比对得到匹配的数据的id列表
+                    String[] requestIds = logicClassIds.split(",");
+                    String[] classIds;
+                    // int count = 0;
+                    for (Map.Entry<Long, String> entry : map.entrySet()) {
+                        classIds = entry.getValue().split(",");
+                        for (String logicClassId : classIds) {
+                            //其中一个班级存在即可
+                            int flag = 0;
+                            for (String requestId : requestIds) {
+                                if (requestId.equals(logicClassId) && e.getIsPublish()) {
+                                    //将已发布的符合要求的exam添加到集合中去
+                                    ids.add(e.getCourseId());
+                                    System.out.println("ids大小:" + ids.size() + "值为" + entry.getKey());
+                                    //标识此条数据正确
+                                    //将结果添加到集合中去
+                                    examList.add(e);
+                                    System.out.println(examList.size());
+                                    flag = 1;
+                                    break;
+                                }
+                            }
+                            // 判定此条数据正确,直接结束当前数据班级信息的循环
+                            if (flag == 1) {
+
+                                break;
+                            }
+
+                            /** 所有班级都存在才可
+                             *
+                             *   if (requestIds[count].equals(logicClassId)) {
+                             *
+                             *   }
+                             *   if (count == requestIds.length) {
+                             *       ids.add(entry.getKey());
+                             *      count = 0;
+                             *       break;
+                             *   }
+                             */
+                        }
+                    }
+                    // 获取根据条件查询到的page
+                    page = examRepository.findAllByIdIsIn(ids, pageable);
+                    // 获取列表
+
+                    // 遍历
+                    for (Exam exam : examList) {
+                        // 对每个数据进行完整性填充
+                        completeEntity(exam);
+                    }
+                }
+            }
+            return page;
+        }
+    }
+
     /**
      * 查询所有考试的详细统计信息
      * 1.题目数量（通过组卷规则）

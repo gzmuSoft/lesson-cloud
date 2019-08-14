@@ -3,6 +3,7 @@ package cn.edu.gzmu.service;
 import cn.edu.gzmu.model.dto.ExamDetailsDto;
 import cn.edu.gzmu.model.entity.Exam;
 import cn.edu.gzmu.model.entity.Student;
+import cn.edu.gzmu.model.entity.Teacher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -21,7 +22,20 @@ import org.springframework.data.domain.Pageable;
  * @date 2019-8-06 22:38:13
  *
  * <p>
+ *
+ * <p>
+ * @author hzl
+ * @date 2019-8-13 23:48:10
+ * 获取到当前教师未发布的考试信息
+ *
+ * </p>
+ *
+ * @author YMS
+ * @date 2019-8-14 11:18
  */
+
+
+
 public interface ExamService extends BaseService<Exam, Long> {
 
     /**
@@ -60,4 +74,22 @@ public interface ExamService extends BaseService<Exam, Long> {
      * @return 考试详情
      */
     Page<Exam> examFromPublish(String classIds,String courseIds ,Pageable pageable);
+
+    /**
+     * 获取到当前教师未发布的考试信息
+     * @param teacher 当前登陆的教师信息
+     * @param logicClassIds logicClassIds
+     * @param courseId 课程id
+     * @param pageable pageable
+     * @return page
+     */
+    public Page<Exam> getAllUnPublishExam(Teacher teacher, String logicClassIds, String courseId, Pageable pageable);
+
+    /**
+     * 获取所有考试的详细统计信息
+     *
+     * @param pageable 分页
+     * @return 考试详情
+     */
+    Page<ExamDetailsDto> searchDetailsAll(Pageable pageable);
 }

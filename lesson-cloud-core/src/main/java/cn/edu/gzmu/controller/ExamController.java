@@ -94,12 +94,12 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
         Student student = OauthHelper.student();
         return ResponseEntity.ok(examService.searchDetailsById(student, id));
     }
-    /*
-   获取到当前教师已发布的考试信息
-   1. 会接收零个或多个逻辑班级id，注意：如果传递了逻辑班级 id ，还需要通过一个或者多个逻辑班级 id 来查询
-   2. 会接收零个或者单个课程id，注意事项同上
-   3. 需分页
-   */
+    /**
+     * 获取到当前教师已发布的考试信息
+     *    1. 会接收零个或多个逻辑班级id，注意：如果传递了逻辑班级 id ，还需要通过一个或者多个逻辑班级 id 来查询
+     *    2. 会接收零个或者单个课程id，注意事项同上
+     *    3. 需分页
+     */
     @GetMapping("/teacher/publish")
     @Secured("ROLE_TEACHER")
     public HttpEntity<?> examFromPublish(String courseIds, String classIds,
