@@ -66,27 +66,32 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
     @Query(value = "SELECT * FROM exam WHERE logic_class_ids in :ids", nativeQuery = true)
     Page<Exam> findAllByLogicClassIds(List<Long> ids, Pageable pageable);
 
-    /**
-     * 查询所有已发布课程考试
-     *
-     * @param pageable 分页
-     * @return 结果
-     */
-    @RestResource(path = "exam", rel = "exam", description = @Description("通过学生所在逻辑班级查询所有资源"))
-    @Query(value = "SELECT * FROM exam where is_publish=1", nativeQuery = true)
-    Page<Exam> findAllexam(Pageable pageable);
+//    /**
+//     * 查询所有已发布课程考试
+//     *
+//     * @param pageable 分页
+//     * @return 结果
+//     */
+//    @RestResource(path = "exam", rel = "exam", description = @Description("通过学生所在逻辑班级查询所有资源"))
+//    @Query(value = "SELECT * FROM exam where is_publish=1", nativeQuery = true)
+//    Page<Exam> findAllexam(Pageable pageable);
 
 
     /**
      * 找所有的未发布的考试信息
+     *
+     * @param publish 是否发布
      * @return 考试信息
      */
-    List<Exam> findDistinctByIsPublishFalse();
+    List<Exam> findDistinctByIsPublish(boolean publish);
 
     /**
      * 通过课程id找所有未发布的考试信息
+     *
      * @param id 课程id
+     * @param publish 是否发布
      * @return 考试信息
      */
-    List<Exam> findDistinctByCourseIdAndIsPublishFalse(Long id);
+    List<Exam> findDistinctByCourseIdAndIsPublish(Long id, boolean publish);
+
 }

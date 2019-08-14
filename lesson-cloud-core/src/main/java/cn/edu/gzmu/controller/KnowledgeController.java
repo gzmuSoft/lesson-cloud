@@ -28,7 +28,7 @@ public class KnowledgeController extends BaseController<Knowledge, KnowledgeServ
     private final @NonNull KnowledgeService knowledgeService;
 
     @GetMapping("/sectionAndCourse")
-    public HttpEntity<?> searchBySectionIdAndCourseId(@PathVariable Long sectionId, @PathVariable Long courseId) {
+    public HttpEntity<?> searchBySectionIdAndCourseId(Long sectionId, Long courseId) {
         return ResponseEntity.ok(knowledgeService.searchBySectionIdAndCourseId(sectionId,courseId));
     }
 }

@@ -15,21 +15,20 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Exam Controller
  *
  * @author echo
- * @version 1.0
- * @date 2019-5-28 17:24:38
- *
  * @author ljq
  *
  * <p>
  * @author hzl
+ * @version 1.0
+ * @date 2019-5-28 17:24:38
  * @date 2019-8-13 23:48:10
  * 获取到当前教师未发布的考试信息
  * </p>
@@ -50,7 +49,7 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
     @GetMapping("/classAndCourse")
     public HttpEntity<?> classAndCourse(String courseId, String classIds,
                                         @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(examService.searchByClassAndCourse(courseId, classIds, pageable));
+        return ResponseEntity.ok(examService.searchByLogicClassAndCourse(courseId, classIds, pageable));
     }
 
     /**
@@ -71,22 +70,41 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
     }
 
     /**
-     *获取到当前教师未发布的考试信息
+     * 获取到当前教师未发布的考试信息
+     *
      * @param logicClassIds 逻辑班级ids
-     * @param courseId 课程id
-     * @param pageable pageable
+     * @param courseId      课程id
+     * @param pageable      pageable
      * @return 。。。
      */
-    @GetMapping("teacher/unpublish")
+    @GetMapping("/teacher/unpublish")
     @Secured("ROLE_TEACHER")
-    public HttpEntity<?> getAllUnPublishExam(String logicClassIds,String courseId,@PageableDefault(sort = {"sort", "id"}) Pageable pageable){
-        Teacher teacher=OauthHelper.teacher();
-        return ResponseEntity.ok(examService.getAllUnPublishExam(teacher,logicClassIds,courseId,pageable));
+    public HttpEntity<?> searchUnPublishExam(
+            @RequestParam(defaultValue = "", required = false) String logicClassIds,
+            @RequestParam(required = false) String courseId,
+            @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return searchByPublishStatus(logicClassIds, courseId, pageable, false);
+    }
+
+    /**
+     * 获取到当前教师已发布的考试信息
+     *
+     * @param logicClassIds 逻辑班级ids
+     * @param courseId      课程id
+     * @param pageable      pageable
+     * @return 。。。
+     */
+    @GetMapping("/teacher/publish")
+    @Secured("ROLE_TEACHER")
+    public HttpEntity<?> searchPublishExam(
+            @RequestParam(defaultValue = "", required = false) String logicClassIds,
+            @RequestParam(required = false) String courseId,
+            @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return searchByPublishStatus(logicClassIds, courseId, pageable, true);
     }
 
     /**
      * 获取当前登录的学生的指定id所有考试详细信息
-     *
      */
     @GetMapping("/details/student/id/{id}")
     @Secured("ROLE_STUDENT")
@@ -94,19 +112,20 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
         Student student = OauthHelper.student();
         return ResponseEntity.ok(examService.searchDetailsById(student, id));
     }
-    /**
-     * 获取到当前教师已发布的考试信息
-     *    1. 会接收零个或多个逻辑班级id，注意：如果传递了逻辑班级 id ，还需要通过一个或者多个逻辑班级 id 来查询
-     *    2. 会接收零个或者单个课程id，注意事项同上
-     *    3. 需分页
-     */
-    @GetMapping("/teacher/publish")
-    @Secured("ROLE_TEACHER")
-    public HttpEntity<?> examFromPublish(String courseIds, String classIds,
-                                         @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
 
-        return ResponseEntity.ok(examService.examFromPublish(courseIds, classIds, pageable));
-    }
+//    /**
+//     * 获取到当前教师已发布的考试信息
+//     * 1. 会接收零个或多个逻辑班级id，注意：如果传递了逻辑班级 id ，还需要通过一个或者多个逻辑班级 id 来查询
+//     * 2. 会接收零个或者单个课程id，注意事项同上
+//     * 3. 需分页
+//     */
+//    @GetMapping("/teacher/publish")
+//    @Secured("ROLE_TEACHER")
+//    public HttpEntity<?> examFromPublish(String courseIds, String classIds,
+//                                         @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+//
+//        return ResponseEntity.ok(examService.examFromPublish(courseIds, classIds, pageable));
+//    }
 
 
     /**
@@ -119,8 +138,26 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
      */
     @GetMapping("/details/complete")
     @Secured("ROLE_TEACHER")
-    public HttpEntity<?> examDetailsAll(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(examService.searchDetailsAll(pageable));
+    public HttpEntity<?> examDetailsAll(
+            @RequestParam(required = false, defaultValue = "") String semesterId,
+            @PageableDefault(sort = {"sort", "id"}) Pageable pageable
+    ) {
+        return ResponseEntity.ok(examService.searchDetailsAll(semesterId, pageable));
+    }
+
+
+    /**
+     * 获取到当前教师未发布的考试信息
+     *
+     * @param logicClassIds 逻辑班级ids
+     * @param courseId      课程id
+     * @param pageable      pageable
+     * @param publish       是否发布
+     * @return 。。。
+     */
+    private HttpEntity<?> searchByPublishStatus(String logicClassIds, String courseId, Pageable pageable, boolean publish) {
+        return ResponseEntity.ok(examService.searchExamFromPublishStatus(
+                OauthHelper.teacher(), logicClassIds, courseId, pageable, publish));
     }
 
 }

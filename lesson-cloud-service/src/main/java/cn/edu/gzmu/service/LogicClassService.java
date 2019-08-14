@@ -23,18 +23,10 @@ import java.util.List;
 public interface LogicClassService extends BaseService<LogicClass, Long> {
 
     /**
-     * 查询所有逻辑班级分页信息
-     *
-     * @param pageable 分页
-     * @return 分页结果
-     */
-    Page<LogicClass> searchAll(Pageable pageable);
-
-    /**
      * 查询所有逻辑班级上课时间地点信息
      * @param student 逻辑班级
      * @return 逻辑班级信息
      */
-    List<LogicClass> getAllCourseTimetableLocation (Student student);
+    List<LogicClass> findAllCourseTimetableLocation(Student student);
 
 }

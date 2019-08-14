@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static cn.edu.gzmu.service.helper.RestHelper.*;
 
@@ -25,6 +24,7 @@ import static cn.edu.gzmu.service.helper.RestHelper.*;
  *
  * @author <a href="https://echocow.cn">EchoCow</a>
  * @author Japoul
+ * @author hzl
  * @version 1.0
  * @date 2019-5-20 9:18:57
  * <p>
@@ -32,9 +32,8 @@ import static cn.edu.gzmu.service.helper.RestHelper.*;
  * @date 2019-8-4 23:33:57
  *
  * <p>
- *  获取当前登录学生的所有逻辑班级（课程）上课时间表及地点信息，不分页
- *  @author hzl
- *  @date 2019-8-13 15:31</p>
+ * 获取当前登录学生的所有逻辑班级（课程）上课时间表及地点信息，不分页
+ * @date 2019-8-13 15:31</p>
  */
 @Service
 @RequiredArgsConstructor
@@ -67,8 +66,8 @@ public class LogicClassServiceImpl extends BaseServiceImpl<LogicClassRepository,
 
 
     @Override
-    public List<LogicClass> getAllCourseTimetableLocation(Student student){
-        List<LogicClass> logicClass=new ArrayList<>();
+    public List<LogicClass> findAllCourseTimetableLocation(Student student) {
+        List<LogicClass> logicClass = new ArrayList<>();
         //通过班级获取逻辑班级
         logicClass.addAll(logicClassRepository.findDistinctByClassesId(student.getClassesId()));
         //其他情况，重修的
