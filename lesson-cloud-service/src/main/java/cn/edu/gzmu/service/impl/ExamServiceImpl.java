@@ -53,6 +53,56 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
     private final @NonNull CourseRepository courseRepository;
     private final @NonNull LogicClassRepository logicClassRepository;
 
+    /**
+     *
+     * @param exam 考试信息
+     * @param student 当前学生
+     * @return 根据数据生成Dto返回
+     */
+    private ExamDetailsDto buildExamDetailsDto(Exam exam,Student student){
+        // 1. 通过考试id查询组卷规则得出所有题目信息
+        List<ExamRule> examRules = examRuleRepository.findAllByExamId(exam.getId());
+        // 通过每题分值字段计算所有总分,得出当前考试总分数
+        double allScore = examRules.stream()
+                .mapToDouble(rule -> rule.getQuestionCount() * rule.getEachValue())
+                .sum();
+        // 题目数量
+        int count = examRules.stream().mapToInt(ExamRule::getQuestionCount).sum();
+        // 2. 再通过考试 id 和学生 id 查询考试历史记录，得出是否已经参加考试
+        ExamHistory examHistory = examHistoryRepository.findFirstByExamIdAndStudentId(exam.getId(), student.getId()).orElse(null);
+        return ExamDetailsDto.builder().exam(exam).allScore(allScore)
+                .count(count).examHistory(examHistory).build();
+    }
+
+
+    /**
+     *
+     * @param student 当前学生
+     * @return 当前学生所有考试的考试信息id List
+     */
+    private List<Long> examIdsByExamHistory(Student student){
+        Page<ExamHistory> examHistories = examHistoryRepository.findAllByStudentId(student.getId(), Pageable.unpaged());
+        return examHistories.stream()
+                .map(ExamHistory::getExamId)
+                .collect(Collectors.toList());
+    }
+    /**
+     *
+     * @param student 当前学生
+     * @param type 是否是重修班级
+     * @return 根据type 返回当前学生的逻辑班级id List
+     */
+    private List<Long> logicClassesIdsByStudentAndType(Student student,Boolean type){
+        Set<LogicClass> logicClassesByClassesId = logicClassRepository.findDistinctByClassesId(student.getClassesId());
+        Set<LogicClass> logicClassesByStudentId = logicClassRepository.findDistinctByStudentId(student.getId());
+        Sets.SetView<LogicClass> logicClasses = Sets.union(logicClassesByClassesId, logicClassesByStudentId);
+        return logicClasses.stream()
+                //如果type为空 代表全查 使用x.geType比较 全等
+                .filter(x-> x.getType().equals(type==null?x.getType():type))
+                .map(LogicClass::getId)
+                .collect(Collectors.toList());
+    }
+
     @Override
     protected Exam completeEntity(Exam entity) {
         return entity
@@ -230,6 +280,41 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
 //        }
     }
 
+
+
+    @Override
+    public Page<ExamDetailsDto> searchDetailsByStudentUnPage(Student student, Pageable pageable,Boolean type,Integer finishFlag) {
+        //获取当前学生考试历史信息 的考试信息
+        List<Long> examIds=examIdsByExamHistory(student);
+        //获取当前学生的逻辑班级
+        List<Long> logicClassesIds=logicClassesIdsByStudentAndType(student,type);
+        Page<Exam> examPage;
+        switch (finishFlag){
+            //完成
+            case 1:
+                examPage=examRepository.findAllByLogicClassesAndInExamIds(examIds, logicClassesIds, pageable);
+                break;
+            //未完成
+            case 2:
+                examPage = examRepository.findAllByLogicClassesAndNotInExamIds(examIds, logicClassesIds, pageable);
+                break;
+            //默认全都要
+            default:
+                //全都要!
+            case 0:
+                examPage=examRepository.findAllByLogicClasses(logicClassesIds,pageable);
+                break;
+
+        }
+
+        List<ExamDetailsDto> examDetailsDtos = new ArrayList<>();
+        for (Exam exam : examPage.getContent()) {
+            examDetailsDtos.add(buildExamDetailsDto(exam,student));
+        }
+        return new PageImpl<>(examDetailsDtos, pageable, examDetailsDtos.size());
+    }
+
+
 //    @Override
 //    public Page<Exam> searchExamFromPublish(String courseIds, String logicClassIds, Pageable pageable) {
     // 传递参数为空的情况，全部
@@ -322,18 +407,7 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
         Exam exam = examRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Exam can not be found!")
         );
-        // 2. 通过考试id查询组卷规则得出所有题目信息
-        List<ExamRule> examRules = examRuleRepository.findAllByExamId(exam.getId());
-        // 通过每题分值字段计算所有总分,得出当前考试总分数
-        double allScore = examRules.stream()
-                .mapToDouble(rule -> rule.getQuestionCount() * rule.getEachValue())
-                .sum();
-        // 题目数量
-        int count = examRules.stream().mapToInt(ExamRule::getQuestionCount).sum();
-        // 3. 再通过考试 id 和学生 id 查询考试历史记录，得出是否已经参加考试
-        ExamHistory examHistory = examHistoryRepository.findFirstByExamIdAndStudentId(id, student.getId()).orElse(null);
-        return ExamDetailsDto.builder().exam(exam).allScore(allScore)
-                .count(count).examHistory(examHistory).build();
+        return buildExamDetailsDto(exam,student);
     }
 
     /**
@@ -345,7 +419,7 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
      * 5.条件可能为学期id（可能没有）
      * <p>
      * 未完成
-     *
+     * <p>
      * TODO: 条件可能为学期id
      *
      * @author YMS

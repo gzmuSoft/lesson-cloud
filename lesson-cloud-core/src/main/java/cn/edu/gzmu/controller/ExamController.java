@@ -112,6 +112,54 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
         return ResponseEntity.ok(examService.searchDetailsById(student, id));
     }
 
+    /**
+     * 获取学生的 未完成 的考试信息，需分页
+     */
+    @GetMapping("/datails/student/unfinish")
+    @Secured("ROLE_STUDENT")
+    public HttpEntity<?> examDetailsByUnfinish(
+            @RequestParam(required = false) Boolean type,
+            @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        // 获取当前登录用户
+        Student student = OauthHelper.student();
+        //finishFlag 未完成
+        return ResponseEntity.ok(
+                examService.searchDetailsByStudentUnPage(student, pageable,type,2)
+        );
+    }
+
+    /**
+     * 获取学生的 完成 的考试信息，需分页
+     */
+    @GetMapping("/datails/student/finish")
+    @Secured("ROLE_STUDENT")
+    public HttpEntity<?> examDetailsByfinish(
+            @RequestParam(required = false) Boolean type,
+            @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        // 获取当前登录用户
+        Student student = OauthHelper.student();
+        //finishFlag 完成
+        return ResponseEntity.ok(
+                examService.searchDetailsByStudentUnPage(student, pageable,type,1)
+        );
+    }
+
+    /**
+     * 获取学生的 所有的考试信息，需分页
+     */
+    @GetMapping("/datails/student")
+    @Secured("ROLE_STUDENT")
+    public HttpEntity<?> examDetailsByAll(
+            @RequestParam(required = false) Boolean type,
+            @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        // 获取当前登录用户
+        Student student = OauthHelper.student();
+        //finishFlag 全都要!
+        return ResponseEntity.ok(
+                examService.searchDetailsByStudentUnPage(student, pageable,type,0)
+        );
+    }
+
 //    /**
 //     * 获取到当前教师已发布的考试信息
 //     * 1. 会接收零个或多个逻辑班级id，注意：如果传递了逻辑班级 id ，还需要通过一个或者多个逻辑班级 id 来查询
