@@ -129,7 +129,7 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
                 .map(LogicClass::getId)
                 .collect(Collectors.toList());
         //根据当前学生所在的逻辑班级查询当前学生的全部考试信息
-        Page<Exam> exam = examRepository.findAllByLogicClassIds(logicClassesIds, pageable);
+        Page<Exam> exam = examRepository.findAllByLogicClassesIn(logicClassesIds, pageable);
         List<Exam> content = exam.getContent();
         for (Exam element : content) {
             completeEntity(element);

@@ -4,7 +4,6 @@ import cn.edu.gzmu.auth.helper.OauthHelper;
 import cn.edu.gzmu.model.constant.LessonResource;
 import cn.edu.gzmu.model.entity.Exam;
 import cn.edu.gzmu.model.entity.Student;
-import cn.edu.gzmu.model.entity.Teacher;
 import cn.edu.gzmu.service.ExamService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

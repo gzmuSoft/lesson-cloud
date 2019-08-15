@@ -62,9 +62,9 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
      * @param pageable 分页
      * @return 考试信息
      */
-    @RestResource(path = "exam", rel = "exam", description = @Description("通过学生所在逻辑班级查询所有资源"))
-    @Query(value = "SELECT * FROM exam WHERE logic_class_ids in :ids", nativeQuery = true)
-    Page<Exam> findAllByLogicClassIds(List<Long> ids, Pageable pageable);
+    Page<Exam> findAllByLogicClassesIn(List<Long> ids, Pageable pageable);
+//    @RestResource(path = "exam", rel = "exam", description = @Description("通过学生所在逻辑班级查询所有资源"))
+//    @Query(value = "SELECT * FROM exam WHERE logic_class_ids in :ids and is_enable = 1", nativeQuery = true)
 
 //    /**
 //     * 查询所有已发布课程考试
