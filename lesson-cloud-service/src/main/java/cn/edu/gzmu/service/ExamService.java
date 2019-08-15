@@ -88,8 +88,8 @@ public interface ExamService extends BaseService<Exam, Long> {
     /**
      * 获取所有考试的详细统计信息
      *
-     * @param pageable      分页
-     * @param semesterId    学期 id
+     * @param pageable   分页
+     * @param semesterId 学期 id
      * @return 考试详情
      */
     Page<ExamDetailsDto> searchDetailsAll(String semesterId, Pageable pageable);
@@ -110,12 +110,12 @@ public interface ExamService extends BaseService<Exam, Long> {
     /**
      * 获取到当前学生考试信息
      *
-     * @param student       当前登陆的学生
-     * @param pageable      pageable
-     * @param type  是否重修班
+     * @param student    当前登陆的学生
+     * @param pageable   pageable
+     * @param type       是否重修班
      * @param finishFlag 根据flag获取 完成:1 未完成:2 我全都要！:0 的数据
      * @return page
      */
-    Page<ExamDetailsDto> searchDetailsByStudentUnPage(Student student, Pageable pageable,Boolean type,Integer finishFlag);
+    Page<ExamDetailsDto> searchDetailsByStudentUnPage(Student student, Pageable pageable, Boolean type, Integer finishFlag);
 
 }

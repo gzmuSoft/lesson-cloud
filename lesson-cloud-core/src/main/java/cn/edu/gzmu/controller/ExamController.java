@@ -115,39 +115,39 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
     /**
      * 获取学生的 未完成 的考试信息，需分页
      */
-    @GetMapping("/datails/student/unfinish")
+    @GetMapping("/details/student/unfinished")
     @Secured("ROLE_STUDENT")
-    public HttpEntity<?> examDetailsByUnfinish(
+    public HttpEntity<?> examDetailsByUnFinished(
             @RequestParam(required = false) Boolean type,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
         // 获取当前登录用户
         Student student = OauthHelper.student();
         //finishFlag 未完成
         return ResponseEntity.ok(
-                examService.searchDetailsByStudentUnPage(student, pageable,type,2)
+                examService.searchDetailsByStudentUnPage(student, pageable, type, 2)
         );
     }
 
     /**
      * 获取学生的 完成 的考试信息，需分页
      */
-    @GetMapping("/datails/student/finish")
+    @GetMapping("/details/student/finished")
     @Secured("ROLE_STUDENT")
-    public HttpEntity<?> examDetailsByfinish(
+    public HttpEntity<?> examDetailsByFinished(
             @RequestParam(required = false) Boolean type,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
         // 获取当前登录用户
         Student student = OauthHelper.student();
         //finishFlag 完成
         return ResponseEntity.ok(
-                examService.searchDetailsByStudentUnPage(student, pageable,type,1)
+                examService.searchDetailsByStudentUnPage(student, pageable, type, 1)
         );
     }
 
     /**
      * 获取学生的 所有的考试信息，需分页
      */
-    @GetMapping("/datails/student")
+    @GetMapping("/details/student")
     @Secured("ROLE_STUDENT")
     public HttpEntity<?> examDetailsByAll(
             @RequestParam(required = false) Boolean type,
@@ -156,7 +156,7 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
         Student student = OauthHelper.student();
         //finishFlag 全都要!
         return ResponseEntity.ok(
-                examService.searchDetailsByStudentUnPage(student, pageable,type,0)
+                examService.searchDetailsByStudentUnPage(student, pageable, type, 0)
         );
     }
 

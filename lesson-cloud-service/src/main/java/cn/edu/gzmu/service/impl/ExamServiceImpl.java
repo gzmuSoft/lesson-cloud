@@ -54,12 +54,11 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
     private final @NonNull LogicClassRepository logicClassRepository;
 
     /**
-     *
-     * @param exam 考试信息
+     * @param exam    考试信息
      * @param student 当前学生
      * @return 根据数据生成Dto返回
      */
-    private ExamDetailsDto buildExamDetailsDto(Exam exam,Student student){
+    private ExamDetailsDto buildExamDetailsDto(Exam exam, Student student) {
         // 1. 通过考试id查询组卷规则得出所有题目信息
         List<ExamRule> examRules = examRuleRepository.findAllByExamId(exam.getId());
         // 通过每题分值字段计算所有总分,得出当前考试总分数
@@ -76,29 +75,28 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
 
 
     /**
-     *
      * @param student 当前学生
      * @return 当前学生所有考试的考试信息id List
      */
-    private List<Long> examIdsByExamHistory(Student student){
+    private List<Long> examIdsByExamHistory(Student student) {
         Page<ExamHistory> examHistories = examHistoryRepository.findAllByStudentId(student.getId(), Pageable.unpaged());
         return examHistories.stream()
                 .map(ExamHistory::getExamId)
                 .collect(Collectors.toList());
     }
+
     /**
-     *
      * @param student 当前学生
-     * @param type 是否是重修班级
+     * @param type    是否是重修班级
      * @return 根据type 返回当前学生的逻辑班级id List
      */
-    private List<Long> logicClassesIdsByStudentAndType(Student student,Boolean type){
+    private List<Long> logicClassesIdsByStudentAndType(Student student, Boolean type) {
         Set<LogicClass> logicClassesByClassesId = logicClassRepository.findDistinctByClassesId(student.getClassesId());
         Set<LogicClass> logicClassesByStudentId = logicClassRepository.findDistinctByStudentId(student.getId());
         Sets.SetView<LogicClass> logicClasses = Sets.union(logicClassesByClassesId, logicClassesByStudentId);
         return logicClasses.stream()
                 //如果type为空 代表全查 使用x.geType比较 全等
-                .filter(x-> x.getType().equals(type==null?x.getType():type))
+                .filter(x -> x.getType().equals(type == null ? x.getType() : type))
                 .map(LogicClass::getId)
                 .collect(Collectors.toList());
     }
@@ -281,36 +279,30 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
     }
 
 
-
     @Override
-    public Page<ExamDetailsDto> searchDetailsByStudentUnPage(Student student, Pageable pageable,Boolean type,Integer finishFlag) {
+    public Page<ExamDetailsDto> searchDetailsByStudentUnPage(Student student, Pageable pageable, Boolean type, Integer finishFlag) {
         //获取当前学生考试历史信息 的考试信息
-        List<Long> examIds=examIdsByExamHistory(student);
+        List<Long> examIds = examIdsByExamHistory(student);
         //获取当前学生的逻辑班级
-        List<Long> logicClassesIds=logicClassesIdsByStudentAndType(student,type);
+        List<Long> logicClassesIds = logicClassesIdsByStudentAndType(student, type);
         Page<Exam> examPage;
-        switch (finishFlag){
+        switch (finishFlag) {
             //完成
             case 1:
-                examPage=examRepository.findAllByLogicClassesAndInExamIds(examIds, logicClassesIds, pageable);
+                examPage = examRepository.findAllByLogicClassesAndInExamIds(examIds, logicClassesIds, pageable);
                 break;
             //未完成
             case 2:
                 examPage = examRepository.findAllByLogicClassesAndNotInExamIds(examIds, logicClassesIds, pageable);
                 break;
-            //默认全都要
-            default:
-                //全都要!
+            //全都要!
             case 0:
-                examPage=examRepository.findAllByLogicClasses(logicClassesIds,pageable);
+            default:
+                examPage = examRepository.findAllByLogicClasses(logicClassesIds, pageable);
                 break;
-
         }
-
         List<ExamDetailsDto> examDetailsDtos = new ArrayList<>();
-        for (Exam exam : examPage.getContent()) {
-            examDetailsDtos.add(buildExamDetailsDto(exam,student));
-        }
+        examPage.getContent().forEach(exam -> examDetailsDtos.add(buildExamDetailsDto(exam, student)));
         return new PageImpl<>(examDetailsDtos, pageable, examDetailsDtos.size());
     }
 
@@ -407,7 +399,7 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
         Exam exam = examRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Exam can not be found!")
         );
-        return buildExamDetailsDto(exam,student);
+        return buildExamDetailsDto(exam, student);
     }
 
     /**
