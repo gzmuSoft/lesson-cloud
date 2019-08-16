@@ -35,9 +35,9 @@ public class ExamDetailsDto implements Serializable {
      */
     private Integer count;
     /**
-     * 应参加考试的人数
+     * 应参加考试的学生人数
      */
-    private Integer peopleNum;
+    private Integer studentNum;
     /**
      * 逻辑班级
      */

@@ -409,9 +409,6 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
      * 3.应参加考试的人数（通过当前考试关联的逻辑班级的所有班级人数以及重修人数相加）
      * 4.考试所有信息
      * 5.条件可能为学期id（可能没有）
-     * <p>
-     * 未完成
-     * <p>
      * TODO: 条件可能为学期id
      *
      * @author YMS
@@ -420,19 +417,8 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
     public Page<ExamDetailsDto> searchDetailsAll(String semesterId, Pageable pageable) {
         //1.获取所有的考试
         Page<Exam> exams = examRepository.findAll(pageable);
-//        exams.getContent().stream().map(BaseEntity::getId)
-//                .map(examRuleRepository::findAllByExamId)
-//                .map(examRules -> {
-//                    int count = examRules.stream().mapToInt(ExamRule::getQuestionCount).sum();
-//
-//                    ExamDetailsDto.builder().count(count)
-//                });
         List<ExamDetailsDto> examDetailsDto = new ArrayList<>();
         for (Exam exam : exams) {
-
-//            //2.根据考试id获取考试规则
-//            List<ExamRule> examRules = new ArrayList<>();
-//            //3.考试题目数量
             int count = examRuleRepository.findAllByExamId(exam.getId()).stream()
                     .mapToInt(ExamRule::getQuestionCount).sum();
             Set<LogicClass> logicClasses = logicClassRepository.findDistinctByIdIn(
@@ -446,27 +432,9 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
             // TODO: 重修班级的人数  ————  等待授权服务器补充相应方法
             // logicClasses.stream().filter(logicClass -> !logicClass.getType())
             examDetailsDto.add(ExamDetailsDto.builder()
-                    .count(count).logicClasses(logicClassNames).exam(exam).peopleNum((int) studentNum)
+                    .count(count).logicClasses(logicClassNames).exam(exam).studentNum((int) studentNum)
                     .build());
-//            int count = examRules.stream().mapToInt(ExamRule::getQuestionCount).sum();
-//            //4.所有参加的逻辑班级的名称
-//            ArrayList<LogicClass> logicClasses = new ArrayList<>();
-//            for (String s : exam.getLogicClassIds().split(",")) {
-//                Page<LogicClass> allById = logicClassRepository.findAllById(Long.valueOf(s), pageable);
-//                logicClasses.addAll(allById.getContent());
-//            }
-//            String classNames = "";
-//            int peopleNum = 0;
-//            for (LogicClass logicClass : logicClasses) {
-//                classNames += logicClass.getName();
-//                //5.应参加人数
-////                peopleNum += logicClass.
-//            }
-//
-//            examDetailsDtos.add(ExamDetailsDto.builder().exam(exam).count(count)
-//                    .logicClasses(classNames).build());
         }
-        //不会写，等理解了再重写，先交了再说 QAQ
         return new PageImpl<>(examDetailsDto, pageable, examDetailsDto.size());
     }
 
