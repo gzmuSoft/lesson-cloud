@@ -14,7 +14,7 @@ import java.util.List;
  * @version 1.0
  * @date 2019-5-23 17:38:13
  */
-@RepositoryRestResource(path = "/examRule")
+@RepositoryRestResource(path = "examRule")
 public interface ExamRuleRepository extends BaseRepository<ExamRule, Long> {
 
     /**

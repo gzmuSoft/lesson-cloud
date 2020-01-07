@@ -4,14 +4,10 @@ import cn.edu.gzmu.model.BaseEntity;
 import cn.edu.gzmu.service.BaseService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.PagedResources;
-import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,24 +39,7 @@ public abstract class BaseController<E extends BaseEntity, S extends BaseService
     @Autowired
     private PagedResourcesAssembler<E> myPagedResourcesAssembler;
 
-    /**
-     * 获取分页元数据
-     *
-     * @param page 分页对象
-     * @return 分页元数据
-     * @deprecated 请使用 pagedResources 方法替代以进行获取分页资源
-     */
-    @Deprecated
-    PagedResources.PageMetadata toPageMetadata(Page page) {
-        return new PagedResources.PageMetadata(page.getSize(),
-                page.getNumber(),
-                page.getTotalElements(),
-                page.getTotalPages());
-    }
 
-    private PagedResources<Resource<E>> pagedResources(Page<E> page) {
-        return myPagedResourcesAssembler.toResource(page);
-    }
 
     /**
      * 获取完整的分页资源
@@ -70,7 +49,7 @@ public abstract class BaseController<E extends BaseEntity, S extends BaseService
      */
     @GetMapping(COMPLETE)
     public HttpEntity<?> resources(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(pagedResources(baseService.searchAll(pageable)));
+        return ResponseEntity.ok(baseService.searchAll(pageable));
     }
 
     /**
@@ -81,11 +60,7 @@ public abstract class BaseController<E extends BaseEntity, S extends BaseService
      */
     @GetMapping(COMPLETE_ONE)
     public HttpEntity<?> resource(@PathVariable ID id) {
-        E entity = baseService.searchById(id);
-        Resource<E> resource = new Resource<>(entity);
-        Link link = repositoryEntityLinks.linkFor(getRepository()).slash("/search/" + COMPLETE + "/" + entity.getId()).withSelfRel();
-        resource.add(link);
-        return ResponseEntity.ok(resource);
+        return ResponseEntity.ok(baseService.searchById(id));
     }
 
     private Class getRepository() {

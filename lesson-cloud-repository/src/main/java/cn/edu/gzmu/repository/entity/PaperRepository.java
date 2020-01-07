@@ -14,14 +14,14 @@ import java.util.List;
  * @version 1.0
  * @date 2019-5-23 17:38:13
  */
-@RepositoryRestResource(path = "/paper")
+@RepositoryRestResource(path = "paper")
 public interface PaperRepository extends BaseRepository<Paper, Long> {
 
     /**
      * 根据考试 id 获取所有试卷信息
      *
-     * @param examId
-     * @return 所有id为examid的试卷
+     * @param examId examId
+     * @return 所有id为 examId 的试卷
      */
     List<Paper> findAllByExamId(Long examId);
 

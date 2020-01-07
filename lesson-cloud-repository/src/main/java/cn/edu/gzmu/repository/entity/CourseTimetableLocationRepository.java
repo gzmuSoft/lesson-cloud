@@ -21,7 +21,7 @@ import java.util.Set;
  *  @author hzl
  *  @date 2019-8-13 15:31</p>
  */
-@RepositoryRestResource(path = "/courseTimetableLocation")
+@RepositoryRestResource(path = "courseTimetableLocation")
 public interface CourseTimetableLocationRepository extends BaseRepository<CourseTimetableLocation, Long> {
 
 

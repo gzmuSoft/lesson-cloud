@@ -16,7 +16,7 @@ import java.util.Optional;
  * @version 1.0
  * @date 2019-5-23 17:38:13
  */
-@RepositoryRestResource(path = "/examHistory")
+@RepositoryRestResource(path = "examHistory")
 public interface ExamHistoryRepository extends BaseRepository<ExamHistory, Long> {
 
     /**

@@ -12,7 +12,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @version 1.0
  * @date 2019-5-23 17:38:13
  */
-@RepositoryRestResource(path = "/multiSel")
+@RepositoryRestResource(path = "multiSel")
 public interface MultiSelRepository extends BaseRepository<MultiSel, Long> {
 
 }

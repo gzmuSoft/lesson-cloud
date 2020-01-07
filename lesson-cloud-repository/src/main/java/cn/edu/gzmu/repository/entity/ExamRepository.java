@@ -11,7 +11,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import java.util.List;
-import java.util.Optional;
 
 
 /**
@@ -36,7 +35,7 @@ import java.util.Optional;
  * 获取到当前教师未发布的考试信息
  * </p>
  */
-@RepositoryRestResource(path = "/exam")
+@RepositoryRestResource(path = "exam")
 public interface ExamRepository extends BaseRepository<Exam, Long> {
 
     /**

@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author ypx
  */
-@RepositoryRestResource(path = "/knowledge")
+@RepositoryRestResource(path = "knowledge")
 public interface KnowledgeRepository extends BaseRepository<Knowledge, Long> {
     /**
      * 根据课程id和章节id查询所有

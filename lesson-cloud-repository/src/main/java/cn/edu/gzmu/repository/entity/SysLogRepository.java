@@ -12,7 +12,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @version 1.0
  * @date 2019-5-23 17:38:13
  */
-@RepositoryRestResource(path = "/sysLog")
+@RepositoryRestResource(path = "sysLog")
 public interface SysLogRepository extends BaseRepository<SysLog, Long> {
 
 

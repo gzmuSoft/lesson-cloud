@@ -9,7 +9,6 @@ import cn.edu.gzmu.service.helper.UserContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 
 import java.util.List;
 import java.util.Objects;
@@ -135,16 +134,17 @@ public class OauthHelper {
      */
     @Nullable
     private static UserContext userContext() {
-        Object current = SecurityContextHolder.getContext().getAuthentication().getDetails();
-        if (isAnonymousUser() || !(current instanceof OAuth2AuthenticationDetails)) {
-            return null;
-        }
-        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) current;
-        UserContext userContext = (UserContext) details.getDecodedDetails();
-        if (Objects.isNull(userContext)) {
-            throw new UserNotFoundException("Can not find the user context of the user.");
-        }
-        return userContext;
+//        Object current = SecurityContextHolder.getContext().getAuthentication().getDetails();
+//        if (isAnonymousUser() || !(current instanceof OAuth2AuthenticationDetails)) {
+//            return null;
+//        }
+//        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) current;
+//        UserContext userContext = (UserContext) details.getDecodedDetails();
+//        if (Objects.isNull(userContext)) {
+//            throw new UserNotFoundException("Can not find the user context of the user.");
+//        }
+//        return userContext;
+        return null;
     }
 
     /**

@@ -15,7 +15,7 @@ import java.util.Set;
  * @version 1.0
  * @date 2019-5-23 17:38:13
  */
-@RepositoryRestResource(path = "/logicClass")
+@RepositoryRestResource(path = "logicClass")
 public interface LogicClassRepository extends BaseRepository<LogicClass, Long> {
 
     /**

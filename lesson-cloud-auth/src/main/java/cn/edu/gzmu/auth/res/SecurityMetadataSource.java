@@ -1,52 +1,29 @@
 package cn.edu.gzmu.auth.res;
 
-import cn.edu.gzmu.auth.helper.BearerAuthenticationInterceptor;
-import cn.edu.gzmu.auth.helper.OauthHelper;
-import cn.edu.gzmu.service.helper.RestHelper;
 import cn.edu.gzmu.service.helper.UserContext;
 import cn.edu.gzmu.constant.HttpMethod;
-import cn.edu.gzmu.model.constant.EntityType;
 import cn.edu.gzmu.model.entity.*;
 import cn.edu.gzmu.properties.Oauth2Properties;
 import cn.edu.gzmu.repository.entity.SysResRepository;
 import cn.edu.gzmu.repository.entity.SysRoleResRepository;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.jwt.Jwt;
-import org.springframework.security.jwt.JwtHelper;
-import org.springframework.security.jwt.crypto.sign.RsaVerifier;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
-import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
-
-import static org.springframework.security.oauth2.provider.token.AccessTokenConverter.*;
 
 /**
  * 动态权限配置核心，将会对请求进行进行匹配
@@ -64,8 +41,6 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
     private final @NonNull SysResRepository sysResRepository;
     private final @NonNull SysRoleResRepository sysRoleResRepository;
     private final @NonNull Oauth2Properties oauth2Properties;
-    private final @NonNull JwtAccessTokenConverter jwtAccessTokenConverter;
-    private final @NonNull ResourceServerTokenServices resourceServerTokenServices;
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Override
@@ -139,40 +114,7 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
      * 通过 {@link UserContext#getSysUser()} 获取当前用户
      */
     private void decodeUserDetails() {
-        Object current = SecurityContextHolder.getContext().getAuthentication().getDetails();
-        if (OauthHelper.isAnonymousUser() || !(current instanceof OAuth2AuthenticationDetails)) {
-            return;
-        }
-        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) current;
-        String tokenValue = details.getTokenValue();
-        if (StringUtils.isBlank(tokenValue)) {
-            return;
-        }
-        OAuth2AccessToken token = resourceServerTokenServices.readAccessToken(tokenValue);
-        if (Objects.isNull(token)) {
-            throw new InvalidTokenException("Token was not recognised");
-        }
-        if (token.isExpired()) {
-            throw new InvalidTokenException("Token has expired");
-        }
-        // 已经标记过时的类
-        // 需要启用请注入 JwtAccessTokenConverter 进行解密和认证
-        // Jwt decode = JwtHelper.decodeAndVerify(tokenValue,
-        //         new RsaVerifier(ResourceServerConfig.JwtKey.publicKey));
-        Jwt decode = JwtHelper.decodeAndVerify(tokenValue,
-                new RsaVerifier(jwtAccessTokenConverter.getKey().get("value")));
-        JSONObject oauth = JSONObject.parseObject(decode.getClaims());
-        if (oauth.containsKey(EXP) && oauth.get(AccessTokenConverter.EXP) instanceof Integer) {
-            Integer intValue = (Integer) oauth.get(EXP);
-            oauth.put(EXP, new Long(intValue));
-        }
-        RestHelper.restTemplate = new RestTemplate();
-        List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
-        interceptors.add(new BearerAuthenticationInterceptor(tokenValue));
-        RestHelper.restTemplate.setInterceptors(interceptors);
-        RestHelper.restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(oauth2Properties.getAuthorizationServerUrl()));
-        RestHelper.accessToken = tokenValue;
-        details.setDecodedDetails(userDetails(oauth));
+
     }
 
     /**
@@ -183,29 +125,6 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
      */
     private UserContext userDetails(@NotNull JSONObject jwtInfo) {
         UserContext userContext = new UserContext();
-        SysUser user = jwtInfo.getObject("user_info", SysUser.class);
-        Assert.notNull(user, "The user info no found！");
-        userContext.setSysUser(user);
-        JSONArray roles = jwtInfo.getJSONArray("role_info");
-        List<SysRole> sysRoles = roles.toJavaList(SysRole.class);
-        userContext.setSysRoles(sysRoles);
-        String entityInfo = jwtInfo.getString("entity_info");
-        sysRoles.forEach(role -> {
-            if (EntityType.isAdmin(role.getName())) {
-                userContext.setAdmin(true);
-            }
-            if (StringUtils.isBlank(entityInfo)) {
-                return;
-            }
-            if (EntityType.isTeacher(role.getName())) {
-                Teacher teacher = JSONObject.parseObject(entityInfo, Teacher.class);
-                userContext.entity(teacher);
-            }
-            if (EntityType.isStudent(role.getName())) {
-                Student student = JSONObject.parseObject(entityInfo, Student.class);
-                userContext.entity(student);
-            }
-        });
         return userContext;
     }
 

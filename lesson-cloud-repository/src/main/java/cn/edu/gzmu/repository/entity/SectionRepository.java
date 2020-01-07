@@ -15,7 +15,7 @@ import java.util.List;
  * @version 1.0
  * @date 2019-5-23 17:38:13
  */
-@RepositoryRestResource(path = "/section")
+@RepositoryRestResource(path = "section")
 public interface SectionRepository extends BaseRepository<Section, Long> {
     /**
      * 根据 exam id 查询所有

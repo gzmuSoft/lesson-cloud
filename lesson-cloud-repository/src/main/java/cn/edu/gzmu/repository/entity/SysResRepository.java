@@ -17,7 +17,7 @@ import java.util.List;
  * @version 1.0
  * @date 2019-5-7 11:05:31
  */
-@RepositoryRestResource(path = "/sysRes")
+@RepositoryRestResource(path = "sysRes")
 public interface SysResRepository extends BaseRepository<SysRes, Long> {
 
     /**
