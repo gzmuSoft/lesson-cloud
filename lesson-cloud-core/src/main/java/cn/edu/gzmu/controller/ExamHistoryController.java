@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ExamHistoryController extends BaseController<ExamHistory, ExamHistoryService, Long> {
 
     private final @NonNull ExamHistoryService examHistoryService;
+    private final @NonNull OauthHelper oauthHelper;
 
     /**
      * 获取当前登录学生的考试历史信息
@@ -41,7 +42,7 @@ public class ExamHistoryController extends BaseController<ExamHistory, ExamHisto
     @Secured("ROLE_STUDENT")
     public HttpEntity<?> fromStudent(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
         // 获取当前登录用户
-        Student student = OauthHelper.student();
+        Student student = oauthHelper.student();
         // 请求响应构建
         return ResponseEntity.ok(
                 examHistoryService.searchByStudentPage(student, pageable)

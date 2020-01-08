@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CourseController extends BaseController<Course, CourseService, Long> {
 
     private @NonNull CourseService courseService;
+    private final @NonNull OauthHelper oauthHelper;
 
     /**
      * 获取当前登录学生的所有课程信息
@@ -41,7 +42,7 @@ public class CourseController extends BaseController<Course, CourseService, Long
     @Secured("ROLE_STUDENT")
     public HttpEntity<?> coursesFromStudent() {
         // 当前登录的学生
-        Student student = OauthHelper.student();
+        Student student = oauthHelper.student();
         return ResponseEntity.ok(courseService.searchByStudent(student));
     }
 
@@ -55,7 +56,7 @@ public class CourseController extends BaseController<Course, CourseService, Long
     @GetMapping(LessonResource.STUDENT + "/page")
     @Secured("ROLE_STUDENT")
     public HttpEntity<?> coursesPageFromStuDent(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        Student student = OauthHelper.student();
+        Student student = oauthHelper.student();
         return ResponseEntity.ok(courseService.searchByStudent(student, pageable));
     }
 
@@ -69,7 +70,7 @@ public class CourseController extends BaseController<Course, CourseService, Long
     @Secured("ROLE_TEACHER")
     public HttpEntity<?> coursesFromTeacher() {
         // 当前登录的教师
-        Teacher teacher = OauthHelper.teacher();
+        Teacher teacher = oauthHelper.teacher();
         return ResponseEntity.ok(courseService.searchByTeacher(teacher));
     }
 
@@ -83,7 +84,7 @@ public class CourseController extends BaseController<Course, CourseService, Long
     @Secured("ROLE_TEACHER")
     public HttpEntity<?> coursesPageFromTeacher(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
         // 当前登录的教师
-        Teacher teacher = OauthHelper.teacher();
+        Teacher teacher = oauthHelper.teacher();
         return ResponseEntity.ok(courseService.searchByTeacher(teacher, pageable));
     }
 

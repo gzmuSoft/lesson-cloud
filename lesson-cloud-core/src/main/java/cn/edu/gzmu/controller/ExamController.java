@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ExamController extends BaseController<Exam, ExamService, Long> {
 
     private final @NonNull ExamService examService;
+    private final @NonNull OauthHelper oauthHelper;
 
     /**
      * 根据班级列表和课程信息获取所有分页过后的考试信息
@@ -62,7 +63,7 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
     @Secured("ROLE_STUDENT")
     public HttpEntity<?> fromStudent(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
         // 获取当前登录用户
-        Student student = OauthHelper.student();
+        Student student = oauthHelper.student();
         return ResponseEntity.ok(
                 examService.searchByStudentPage(student, pageable)
         );
@@ -108,7 +109,7 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
     @GetMapping("/details/student/id/{id}")
     @Secured("ROLE_STUDENT")
     public HttpEntity<?> examDetailsById(@PathVariable Long id) {
-        Student student = OauthHelper.student();
+        Student student = oauthHelper.student();
         return ResponseEntity.ok(examService.searchDetailsById(student, id));
     }
 
@@ -121,7 +122,7 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
             @RequestParam(required = false) Boolean type,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
         // 获取当前登录用户
-        Student student = OauthHelper.student();
+        Student student = oauthHelper.student();
         //finishFlag 未完成
         return ResponseEntity.ok(
                 examService.searchDetailsByStudentUnPage(student, pageable, type, 2)
@@ -137,7 +138,7 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
             @RequestParam(required = false) Boolean type,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
         // 获取当前登录用户
-        Student student = OauthHelper.student();
+        Student student = oauthHelper.student();
         //finishFlag 完成
         return ResponseEntity.ok(
                 examService.searchDetailsByStudentUnPage(student, pageable, type, 1)
@@ -153,7 +154,7 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
             @RequestParam(required = false) Boolean type,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
         // 获取当前登录用户
-        Student student = OauthHelper.student();
+        Student student = oauthHelper.student();
         //finishFlag 全都要!
         return ResponseEntity.ok(
                 examService.searchDetailsByStudentUnPage(student, pageable, type, 0)
@@ -204,7 +205,7 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
      */
     private HttpEntity<?> searchByPublishStatus(String logicClassIds, String courseId, Pageable pageable, boolean publish) {
         return ResponseEntity.ok(examService.searchExamFromPublishStatus(
-                OauthHelper.teacher(), logicClassIds, courseId, pageable, publish));
+                oauthHelper.teacher(), logicClassIds, courseId, pageable, publish));
     }
 
 }

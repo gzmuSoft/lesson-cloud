@@ -6,10 +6,8 @@ import cn.edu.gzmu.model.entity.*;
 import cn.edu.gzmu.properties.Oauth2Properties;
 import cn.edu.gzmu.repository.entity.SysResRepository;
 import cn.edu.gzmu.repository.entity.SysRoleResRepository;
-import com.alibaba.fastjson.JSONObject;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -46,7 +44,6 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
         HttpServletRequest httpRequest = ((FilterInvocation) object).getHttpRequest();
-        decodeUserDetails();
         String method = httpRequest.getMethod();
         String requestUrl = httpRequest.getServletPath();
         if (isRoleAdmin() || !oauth2Properties.isEnabled()) {
@@ -104,28 +101,6 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
     private boolean isRoleAdmin() {
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities()
                 .contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
-    }
-
-    /**
-     * 解密用户信息，直接解析 jwt token
-     * 把解析后的信息存入 {@link SecurityContextHolder#getContext()} 中
-     * 通过 <code>SecurityContextHolder.getContext().getAuthentication().getDetails()</code>
-     * 获取当前 {@link UserContext} 实例，需要强转
-     * 通过 {@link UserContext#getSysUser()} 获取当前用户
-     */
-    private void decodeUserDetails() {
-
-    }
-
-    /**
-     * 创建用户上下文对象
-     *
-     * @param jwtInfo jwt 解密信息
-     * @return 用户上下文对象
-     */
-    private UserContext userDetails(@NotNull JSONObject jwtInfo) {
-        UserContext userContext = new UserContext();
-        return userContext;
     }
 
 }

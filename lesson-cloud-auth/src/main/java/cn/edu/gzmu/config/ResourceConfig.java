@@ -1,7 +1,7 @@
 package cn.edu.gzmu.config;
 
 import cn.edu.gzmu.properties.Oauth2Properties;
-import lombok.NonNull;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,16 +13,17 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
+ * .
+ *
  * @author <a href="https://echocow.cn">EchoCow</a>
- * @date 2019/8/1 下午11:16
+ * @date 2020/1/8 下午1:59
  */
 @Configuration
 @RequiredArgsConstructor
-public class ClientConfig {
+public class ResourceConfig {
 
-    private final @NonNull Oauth2Properties oauth2Properties;
+    private final Oauth2Properties oauth2Properties;
 
     /**
      * 客户端请求
@@ -43,5 +44,4 @@ public class ClientConfig {
                 oauth2Properties.getAuthorizationServerUrl()));
         return restTemplate;
     }
-
 }

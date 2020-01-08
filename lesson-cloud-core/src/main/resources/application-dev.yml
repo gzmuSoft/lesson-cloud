@@ -1,11 +1,13 @@
 server:
   port: 8080
 spring:
+  application:
+    name: lesson-cloud
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://127.0.0.1:3306/lesson-cloud?useUnicode=true&characterEncoding=UTF-8&useOldAliasMetadataBehavior=true&autoReconnect=true&serverTimezone=UTC
-    username: root
-    password: 123456
+    url: jdbc:mysql://118.24.1.170:3306/lesson-cloud?useUnicode=true&characterEncoding=UTF-8&useOldAliasMetadataBehavior=true&autoReconnect=true&serverTimezone=UTC
+    username: lesson
+    password: Lc.123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       filters: stat,wall
@@ -90,14 +92,15 @@ application:
     action-template: RhXa
   oauth2:
     enabled: false
-    authorization-server-url: http://127.0.0.1:8888
+    authorization-server-url: http://118.24.1.170:8888
     token-info-uri: /oauth/check_token
     access-token-uri: /oauth/token
+    user-info-uri: /auth/me
+    jwk-set-uri: /.well-known/jwks.json
     client-id: lesson-cloud
     client-secret: lesson-cloud-secret
     grant-type: password,refresh_token,sms,email,authorization_code
     scope: READ
-    jwk-set-uri: /.well-known/jwks.json
 
 logging:
   level:

@@ -42,26 +42,23 @@ public class RestHelper {
             return null;
         }
         String url = repository.apply(id);
-        log.debug("Request for auth server:" + url + " and the return: " + sClass.getName());
+        log.debug("Request for auth server: {} and the return: {}", url, sClass.getName());
         ResponseEntity<S> response = restTemplate.getForEntity(url, sClass);
-        log.debug("Response from auth server:" + response.getStatusCodeValue());
-        log.debug("Response from auth server:" + response.getHeaders());
+        log.debug("Response from auth server:{} headers: {}", response.getStatusCodeValue(), response.getHeaders());
         if (!response.getStatusCode().is2xxSuccessful()) {
             return null;
         }
         return response.getBody();
     }
 
-    @SuppressWarnings("all")
     public static <S extends BaseEntity> List<S> getByIdsForEntity(String ids, Supplier<String> repository, Class<S> sClass) {
         if (Objects.isNull(ids)) {
             return null;
         }
         String url = repository.get() + "?ids=" + ids;
-        log.debug("Request for auth server:" + url + " and the return: " + sClass.getName());
+        log.debug("Request for auth server: {} and the return: {}", url, sClass.getName());
         ResponseEntity<List> response = restTemplate.getForEntity(url, List.class);
-        log.debug("Response from auth server:" + response.getStatusCodeValue());
-        log.debug("Response from auth server:" + response.getHeaders());
+        log.debug("Response from auth server:{} headers: {}", response.getStatusCodeValue(), response.getHeaders());
         if (!response.getStatusCode().is2xxSuccessful()) {
             return null;
         }

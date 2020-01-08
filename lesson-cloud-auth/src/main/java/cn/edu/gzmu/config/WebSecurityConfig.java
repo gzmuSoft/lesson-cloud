@@ -5,17 +5,26 @@ import cn.edu.gzmu.properties.Oauth2Properties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
 import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 /**
  * web 安全配置，在这里主要配额一些 Bean
@@ -52,7 +61,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2ResourceServer()
                 .jwt()
-                .jwkSetUri(oauth2Properties.getJwkSetUri());
+                .jwkSetUri(oauth2Properties.getJwkSetUri())
+                .jwtAuthenticationConverter(grantedAuthoritiesExtractor());
     }
 
     @Bean
@@ -70,6 +80,31 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 + ":" + oauth2Properties.getClientSecret();
         log.debug("client {}", client);
         return "Basic " + Base64.getEncoder().encodeToString(client.getBytes());
+    }
+
+    Converter<Jwt, AbstractAuthenticationToken> grantedAuthoritiesExtractor() {
+        JwtAuthenticationConverter jwtAuthenticationConverter =
+                new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter
+                (new GrantedAuthoritiesExtractor());
+        return jwtAuthenticationConverter;
+    }
+
+    static class GrantedAuthoritiesExtractor
+            implements Converter<Jwt, Collection<GrantedAuthority>> {
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public Collection<GrantedAuthority> convert(Jwt jwt) {
+            Object authorities = jwt.getClaims().get("authorities");
+            if (!(authorities instanceof Collection)) {
+                return Collections.emptyList();
+            }
+            Collection<String> collection = (Collection<String>) authorities;
+            return collection.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+        }
     }
 
 }

@@ -1,8 +1,13 @@
 package cn.edu.gzmu.controller;
 
+import cn.edu.gzmu.auth.helper.OauthHelper;
 import cn.edu.gzmu.model.constant.LessonResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -16,5 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RepositoryRestController
 @RequestMapping(LessonResource.TEACHER_SEARCH)
 public class TeacherController {
+
+    private final OauthHelper oauthHelper;
+
+    @GetMapping("/test")
+    @PreAuthorize("hasRole('ADMIN')")
+    public HttpEntity<?> teacherTest(){
+        return ResponseEntity.ok(oauthHelper.student());
+    }
 
 }

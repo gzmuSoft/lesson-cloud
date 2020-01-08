@@ -26,6 +26,11 @@ public class Oauth2Properties {
     private String tokenInfoUri;
 
     /**
+     * 用户信息
+     */
+    private String userInfoUri;
+
+    /**
      * 获取 token 地址
      */
     private String accessTokenUri;
@@ -66,4 +71,5 @@ public class Oauth2Properties {
     public String getJwkSetUri() {
         return authorizationServerUrl + jwkSetUri;
     }
+
 }

@@ -30,11 +30,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(LessonResource.LOGIC_CLASS_SEARCH)
 public class LogicClassController extends BaseController<LogicClass, LogicClassService, Long> {
     private final @NonNull LogicClassService logicClassService;
+    private final @NonNull OauthHelper oauthHelper;
 
     @GetMapping(LessonResource.STUDENT)
     @Secured("ROLE_STUDENT")
     public  HttpEntity<?> student(){
-        return ResponseEntity.ok(logicClassService.findAllCourseTimetableLocation(OauthHelper.student()));
+        return ResponseEntity.ok(logicClassService.findAllCourseTimetableLocation(oauthHelper.student()));
     }
 
 }
