@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @version 1.0
  * @date 2019-5-23 17:38:13
  */
-@FeignClient(name = "gzmu-auth", configuration = BearerRequestInterceptor.class,
+@FeignClient(name = "teacher", configuration = BearerRequestInterceptor.class,
         url = "http://118.24.1.170:8888")
 public interface TeacherRepository  {
 

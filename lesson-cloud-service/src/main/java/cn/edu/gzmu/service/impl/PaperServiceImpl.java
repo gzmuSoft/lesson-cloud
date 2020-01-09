@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static cn.edu.gzmu.service.helper.RestHelper.*;
-
 /**
  * Paper Service Impl
  *
@@ -48,7 +46,7 @@ public class PaperServiceImpl extends BaseServiceImpl<PaperRepository, Paper, Lo
         paper.setJudgement(listEntity(paper.getJudgementIds(), judgementRepository));
         paper.setEssay(listEntity(paper.getEssayIds(), essayRepository));
         paper.setProgram(listEntity(paper.getProgramIds(), programRepository));
-        paper.setStudent(getByIdForEntity(paper.getStudentId(), studentRepository::getOnePath, Student.class));
+        paper.setStudent(studentRepository.findById(paper.getStudentId()));
         return paper;
     }
 
