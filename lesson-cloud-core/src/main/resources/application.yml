@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: lesson-cloud
   profiles:
     active: dev
   data:

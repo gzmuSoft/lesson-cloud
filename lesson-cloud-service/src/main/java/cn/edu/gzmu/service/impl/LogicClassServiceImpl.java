@@ -17,8 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cn.edu.gzmu.service.helper.RestHelper.*;
-
 /**
  * LogicClass Service Impl
  *
@@ -50,16 +48,16 @@ public class LogicClassServiceImpl extends BaseServiceImpl<LogicClassRepository,
 
     @Override
     protected LogicClass completeEntity(LogicClass logicClass) {
-        logicClass.setSchool(getByIdForEntity(logicClass.getSchoolId(), sysDataRepository::getOnePath, SysData.class));
-        logicClass.setCollege(getByIdForEntity(logicClass.getDepId(), sysDataRepository::getOnePath, SysData.class));
-        logicClass.setSpecialty(getByIdForEntity(logicClass.getSpecialtyId(), sysDataRepository::getOnePath, SysData.class));
+        logicClass.setSchool(sysDataRepository.findById(logicClass.getSchoolId()));
+        logicClass.setCollege(sysDataRepository.findById(logicClass.getDepId()));
+        logicClass.setSpecialty(sysDataRepository.findById(logicClass.getSpecialtyId()));
         if (LogicClassType.CLASSES.match(logicClass.getType())) {
-            logicClass.setClasses(getByIdForEntity(logicClass.getClassesId(), sysDataRepository::getOnePath, SysData.class));
+            logicClass.setClasses(sysDataRepository.findById(logicClass.getClassesId()));
         } else if (LogicClassType.STUDENT.match(logicClass.getType())) {
-            logicClass.setStudent(getByIdForEntity(logicClass.getStudentId(), studentRepository::getOnePath, Student.class));
+            logicClass.setStudent(studentRepository.findById(logicClass.getSchoolId()));
         }
-        logicClass.setTeacher(getByIdForEntity(logicClass.getTeacherId(), teacherRepository::getOnePath, Teacher.class));
-        logicClass.setSemester(getByIdForEntity(logicClass.getSemesterId(), semesterRepository::getOnePath, Semester.class));
+        logicClass.setTeacher(teacherRepository.findById(logicClass.getTeacherId()));
+        logicClass.setSemester(semesterRepository.findById(logicClass.getSemesterId()));
         return logicClass
                 .setCourse(courseRepository.findById(logicClass.getCourseId()).orElse(null));
     }

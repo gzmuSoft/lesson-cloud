@@ -1,8 +1,6 @@
 server:
   port: 8080
 spring:
-  application:
-    name: lesson-cloud
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://118.24.1.170:3306/lesson-cloud?useUnicode=true&characterEncoding=UTF-8&useOldAliasMetadataBehavior=true&autoReconnect=true&serverTimezone=UTC
@@ -106,3 +104,13 @@ logging:
   level:
     org.springframework.security: DEBUG
     cn.edu.gzmu: DEBUG
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: full
+  httpclient:
+    enabled: true
+    max-connections: 200
+    max-connections-per-route: 50

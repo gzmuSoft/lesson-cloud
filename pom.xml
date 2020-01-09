@@ -74,19 +74,31 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-httpclient</artifactId>
+        </dependency>
     </dependencies>
 
     <!--依赖管理-->
     <dependencyManagement>
         <dependencies>
-<!--            由于此项目不再维护所以不再使用-->
-<!--            <dependency>-->
-<!--                <groupId>io.spring.platform</groupId>-->
-<!--                <artifactId>platform-bom</artifactId>-->
-<!--                <version>${spring.io.platform.version}</version>-->
-<!--                <type>pom</type>-->
-<!--                <scope>import</scope>-->
-<!--            </dependency>-->
+            <!--            由于此项目不再维护所以不再使用-->
+            <!--            <dependency>-->
+            <!--                <groupId>io.spring.platform</groupId>-->
+            <!--                <artifactId>platform-bom</artifactId>-->
+            <!--                <version>${spring.io.platform.version}</version>-->
+            <!--                <type>pom</type>-->
+            <!--                <scope>import</scope>-->
+            <!--            </dependency>-->
             <!--springboot及springcloud核心依赖-->
 
             <dependency>
@@ -103,11 +115,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.security.oauth.boot</groupId>-->
-<!--                <artifactId>spring-security-oauth2-autoconfigure</artifactId>-->
-<!--                <version>${spring.boot.version}</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>org.springframework.security.oauth.boot</groupId>-->
+            <!--                <artifactId>spring-security-oauth2-autoconfigure</artifactId>-->
+            <!--                <version>${spring.boot.version}</version>-->
+            <!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
     <!--项目部署-->

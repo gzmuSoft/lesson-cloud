@@ -1,8 +1,11 @@
 package cn.edu.gzmu.repository.auth;
 
-import cn.edu.gzmu.model.annoection.AuthorizationRepository;
+import cn.edu.gzmu.model.entity.Teacher;
+import cn.edu.gzmu.repository.interceptor.BearerRequestInterceptor;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import static cn.edu.gzmu.model.constant.LessonResource.TEACHER;
 
 /**
  * Teacher Repository
@@ -11,38 +14,17 @@ import static cn.edu.gzmu.model.constant.LessonResource.TEACHER;
  * @version 1.0
  * @date 2019-5-23 17:38:13
  */
-@AuthorizationRepository
-public class TeacherRepository  {
-    public static final String GET_ONE = TEACHER + "/one/";
-    public static final String GET_MORE = TEACHER;
-    public static final String GET_SELF = TEACHER + "/self";
+@FeignClient(name = "gzmu-auth", configuration = BearerRequestInterceptor.class,
+        url = "http://118.24.1.170:8888")
+public interface TeacherRepository  {
 
     /**
-     * 获取一个资源的路径
+     * 根据 id 查询
      *
-     * @param id id
+     * @param id  结果
      * @return 结果
      */
-    public String getOnePath(Long id) {
-        return GET_ONE + id;
-    }
-
-    /**
-     * 获取多个资源的路径
-     *
-     * @return 结果
-     */
-    public String getMorePath() {
-        return GET_MORE;
-    }
-
-    /**
-     * 获取自己资源的路径
-     *
-     * @return 结果
-     */
-    public String getSelf() {
-        return GET_SELF;
-    }
+    @GetMapping("/api/teacher/{id}")
+    Teacher findById(@PathVariable("id") Long id);
 
 }
