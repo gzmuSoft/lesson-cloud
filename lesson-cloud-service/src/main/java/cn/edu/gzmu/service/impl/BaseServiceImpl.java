@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,6 +41,15 @@ public abstract class BaseServiceImpl<R extends BaseRepository<T, ID>, T extends
     public T searchById(ID id) {
         return completeEntity(baseRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new));
+    }
+
+    /**
+     * 保存所有资源列表.
+     * @param entityList 资源列表
+     */
+    @Override
+    public void saveAll(List<T> entityList){
+        baseRepository.saveAll(entityList);
     }
 
     /**

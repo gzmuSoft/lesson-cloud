@@ -4,6 +4,8 @@ import cn.edu.gzmu.model.BaseEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * BaseService
  *
@@ -28,4 +30,10 @@ public interface BaseService<T extends BaseEntity, ID> {
      * @return 结果
      */
     T searchById(ID id);
+
+    /**
+     * 保存所有资源列表.
+     * @param entityList 资源列表
+     */
+    void saveAll(List<T> entityList);
 }
