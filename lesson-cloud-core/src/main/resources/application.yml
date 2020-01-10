@@ -3,8 +3,115 @@ spring:
     name: lesson-cloud
   profiles:
     active: dev
+  datasource:
+    druid:
+      filters: stat,wall
+      initial-size: 5
+      max-active: 20
+      max-pool-prepared-statement-per-connection-size: 20
+      max-wait: 60000
+      min-evictable-idle-time-millis: 30000
+      min-idle: 5
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      use-global-data-source-stat: true
+      validation-query: select 'x'
+      stat-view-servlet:
+        enabled: true
+        login-password: 123456
+        login-username: admin
+        url-pattern: /druid/*
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+  jpa:
+    show-sql: true
+    properties:
+      #      redisson-config: redisson.yaml
+      #      redis:
+      #        expiryInSeconds:
+      #          default: 120
+      #          hibernate:
+      #            common: 0
+      #            account: 1200
+      hibernate:
+        cache:
+          redisson:
+            config: redisson.yaml
+          region:
+            factory_class: org.redisson.hibernate.RedissonRegionFactory
+          region_prefix: gzmu_lesson_cloud_
+          use_query_cache: true
+          use_second_level_cache: true
+          use_structured_entries: true
+        format_sql: true
+        generate_statistics: false
+        javax:
+          cache:
+            missing_cache_strategy: create
+  mail:
+    host: smtp.exmail.qq.com
+    port: 465
+    username: lessonCloud@japoul.cn
+    password: lessonC2019
+    properties:
+      mail:
+        debug: false
+        smtp:
+          auth: true
+          starttls:
+            required: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+    test-connection: false
+  redis:
+    host: 127.0.0.1
+    password:
   data:
+    rest:
+      default-page-size: 10
     redis:
       repositories:
         enabled: false
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+application:
+  message:
+    app-id: 35223
+    app-key: e7eede1811867421882df861a20ed26e
+    action-template: RhXa
+  oauth2:
+    enabled: false
+    authorization-server-url: http://118.24.1.170:8888
+    token-info-uri: /oauth/check_token
+    access-token-uri: /oauth/token
+    user-info-uri: /auth/me
+    jwk-set-uri: /.well-known/jwks.json
+    client-id: lesson-cloud
+    client-secret: lesson-cloud-secret
+    grant-type: password,refresh_token,sms,email,authorization_code
+    scope: READ
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    cn.edu.gzmu: DEBUG
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: full
+  httpclient:
+    enabled: true
+    max-connections: 200
+    max-connections-per-route: 50
