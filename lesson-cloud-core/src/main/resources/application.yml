@@ -30,29 +30,6 @@ spring:
     password: guest
   jpa:
     show-sql: true
-    properties:
-      #      redisson-config: redisson.yaml
-      #      redis:
-      #        expiryInSeconds:
-      #          default: 120
-      #          hibernate:
-      #            common: 0
-      #            account: 1200
-      hibernate:
-        cache:
-          redisson:
-            config: redisson.yaml
-          region:
-            factory_class: org.redisson.hibernate.RedissonRegionFactory
-          region_prefix: gzmu_lesson_cloud_
-          use_query_cache: true
-          use_second_level_cache: true
-          use_structured_entries: true
-        format_sql: true
-        generate_statistics: false
-        javax:
-          cache:
-            missing_cache_strategy: create
   mail:
     host: smtp.exmail.qq.com
     port: 465

@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Cacheable;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 

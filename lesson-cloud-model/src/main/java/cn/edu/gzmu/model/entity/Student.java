@@ -1,18 +1,11 @@
 package cn.edu.gzmu.model.entity;
 
 import cn.edu.gzmu.model.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Where;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;

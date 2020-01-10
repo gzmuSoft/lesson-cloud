@@ -1,17 +1,11 @@
 package cn.edu.gzmu.config;
 
-import org.redisson.Redisson;
-import org.redisson.api.RedissonClient;
-import org.redisson.config.Config;
-import org.redisson.spring.cache.RedissonSpringCacheManager;
-import org.redisson.spring.data.connection.RedissonConnectionFactory;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AllArgsConstructor;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
-
-import java.io.IOException;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 
 /**
  * 缓存配置类(读取model模块的yaml配置文件)
@@ -21,29 +15,14 @@ import java.io.IOException;
  * @date 19-4-12 09:50
  */
 @Configuration
+@AllArgsConstructor
 public class RedisConfig {
 
-    @Bean
-    public RedissonConnectionFactory redissonConnectionFactory(RedissonClient redisson) {
-        return new RedissonConnectionFactory(redisson);
-    }
-
-    /**
-     * redisson 配置
-     *
-     * @param configFile 配置文件
-     * @return 结果
-     * @throws IOException 异常
-     */
-    @Bean(destroyMethod = "shutdown")
-    public RedissonClient redisson(@Value("classpath:/redisson.yaml") Resource configFile) throws IOException {
-        Config config = Config.fromYAML(configFile.getInputStream());
-        return Redisson.create(config);
-    }
+    private final RedisConnectionFactory redisConnectionFactory;
 
     @Bean
-    public CacheManager cacheManager(@Value("classpath:/redisson.yaml") Resource configFile) throws IOException {
-        return new RedissonSpringCacheManager(redisson(configFile));
+    public CacheManager cacheManager() {
+        return RedisCacheManager.create(redisConnectionFactory);
     }
 
 }
