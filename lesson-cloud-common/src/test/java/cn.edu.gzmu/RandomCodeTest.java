@@ -1,7 +1,7 @@
 package cn.edu.gzmu;
 
 import cn.edu.gzmu.util.RandomCode;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RandomCodeTest {
     @Test

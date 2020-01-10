@@ -1,4 +1,4 @@
-package cn.edu.gzmu;
+package cn.edu.gzmu.integration;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.Getter;

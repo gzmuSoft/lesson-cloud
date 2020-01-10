@@ -1,6 +1,6 @@
-package cn.edu.gzmu.controller;
+package cn.edu.gzmu.integration.controller;
 
-import cn.edu.gzmu.Oauth2RestTemplate;
+import cn.edu.gzmu.integration.Oauth2RestTemplate;
 import cn.edu.gzmu.model.entity.SysLog;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.jupiter.api.Test;
