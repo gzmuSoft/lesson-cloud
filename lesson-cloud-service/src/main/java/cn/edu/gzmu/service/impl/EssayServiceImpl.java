@@ -43,56 +43,56 @@ public class EssayServiceImpl extends BaseServiceImpl<EssayRepository, Essay, Lo
     @Override
     public Page<Essay> findAllByCourseId(Long courseId, Pageable pageable) {
         // 先根据 courseId 查出当前课程所有问答题
-        Page<Essay> essayList = essayRepository.findAllByCourseId(courseId, pageable);
+        Page<Essay> essays = essayRepository.findAllByCourseId(courseId, pageable);
         // 获取到分页信息中的数据
-        List<Essay> content = essayList.getContent();
+        List<Essay> content = essays.getContent();
         // 对数据进行遍历
-        for (Essay essay : essayList) {
+        for (Essay essay : content) {
             // 对每个数据进行完整性填充
             completeEntity(essay);
         }
-        return essayList;
+        return essays;
     }
 
     @Override
-    public Page<Essay> findAllBySectionId(Long sectionId, Pageable pageable) {
-        // 先根据 sectionId 查出当前章节所有问答题
-        Page<Essay> essayList = essayRepository.findAllBySectionId(sectionId, pageable);
+    public Page<Essay> findAllByCourseIdAndSectionId(Long courseId, Long sectionId, Pageable pageable) {
+        // 先根据 courseId 和 sectionId 查出当前章节所有问答题
+        Page<Essay> essays = essayRepository.findAllByCourseIdAndSectionId(courseId, sectionId, pageable);
         // 获取到分页信息中的数据
-        List<Essay> content = essayList.getContent();
+        List<Essay> content = essays.getContent();
         // 对数据进行遍历
-        for (Essay essay : essayList) {
+        for (Essay essay : content) {
             // 对每个数据进行完整性填充
             completeEntity(essay);
         }
-        return essayList;
+        return essays;
     }
 
     @Override
-    public Page<Essay> findAllByKnowledgeId(Long knowledgeId, Pageable pageable) {
-        // 先根据 knowledgeId 查出当前知识点所有问答题
-        Page<Essay> essayList = essayRepository.findAllByKnowledgeId(knowledgeId, pageable);
+    public Page<Essay> findAllByCourseIdAndSectionIdAndKnowledgeId(Long courseId, Long sectionId, Long knowledgeId, Pageable pageable) {
+        // 先根据  courseId 和 sectionId 和 knowledgeId 查出当前知识点所有问答题
+        Page<Essay> essays = essayRepository.findAllByCourseIdAndSectionIdAndKnowledgeId(courseId, sectionId, knowledgeId, pageable);
         // 获取到分页信息中的数据
-        List<Essay> content = essayList.getContent();
+        List<Essay> content = essays.getContent();
         // 对数据进行遍历
-        for (Essay essay : essayList) {
+        for (Essay essay : content) {
             // 对每个数据进行完整性填充
             completeEntity(essay);
         }
-        return essayList;
+        return essays;
     }
 
     @Override
     public Page<Essay> findByNameContaining(String name, Pageable pageable) {
         // 先根据 name 查出与之匹配的问答题
-        Page<Essay> essayList = essayRepository.findByNameContaining(name, pageable);
+        Page<Essay> essays = essayRepository.findByNameContaining(name, pageable);
         // 获取到分页信息中的数据
-        List<Essay> content = essayList.getContent();
+        List<Essay> content = essays.getContent();
         // 对数据进行遍历
-        for (Essay essay : essayList) {
+        for (Essay essay : content) {
             // 对每个数据进行完整性填充
             completeEntity(essay);
         }
-        return essayList;
+        return essays;
     }
 }

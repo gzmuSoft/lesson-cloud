@@ -28,9 +28,9 @@ public class EssayController extends BaseController<Essay, EssayService, Long> {
     private final @NonNull EssayService essayService;
 
     /**
-     * 根据课程 id 分页查询问答题.
+     * 根据课程 id 分页查询问答题
      *
-     * @param courseId 课程ID
+     * @param courseId 课程Id
      * @return .
      */
     @GetMapping("/findAllByCourseId")
@@ -39,36 +39,39 @@ public class EssayController extends BaseController<Essay, EssayService, Long> {
     }
 
     /**
-     * 根据章节 id 分页查询问答题.
+     * 根据课程 Id和章节 Id 分页查询问答题
      *
-     * @param sectionId
+     * @param courseId  课程Id
+     * @param sectionId 章节Id
      * @return org.springframework.http.HttpEntity<?>
      * @author Soul
      * @date 2020/1/10 17:21
      */
-    @GetMapping("/findAllBySectionId")
-    public HttpEntity<?> findAllBySectionId(Long sectionId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(essayService.findAllBySectionId(sectionId, pageable));
+    @GetMapping("/findAllByCourseIdAndSectionId")
+    public HttpEntity<?> findAllBySectionId(Long courseId, Long sectionId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(essayService.findAllByCourseIdAndSectionId(courseId, sectionId, pageable));
     }
 
     /**
-     * 根据知识点 id 分页查询问答题.
+     * 根据课程 Id和章节 Id 和知识点 id 分页查询问答题
      *
-     * @param knowledgeId
+     * @param courseId    课程Id
+     * @param sectionId   章节Id
+     * @param knowledgeId 知识点Id
      * @return org.springframework.http.HttpEntity<?>
      * @author Soul
      * @date 2020/1/10 17:21
      */
-    @GetMapping("/findAllByKnowledgeId")
-    public HttpEntity<?> findAllByKnowledgeId(Long knowledgeId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(essayService.findAllByKnowledgeId(knowledgeId, pageable));
+    @GetMapping("/findAllByCourseIdAndSectionIdAndKnowledgeId")
+    public HttpEntity<?> findAllByCourseIdAndSectionIdAndKnowledgeId(Long courseId, Long sectionId, Long knowledgeId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(essayService.findAllByCourseIdAndSectionIdAndKnowledgeId(courseId, sectionId, knowledgeId, pageable));
     }
 
     /**
      * 根据题目部分内容模糊分页查询问答题
      *
-     * @param name
-     * @return cn.edu.gzmu.model.entity.Essay
+     * @param name 内容
+     * @return org.springframework.http.HttpEntity<?>
      * @author Soul
      * @date 2020/1/10 17:21
      */

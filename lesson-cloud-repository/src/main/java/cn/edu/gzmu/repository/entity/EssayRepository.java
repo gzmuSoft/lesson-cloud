@@ -16,7 +16,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(path = "essay")
 public interface EssayRepository extends BaseRepository<Essay, Long> {
     /**
-     * 根据课课程 Id 分页查询
+     * 根据课程 Id 分页查询
      *
      * @param courseId 课程id
      * @param pageable 分页
@@ -27,26 +27,29 @@ public interface EssayRepository extends BaseRepository<Essay, Long> {
     Page<Essay> findAllByCourseId(Long courseId, Pageable pageable);
 
     /**
-     * 根据课章节 Id 分页查询
+     * 根据课程 Id 和章节 Id 分页查询
      *
+     * @param courseId  课程id
      * @param sectionId 章节id
      * @param pageable  分页
      * @return java.util.List<cn.edu.gzmu.model.entity.Essay>
      * @author Soul
      * @date 2020/1/10 13:17
      */
-    Page<Essay> findAllBySectionId(Long sectionId, Pageable pageable);
+    Page<Essay> findAllByCourseIdAndSectionId(Long courseId, Long sectionId, Pageable pageable);
 
     /**
-     * 根据知识点 Id 分页查询
+     * 根据课程 Id 和章节 Id 和知识点 Id 分页查询
      *
+     * @param courseId    课程id
+     * @param sectionId   章节id
      * @param knowledgeId 知识点id
      * @param pageable    分页
      * @return java.util.List<cn.edu.gzmu.model.entity.Essay>
      * @author Soul
      * @date 2020/1/10 13:18
      */
-    Page<Essay> findAllByKnowledgeId(Long knowledgeId, Pageable pageable);
+    Page<Essay> findAllByCourseIdAndSectionIdAndKnowledgeId(Long courseId, Long sectionId, Long knowledgeId, Pageable pageable);
 
     /**
      * 根据题目部分内容模糊分页查询
