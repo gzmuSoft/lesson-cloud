@@ -13,10 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +44,7 @@ public class TeacherServiceImpl implements TeacherService {
 
 
     @Override
-    public JSONObject finPublicQuestionBankByCondition(Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable) {
+    public JSONObject findPublicQuestionBankByCondition(Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable) {
         JSONObject result = new JSONObject();
         result.put("essay", essayRepository.findAll(specification(courseId, sectionId, knowledgeId, name, isPublic), pageable));
         result.put("judgement", judgementRepository.findAll(specification(courseId, sectionId, knowledgeId, name, isPublic), pageable));

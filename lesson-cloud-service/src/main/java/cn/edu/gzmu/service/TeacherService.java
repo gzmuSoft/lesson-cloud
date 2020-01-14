@@ -35,5 +35,5 @@ public interface TeacherService {
      * @author Soul
      * @date 2020/1/14 0:05
      */
-    JSONObject finPublicQuestionBankByCondition(Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable);
+    JSONObject findPublicQuestionBankByCondition(Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable);
 }

@@ -2,7 +2,6 @@ package cn.edu.gzmu.controller;
 
 import cn.edu.gzmu.auth.helper.OauthHelper;
 import cn.edu.gzmu.model.constant.LessonResource;
-import cn.edu.gzmu.model.entity.Teacher;
 import cn.edu.gzmu.service.TeacherService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +51,6 @@ public class TeacherController {
             @RequestParam(defaultValue = "0") Long knowledgeId,
             @RequestParam(defaultValue = "") String name,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(teacherService.finPublicQuestionBankByCondition(courseId, sectionId, knowledgeId, name, true, pageable));
+        return ResponseEntity.ok(teacherService.findPublicQuestionBankByCondition(courseId, sectionId, knowledgeId, name, true, pageable));
     }
 }
