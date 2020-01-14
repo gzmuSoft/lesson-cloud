@@ -3,13 +3,20 @@ package cn.edu.gzmu.service.impl;
 import cn.edu.gzmu.model.entity.*;
 import cn.edu.gzmu.repository.entity.*;
 import cn.edu.gzmu.service.TeacherService;
+import com.alibaba.fastjson.JSONObject;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +37,9 @@ public class TeacherServiceImpl implements TeacherService {
     private final @NonNull ProgramRepository programRepository;
     private final @NonNull SingleSelRepository singleSelRepository;
 
-    // 待续
+    /**
+     * TODO: 待续
+     */
     @Override
     public Page<Object> findPrivateQuestionBankCondition(Teacher teacher, Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable) {
         return null;
@@ -38,27 +47,64 @@ public class TeacherServiceImpl implements TeacherService {
 
 
     @Override
-    public Page<Object> finPublicQuestionBankByCondition(Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable) {
-        // 如果 name 不为空，则优先按题目内容模糊查询公开题目
-        if (!name.equals("")) {
-            return this.findByNameContainingAndIsPublic(name, isPublic, pageable);
-        }
-        // 如果没有课程 Id，则表示也没有更低级的条件，直接全查公开题目
-        else if (courseId == 0) {
-            return this.findAllByIsPublic(isPublic, pageable);
-        }
-        // 如果没有章节 Id，则表示也没有更低级的条件，则按课程 Id 查询公开题目
-        else if (sectionId == 0) {
-            return this.findAllByCourseIdAndIsPublic(courseId, isPublic, pageable);
-        }
-        // 如果没有知识点 Id，则按课程 Id 和章节 Id 查询公开题目
-        else if (knowledgeId == 0) {
-            return this.findAllByCourseIdAndSectionIdAndIsPublic(courseId, sectionId, isPublic, pageable);
-        }
-        // 如果所有条件都有，则按课程 Id ，章节 Id ，知识点 Id 查询公开题目
-        else {
-            return this.findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(courseId, sectionId, knowledgeId, isPublic, pageable);
-        }
+    public JSONObject finPublicQuestionBankByCondition(Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable) {
+        JSONObject result = new JSONObject();
+        result.put("essay", essayRepository.findAll(specification(courseId, sectionId, knowledgeId, name, isPublic), pageable));
+        result.put("judgement", judgementRepository.findAll(specification(courseId, sectionId, knowledgeId, name, isPublic), pageable));
+        result.put("multiSel", multiSelRepository.findAll(specification(courseId, sectionId, knowledgeId, name, isPublic), pageable));
+        result.put("program", programRepository.findAll(specification(courseId, sectionId, knowledgeId, name, isPublic), pageable));
+        result.put("singleSel", singleSelRepository.findAll(specification(courseId, sectionId, knowledgeId, name, isPublic), pageable));
+        return result;
+//        // 如果 name 不为空，则优先按题目内容模糊查询公开题目
+//        if (StringUtils.isNoneEmpty(name)) {
+//            return this.findByNameContainingAndIsPublic(name, isPublic, pageable);
+//        }
+//        // 如果没有课程 Id，则表示也没有更低级的条件，直接全查公开题目
+//        else if (courseId == 0) {
+//            return this.findAllByIsPublic(isPublic, pageable);
+//        }
+//        // 如果没有章节 Id，则表示也没有更低级的条件，则按课程 Id 查询公开题目
+//        else if (sectionId == 0) {
+//            return this.findAllByCourseIdAndIsPublic(courseId, isPublic, pageable);
+//        }
+//        // 如果没有知识点 Id，则按课程 Id 和章节 Id 查询公开题目
+//        else if (knowledgeId == 0) {
+//            return this.findAllByCourseIdAndSectionIdAndIsPublic(courseId, sectionId, isPublic, pageable);
+//        }
+//        // 如果所有条件都有，则按课程 Id ，章节 Id ，知识点 Id 查询公开题目
+//        else {
+//            return this.findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(courseId, sectionId, knowledgeId, isPublic, pageable);
+//        }
+    }
+
+    private <T> Specification<T> specification(Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate conjunction = criteriaBuilder.conjunction();
+            if (StringUtils.isNoneEmpty(name)) {
+                conjunction = criteriaBuilder.and(conjunction,
+                        criteriaBuilder.like(root.get("name").as(String.class), "%" + name + "%")
+                );
+            }
+            if (courseId != 0) {
+                conjunction = criteriaBuilder.and(conjunction,
+                        criteriaBuilder.equal(root.get("courseId").as(Long.class), courseId)
+                );
+            }
+            if (sectionId != 0) {
+                conjunction = criteriaBuilder.and(conjunction,
+                        criteriaBuilder.equal(root.get("sectionId").as(Long.class), sectionId)
+                );
+            }
+            if (knowledgeId != 0) {
+                conjunction = criteriaBuilder.and(conjunction,
+                        criteriaBuilder.equal(root.get("knowledgeId").as(Long.class), knowledgeId)
+                );
+            }
+            return query.where(
+                    criteriaBuilder.and(conjunction,
+                            criteriaBuilder.equal(root.get("isPublic").as(Boolean.class), isPublic))
+            ).getRestriction();
+        };
     }
 
     /**
@@ -89,7 +135,7 @@ public class TeacherServiceImpl implements TeacherService {
         // end表示每页List终止位置
         int end = Math.min((start + pageable.getPageSize()), list.size());
         // new一个PageImpl实现分页
-        return new PageImpl<Object>(list.subList(start, end), pageable, list.size());
+        return new PageImpl<>(list.subList(start, end), pageable, list.size());
     }
 
     /**
@@ -121,7 +167,7 @@ public class TeacherServiceImpl implements TeacherService {
         // end表示每页List终止位置
         int end = Math.min((start + pageable.getPageSize()), list.size());
         // new一个PageImpl实现分页
-        return new PageImpl<Object>(list.subList(start, end), pageable, list.size());
+        return new PageImpl<>(list.subList(start, end), pageable, list.size());
     }
 
     /**
@@ -188,7 +234,7 @@ public class TeacherServiceImpl implements TeacherService {
         // end表示每页List终止位置
         int end = Math.min((start + pageable.getPageSize()), list.size());
         // new一个PageImpl实现分页
-        return new PageImpl<Object>(list.subList(start, end), pageable, list.size());
+        return new PageImpl<>(list.subList(start, end), pageable, list.size());
     }
 
     /**
@@ -220,6 +266,6 @@ public class TeacherServiceImpl implements TeacherService {
         // end表示每页List终止位置
         int end = Math.min((start + pageable.getPageSize()), list.size());
         // new一个PageImpl实现分页
-        return new PageImpl<Object>(list.subList(start, end), pageable, list.size());
+        return new PageImpl<>(list.subList(start, end), pageable, list.size());
     }
 }

@@ -1,6 +1,7 @@
 package cn.edu.gzmu.service;
 
 import cn.edu.gzmu.model.entity.Teacher;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -34,5 +35,5 @@ public interface TeacherService {
      * @author Soul
      * @date 2020/1/14 0:05
      */
-    Page<Object> finPublicQuestionBankByCondition(Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable);
+    JSONObject finPublicQuestionBankByCondition(Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable);
 }

@@ -46,7 +46,12 @@ public class TeacherController {
      * @date 2020/1/13 22:04
      */
     @GetMapping("/finPublicQuestionBankByCondition")
-    public HttpEntity<?> finPublicQuestionBankByCondition(@RequestParam(defaultValue = "0") Long courseId, @RequestParam(defaultValue = "0") Long sectionId, @RequestParam(defaultValue = "0") Long knowledgeId, @RequestParam(defaultValue = "") String name, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+    public HttpEntity<?> finPublicQuestionBankByCondition(
+            @RequestParam(defaultValue = "0") Long courseId,
+            @RequestParam(defaultValue = "0") Long sectionId,
+            @RequestParam(defaultValue = "0") Long knowledgeId,
+            @RequestParam(defaultValue = "") String name,
+            @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
         return ResponseEntity.ok(teacherService.finPublicQuestionBankByCondition(courseId, sectionId, knowledgeId, name, true, pageable));
     }
 }
