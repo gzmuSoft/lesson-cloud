@@ -79,7 +79,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     private <T> Specification<T> specification(Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic) {
         return (root, query, criteriaBuilder) -> {
-            Predicate conjunction = criteriaBuilder.conjunction();
+            Predicate conjunction = criteriaBuilder.equal(root.get("isPublic").as(Boolean.class), isPublic);
             if (StringUtils.isNoneEmpty(name)) {
                 conjunction = criteriaBuilder.and(conjunction,
                         criteriaBuilder.like(root.get("name").as(String.class), "%" + name + "%")
@@ -100,10 +100,7 @@ public class TeacherServiceImpl implements TeacherService {
                         criteriaBuilder.equal(root.get("knowledgeId").as(Long.class), knowledgeId)
                 );
             }
-            return query.where(
-                    criteriaBuilder.and(conjunction,
-                            criteriaBuilder.equal(root.get("isPublic").as(Boolean.class), isPublic))
-            ).getRestriction();
+            return query.where(conjunction).getRestriction();
         };
     }
 
