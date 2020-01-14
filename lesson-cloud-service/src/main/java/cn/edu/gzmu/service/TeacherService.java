@@ -21,7 +21,7 @@ public interface TeacherService {
      * @author Soul
      * @date 2020/1/12 1:16
      */
-    Page<Object> findPrivateQuestionBankCondition(Teacher teacher, boolean isPublic, Pageable pageable);
+    Page<Object> findPrivateQuestionBankCondition(Teacher teacher, Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable);
 
     /**
      * 通过不同条件获取公有题库

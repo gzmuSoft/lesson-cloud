@@ -32,22 +32,31 @@ public class TeacherServiceImpl implements TeacherService {
 
     // 待续
     @Override
-    public Page<Object> findPrivateQuestionBankCondition(Teacher teacher, boolean isPublic, Pageable pageable) {
+    public Page<Object> findPrivateQuestionBankCondition(Teacher teacher, Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable) {
         return null;
     }
 
 
     @Override
     public Page<Object> finPublicQuestionBankByCondition(Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable) {
+        // 如果 name 不为空，则优先按题目内容模糊查询公开题目
         if (!name.equals("")) {
             return this.findByNameContainingAndIsPublic(name, isPublic, pageable);
-        } else if (courseId == 0) {
+        }
+        // 如果没有课程 Id，则表示也没有更低级的条件，直接全查公开题目
+        else if (courseId == 0) {
             return this.findAllByIsPublic(isPublic, pageable);
-        } else if (sectionId == 0) {
+        }
+        // 如果没有章节 Id，则表示也没有更低级的条件，则按课程 Id 查询公开题目
+        else if (sectionId == 0) {
             return this.findAllByCourseIdAndIsPublic(courseId, isPublic, pageable);
-        } else if (knowledgeId == 0) {
+        }
+        // 如果没有知识点 Id，则按课程 Id 和章节 Id 查询公开题目
+        else if (knowledgeId == 0) {
             return this.findAllByCourseIdAndSectionIdAndIsPublic(courseId, sectionId, isPublic, pageable);
-        } else {
+        }
+        // 如果所有条件都有，则按课程 Id ，章节 Id ，知识点 Id 查询公开题目
+        else {
             return this.findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(courseId, sectionId, knowledgeId, isPublic, pageable);
         }
     }
