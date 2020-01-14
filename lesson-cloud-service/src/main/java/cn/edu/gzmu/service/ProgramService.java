@@ -14,27 +14,38 @@ import org.springframework.data.domain.Pageable;
  */
 public interface ProgramService extends BaseService<Program, Long> {
     /**
+     * 分页查询公开与不公开的题目
+     *
+     * @param isPublic 是否公开
+     * @param pageable 分页
+     * @return java.util.List<cn.edu.gzmu.model.entity.Program>
+     */
+    Page<Program> findAllByIsPublic(boolean isPublic, Pageable pageable);
+
+    /**
      * 根据课程 Id 分页查询
      *
      * @param courseId 课程id
+     * @param isPublic 是否公开
      * @param pageable 分页
      * @return java.util.List<cn.edu.gzmu.model.entity.Program>
      * @author Soul
      * @date 2020/1/10 13:16
      */
-    Page<Program> findAllByCourseId(Long courseId, Pageable pageable);
+    Page<Program> findAllByCourseIdAndIsPublic(Long courseId, boolean isPublic, Pageable pageable);
 
     /**
      * 根据课程 Id 和章节 Id 分页查询
      *
      * @param courseId  课程id
      * @param sectionId 章节id
+     * @param isPublic  是否公开
      * @param pageable  分页
      * @return java.util.List<cn.edu.gzmu.model.entity.Program>
      * @author Soul
      * @date 2020/1/10 13:17
      */
-    Page<Program> findAllByCourseIdAndSectionId(Long courseId, Long sectionId, Pageable pageable);
+    Page<Program> findAllByCourseIdAndSectionIdAndIsPublic(Long courseId, Long sectionId, boolean isPublic, Pageable pageable);
 
     /**
      * 根据课程 Id 和章节 Id 和知识点 Id 分页查询
@@ -42,21 +53,23 @@ public interface ProgramService extends BaseService<Program, Long> {
      * @param courseId    课程id
      * @param sectionId   章节id
      * @param knowledgeId 知识点id
+     * @param isPublic    是否公开
      * @param pageable    分页
      * @return java.util.List<cn.edu.gzmu.model.entity.Program>
      * @author Soul
      * @date 2020/1/10 13:18
      */
-    Page<Program> findAllByCourseIdAndSectionIdAndKnowledgeId(Long courseId, Long sectionId, Long knowledgeId, Pageable pageable);
+    Page<Program> findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(Long courseId, Long sectionId, Long knowledgeId, boolean isPublic, Pageable pageable);
 
     /**
      * 根据题目部分内容模糊分页查询
      *
      * @param name     名称
+     * @param isPublic 是否公开
      * @param pageable 分页
      * @return cn.edu.gzmu.model.entity.Program
      * @author Soul
      * @date 2020/1/10 13:23
      */
-    Page<Program> findByNameContaining(String name, Pageable pageable);
+    Page<Program> findByNameContainingAndIsPublic(String name, boolean isPublic, Pageable pageable);
 }

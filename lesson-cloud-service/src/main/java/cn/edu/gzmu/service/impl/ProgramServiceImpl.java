@@ -40,9 +40,23 @@ public class ProgramServiceImpl extends BaseServiceImpl<ProgramRepository, Progr
     }
 
     @Override
-    public Page<Program> findAllByCourseId(Long courseId, Pageable pageable) {
+    public Page<Program> findAllByIsPublic(boolean isPublic, Pageable pageable) {
+        // 先根据 isPublic 查出当前课程所有编程题
+        Page<Program> programs = programRepository.findAllByIsPublic(isPublic, pageable);
+        // 获取到分页信息中的数据
+        List<Program> content = programs.getContent();
+        // 对数据进行遍历
+        for (Program program : content) {
+            // 对每个数据进行完整性填充
+            completeEntity(program);
+        }
+        return programs;
+    }
+
+    @Override
+    public Page<Program> findAllByCourseIdAndIsPublic(Long courseId, boolean isPublic, Pageable pageable) {
         // 先根据 courseId 查出当前课程所有编程题
-        Page<Program> programs = programRepository.findAllByCourseId(courseId, pageable);
+        Page<Program> programs = programRepository.findAllByCourseIdAndIsPublic(courseId, isPublic, pageable);
         // 获取到分页信息中的数据
         List<Program> content = programs.getContent();
         // 对数据进行遍历
@@ -54,9 +68,9 @@ public class ProgramServiceImpl extends BaseServiceImpl<ProgramRepository, Progr
     }
 
     @Override
-    public Page<Program> findAllByCourseIdAndSectionId(Long courseId, Long sectionId, Pageable pageable) {
+    public Page<Program> findAllByCourseIdAndSectionIdAndIsPublic(Long courseId, Long sectionId, boolean isPublic, Pageable pageable) {
         // 先根据 courseId 和 sectionId 查出当前课程所有编程题
-        Page<Program> programs = programRepository.findAllByCourseIdAndSectionId(courseId, sectionId, pageable);
+        Page<Program> programs = programRepository.findAllByCourseIdAndSectionIdAndIsPublic(courseId, sectionId, isPublic, pageable);
         // 获取到分页信息中的数据
         List<Program> content = programs.getContent();
         // 对数据进行遍历
@@ -68,9 +82,9 @@ public class ProgramServiceImpl extends BaseServiceImpl<ProgramRepository, Progr
     }
 
     @Override
-    public Page<Program> findAllByCourseIdAndSectionIdAndKnowledgeId(Long courseId, Long sectionId, Long knowledgeId, Pageable pageable) {
+    public Page<Program> findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(Long courseId, Long sectionId, Long knowledgeId, boolean isPublic, Pageable pageable) {
         // 先根据 courseId 和 sectionId 和 knowledgeId 查出当前课程所有编程题
-        Page<Program> programs = programRepository.findAllByCourseIdAndSectionIdAndKnowledgeId(courseId, sectionId, knowledgeId, pageable);
+        Page<Program> programs = programRepository.findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(courseId, sectionId, knowledgeId, isPublic, pageable);
         // 获取到分页信息中的数据
         List<Program> content = programs.getContent();
         // 对数据进行遍历
@@ -82,9 +96,9 @@ public class ProgramServiceImpl extends BaseServiceImpl<ProgramRepository, Progr
     }
 
     @Override
-    public Page<Program> findByNameContaining(String name, Pageable pageable) {
+    public Page<Program> findByNameContainingAndIsPublic(String name, boolean isPublic, Pageable pageable) {
         // 先根据 name 查出当前课程所有编程题
-        Page<Program> programs = programRepository.findByNameContaining(name, pageable);
+        Page<Program> programs = programRepository.findByNameContainingAndIsPublic(name, isPublic, pageable);
         // 获取到分页信息中的数据
         List<Program> content = programs.getContent();
         // 对数据进行遍历

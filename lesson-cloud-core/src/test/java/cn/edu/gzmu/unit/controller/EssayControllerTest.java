@@ -45,7 +45,7 @@ public class EssayControllerTest {
 
     @Test
     void findAllByCourseIdWhenPassed() {
-        Page<Essay> essays = essayService.findAllByCourseId(1L, page);
+        Page<Essay> essays = essayService.findAllByCourseIdAndIsPublic(1L, false, page);
         assertEquals(2, essays.getTotalElements());
     }
 }

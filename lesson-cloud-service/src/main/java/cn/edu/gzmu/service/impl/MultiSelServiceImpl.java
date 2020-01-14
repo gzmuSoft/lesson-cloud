@@ -40,9 +40,23 @@ public class MultiSelServiceImpl extends BaseServiceImpl<MultiSelRepository, Mul
     }
 
     @Override
-    public Page<MultiSel> findAllByCourseId(Long courseId, Pageable pageable) {
+    public Page<MultiSel> findAllByIsPublic(boolean isPublic, Pageable pageable) {
+        // 先根据 isPublic 查出当前课程所有多选题
+        Page<MultiSel> multiSelList = multiSelRepository.findAllByIsPublic(isPublic, pageable);
+        // 获取到分页信息中的数据
+        List<MultiSel> content = multiSelList.getContent();
+        // 对数据进行遍历
+        for (MultiSel multiSel : content) {
+            // 对每个数据进行完整性填充
+            completeEntity(multiSel);
+        }
+        return multiSelList;
+    }
+
+    @Override
+    public Page<MultiSel> findAllByCourseIdAndIsPublic(Long courseId, boolean isPublic, Pageable pageable) {
         // 先根据 courseId 查出当前课程所有多选题
-        Page<MultiSel> multiSelList = multiSelRepository.findAllByCourseId(courseId, pageable);
+        Page<MultiSel> multiSelList = multiSelRepository.findAllByCourseIdAndIsPublic(courseId, isPublic, pageable);
         // 获取到分页信息中的数据
         List<MultiSel> content = multiSelList.getContent();
         // 对数据进行遍历
@@ -54,9 +68,9 @@ public class MultiSelServiceImpl extends BaseServiceImpl<MultiSelRepository, Mul
     }
 
     @Override
-    public Page<MultiSel> findAllByCourseIdAndSectionId(Long courseId, Long sectionId, Pageable pageable) {
+    public Page<MultiSel> findAllByCourseIdAndSectionIdAndIsPublic(Long courseId, Long sectionId, boolean isPublic, Pageable pageable) {
         // 先根据 courseId 和 sectionId 查出当前课程所有多选题
-        Page<MultiSel> multiSelList = multiSelRepository.findAllByCourseIdAndSectionId(courseId, sectionId, pageable);
+        Page<MultiSel> multiSelList = multiSelRepository.findAllByCourseIdAndSectionIdAndIsPublic(courseId, sectionId, isPublic, pageable);
         // 获取到分页信息中的数据
         List<MultiSel> content = multiSelList.getContent();
         // 对数据进行遍历
@@ -68,9 +82,9 @@ public class MultiSelServiceImpl extends BaseServiceImpl<MultiSelRepository, Mul
     }
 
     @Override
-    public Page<MultiSel> findAllByCourseIdAndSectionIdAndKnowledgeId(Long courseId, Long sectionId, Long knowledgeId, Pageable pageable) {
+    public Page<MultiSel> findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(Long courseId, Long sectionId, Long knowledgeId, boolean isPublic, Pageable pageable) {
         // 先根据 courseId 和 sectionId 和 knowledgeId 查出当前课程所有多选题
-        Page<MultiSel> multiSelList = multiSelRepository.findAllByCourseIdAndSectionIdAndKnowledgeId(courseId, sectionId, knowledgeId, pageable);
+        Page<MultiSel> multiSelList = multiSelRepository.findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(courseId, sectionId, knowledgeId, isPublic, pageable);
         // 获取到分页信息中的数据
         List<MultiSel> content = multiSelList.getContent();
         // 对数据进行遍历
@@ -82,9 +96,9 @@ public class MultiSelServiceImpl extends BaseServiceImpl<MultiSelRepository, Mul
     }
 
     @Override
-    public Page<MultiSel> findByNameContaining(String name, Pageable pageable) {
+    public Page<MultiSel> findByNameContainingAndIsPublic(String name, boolean isPublic, Pageable pageable) {
         // 先根据 name 查出当前课程所有多选题
-        Page<MultiSel> multiSelList = multiSelRepository.findByNameContaining(name, pageable);
+        Page<MultiSel> multiSelList = multiSelRepository.findByNameContainingAndIsPublic(name, isPublic, pageable);
         // 获取到分页信息中的数据
         List<MultiSel> content = multiSelList.getContent();
         // 对数据进行遍历

@@ -17,10 +17,9 @@ import java.io.Serializable;
  * single_sel
  *
  * @author echo
+ * @author Japoul
  * @version 1.0
  * @date 2019-5-27 10:59:08
- *
- * @author Japoul
  * @date 2019-8-4 23:33:57
  */
 @Data
@@ -85,4 +84,9 @@ public class SingleSel extends BaseEntity implements Serializable {
      */
     @Transient
     private Knowledge knowledge;
+
+    /**
+     * 是否公开
+     */
+    private Boolean isPublic = false;
 }

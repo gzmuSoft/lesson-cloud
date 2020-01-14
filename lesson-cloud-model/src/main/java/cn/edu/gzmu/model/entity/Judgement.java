@@ -84,4 +84,8 @@ public class Judgement extends BaseEntity implements Serializable {
     @Transient
     private Knowledge knowledge;
 
+    /**
+     * 是否公开
+     */
+    private Boolean isPublic = false;
 }

@@ -39,9 +39,23 @@ public class JudgementServiceImpl extends BaseServiceImpl<JudgementRepository, J
     }
 
     @Override
-    public Page<Judgement> findAllByCourseId(Long courseId, Pageable pageable) {
+    public Page<Judgement> findAllByIsPublic(boolean isPublic, Pageable pageable) {
+        // 先根据 isPublic 查出当前课程所有判断题
+        Page<Judgement> judgements = judgementRepository.findAllByIsPublic(isPublic, pageable);
+        // 获取到分页信息中的数据
+        List<Judgement> content = judgements.getContent();
+        // 对数据进行遍历
+        for (Judgement judgement : content) {
+            // 对每个数据进行完整性填充
+            completeEntity(judgement);
+        }
+        return judgements;
+    }
+
+    @Override
+    public Page<Judgement> findAllByCourseIdAndIsPublic(Long courseId, boolean isPublic, Pageable pageable) {
         // 先根据 courseId 查出当前课程所有判断题
-        Page<Judgement> judgements = judgementRepository.findAllByCourseId(courseId, pageable);
+        Page<Judgement> judgements = judgementRepository.findAllByCourseIdAndIsPublic(courseId, isPublic, pageable);
         // 获取到分页信息中的数据
         List<Judgement> content = judgements.getContent();
         // 对数据进行遍历
@@ -53,9 +67,9 @@ public class JudgementServiceImpl extends BaseServiceImpl<JudgementRepository, J
     }
 
     @Override
-    public Page<Judgement> findAllByCourseIdAndSectionId(Long courseId, Long sectionId, Pageable pageable) {
+    public Page<Judgement> findAllByCourseIdAndSectionIdAndIsPublic(Long courseId, Long sectionId, boolean isPublic, Pageable pageable) {
         // 先根据 courseId 和 sectionId 查出当前章节所有判断题
-        Page<Judgement> judgements = judgementRepository.findAllByCourseIdAndSectionId(courseId, sectionId, pageable);
+        Page<Judgement> judgements = judgementRepository.findAllByCourseIdAndSectionIdAndIsPublic(courseId, sectionId, isPublic, pageable);
         // 获取到分页信息中的数据
         List<Judgement> content = judgements.getContent();
         // 对数据进行遍历
@@ -67,9 +81,9 @@ public class JudgementServiceImpl extends BaseServiceImpl<JudgementRepository, J
     }
 
     @Override
-    public Page<Judgement> findAllByCourseIdAndSectionIdAndKnowledgeId(Long courseId, Long sectionId, Long knowledgeId, Pageable pageable) {
+    public Page<Judgement> findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(Long courseId, Long sectionId, Long knowledgeId, boolean isPublic, Pageable pageable) {
         // 先根据 courseId 和 sectionId 和 knowledgeId 查出当前知识点所有判断题
-        Page<Judgement> judgements = judgementRepository.findAllByCourseIdAndSectionIdAndKnowledgeId(courseId, sectionId, knowledgeId, pageable);
+        Page<Judgement> judgements = judgementRepository.findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(courseId, sectionId, knowledgeId, isPublic, pageable);
         // 获取到分页信息中的数据
         List<Judgement> content = judgements.getContent();
         // 对数据进行遍历
@@ -81,9 +95,9 @@ public class JudgementServiceImpl extends BaseServiceImpl<JudgementRepository, J
     }
 
     @Override
-    public Page<Judgement> findByNameContaining(String name, Pageable pageable) {
+    public Page<Judgement> findByNameContainingAndIsPublic(String name, boolean isPublic, Pageable pageable) {
         // 先根据 name 查出与之匹配的判断题
-        Page<Judgement> judgements = judgementRepository.findByNameContaining(name, pageable);
+        Page<Judgement> judgements = judgementRepository.findByNameContainingAndIsPublic(name, isPublic, pageable);
         // 获取到分页信息中的数据
         List<Judgement> content = judgements.getContent();
         // 对数据进行遍历

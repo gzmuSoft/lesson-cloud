@@ -28,14 +28,29 @@ public class EssayController extends BaseController<Essay, EssayService, Long> {
     private final @NonNull EssayService essayService;
 
     /**
+     * 根据 isPublic 分页查询问答题
+     *
+     * @param isPublic 是否公开
+     * @return org.springframework.http.HttpEntity<?>
+     * @author Soul
+     * @date 2020/1/10 17:21
+     */
+    @GetMapping("/findAllByIsPublic")
+    public HttpEntity<?> findAllByIsPublic(boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(essayService.findAllByIsPublic(isPublic, pageable));
+    }
+
+    /**
      * 根据课程 id 分页查询问答题
      *
      * @param courseId 课程Id
-     * @return .
+     * @return org.springframework.http.HttpEntity<?>
+     * @author Soul
+     * @date 2020/1/10 17:21
      */
-    @GetMapping("/findAllByCourseId")
-    public HttpEntity<?> findAllByCourseId(Long courseId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(essayService.findAllByCourseId(courseId, pageable));
+    @GetMapping("/findAllByCourseIdAndIsPublic")
+    public HttpEntity<?> findAllByCourseIdAndIsPublic(Long courseId, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(essayService.findAllByCourseIdAndIsPublic(courseId, isPublic, pageable));
     }
 
     /**
@@ -47,9 +62,9 @@ public class EssayController extends BaseController<Essay, EssayService, Long> {
      * @author Soul
      * @date 2020/1/10 17:21
      */
-    @GetMapping("/findAllByCourseIdAndSectionId")
-    public HttpEntity<?> findAllBySectionId(Long courseId, Long sectionId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(essayService.findAllByCourseIdAndSectionId(courseId, sectionId, pageable));
+    @GetMapping("/findAllByCourseIdAndSectionIdAndIsPublic")
+    public HttpEntity<?> findAllByCourseIdAndSectionIdAndIsPublic(Long courseId, Long sectionId, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(essayService.findAllByCourseIdAndSectionIdAndIsPublic(courseId, sectionId, isPublic, pageable));
     }
 
     /**
@@ -62,9 +77,9 @@ public class EssayController extends BaseController<Essay, EssayService, Long> {
      * @author Soul
      * @date 2020/1/10 17:21
      */
-    @GetMapping("/findAllByCourseIdAndSectionIdAndKnowledgeId")
-    public HttpEntity<?> findAllByCourseIdAndSectionIdAndKnowledgeId(Long courseId, Long sectionId, Long knowledgeId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(essayService.findAllByCourseIdAndSectionIdAndKnowledgeId(courseId, sectionId, knowledgeId, pageable));
+    @GetMapping("/findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic")
+    public HttpEntity<?> findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(Long courseId, Long sectionId, Long knowledgeId, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(essayService.findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(courseId, sectionId, knowledgeId, isPublic, pageable));
     }
 
     /**
@@ -75,8 +90,8 @@ public class EssayController extends BaseController<Essay, EssayService, Long> {
      * @author Soul
      * @date 2020/1/10 17:21
      */
-    @GetMapping("/findByNameContaining")
-    public HttpEntity<?> findByNameContaining(String name, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(essayService.findByNameContaining(name, pageable));
+    @GetMapping("/findByNameContainingAndIsPublic")
+    public HttpEntity<?> findByNameContainingAndIsPublic(String name, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(essayService.findByNameContainingAndIsPublic(name, isPublic, pageable));
     }
 }

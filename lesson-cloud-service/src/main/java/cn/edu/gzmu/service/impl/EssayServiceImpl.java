@@ -41,9 +41,23 @@ public class EssayServiceImpl extends BaseServiceImpl<EssayRepository, Essay, Lo
     }
 
     @Override
-    public Page<Essay> findAllByCourseId(Long courseId, Pageable pageable) {
+    public Page<Essay> findAllByIsPublic(boolean isPublic, Pageable pageable) {
+        // 先根据 isPublic 查出当前课程所有问答题
+        Page<Essay> essays = essayRepository.findAllByIsPublic(isPublic, pageable);
+        // 获取到分页信息中的数据
+        List<Essay> content = essays.getContent();
+        // 对数据进行遍历
+        for (Essay essay : content) {
+            // 对每个数据进行完整性填充
+            completeEntity(essay);
+        }
+        return essays;
+    }
+
+    @Override
+    public Page<Essay> findAllByCourseIdAndIsPublic(Long courseId, boolean isPublic, Pageable pageable) {
         // 先根据 courseId 查出当前课程所有问答题
-        Page<Essay> essays = essayRepository.findAllByCourseId(courseId, pageable);
+        Page<Essay> essays = essayRepository.findAllByCourseIdAndIsPublic(courseId, isPublic, pageable);
         // 获取到分页信息中的数据
         List<Essay> content = essays.getContent();
         // 对数据进行遍历
@@ -55,9 +69,9 @@ public class EssayServiceImpl extends BaseServiceImpl<EssayRepository, Essay, Lo
     }
 
     @Override
-    public Page<Essay> findAllByCourseIdAndSectionId(Long courseId, Long sectionId, Pageable pageable) {
+    public Page<Essay> findAllByCourseIdAndSectionIdAndIsPublic(Long courseId, Long sectionId, boolean isPublic, Pageable pageable) {
         // 先根据 courseId 和 sectionId 查出当前章节所有问答题
-        Page<Essay> essays = essayRepository.findAllByCourseIdAndSectionId(courseId, sectionId, pageable);
+        Page<Essay> essays = essayRepository.findAllByCourseIdAndSectionIdAndIsPublic(courseId, sectionId, isPublic, pageable);
         // 获取到分页信息中的数据
         List<Essay> content = essays.getContent();
         // 对数据进行遍历
@@ -69,9 +83,9 @@ public class EssayServiceImpl extends BaseServiceImpl<EssayRepository, Essay, Lo
     }
 
     @Override
-    public Page<Essay> findAllByCourseIdAndSectionIdAndKnowledgeId(Long courseId, Long sectionId, Long knowledgeId, Pageable pageable) {
+    public Page<Essay> findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(Long courseId, Long sectionId, Long knowledgeId, boolean isPublic, Pageable pageable) {
         // 先根据  courseId 和 sectionId 和 knowledgeId 查出当前知识点所有问答题
-        Page<Essay> essays = essayRepository.findAllByCourseIdAndSectionIdAndKnowledgeId(courseId, sectionId, knowledgeId, pageable);
+        Page<Essay> essays = essayRepository.findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(courseId, sectionId, knowledgeId, isPublic, pageable);
         // 获取到分页信息中的数据
         List<Essay> content = essays.getContent();
         // 对数据进行遍历
@@ -83,9 +97,9 @@ public class EssayServiceImpl extends BaseServiceImpl<EssayRepository, Essay, Lo
     }
 
     @Override
-    public Page<Essay> findByNameContaining(String name, Pageable pageable) {
+    public Page<Essay> findByNameContainingAndIsPublic(String name, boolean isPublic, Pageable pageable) {
         // 先根据 name 查出与之匹配的问答题
-        Page<Essay> essays = essayRepository.findByNameContaining(name, pageable);
+        Page<Essay> essays = essayRepository.findByNameContainingAndIsPublic(name, isPublic, pageable);
         // 获取到分页信息中的数据
         List<Essay> content = essays.getContent();
         // 对数据进行遍历

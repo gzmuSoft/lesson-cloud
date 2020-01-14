@@ -45,9 +45,23 @@ public class SingleSelServiceImpl extends BaseServiceImpl<SingleSelRepository, S
     }
 
     @Override
-    public Page<SingleSel> findAllByCourseId(Long courseId, Pageable pageable) {
+    public Page<SingleSel> findAllByIsPublic(boolean isPublic, Pageable pageable) {
+        // 先根据 isPublic 查出当前课程所有单选题
+        Page<SingleSel> singleSelList = singleSelRepository.findAllByIsPublic(isPublic, pageable);
+        // 获取到分页信息中的数据
+        List<SingleSel> content = singleSelList.getContent();
+        // 对数据进行遍历
+        for (SingleSel singleSel : content) {
+            // 对每个数据进行完整性填充
+            completeEntity(singleSel);
+        }
+        return singleSelList;
+    }
+
+    @Override
+    public Page<SingleSel> findAllByCourseIdAndIsPublic(Long courseId, boolean isPublic, Pageable pageable) {
         // 先根据 courseId 查出当前课程所有单选题
-        Page<SingleSel> singleSelList = singleSelRepository.findAllByCourseId(courseId, pageable);
+        Page<SingleSel> singleSelList = singleSelRepository.findAllByCourseIdAndIsPublic(courseId, isPublic, pageable);
         // 获取到分页信息中的数据
         List<SingleSel> content = singleSelList.getContent();
         // 对数据进行遍历
@@ -59,9 +73,9 @@ public class SingleSelServiceImpl extends BaseServiceImpl<SingleSelRepository, S
     }
 
     @Override
-    public Page<SingleSel> findAllByCourseIdAndSectionId(Long courseId, Long sectionId, Pageable pageable) {
+    public Page<SingleSel> findAllByCourseIdAndSectionIdAndIsPublic(Long courseId, Long sectionId, boolean isPublic, Pageable pageable) {
         // 先根据 courseId 和 sectionId 查出当前课程所有单选题
-        Page<SingleSel> singleSelList = singleSelRepository.findAllByCourseIdAndSectionId(courseId, sectionId, pageable);
+        Page<SingleSel> singleSelList = singleSelRepository.findAllByCourseIdAndSectionIdAndIsPublic(courseId, sectionId, isPublic, pageable);
         // 获取到分页信息中的数据
         List<SingleSel> content = singleSelList.getContent();
         // 对数据进行遍历
@@ -73,9 +87,9 @@ public class SingleSelServiceImpl extends BaseServiceImpl<SingleSelRepository, S
     }
 
     @Override
-    public Page<SingleSel> findAllByCourseIdAndSectionIdAndKnowledgeId(Long courseId, Long sectionId, Long knowledgeId, Pageable pageable) {
+    public Page<SingleSel> findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(Long courseId, Long sectionId, Long knowledgeId, boolean isPublic, Pageable pageable) {
         // 先根据 courseId 和 sectionId 和 knowledgeId 查出当前课程所有单选题
-        Page<SingleSel> singleSelList = singleSelRepository.findAllByCourseIdAndSectionIdAndKnowledgeId(courseId, sectionId, knowledgeId, pageable);
+        Page<SingleSel> singleSelList = singleSelRepository.findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(courseId, sectionId, knowledgeId, isPublic, pageable);
         // 获取到分页信息中的数据
         List<SingleSel> content = singleSelList.getContent();
         // 对数据进行遍历
@@ -87,9 +101,9 @@ public class SingleSelServiceImpl extends BaseServiceImpl<SingleSelRepository, S
     }
 
     @Override
-    public Page<SingleSel> findByNameContaining(String name, Pageable pageable) {
+    public Page<SingleSel> findByNameContainingAndIsPublic(String name, boolean isPublic, Pageable pageable) {
         // 先根据 name 查出当前课程所有单选题
-        Page<SingleSel> singleSelList = singleSelRepository.findByNameContaining(name, pageable);
+        Page<SingleSel> singleSelList = singleSelRepository.findByNameContainingAndIsPublic(name, isPublic, pageable);
         // 获取到分页信息中的数据
         List<SingleSel> content = singleSelList.getContent();
         // 对数据进行遍历

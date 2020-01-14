@@ -24,7 +24,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RepositoryRestController
 @RequestMapping(LessonResource.MULTI_SEL_SEARCH)
 public class MultiSelController extends BaseController<MultiSel, MultiSelService, Long> {
+
     private final @NonNull MultiSelService multiSelService;
+
+    /**
+     * 根据 isPublic 分页查询多选题
+     *
+     * @param isPublic 是否公开
+     * @return org.springframework.http.HttpEntity<?>
+     * @author Soul
+     * @date 2020/1/10 17:21
+     */
+    @GetMapping("/findAllByIsPublic")
+    public HttpEntity<?> findAllByIsPublic(boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(multiSelService.findAllByIsPublic(isPublic, pageable));
+    }
 
     /**
      * 根据课程 id 分页查询多选题
@@ -32,9 +46,9 @@ public class MultiSelController extends BaseController<MultiSel, MultiSelService
      * @param courseId 课程Id
      * @return .
      */
-    @GetMapping("/findAllByCourseId")
-    public HttpEntity<?> findAllByCourseId(Long courseId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(multiSelService.findAllByCourseId(courseId, pageable));
+    @GetMapping("/findAllByCourseIdAndIsPublic")
+    public HttpEntity<?> findAllByCourseIdAndIsPublic(Long courseId, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(multiSelService.findAllByCourseIdAndIsPublic(courseId, isPublic, pageable));
     }
 
     /**
@@ -46,9 +60,9 @@ public class MultiSelController extends BaseController<MultiSel, MultiSelService
      * @author Soul
      * @date 2020/1/10 17:21
      */
-    @GetMapping("/findAllByCourseIdAndSectionId")
-    public HttpEntity<?> findAllBySectionId(Long courseId, Long sectionId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(multiSelService.findAllByCourseIdAndSectionId(courseId, sectionId, pageable));
+    @GetMapping("/findAllByCourseIdAndSectionIdAndIsPublic")
+    public HttpEntity<?> findAllByCourseIdAndSectionIdAndIsPublic(Long courseId, Long sectionId, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(multiSelService.findAllByCourseIdAndSectionIdAndIsPublic(courseId, sectionId, isPublic, pageable));
     }
 
     /**
@@ -61,9 +75,9 @@ public class MultiSelController extends BaseController<MultiSel, MultiSelService
      * @author Soul
      * @date 2020/1/10 17:21
      */
-    @GetMapping("/findAllByCourseIdAndSectionIdAndKnowledgeId")
-    public HttpEntity<?> findAllByCourseIdAndSectionIdAndKnowledgeId(Long courseId, Long sectionId, Long knowledgeId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(multiSelService.findAllByCourseIdAndSectionIdAndKnowledgeId(courseId, sectionId, knowledgeId, pageable));
+    @GetMapping("/findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic")
+    public HttpEntity<?> findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(Long courseId, Long sectionId, Long knowledgeId, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(multiSelService.findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(courseId, sectionId, knowledgeId, isPublic, pageable));
     }
 
     /**
@@ -74,8 +88,8 @@ public class MultiSelController extends BaseController<MultiSel, MultiSelService
      * @author Soul
      * @date 2020/1/10 17:21
      */
-    @GetMapping("/findByNameContaining")
-    public HttpEntity<?> findByNameContaining(String name, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(multiSelService.findByNameContaining(name, pageable));
+    @GetMapping("/findByNameContainingAndIsPublic")
+    public HttpEntity<?> findByNameContainingAndIsPublic(String name, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(multiSelService.findByNameContainingAndIsPublic(name, isPublic, pageable));
     }
 }

@@ -24,7 +24,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RepositoryRestController
 @RequestMapping(LessonResource.PROGRAM_SEARCH)
 public class ProgramController extends BaseController<Program, ProgramService, Long> {
+
     private final @NonNull ProgramService programService;
+
+    /**
+     * 根据 isPublic 分页查询多编程题
+     *
+     * @param isPublic 是否公开
+     * @return org.springframework.http.HttpEntity<?>
+     * @author Soul
+     * @date 2020/1/10 17:21
+     */
+    @GetMapping("/findAllByIsPublic")
+    public HttpEntity<?> findAllByIsPublic(boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(programService.findAllByIsPublic(isPublic, pageable));
+    }
 
     /**
      * 根据课程 id 分页查询编程题
@@ -32,9 +46,9 @@ public class ProgramController extends BaseController<Program, ProgramService, L
      * @param courseId 课程Id
      * @return .
      */
-    @GetMapping("/findAllByCourseId")
-    public HttpEntity<?> findAllByCourseId(Long courseId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(programService.findAllByCourseId(courseId, pageable));
+    @GetMapping("/findAllByCourseIdAndIsPublic")
+    public HttpEntity<?> findAllByCourseIdAndIsPublic(Long courseId, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(programService.findAllByCourseIdAndIsPublic(courseId, isPublic, pageable));
     }
 
     /**
@@ -46,9 +60,9 @@ public class ProgramController extends BaseController<Program, ProgramService, L
      * @author Soul
      * @date 2020/1/10 17:21
      */
-    @GetMapping("/findAllByCourseIdAndSectionId")
-    public HttpEntity<?> findAllBySectionId(Long courseId, Long sectionId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(programService.findAllByCourseIdAndSectionId(courseId, sectionId, pageable));
+    @GetMapping("/findAllByCourseIdAndSectionIdAndIsPublic")
+    public HttpEntity<?> findAllByCourseIdAndSectionIdAndIsPublic(Long courseId, Long sectionId, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(programService.findAllByCourseIdAndSectionIdAndIsPublic(courseId, sectionId, isPublic, pageable));
     }
 
     /**
@@ -61,9 +75,9 @@ public class ProgramController extends BaseController<Program, ProgramService, L
      * @author Soul
      * @date 2020/1/10 17:21
      */
-    @GetMapping("/findAllByCourseIdAndSectionIdAndKnowledgeId")
-    public HttpEntity<?> findAllByCourseIdAndSectionIdAndKnowledgeId(Long courseId, Long sectionId, Long knowledgeId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(programService.findAllByCourseIdAndSectionIdAndKnowledgeId(courseId, sectionId, knowledgeId, pageable));
+    @GetMapping("/findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic")
+    public HttpEntity<?> findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(Long courseId, Long sectionId, Long knowledgeId, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(programService.findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(courseId, sectionId, knowledgeId, isPublic, pageable));
     }
 
     /**
@@ -74,8 +88,8 @@ public class ProgramController extends BaseController<Program, ProgramService, L
      * @author Soul
      * @date 2020/1/10 17:21
      */
-    @GetMapping("/findByNameContaining")
-    public HttpEntity<?> findByNameContaining(String name, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(programService.findByNameContaining(name, pageable));
+    @GetMapping("/findByNameContainingAndIsPublic")
+    public HttpEntity<?> findByNameContainingAndIsPublic(String name, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(programService.findByNameContainingAndIsPublic(name, isPublic, pageable));
     }
 }
