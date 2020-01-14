@@ -85,21 +85,24 @@ public class TeacherServiceImpl implements TeacherService {
                         criteriaBuilder.like(root.get("name").as(String.class), "%" + name + "%")
                 );
             }
-            if (courseId != 0) {
-                conjunction = criteriaBuilder.and(conjunction,
-                        criteriaBuilder.equal(root.get("courseId").as(Long.class), courseId)
-                );
+            if (courseId == 0) {
+                return query.where(conjunction).getRestriction();
             }
-            if (sectionId != 0) {
-                conjunction = criteriaBuilder.and(conjunction,
-                        criteriaBuilder.equal(root.get("sectionId").as(Long.class), sectionId)
-                );
+            conjunction = criteriaBuilder.and(conjunction,
+                    criteriaBuilder.equal(root.get("courseId").as(Long.class), courseId)
+            );
+            if (sectionId == 0) {
+                return query.where(conjunction).getRestriction();
             }
-            if (knowledgeId != 0) {
-                conjunction = criteriaBuilder.and(conjunction,
-                        criteriaBuilder.equal(root.get("knowledgeId").as(Long.class), knowledgeId)
-                );
+            conjunction = criteriaBuilder.and(conjunction,
+                    criteriaBuilder.equal(root.get("sectionId").as(Long.class), sectionId)
+            );
+            if (knowledgeId == 0) {
+                return query.where(conjunction).getRestriction();
             }
+            conjunction = criteriaBuilder.and(conjunction,
+                    criteriaBuilder.equal(root.get("knowledgeId").as(Long.class), knowledgeId)
+            );
             return query.where(conjunction).getRestriction();
         };
     }
