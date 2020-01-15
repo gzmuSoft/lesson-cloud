@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 /**
  * Teacher Repository
  *
- * @author <a href="https://echocow.cn">EchoCow</a>
+ *
  * @version 1.0
  * @date 2019-5-23 17:38:13
  */

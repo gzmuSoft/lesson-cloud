@@ -28,20 +28,19 @@ public class EssayController extends BaseController<Essay, EssayService, Long> {
     private final @NonNull EssayService essayService;
 
     /**
-     * 根据 isPublic 分页查询问答题
+     * 查询公开的问答题
      *
-     * @param isPublic 是否公开
      * @return org.springframework.http.HttpEntity<?>
      * @author Soul
      * @date 2020/1/10 17:21
      */
     @GetMapping("/findAllByIsPublic")
-    public HttpEntity<?> findAllByIsPublic(boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(essayService.findAllByIsPublic(isPublic, pageable));
+    public HttpEntity<?> findAllByIsPublic(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(essayService.findAllByIsPublic(true, pageable));
     }
 
     /**
-     * 根据课程 id 分页查询问答题
+     * 根据课程 Id 分页查询公开的问答题
      *
      * @param courseId 课程Id
      * @return org.springframework.http.HttpEntity<?>
@@ -49,12 +48,12 @@ public class EssayController extends BaseController<Essay, EssayService, Long> {
      * @date 2020/1/10 17:21
      */
     @GetMapping("/findAllByCourseIdAndIsPublic")
-    public HttpEntity<?> findAllByCourseIdAndIsPublic(Long courseId, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(essayService.findAllByCourseIdAndIsPublic(courseId, isPublic, pageable));
+    public HttpEntity<?> findAllByCourseIdAndIsPublic(Long courseId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(essayService.findAllByCourseIdAndIsPublic(courseId, true, pageable));
     }
 
     /**
-     * 根据课程 Id和章节 Id 分页查询问答题
+     * 根据课程 Id 和章节 Id 分页查询公开的问答题
      *
      * @param courseId  课程Id
      * @param sectionId 章节Id
@@ -63,12 +62,12 @@ public class EssayController extends BaseController<Essay, EssayService, Long> {
      * @date 2020/1/10 17:21
      */
     @GetMapping("/findAllByCourseIdAndSectionIdAndIsPublic")
-    public HttpEntity<?> findAllByCourseIdAndSectionIdAndIsPublic(Long courseId, Long sectionId, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(essayService.findAllByCourseIdAndSectionIdAndIsPublic(courseId, sectionId, isPublic, pageable));
+    public HttpEntity<?> findAllByCourseIdAndSectionIdAndIsPublic(Long courseId, Long sectionId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(essayService.findAllByCourseIdAndSectionIdAndIsPublic(courseId, sectionId, true, pageable));
     }
 
     /**
-     * 根据课程 Id和章节 Id 和知识点 id 分页查询问答题
+     * 根据课程 Id 和章节 Id 和知识点 Id 分页查询公开的问答题
      *
      * @param courseId    课程Id
      * @param sectionId   章节Id
@@ -78,12 +77,12 @@ public class EssayController extends BaseController<Essay, EssayService, Long> {
      * @date 2020/1/10 17:21
      */
     @GetMapping("/findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic")
-    public HttpEntity<?> findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(Long courseId, Long sectionId, Long knowledgeId, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(essayService.findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(courseId, sectionId, knowledgeId, isPublic, pageable));
+    public HttpEntity<?> findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(Long courseId, Long sectionId, Long knowledgeId, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(essayService.findAllByCourseIdAndSectionIdAndKnowledgeIdAndIsPublic(courseId, sectionId, knowledgeId, true, pageable));
     }
 
     /**
-     * 根据题目部分内容模糊分页查询问答题
+     * 根据题目部分内容模糊分页查询公开的问答题
      *
      * @param name 内容
      * @return org.springframework.http.HttpEntity<?>
@@ -91,7 +90,7 @@ public class EssayController extends BaseController<Essay, EssayService, Long> {
      * @date 2020/1/10 17:21
      */
     @GetMapping("/findByNameContainingAndIsPublic")
-    public HttpEntity<?> findByNameContainingAndIsPublic(String name, boolean isPublic, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(essayService.findByNameContainingAndIsPublic(name, isPublic, pageable));
+    public HttpEntity<?> findByNameContainingAndIsPublic(String name, @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(essayService.findByNameContainingAndIsPublic(name, true, pageable));
     }
 }

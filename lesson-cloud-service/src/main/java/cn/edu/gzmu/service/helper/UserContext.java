@@ -16,7 +16,7 @@ import java.util.function.Predicate;
  * 用户上下文对象，通过他来存取当前已经登录的用户的信息
  * 通过 <code>SecurityContextHolder.getContext().getAuthentication().getDetails()</code>
  *
- * @author <a href="https://echocow.cn">EchoCow</a>
+ *
  * @date 19-6-23 下午7:08
  */
 @Data

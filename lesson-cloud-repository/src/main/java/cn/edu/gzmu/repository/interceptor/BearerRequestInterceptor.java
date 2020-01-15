@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * .
  *
- * @author <a href="https://echocow.cn">EchoCow</a>
+ *
  * @date 2020/1/9 下午7:23
  */
 public class BearerRequestInterceptor implements RequestInterceptor {

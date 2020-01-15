@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * .
  *
- * @author <a href="https://echocow.cn">EchoCow</a>
+ *
  * @date 2020/1/10 下午7:40
  */
 public class SysLogControllerTest extends Oauth2RestTemplate {

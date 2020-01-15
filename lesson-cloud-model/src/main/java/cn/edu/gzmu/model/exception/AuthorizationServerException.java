@@ -3,7 +3,7 @@ package cn.edu.gzmu.model.exception;
 /**
  * .
  *
- * @author <a href="https://echocow.cn">EchoCow</a>
+ *
  * @date 2020/1/8 下午1:48
  */
 public class AuthorizationServerException extends RuntimeException {

@@ -14,7 +14,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import java.io.IOException;
 
 /**
- * @author <a href="https://echocow.cn">EchoCow</a>
+ *
  * @date 2019/8/2 下午6:05
  */
 @RequiredArgsConstructor

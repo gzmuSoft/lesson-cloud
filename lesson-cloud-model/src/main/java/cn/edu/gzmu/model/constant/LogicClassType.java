@@ -3,7 +3,7 @@ package cn.edu.gzmu.model.constant;
 /**
  * 逻辑班级类型
  *
- * @author <a href="https://echocow.cn">EchoCow</a>
+ *
  * @date 2019/8/4 下午10:40
  */
 public enum LogicClassType {

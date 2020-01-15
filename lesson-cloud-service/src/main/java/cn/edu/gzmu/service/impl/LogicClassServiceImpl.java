@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * LogicClass Service Impl
  *
- * @author <a href="https://echocow.cn">EchoCow</a>
+ *
  * @author Japoul
  * @author hzl
  * @version 1.0

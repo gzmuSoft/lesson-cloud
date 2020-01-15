@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 /**
  * .
  *
- * @author <a href="https://echocow.cn">EchoCow</a>
+ *
  * @date 2020/1/10 下午7:14
  */
 public class Oauth2RestTemplate {

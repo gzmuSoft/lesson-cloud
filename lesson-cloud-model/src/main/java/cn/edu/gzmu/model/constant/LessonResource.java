@@ -4,7 +4,7 @@ package cn.edu.gzmu.model.constant;
 import java.io.File;
 
 /**
- * @author <a href="https://echocow.cn">EchoCow</a>
+ *
  * @version 1.0
  * @date 19-5-28 17:39
  */
