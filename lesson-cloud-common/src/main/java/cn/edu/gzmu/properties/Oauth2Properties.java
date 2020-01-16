@@ -18,12 +18,15 @@ public class Oauth2Properties {
      */
     private boolean enabled = true;
 
+    /**
+     * 授权服务器地址
+     */
     private String authorizationServerUrl = "http://127.0.0.1:8888";
 
     /**
      * 解析 token 地址
      */
-    private String tokenInfoUri;
+    private String tokenInfoUri = "/oauth/check_token";
 
     /**
      * 用户信息
@@ -31,9 +34,24 @@ public class Oauth2Properties {
     private String userInfoUri;
 
     /**
+     * 授权服务器协议
+     */
+    private String scheme = "http";
+
+    /**
+     * 授权地址
+     */
+    private String authorizeUri = "/oauth/authorize";
+
+    /**
      * 获取 token 地址
      */
-    private String accessTokenUri;
+    private String accessTokenUri = "/oauth/token";
+
+    /**
+     * 退出登录地址
+     */
+    private String logoutUri = "/oauth/logout";
 
     /**
      * 客户端 id
@@ -51,6 +69,16 @@ public class Oauth2Properties {
     private String grantType;
 
     /**
+     * 登录成功的回调地址
+     */
+    private String redirectUrl = "http://127.0.0.1:8081";
+
+    /**
+     * 退出登录的回调地址
+     */
+    private String logoutRedirectUrl = "http://127.0.0.1:8081";
+
+    /**
      * 授权域
      */
     private String scope;
@@ -58,7 +86,7 @@ public class Oauth2Properties {
     /**
      * jwkSetUri
      */
-    private String jwkSetUri;
+    private String jwkSetUri = "/.well-known/jwks.json";
 
     public String getTokenInfoUri() {
         return authorizationServerUrl + tokenInfoUri;

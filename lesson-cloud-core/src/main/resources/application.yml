@@ -69,14 +69,13 @@ application:
   oauth2:
     enabled: false
     authorization-server-url: http://118.24.1.170:8888
-    token-info-uri: /oauth/check_token
-    access-token-uri: /oauth/token
     user-info-uri: /auth/me
-    jwk-set-uri: /.well-known/jwks.json
     client-id: lesson-cloud
     client-secret: lesson-cloud-secret
     grant-type: password,refresh_token,sms,email,authorization_code
     scope: READ
+    redirect-url: http://127.0.0.1:8081/#/login
+    logout-redirect-url: http://127.0.0.1:8081/#/logout
 
 logging:
   level:
