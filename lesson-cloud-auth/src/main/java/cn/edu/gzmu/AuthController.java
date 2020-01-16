@@ -2,6 +2,7 @@ package cn.edu.gzmu;
 
 import cn.edu.gzmu.properties.Oauth2Properties;
 import cn.edu.gzmu.repository.auth.Oauth2Repository;
+import cn.edu.gzmu.repository.auth.UserRepository;
 import com.alibaba.fastjson.JSONObject;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,11 +31,7 @@ public class AuthController {
 
     private final @NonNull Oauth2Properties oauth2Properties;
     private final @NonNull Oauth2Repository oauth2Repository;
-
-    @GetMapping("/user")
-    public HttpEntity<?> userInfo(Principal principal) {
-        return ResponseEntity.ok(principal);
-    }
+    private final @NonNull UserRepository userRepository;
 
     /**
      * 获取授权服务器的登录地址
@@ -124,6 +120,16 @@ public class AuthController {
         JSONObject result = new JSONObject();
         result.put("logout_url", logoutUri.build().toString());
         return ResponseEntity.ok(result);
+    }
+
+    /**
+     * 获取用户信息.
+     *
+     * @return 结果
+     */
+    @GetMapping("/me")
+    public HttpEntity<?> me() {
+        return ResponseEntity.ok(userRepository.me());
     }
 
     /**
