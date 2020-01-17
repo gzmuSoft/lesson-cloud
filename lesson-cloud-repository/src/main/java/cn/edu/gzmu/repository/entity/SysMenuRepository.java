@@ -29,7 +29,7 @@ public interface SysMenuRepository extends BaseRepository<SysMenu, Long> {
      */
     @RestResource(path = "sysRole", rel = "sysRole", description = @Description("通过角色名称列表查询所有菜单"))
     @Query(value = "SELECT sm.* FROM sys_role_menu srm, sys_menu sm WHERE srm.role_name in :names and srm.menu_id = sm.id " +
-            "and sm.is_enable = 1", nativeQuery = true)
+            "and sm.is_enable = 1 order by sm.sort", nativeQuery = true)
     List<SysMenu> searchBySysRoleNames(@Param("names") List<String> names);
 
 }

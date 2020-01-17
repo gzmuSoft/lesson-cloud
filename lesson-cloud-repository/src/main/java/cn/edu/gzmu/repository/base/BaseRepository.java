@@ -99,5 +99,6 @@ public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<
      * @author Soul
      * @date 2020/1/17 21:43
      */
-    Page<T> findByNameContaining(String name, Pageable pageable);
+    @RestResource(path = "name", rel = "searchByNameContaining")
+    Page<T> findByNameContaining(@Param("containing") String name, Pageable pageable);
 }
