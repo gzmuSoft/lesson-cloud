@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
@@ -51,7 +52,7 @@ public class TeacherServiceTest {
     @Test
     @Tag("passed")
     @DisplayName("根据 name 查询公开题目")
-    void findPublicQuestionBankByConditionWhenPassedIsPublicAndName() {
+    void findPublicQuestionBankByConditionWhenPassedIsPublicTrueAndName() {
         JSONObject result = teacherService.findPublicQuestionBankByCondition(
                 0L, 0L, 0L, "你是", true, PageRequest.of(0, 10)
         );

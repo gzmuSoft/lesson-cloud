@@ -37,6 +37,24 @@ public class TeacherController {
     }
 
     /**
+     * 通过不同条件获取当前登录教师的私有题库
+     *
+     * @param pageable 分页
+     * @return org.springframework.http.HttpEntity<?>
+     * @author Soul
+     * @date 2020/1/13 22:04
+     */
+    @GetMapping("/findPrivateQuestionBankByCondition")
+    public HttpEntity<?> findPrivateQuestionBankByCondition(
+            @RequestParam(defaultValue = "0") Long courseId,
+            @RequestParam(defaultValue = "0") Long sectionId,
+            @RequestParam(defaultValue = "0") Long knowledgeId,
+            @RequestParam(defaultValue = "") String name,
+            @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
+        return ResponseEntity.ok(teacherService.findPrivateQuestionBankCondition(oauthHelper.teacher(), courseId, sectionId, knowledgeId, name, false, pageable));
+    }
+
+    /**
      * 通过不同条件获取公有题库
      *
      * @param pageable 分页
@@ -44,8 +62,8 @@ public class TeacherController {
      * @author Soul
      * @date 2020/1/13 22:04
      */
-    @GetMapping("/finPublicQuestionBankByCondition")
-    public HttpEntity<?> finPublicQuestionBankByCondition(
+    @GetMapping("/findPublicQuestionBankByCondition")
+    public HttpEntity<?> findPublicQuestionBankByCondition(
             @RequestParam(defaultValue = "0") Long courseId,
             @RequestParam(defaultValue = "0") Long sectionId,
             @RequestParam(defaultValue = "0") Long knowledgeId,
