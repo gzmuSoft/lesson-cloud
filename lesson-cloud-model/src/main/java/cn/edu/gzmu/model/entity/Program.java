@@ -88,4 +88,9 @@ public class Program extends BaseEntity implements Serializable {
      * 是否公开
      */
     private Boolean isPublic = false;
+
+    /**
+     * 默认值
+     */
+    private String remark = "PROGRAM";
 }
