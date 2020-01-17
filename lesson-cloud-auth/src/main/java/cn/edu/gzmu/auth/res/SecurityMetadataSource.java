@@ -1,6 +1,5 @@
 package cn.edu.gzmu.auth.res;
 
-import cn.edu.gzmu.service.helper.UserContext;
 import cn.edu.gzmu.constant.HttpMethod;
 import cn.edu.gzmu.model.entity.*;
 import cn.edu.gzmu.properties.Oauth2Properties;
@@ -23,6 +22,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static cn.edu.gzmu.model.constant.Security.*;
+
 /**
  * 动态权限配置核心，将会对请求进行进行匹配
  * <p>
@@ -35,7 +36,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class SecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
-    private final static Long ROLE_PUBLIC_ID = -1L;
     private final @NonNull SysResRepository sysResRepository;
     private final @NonNull SysRoleResRepository sysRoleResRepository;
     private final @NonNull Oauth2Properties oauth2Properties;
@@ -48,7 +48,7 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
         String requestUrl = httpRequest.getServletPath();
         if (isRoleAdmin() || !oauth2Properties.isEnabled()) {
             // 对于管理员角色和不启用的情况，开放所有资源
-            return SecurityConfig.createList("ROLE_PUBLIC");
+            return SecurityConfig.createList(ROLE_PUBLIC);
         }
         List<SysRes> sysRes = sysResRepository.findAll();
         for (SysRes res : sysRes) {
@@ -65,22 +65,14 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
             if (CollectionUtils.isEmpty(sysRoleResList)) {
                 continue;
             }
-            // 获取匹配当前资源的角色 id 表
-            List<Long> sysRoleIds = sysRoleResList.stream().map(SysRoleRes::getRoleId).collect(Collectors.toList());
-            // 如果当前匹配的角色中含有公共资源的 id （-1）
-            if (sysRoleIds.contains(ROLE_PUBLIC_ID)) {
-                return SecurityConfig.createList("ROLE_PUBLIC");
+            // 获取匹配当前资源的角色名称表
+            List<String> sysRoleNames = sysRoleResList.stream().map(SysRoleRes::getRoleName).collect(Collectors.toList());
+            if (sysRoleNames.contains(ROLE_PUBLIC)) {
+                return SecurityConfig.createList(ROLE_PUBLIC);
             }
-            // 获取当前用户的角色信息
-            List<SysRole> sysRoles = ((UserContext) SecurityContextHolder.getContext().getAuthentication().getDetails()).currentRoles();
-            // 检查当前用户的角色是否有符合当前资源的
-            List<SysRole> matchRoles = sysRoles.stream().filter(sysRole -> sysRoleIds.contains(sysRole.getId())).collect(Collectors.toList());
-            if (matchRoles.size() == 0) {
-                continue;
-            }
-            return SecurityConfig.createList(matchRoles.stream().map(SysRole::getName).collect(Collectors.joining(",")));
+            return SecurityConfig.createListFromCommaDelimitedString(String.join(",", sysRoleNames));
         }
-        return SecurityConfig.createList("ROLE_NO_AUTH");
+        return SecurityConfig.createList(ROLE_NO_AUTH);
     }
 
     @Override
@@ -100,7 +92,7 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
      */
     private boolean isRoleAdmin() {
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities()
-                .contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                .contains(new SimpleGrantedAuthority(ROLE_ADMIN));
     }
 
 }

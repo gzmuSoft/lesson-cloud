@@ -27,8 +27,8 @@ public class SysResServiceImpl extends BaseServiceImpl<SysResRepository, SysRes,
 
     @Override
     public List<SysRes> searchByRoles(List<SysRole> roles) {
-        return sysResRepository.searchBySysRoleIds(roles.stream()
-                .map(SysRole::getId).toArray(Long[]::new));
+        return sysResRepository.searchBySysRoleNames(roles.stream()
+                .map(SysRole::getName).toArray(String[]::new));
     }
 
 }

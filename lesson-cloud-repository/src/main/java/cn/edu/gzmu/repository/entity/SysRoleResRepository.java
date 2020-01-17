@@ -17,6 +17,20 @@ import java.util.List;
 @RepositoryRestResource(path = "sysRoleRes")
 public interface SysRoleResRepository extends BaseRepository<SysRoleRes, Long> {
 
+    /**
+     * 通过 res id 查询
+     *
+     * @param resId 资源id
+     * @return 结果
+     */
     List<SysRoleRes> findAllByResId(Long resId);
+
+    /**
+     * 通过 角色名称 查询
+     *
+     * @param roleName 角色名称
+     * @return 结果
+     */
+    List<SysRoleRes> findAllByRoleName(String roleName);
 
 }

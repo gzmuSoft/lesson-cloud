@@ -3,6 +3,7 @@ package cn.edu.gzmu;
 import cn.edu.gzmu.properties.Oauth2Properties;
 import cn.edu.gzmu.repository.auth.Oauth2Repository;
 import cn.edu.gzmu.repository.auth.UserRepository;
+import cn.edu.gzmu.repository.entity.SysMenuRepository;
 import com.alibaba.fastjson.JSONObject;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +12,17 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 授权信息
@@ -32,6 +39,7 @@ public class AuthController {
     private final @NonNull Oauth2Properties oauth2Properties;
     private final @NonNull Oauth2Repository oauth2Repository;
     private final @NonNull UserRepository userRepository;
+    private final @NonNull SysMenuRepository sysMenuRepository;
 
     /**
      * 获取授权服务器的登录地址
@@ -130,6 +138,24 @@ public class AuthController {
     @GetMapping("/me")
     public HttpEntity<?> me() {
         return ResponseEntity.ok(userRepository.me());
+    }
+
+    /**
+     * 获取当前登录用户的菜单.
+     *
+     * @param principal 登录用户
+     * @return 结果
+     */
+    @GetMapping("/menu")
+    public HttpEntity<?> menus(Principal principal) {
+        if (!(principal instanceof JwtAuthenticationToken)) {
+            throw new AccessDeniedException("角色信息错误");
+        }
+        JwtAuthenticationToken authentication = (JwtAuthenticationToken) principal;
+        List<String> roleNames = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(sysMenuRepository.searchBySysRoleNames(roleNames));
     }
 
     /**

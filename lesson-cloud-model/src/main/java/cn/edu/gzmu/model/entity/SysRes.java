@@ -29,11 +29,6 @@ import java.io.Serializable;
 public class SysRes extends BaseEntity implements Serializable {
 
     /**
-     * 父权限资源编号
-     */
-    private java.lang.Long parentId;
-
-    /**
      * 描述
      */
     @Size(max = 1024, message = "des 不能大于 1024 位")
@@ -47,37 +42,9 @@ public class SysRes extends BaseEntity implements Serializable {
     private java.lang.String matchUrl;
 
     /**
-     * 路由路径
-     */
-    @Size(max = 255, message = "router 不能大于 255 位")
-    private java.lang.String router;
-
-    /**
-     * 组件名称
-     */
-    @Size(max = 255, message = "component 不能大于 255 位")
-    private java.lang.String component;
-
-    /**
-     * 图标
-     */
-    @Size(max = 255, message = "iconCls 不能大于 255 位")
-    private java.lang.String iconCls;
-
-    /**
-     * 层级
-     */
-    private java.lang.Integer level;
-
-    /**
      * 允许使用的方法：GET、POST、PUT、PATCH、DELETE、ALL
      */
     @Size(max = 50, message = "method 不能大于 50 位")
     private java.lang.String method;
 
-    /**
-     * 类型：1 功能 2 权限
-     */
-    @Size(max = 255, message = "type 不能大于 255 位")
-    private java.lang.String type;
 }
