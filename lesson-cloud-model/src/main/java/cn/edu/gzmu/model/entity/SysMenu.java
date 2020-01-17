@@ -12,28 +12,33 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
- * sys_role_res
+ * sys_menu.
  *
- * @author echo
- * @version 1.0
- * @date 2019-5-27 10:59:09
+ * @author <a href="https://echocow.cn">EchoCow</a>
+ * @date 2020/1/17 下午2:09
  */
 @Data
 @ToString(callSuper = true)
-@Table(name = "sys_role_res")
-@Entity(name = "sys_role_res")
+@Table(name = "sys_menu")
+@Entity(name = "sys_menu")
 @Where(clause = "is_enable = 1")
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class SysRoleRes extends BaseEntity implements Serializable {
+public class SysMenu extends BaseEntity implements Serializable  {
 
     /**
-     * 角色编号
+     * 描述
      */
-    private java.lang.String roleName;
+    private java.lang.String des;
 
     /**
-     * 权限资源编号
+     * 路由名称
      */
-    private java.lang.Long resId;
+    private java.lang.String routeName;
+
+    /**
+     * 图标
+     */
+    private java.lang.String icon;
+
 }

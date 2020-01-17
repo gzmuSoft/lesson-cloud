@@ -1,7 +1,6 @@
 package cn.edu.gzmu.integration;
 
 import com.alibaba.fastjson.JSONObject;
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
@@ -24,13 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 /**
  * .
  *
- *
  * @date 2020/1/10 下午7:14
  */
-public class Oauth2RestTemplate {
+public class Oauth2RestTemplate extends ApplicationConfig {
 
     private static final String AUTHORIZATION_SERVER_URL = "http://118.24.1.170:8888";
-    private static final String LESSON_CLOUD_URL = "http://127.0.0.1:8080";
     private static final String CLIENT_ID = "lesson-cloud";
     private static final String CLIENT_SECRET = "lesson-cloud-secret";
 
@@ -41,7 +38,7 @@ public class Oauth2RestTemplate {
         List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
         interceptors.add(new BearerAuthenticationInterceptor(accessToken()));
         oauthRestTemplate.setInterceptors(interceptors);
-        oauthRestTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(LESSON_CLOUD_URL));
+        oauthRestTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(BASE_URL));
     }
 
     @Test

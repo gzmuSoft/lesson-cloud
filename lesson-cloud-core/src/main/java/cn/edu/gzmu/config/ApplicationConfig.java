@@ -1,5 +1,8 @@
 package cn.edu.gzmu.config;
 
+import cn.edu.gzmu.properties.Oauth2Properties;
+import feign.RequestInterceptor;
+import feign.auth.BasicAuthRequestInterceptor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +23,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class ApplicationConfig implements WebMvcConfigurer {
 
     private final @NonNull HateoasPageableHandlerMethodArgumentResolver pageableResolver;
+    private final @NonNull Oauth2Properties oauth2Properties;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -28,6 +32,14 @@ public class ApplicationConfig implements WebMvcConfigurer {
                 .allowedMethods("*")
                 .maxAge(6000)
                 .allowedOrigins("*");
+    }
+
+    @Bean
+    public RequestInterceptor basicAuthRequestInterceptor() {
+        return new BasicAuthRequestInterceptor(
+                oauth2Properties.getClientId(),
+                oauth2Properties.getClientSecret()
+        );
     }
 
     @Bean

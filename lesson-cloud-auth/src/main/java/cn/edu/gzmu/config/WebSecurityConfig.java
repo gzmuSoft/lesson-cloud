@@ -59,6 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
+                .csrf().disable();
+        http
                 .oauth2ResourceServer()
                 .jwt()
                 .jwkSetUri(oauth2Properties.getJwkSetUri())

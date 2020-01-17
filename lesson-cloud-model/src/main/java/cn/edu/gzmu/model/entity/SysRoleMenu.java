@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
- * sys_role_res
+ * sys_role_menu
  *
  * @author echo
  * @version 1.0
@@ -20,12 +20,12 @@ import java.io.Serializable;
  */
 @Data
 @ToString(callSuper = true)
-@Table(name = "sys_role_res")
-@Entity(name = "sys_role_res")
+@Table(name = "sys_role_menu")
+@Entity(name = "sys_role_menu")
 @Where(clause = "is_enable = 1")
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class SysRoleRes extends BaseEntity implements Serializable {
+public class SysRoleMenu extends BaseEntity implements Serializable {
 
     /**
      * 角色编号
@@ -35,5 +35,5 @@ public class SysRoleRes extends BaseEntity implements Serializable {
     /**
      * 权限资源编号
      */
-    private java.lang.Long resId;
+    private java.lang.Long menuId;
 }
