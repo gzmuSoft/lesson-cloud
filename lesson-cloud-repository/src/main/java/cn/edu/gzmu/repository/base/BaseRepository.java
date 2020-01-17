@@ -89,4 +89,15 @@ public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<
     default void deleteById(ID id) {
         deleteExistById(id);
     }
+
+    /**
+     * 根据名称模糊分页查询
+     *
+     * @param name
+     * @param pageable
+     * @return org.springframework.data.domain.Page<T>
+     * @author Soul
+     * @date 2020/1/17 21:43
+     */
+    Page<T> findByNameContaining(String name, Pageable pageable);
 }
