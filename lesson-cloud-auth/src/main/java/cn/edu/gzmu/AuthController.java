@@ -19,9 +19,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.security.Principal;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -136,8 +139,12 @@ public class AuthController {
      * @return 结果
      */
     @GetMapping("/me")
-    public HttpEntity<?> me() {
-        return ResponseEntity.ok(userRepository.me());
+    public HttpEntity<?> me(Principal principal) {
+        JSONObject me = userRepository.me();
+        boolean refresh = Objects.requireNonNull(authenticationToken(principal).getToken().getExpiresAt())
+                .isBefore(Instant.now().plus(Duration.ofHours(oauth2Properties.getRefreshTokenHour())));
+        me.put("refresh", refresh);
+        return ResponseEntity.ok(me);
     }
 
     /**
@@ -148,11 +155,8 @@ public class AuthController {
      */
     @GetMapping("/menu")
     public HttpEntity<?> menus(Principal principal) {
-        if (!(principal instanceof JwtAuthenticationToken)) {
-            throw new AccessDeniedException("角色信息错误");
-        }
-        JwtAuthenticationToken authentication = (JwtAuthenticationToken) principal;
-        List<String> roleNames = authentication.getAuthorities().stream()
+        List<String> roleNames = authenticationToken(principal)
+                .getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(sysMenuRepository.searchBySysRoleNames(roleNames));
@@ -173,5 +177,18 @@ public class AuthController {
                 .addParameter("redirect_uri", oauth2Properties.getRedirectUrl())
                 .addParameter("scope", oauth2Properties.getScope());
         return authorizeUri.build().toString();
+    }
+
+    /**
+     * 获取 jwt token 信息
+     *
+     * @param principal 用户
+     * @return 结果
+     */
+    private JwtAuthenticationToken authenticationToken(Principal principal) {
+        if (!(principal instanceof JwtAuthenticationToken)) {
+            throw new AccessDeniedException("角色信息错误");
+        }
+        return (JwtAuthenticationToken) principal;
     }
 }

@@ -79,6 +79,11 @@ public class Oauth2Properties {
     private String logoutRedirectUrl = "http://127.0.0.1:8081";
 
     /**
+     * 前台距离 token 多长时间刷新 token
+     */
+    private Long refreshTokenHour = 5L;
+
+    /**
      * 授权域
      */
     private String scope;
