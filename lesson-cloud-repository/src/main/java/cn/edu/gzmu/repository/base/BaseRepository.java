@@ -91,14 +91,13 @@ public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<
     }
 
     /**
-     * 根据名称模糊分页查询
+     * 根据名称模糊
      *
      * @param name
-     * @param pageable
      * @return org.springframework.data.domain.Page<T>
      * @author Soul
      * @date 2020/1/17 21:43
      */
     @RestResource(path = "name", rel = "searchByNameContaining")
-    Page<T> findByNameContaining(@Param("containing") String name, Pageable pageable);
+    List<T> findByNameContaining(@Param("containing") String name);
 }
