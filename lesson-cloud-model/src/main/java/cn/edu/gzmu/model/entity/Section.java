@@ -51,7 +51,7 @@ public class Section extends BaseEntity implements Serializable {
      * 类型，0：章，1：节
      */
     @javax.validation.constraints.NotNull(message = "type 类型，0：章，1：节 为必填项")
-    private java.lang.Byte type;
+    private java.lang.Integer type;
 
     @Transient
     private Course course;
