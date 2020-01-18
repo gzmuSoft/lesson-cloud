@@ -9,8 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
-import static cn.edu.gzmu.model.constant.Security.ROLE_NO_AUTH;
-import static cn.edu.gzmu.model.constant.Security.ROLE_PUBLIC;
+import static cn.edu.gzmu.model.constant.Security.*;
 
 /**
  * 访问授权检验,制定最终访问控制（授权）决策。
@@ -27,11 +26,15 @@ public class AuthAccessDecisionManager implements AccessDecisionManager {
         for (ConfigAttribute configAttribute : configAttributes) {
             String needRole = configAttribute.getAttribute();
             //  对于不允许访问的资源
-            if (ROLE_NO_AUTH.equals(needRole)) {
+            if (ROLE_NO_AUTH.equalsIgnoreCase(needRole)) {
                 throw new AccessDeniedException("权限不足");
             }
+            // 不需要登录的时候
+            if (ROLE_NO_LOGIN.equalsIgnoreCase(needRole)) {
+                return;
+            }
             // 公共资源或者通过的资源
-            if (ROLE_PUBLIC.equals(needRole) || authentication.getAuthorities().stream().anyMatch(
+            if (ROLE_PUBLIC.equalsIgnoreCase(needRole) || authentication.getAuthorities().stream().anyMatch(
                     authority -> authority.getAuthority().equalsIgnoreCase(needRole))) {
                 return;
             }

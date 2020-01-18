@@ -69,6 +69,8 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
             List<String> sysRoleNames = sysRoleResList.stream().map(SysRoleRes::getRoleName).collect(Collectors.toList());
             if (sysRoleNames.contains(ROLE_PUBLIC)) {
                 return SecurityConfig.createList(ROLE_PUBLIC);
+            } else if (sysRoleNames.contains(ROLE_NO_LOGIN)) {
+                return SecurityConfig.createList(ROLE_NO_LOGIN);
             }
             return SecurityConfig.createListFromCommaDelimitedString(String.join(",", sysRoleNames));
         }

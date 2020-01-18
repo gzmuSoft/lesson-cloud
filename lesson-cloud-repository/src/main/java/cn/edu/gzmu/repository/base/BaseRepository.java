@@ -1,6 +1,7 @@
 package cn.edu.gzmu.repository.base;
 
 import cn.edu.gzmu.model.BaseEntity;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,19 +34,18 @@ public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<
      * @param pageable 分页
      * @return 结果
      */
-    @RestResource(path = "all", rel = "all")
+    @RestResource(exported = false)
     @Query(value = "select * from #{#entityName} ", countQuery = "select count(*) from #{#entityName}", nativeQuery = true)
     Page<T> findAllExist(Pageable pageable);
 
     /**
-     * 根据 id 分页查询
+     * 查询所有数据
      *
-     * @param id       id
-     * @param pageable 分页
      * @return 结果
      */
-    Page<T> findAllById(Long id, Pageable pageable);
-
+    @RestResource(path = "all", rel = "all")
+    @Query(value = "select * from #{#entityName} where is_enable = 1", nativeQuery = true)
+    List<T> searchAll();
 
     /**
      * 通过 id 列表查询
@@ -61,6 +61,7 @@ public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<
      * 通过 id 列表查询
      *
      * @param ids id 列表
+     * @param pageable page
      * @return 结果
      */
     @RestResource(exported = false)
@@ -86,7 +87,7 @@ public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<
      * @param id id
      */
     @Override
-    default void deleteById(ID id) {
+    default void deleteById(@NotNull ID id) {
         deleteExistById(id);
     }
 

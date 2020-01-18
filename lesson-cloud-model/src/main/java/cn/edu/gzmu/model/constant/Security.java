@@ -19,4 +19,8 @@ public interface Security {
      * 禁止访问角色
      */
     String ROLE_NO_AUTH = "ROLE_NO_AUTH";
+    /**
+     * 不用登录即可访问
+     */
+    String ROLE_NO_LOGIN = "ROLE_NO_LOGIN";
 }
