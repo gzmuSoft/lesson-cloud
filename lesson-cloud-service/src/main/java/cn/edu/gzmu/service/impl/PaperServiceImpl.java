@@ -2,7 +2,6 @@ package cn.edu.gzmu.service.impl;
 
 import cn.edu.gzmu.model.BaseEntity;
 import cn.edu.gzmu.model.entity.*;
-import cn.edu.gzmu.repository.auth.StudentRepository;
 import cn.edu.gzmu.repository.base.BaseRepository;
 import cn.edu.gzmu.repository.entity.*;
 import cn.edu.gzmu.service.PaperService;
@@ -29,24 +28,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PaperServiceImpl extends BaseServiceImpl<PaperRepository, Paper, Long>
         implements PaperService {
-    private final @NonNull ExamRepository examRepository;
-    private final @NonNull SingleSelRepository singleSelRepository;
-    private final @NonNull MultiSelRepository multiSelRepository;
-    private final @NonNull JudgementRepository judgementRepository;
-    private final @NonNull EssayRepository essayRepository;
-    private final @NonNull ProgramRepository programRepository;
     private final @NonNull PaperRepository paperRepository;
-    private final @NonNull StudentRepository studentRepository;
 
     @Override
     protected Paper completeEntity(Paper paper) {
-        paper.setExam(examRepository.findById(paper.getExamId()).orElse(null));
-        paper.setSingleSel(listEntity(paper.getSingleSelIds(), singleSelRepository));
-        paper.setMultiSel(listEntity(paper.getMultiSelIds(), multiSelRepository));
-        paper.setJudgement(listEntity(paper.getJudgementIds(), judgementRepository));
-        paper.setEssay(listEntity(paper.getEssayIds(), essayRepository));
-        paper.setProgram(listEntity(paper.getProgramIds(), programRepository));
-        paper.setStudent(studentRepository.findById(paper.getStudentId()));
+        // TODO: paper 完整性填充
         return paper;
     }
 

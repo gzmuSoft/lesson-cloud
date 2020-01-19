@@ -9,56 +9,38 @@ package cn.edu.gzmu.model.constant;
 public enum QuestionType {
 
     /**
-     * 单项选择题
+     * 单项选择题 0
      */
-    SINGLE_SEL(0),
+    SINGLE_SEL,
     /**
-     * 多项选择题
+     * 多项选择题 1
      */
-    MULTI_SEL(1),
+    MULTI_SEL,
     /**
-     * 判断题
+     * 判断题 2
      */
-    JUDGEMENT(2),
-
-//    NotFound(3),
+    JUDGEMENT,
+    /**
+     * 填空题 3
+     */
+    FILL_BLANK,
+    /**
+     * 简答题 4
+     */
+    ESSAY,
+    /**
+     * 编程题 5
+     */
+    PROGRAM;
 
     /**
-     * 简答题
+     * 类型匹配
+     *
+     * @param type 要匹配的类型
+     * @return 结果
      */
-    ESSAY(4),
-    /**
-     * 编程题
-     */
-    PROGRAM(5);
-
-    private Integer value;
-
-    QuestionType(Integer order){
-        value = order;
+    public Boolean match(QuestionType type) {
+        return this.equals(type);
     }
 
-    public static boolean isSingleSel(Integer id) {
-        return SINGLE_SEL.value.equals(id);
-    }
-
-    public static boolean isMultiSel(Integer id) {
-        return MULTI_SEL.value.equals(id);
-    }
-
-    public static boolean isJudgement(Integer id) {
-        return JUDGEMENT.value.equals(id);
-    }
-
-//    public static boolean isNotFound(Integer id) {
-//        return NotFound.value.equals(id);
-//    }
-
-    public static boolean isEssay(Integer id) {
-        return ESSAY.value.equals(id);
-    }
-
-    public static boolean isProgram(Integer id) {
-        return PROGRAM.value.equals(id);
-    }
 }

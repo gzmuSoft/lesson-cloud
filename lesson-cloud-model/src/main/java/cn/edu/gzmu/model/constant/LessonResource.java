@@ -127,4 +127,12 @@ public interface LessonResource {
 
     public static final String TEACHER = "/teacher";
 
+    public static final String QUESTION_SEARCH = "/question/search";
+
+    public static final String QUESTION = "/question";
+
+    public static final String KNOWLEDGE_QUESTION_SEARCH = "/knowledgeQuestion/search";
+
+    public static final String KNOWLEDGE_QUESTION = "/knowledgeQuestion";
+
 }

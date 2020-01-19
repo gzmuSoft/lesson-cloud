@@ -22,15 +22,6 @@ import java.util.List;
 public interface KnowledgeRepository extends BaseRepository<Knowledge, Long> {
 
     /**
-     * 根据课程id和章节id查询所有
-     *
-     * @param sectionId section Id
-     * @param courseId course Id
-     * @return Knowledge
-     */
-    List<Knowledge> findAllBySectionIdAndCourseId(Long sectionId, Long courseId);
-
-    /**
      * 通过 section 查询
      *
      * @param id id

@@ -158,6 +158,6 @@ public class LogicClass extends BaseEntity implements Serializable {
      * 逻辑班级上课时间及地点
      */
     @Transient
-    List<CourseTimetableLocation> courseTimetableLocationList;
+    private List<CourseTimetableLocation> courseTimetableLocationList;
 
 }
