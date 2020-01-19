@@ -37,7 +37,7 @@ public interface SectionRepository extends BaseRepository<Section, Long> {
      * @param type     类型
      * @return 结果
      */
-    @RestResource(path = "/courseAndType", rel = "byCourseIdAndType")
+    @RestResource(path = "courseAndType", rel = "byCourseIdAndType")
     List<Section> findAllByCourseIdAndType(@Param("courseId") Long courseId, @Param("type") SectionType type);
 
     /**
@@ -56,4 +56,18 @@ public interface SectionRepository extends BaseRepository<Section, Long> {
      * @return 结果
      */
     List<Section> findAllByParentIdIn(List<Long> ids);
+
+    /**
+     * 更具课程 id 和类型查询
+     *
+     * @param courseId 课程 id
+     * @param parentId 父级 id
+     * @param type     类型
+     * @return 结果
+     */
+    @RestResource(path = "courseAndParentAndType", rel = "byCourseIdAndType")
+    List<Section> findAllByCourseIdAndParentIdAndType(
+            @Param("courseId") Long courseId,
+            @Param("parentId") Long parentId,
+            @Param("type") SectionType type);
 }
