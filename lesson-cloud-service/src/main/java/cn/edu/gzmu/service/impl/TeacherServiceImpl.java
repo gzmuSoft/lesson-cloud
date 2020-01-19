@@ -1,18 +1,24 @@
 package cn.edu.gzmu.service.impl;
 
-import cn.edu.gzmu.model.dto.QuestionView;
 import cn.edu.gzmu.model.entity.*;
-import cn.edu.gzmu.repository.dto.QuestionViewRepository;
+import cn.edu.gzmu.repository.entity.KnowledgeQuestionRepository;
+import cn.edu.gzmu.repository.entity.KnowledgeRepository;
+import cn.edu.gzmu.repository.entity.QuestionRepository;
+import cn.edu.gzmu.repository.entity.SectionRepository;
 import cn.edu.gzmu.service.TeacherService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -25,45 +31,51 @@ import javax.persistence.criteria.Predicate;
 @Service
 @RequiredArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
-    private final @NonNull QuestionViewRepository questionViewRepository;
+    private final @NonNull QuestionRepository questionRepository;
+
+    private final @NonNull KnowledgeQuestionRepository knowledgeQuestionRepository;
+
+    private final @NonNull KnowledgeRepository knowledgeRepository;
+
+    private final @NonNull SectionRepository sectionRepository;
 
     @Override
-    public Page<QuestionView> findQuestionBankCondition(Teacher teacher, Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable) {
-        return questionViewRepository.findAll(specificationPrivate(teacher, courseId, sectionId, knowledgeId, name, isPublic), pageable);
+    public Page<Question> findQuestionBankCondition(Teacher teacher, Long passageId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable) {
+        return questionRepository.findAll((Specification<Question>) (root, criteriaQuery, criteriaBuilder) -> {
+            Predicate conjunction = criteriaBuilder.equal(root.get("isEnable").as(Boolean.class), true);
+            if (BooleanUtils.isFalse(isPublic)) {
+                conjunction = criteriaBuilder.and(conjunction,
+                        criteriaBuilder.equal(root.get("createUser").as(Long.class), teacher.getName()));
+            }
+            if (StringUtils.isNoneBlank(name)) {
+                conjunction = criteriaBuilder.and(conjunction,
+                        criteriaBuilder.like(root.get("name").as(String.class), "%" + name + "%"));
+            }
+            CriteriaBuilder.In<Long> inIds = criteriaBuilder.in(root.get("id").as(Long.class));
+            if (knowledgeId != 0) {
+                List<KnowledgeQuestion> knowledgeQuestions = knowledgeQuestionRepository.findAllByKnowledgeId(knowledgeId);
+                knowledgeQuestions.forEach(knowledgeQuestion -> inIds.value(knowledgeQuestion.getQuestionId()));
+            } else if (sectionId != 0) {
+                List<Knowledge> knowledgeList = knowledgeRepository.findAllBySectionId(sectionId);
+                List<Long> knowledgeIds = knowledgeList.stream().map(Knowledge::getId).collect(Collectors.toList());
+                List<KnowledgeQuestion> knowledgeQuestionList = knowledgeQuestionRepository.findAllByKnowledgeIdIn(knowledgeIds);
+                knowledgeQuestionList.forEach(knowledgeQuestion -> inIds.value(knowledgeQuestion.getQuestionId()));
+            } else if (passageId != 0) {
+                List<Section> sectionList = sectionRepository.findAllByParentId(passageId);
+                //TODO 代码冗余 可以尝试优化一下
+                List<Long> sectionIds = sectionList.stream().map(Section::getId).collect(Collectors.toList());
+                //这里需要注意一下 章Id也需要加入到查询列表里面
+                sectionIds.add(passageId);
+                List<Knowledge> knowledgeList = knowledgeRepository.findAllBySectionIdIn(sectionIds);
+                List<Long> knowledgeIds = knowledgeList.stream().map(Knowledge::getId).collect(Collectors.toList());
+                List<KnowledgeQuestion> knowledgeQuestionList = knowledgeQuestionRepository.findAllByKnowledgeIdIn(knowledgeIds);
+                knowledgeQuestionList.forEach(knowledgeQuestion -> inIds.value(knowledgeQuestion.getQuestionId()));
+            }
+            conjunction = criteriaBuilder.and(conjunction,
+                    inIds);
+            return criteriaQuery.where(conjunction).getRestriction();
+
+        }, pageable);
     }
 
-    private <T> Specification<T> specificationPrivate(Teacher teacher, Long courseId, Long sectionId, Long knowledgeId, String name, boolean isPublic) {
-        return (root, query, criteriaBuilder) -> {
-            Predicate conjunction = criteriaBuilder.equal(root.get("isPublic").as(Boolean.class), isPublic);
-            if (!isPublic) {
-                conjunction = criteriaBuilder.and(conjunction,
-                        criteriaBuilder.equal(root.get("createUser").as(Long.class), teacher.getName())
-                );
-            }
-            if (StringUtils.isNoneEmpty(name)) {
-                conjunction = criteriaBuilder.and(conjunction,
-                        criteriaBuilder.like(root.get("name").as(String.class), "%" + name + "%")
-                );
-            }
-            if (courseId == 0) {
-                return query.where(conjunction).getRestriction();
-            }
-            conjunction = criteriaBuilder.and(conjunction,
-                    criteriaBuilder.equal(root.get("courseId").as(Long.class), courseId)
-            );
-            if (sectionId == 0) {
-                return query.where(conjunction).getRestriction();
-            }
-            conjunction = criteriaBuilder.and(conjunction,
-                    criteriaBuilder.equal(root.get("sectionId").as(Long.class), sectionId)
-            );
-            if (knowledgeId == 0) {
-                return query.where(conjunction).getRestriction();
-            }
-            conjunction = criteriaBuilder.and(conjunction,
-                    criteriaBuilder.equal(root.get("knowledgeId").as(Long.class), knowledgeId)
-            );
-            return query.where(conjunction).getRestriction();
-        };
-    }
 }

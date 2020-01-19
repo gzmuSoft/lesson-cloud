@@ -44,12 +44,12 @@ public class TeacherController {
      */
     @GetMapping("/QuestionBank")
     public HttpEntity<?> findQuestionBankByCondition(
-            @RequestParam(defaultValue = "0") Long courseId,
+            @RequestParam(defaultValue = "0") Long passageId,
             @RequestParam(defaultValue = "0") Long sectionId,
             @RequestParam(defaultValue = "0") Long knowledgeId,
             @RequestParam(defaultValue = "") String name,
             @RequestParam(defaultValue = "true") boolean isPublic,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(teacherService.findQuestionBankCondition(oauthHelper.teacher(), courseId, sectionId, knowledgeId, name, isPublic, pageable));
+        return ResponseEntity.ok(teacherService.findQuestionBankCondition(oauthHelper.teacher(), passageId, sectionId, knowledgeId, name, isPublic, pageable));
     }
 }

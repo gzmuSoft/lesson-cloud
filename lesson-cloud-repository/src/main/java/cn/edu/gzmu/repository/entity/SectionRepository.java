@@ -39,4 +39,21 @@ public interface SectionRepository extends BaseRepository<Section, Long> {
      */
     @RestResource(path = "/courseAndType", rel = "byCourseIdAndType")
     List<Section> findAllByCourseIdAndType(@Param("courseId") Long courseId, @Param("type") SectionType type);
+
+    /**
+     * 根据章id 查询所有的节
+     *
+     * @param id 章 id
+     * @return 结果
+     */
+    @RestResource(path = "/passage", rel = "byPassage")
+    List<Section> findAllByParentId(@Param("passageId") Long id);
+
+    /**
+     * 根据章ids 查询所有的节
+     *
+     * @param ids 章ids
+     * @return 结果
+     */
+    List<Section> findAllByParentIdIn(List<Long> ids);
 }

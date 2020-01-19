@@ -77,7 +77,7 @@ public class CourseServiceImpl extends BaseServiceImpl<CourseRepository, Course,
     @Override
     public Page<Course> searchByNameAndTypeAndSelf(Teacher teacher, String name, String type, Boolean isSelf, Pageable pageable) {
         return courseRepository.findAll((Specification<Course>) (root, criteriaQuery, criteriaBuilder) -> {
-            Predicate conjunction = criteriaBuilder.conjunction();
+            Predicate conjunction = criteriaBuilder.equal(root.get("isEnable").as(Boolean.class), true);
             //如果只查询自己管理的班级课程
             if (BooleanUtils.isTrue(isSelf)) {
                 CriteriaBuilder.In<Long> inIds = criteriaBuilder.in(root.get("id").as(Long.class));

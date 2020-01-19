@@ -13,10 +13,9 @@ import java.util.List;
  * Knowledge Repository
  *
  * @author echo
+ * @author ypx
  * @version 1.0
  * @date 2019-5-23 17:38:13
- *
- * @author ypx
  */
 @RepositoryRestResource(path = "knowledge")
 public interface KnowledgeRepository extends BaseRepository<Knowledge, Long> {
@@ -24,10 +23,18 @@ public interface KnowledgeRepository extends BaseRepository<Knowledge, Long> {
     /**
      * 通过 section 查询
      *
-     * @param id id
+     * @param id section id
      * @return 结果
      */
     @RestResource(path = "section", rel = "searchBySectionId")
     List<Knowledge> findAllBySectionId(@Param("id") Long id);
+
+    /**
+     * 通过 section ids 查询
+     *
+     * @param ids section ids
+     * @return 结果
+     */
+    List<Knowledge> findAllBySectionIdIn(List<Long> ids);
 
 }

@@ -1,7 +1,10 @@
 package cn.edu.gzmu.service;
 
 import cn.edu.gzmu.model.entity.Teacher;
-import cn.edu.gzmu.repository.dto.QuestionViewRepository;
+import cn.edu.gzmu.repository.entity.KnowledgeQuestionRepository;
+import cn.edu.gzmu.repository.entity.KnowledgeRepository;
+import cn.edu.gzmu.repository.entity.QuestionRepository;
+import cn.edu.gzmu.repository.entity.SectionRepository;
 import cn.edu.gzmu.service.impl.TeacherServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,12 +24,21 @@ public class TeacherServiceTest {
     private Teacher teacher = new Teacher();
     private TeacherService teacherService;
     @Autowired
-    private QuestionViewRepository questionViewRepository;
+    private QuestionRepository questionRepository;
+
+    @Autowired
+    private KnowledgeRepository knowledgeRepository;
+
+    @Autowired
+    private KnowledgeQuestionRepository knowledgeQuestionRepository;
+
+    @Autowired
+    private SectionRepository sectionRepository;
 
     @BeforeEach
     void setUp() {
         teacher.setName("admin");
-        teacherService = new TeacherServiceImpl(questionViewRepository);
+        teacherService = new TeacherServiceImpl(questionRepository, knowledgeQuestionRepository, knowledgeRepository, sectionRepository);
     }
 
     @Test
