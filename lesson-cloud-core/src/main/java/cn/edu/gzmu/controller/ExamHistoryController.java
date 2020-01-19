@@ -12,7 +12,6 @@ import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -39,7 +38,6 @@ public class ExamHistoryController extends BaseController<ExamHistory, ExamHisto
      * @return 响应
      */
     @GetMapping("/student")
-    @Secured("ROLE_STUDENT")
     public HttpEntity<?> fromStudent(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
         // 获取当前登录用户
         Student student = oauthHelper.student();

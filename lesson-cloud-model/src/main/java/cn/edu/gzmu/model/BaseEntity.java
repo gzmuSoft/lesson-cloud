@@ -48,7 +48,7 @@ public class BaseEntity {
     /**
      * 排序
      */
-    private Integer sort;
+    private Integer sort = 1;
 
     /**
      * 创建时间

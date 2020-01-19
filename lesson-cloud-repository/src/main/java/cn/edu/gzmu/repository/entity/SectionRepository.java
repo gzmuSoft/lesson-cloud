@@ -1,6 +1,7 @@
 package cn.edu.gzmu.repository.entity;
 
 
+import cn.edu.gzmu.model.constant.SectionType;
 import cn.edu.gzmu.model.entity.Section;
 import cn.edu.gzmu.repository.base.BaseRepository;
 import org.springframework.data.repository.query.Param;
@@ -19,12 +20,23 @@ import java.util.List;
  */
 @RepositoryRestResource(path = "section")
 public interface SectionRepository extends BaseRepository<Section, Long> {
+
     /**
      * 根据 exam id 查询所有
      *
      * @param id CourseId
      * @return 结果
      */
-    @RestResource(path = "course", rel = "searchByCourseId")
+    @RestResource(path = "course", rel = "byCourseId")
     List<Section> findAllByCourseId(@Param("id") Long id);
+
+    /**
+     * 更具课程 id 和类型查询
+     *
+     * @param courseId 课程 id
+     * @param type     类型
+     * @return 结果
+     */
+    @RestResource(path = "/courseAndType", rel = "byCourseIdAndType")
+    List<Section> findAllByCourseIdAndType(@Param("courseId") Long courseId, @Param("type") SectionType type);
 }

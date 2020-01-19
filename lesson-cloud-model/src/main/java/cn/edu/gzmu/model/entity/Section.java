@@ -1,6 +1,7 @@
 package cn.edu.gzmu.model.entity;
 
 import cn.edu.gzmu.model.BaseEntity;
+import cn.edu.gzmu.model.constant.SectionType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -8,6 +9,7 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
@@ -50,8 +52,9 @@ public class Section extends BaseEntity implements Serializable {
     /**
      * 类型，0：章，1：节
      */
+    @Enumerated
     @javax.validation.constraints.NotNull(message = "type 类型，0：章，1：节 为必填项")
-    private java.lang.Integer type;
+    private SectionType type;
 
     @Transient
     private Course course;

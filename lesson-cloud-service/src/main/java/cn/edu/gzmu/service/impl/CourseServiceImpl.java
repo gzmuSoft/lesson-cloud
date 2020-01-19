@@ -35,8 +35,7 @@ public class CourseServiceImpl extends BaseServiceImpl<CourseRepository, Course,
     private @NonNull LogicClassRepository logicClassRepository;
     private @NonNull CourseRepository courseRepository;
 
-    @Override
-    public List<Course> searchByStudent(Student student) {
+    private List<Course> searchByStudent(Student student) {
         // 获取当前学生的物理班级信息
         Long classesId = student.getClassesId();
         // 查找当前学生所在物理班级的逻辑班级
@@ -60,16 +59,8 @@ public class CourseServiceImpl extends BaseServiceImpl<CourseRepository, Course,
     }
 
     @Override
-    public List<Course> searchByTeacher(Teacher teacher) {
-        Set<LogicClass> logicClasses = logicClassRepository.findDistinctByTeacherId(teacher.getId());
-        List<Long> courseIds = logicClasses.stream()
-                .map(LogicClass::getCourseId)
-                .collect(Collectors.toList());
-        return courseRepository.searchAllByIds(courseIds);
-    }
-
-    @Override
     public Page<Course> searchByTeacher(Teacher teacher, Pageable pageable) {
+        // TODO: 逻辑可能需要优化
         Set<LogicClass> logicClasses = logicClassRepository.findDistinctByTeacherId(teacher.getId());
         List<Long> courseIds = logicClasses.stream()
                 .map(LogicClass::getCourseId)

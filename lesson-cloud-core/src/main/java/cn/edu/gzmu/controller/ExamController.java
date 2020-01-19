@@ -60,7 +60,6 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
      * @return 响应
      */
     @GetMapping("/student")
-    @Secured("ROLE_STUDENT")
     public HttpEntity<?> fromStudent(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
         // 获取当前登录用户
         Student student = oauthHelper.student();
@@ -78,7 +77,6 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
      * @return 。。。
      */
     @GetMapping("/teacher/unpublish")
-    @Secured("ROLE_TEACHER")
     public HttpEntity<?> searchUnPublishExam(
             @RequestParam(defaultValue = "", required = false) String logicClassIds,
             @RequestParam(required = false) String courseId,
@@ -95,7 +93,6 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
      * @return 。。。
      */
     @GetMapping("/teacher/publish")
-    @Secured("ROLE_TEACHER")
     public HttpEntity<?> searchPublishExam(
             @RequestParam(defaultValue = "", required = false) String logicClassIds,
             @RequestParam(required = false) String courseId,
@@ -107,7 +104,6 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
      * 获取当前登录的学生的指定id所有考试详细信息
      */
     @GetMapping("/details/student/id/{id}")
-    @Secured("ROLE_STUDENT")
     public HttpEntity<?> examDetailsById(@PathVariable Long id) {
         Student student = oauthHelper.student();
         return ResponseEntity.ok(examService.searchDetailsById(student, id));
@@ -117,7 +113,6 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
      * 获取学生的 未完成 的考试信息，需分页
      */
     @GetMapping("/details/student/unfinished")
-    @Secured("ROLE_STUDENT")
     public HttpEntity<?> examDetailsByUnFinished(
             @RequestParam(required = false) Boolean type,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
@@ -133,7 +128,6 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
      * 获取学生的 完成 的考试信息，需分页
      */
     @GetMapping("/details/student/finished")
-    @Secured("ROLE_STUDENT")
     public HttpEntity<?> examDetailsByFinished(
             @RequestParam(required = false) Boolean type,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
@@ -149,7 +143,6 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
      * 获取学生的 所有的考试信息，需分页
      */
     @GetMapping("/details/student")
-    @Secured("ROLE_STUDENT")
     public HttpEntity<?> examDetailsByAll(
             @RequestParam(required = false) Boolean type,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
@@ -185,7 +178,6 @@ public class ExamController extends BaseController<Exam, ExamService, Long> {
      * 5. 条件可能为逻辑班级id和学期id（可能没有）
      */
     @GetMapping("/details/complete")
-    @Secured("ROLE_TEACHER")
     public HttpEntity<?> examDetailsAll(
             @RequestParam(required = false, defaultValue = "") String semesterId,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable

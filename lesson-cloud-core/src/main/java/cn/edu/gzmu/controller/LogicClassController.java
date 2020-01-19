@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -33,7 +32,6 @@ public class LogicClassController extends BaseController<LogicClass, LogicClassS
     private final @NonNull OauthHelper oauthHelper;
 
     @GetMapping(LessonResource.STUDENT)
-    @Secured("ROLE_STUDENT")
     public  HttpEntity<?> student(){
         return ResponseEntity.ok(logicClassService.findAllCourseTimetableLocation(oauthHelper.student()));
     }
