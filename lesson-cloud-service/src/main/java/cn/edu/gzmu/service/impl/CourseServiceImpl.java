@@ -10,11 +10,16 @@ import cn.edu.gzmu.service.CourseService;
 import com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,6 +39,7 @@ public class CourseServiceImpl extends BaseServiceImpl<CourseRepository, Course,
 
     private @NonNull LogicClassRepository logicClassRepository;
     private @NonNull CourseRepository courseRepository;
+
 
     private List<Course> searchByStudent(Student student) {
         // 获取当前学生的物理班级信息
@@ -67,5 +73,28 @@ public class CourseServiceImpl extends BaseServiceImpl<CourseRepository, Course,
                 .collect(Collectors.toList());
         return courseRepository.searchAllByIds(courseIds, pageable);
     }
+
+    @Override
+    public Page<Course> searchByNameAndTypeAndSelf(Teacher teacher, String name, String type, Boolean isSelf, Pageable pageable) {
+        return courseRepository.findAll((Specification<Course>) (root, criteriaQuery, criteriaBuilder) -> {
+            Predicate conjunction = criteriaBuilder.conjunction();
+            //如果只查询自己管理的班级课程
+            if (BooleanUtils.isTrue(isSelf)) {
+                CriteriaBuilder.In<Long> inIds = criteriaBuilder.in(root.get("id").as(Long.class));
+                Set<LogicClass> logicClassSet = logicClassRepository.findDistinctByTeacherId(teacher.getId());
+                //查询出自己管理的逻辑班级 然后用where in 条件判断
+                logicClassSet.stream().map(LogicClass::getCourseId).forEach(inIds::value);
+                conjunction = criteriaBuilder.and(conjunction, inIds);
+            }
+            if (StringUtils.isNoneBlank(name)) {
+                conjunction = criteriaBuilder.and(conjunction, criteriaBuilder.like(root.get("name").as(String.class), "%" + name + "%"));
+            }
+            if (StringUtils.isNoneBlank(type)) {
+                conjunction = criteriaBuilder.and(conjunction, criteriaBuilder.like(root.get("type").as(String.class), "%" + type + "%"));
+            }
+            return criteriaQuery.where(conjunction).getRestriction();
+        }, pageable);
+    }
+
 
 }

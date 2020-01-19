@@ -71,7 +71,6 @@ public class CourseController extends BaseController<Course, CourseService, Long
             @RequestParam(defaultValue = "false") Boolean self,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable
     ) {
-        // TODO:条件查询
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(courseService.searchByNameAndTypeAndSelf(oauthHelper.teacher(), name, type, self, pageable));
     }
 }

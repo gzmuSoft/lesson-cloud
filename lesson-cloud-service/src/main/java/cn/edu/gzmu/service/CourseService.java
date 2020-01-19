@@ -32,4 +32,15 @@ public interface CourseService extends BaseService<Course, Long> {
      * @return 课程信息
      */
     Page<Course> searchByTeacher(Teacher teacher, Pageable pageable);
+
+    /**
+     * 通过name type self 查询班级
+     *
+     * @param name     名称
+     * @param type     课程类型
+     * @param isSelf   是否只查询自己管理的班级
+     * @param pageable 分页信息
+     * @return 课程信息
+     */
+    Page<Course> searchByNameAndTypeAndSelf(Teacher teacher, String name, String type, Boolean isSelf, Pageable pageable);
 }
