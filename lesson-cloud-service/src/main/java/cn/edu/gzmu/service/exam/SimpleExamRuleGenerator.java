@@ -2,6 +2,7 @@ package cn.edu.gzmu.service.exam;
 
 import cn.edu.gzmu.model.constant.QuestionType;
 import cn.edu.gzmu.model.dto.QuestionInfo;
+import cn.edu.gzmu.model.dto.RuleDetailInfo;
 import cn.edu.gzmu.model.entity.Exam;
 import cn.edu.gzmu.model.entity.ExamRule;
 import cn.edu.gzmu.model.entity.Knowledge;
@@ -14,6 +15,7 @@ import cn.edu.gzmu.repository.entity.QuestionRepository;
 import cn.edu.gzmu.repository.entity.SectionRepository;
 import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
@@ -39,11 +41,8 @@ import java.util.stream.Collectors;
 public class SimpleExamRuleGenerator implements ExamRuleGenerator {
 
     @Data
-    private static class RuleDetail {
-        private List<Long> requireQuestionIds;
-        private List<Long> sectionIds;
-        private List<Long> passageIds;
-
+    @EqualsAndHashCode(callSuper = true)
+    private static class RuleDetail extends RuleDetailInfo {
         private RuleDetail() {
         }
 
@@ -52,20 +51,7 @@ public class SimpleExamRuleGenerator implements ExamRuleGenerator {
         }
 
         public static RuleDetail convert(JSONObject jsonObject) {
-            RuleDetail ruleDetail = new RuleDetail();
-            try {
-                List<Long> sectionList = jsonObject.getJSONArray("sectionIds")
-                        .toJavaList(Long.class);
-                ruleDetail.setSectionIds(sectionList);
-                List<Long> passageList = jsonObject.getJSONArray("passageIds")
-                        .toJavaList(Long.class);
-                ruleDetail.setSectionIds(passageList);
-                List<Long> requireQuestionList = jsonObject.getJSONArray("requireQuestionIds")
-                        .toJavaList(Long.class);
-                ruleDetail.setSectionIds(requireQuestionList);
-            } catch (Exception ignored) {
-            }
-            return ruleDetail;
+            return (RuleDetail) RuleDetailInfo.convert(jsonObject);
         }
     }
 
