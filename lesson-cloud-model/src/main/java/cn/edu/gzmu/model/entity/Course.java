@@ -32,7 +32,7 @@ public class Course extends BaseEntity implements Serializable {
      * 基础学时
      */
     @javax.validation.constraints.NotNull(message = "period 基础学时 为必填项")
-    private java.lang.Short period;
+    private java.lang.Integer period;
 
     /**
      * 基础学分

@@ -32,9 +32,9 @@ public class ExamGenerateServiceImpl implements ExamGenerateService {
 
     @Override
     public Paper generatePaper(Long examId) {
-        Exam exam = examRepository.findById(examId).orElseThrow(ResourceNotFoundException::new);
-        List<ExamRule> examRuleList = examRuleRepository.findAllByExamId(exam.getId());
-        examRuleList.stream().
+//        Exam exam = examRepository.findById(examId).orElseThrow(ResourceNotFoundException::new);
+//        List<ExamRule> examRuleList = examRuleRepository.findAllByExamId(exam.getId());
+//        examRuleList.stream().
         return null;
     }
 }
