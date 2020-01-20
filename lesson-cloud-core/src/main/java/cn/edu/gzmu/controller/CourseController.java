@@ -1,6 +1,6 @@
 package cn.edu.gzmu.controller;
 
-import cn.edu.gzmu.auth.helper.OauthHelper;
+import cn.edu.gzmu.service.helper.OauthHelper;
 import cn.edu.gzmu.model.constant.LessonResource;
 import cn.edu.gzmu.model.entity.Course;
 import cn.edu.gzmu.service.CourseService;
@@ -64,13 +64,13 @@ public class CourseController extends BaseController<Course, CourseService, Long
      * @param pageable 分页
      * @return 结果
      */
-    @GetMapping("/name/type/self")
+    @GetMapping("/byNameAndTypeAndSelf")
     public HttpEntity<?> courseByNameContainingAndType(
             @RequestParam(defaultValue = "") String name,
             @RequestParam(defaultValue = "") String type,
             @RequestParam(defaultValue = "false") Boolean self,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable
     ) {
-        return ResponseEntity.ok(courseService.searchByNameAndTypeAndSelf(oauthHelper.teacher(), name, type, self, pageable));
+        return ResponseEntity.ok(courseService.searchByNameAndTypeAndSelf(name, type, self, pageable));
     }
 }

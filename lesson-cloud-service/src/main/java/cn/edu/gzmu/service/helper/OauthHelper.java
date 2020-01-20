@@ -1,4 +1,4 @@
-package cn.edu.gzmu.auth.helper;
+package cn.edu.gzmu.service.helper;
 
 import cn.edu.gzmu.model.entity.Student;
 import cn.edu.gzmu.model.entity.Teacher;

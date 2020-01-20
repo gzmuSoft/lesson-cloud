@@ -6,6 +6,7 @@ import cn.edu.gzmu.repository.entity.KnowledgeRepository;
 import cn.edu.gzmu.repository.entity.QuestionRepository;
 import cn.edu.gzmu.repository.entity.SectionRepository;
 import cn.edu.gzmu.service.TeacherService;
+import cn.edu.gzmu.service.helper.OauthHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.BooleanUtils;
@@ -32,20 +33,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
     private final @NonNull QuestionRepository questionRepository;
-
     private final @NonNull KnowledgeQuestionRepository knowledgeQuestionRepository;
-
     private final @NonNull KnowledgeRepository knowledgeRepository;
-
     private final @NonNull SectionRepository sectionRepository;
+    private final @NonNull OauthHelper oauthHelper;
 
     @Override
-    public Page<Question> findQuestionBankCondition(Teacher teacher, Long passageId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable) {
+    public Page<Question> findQuestionBankCondition(Long passageId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable) {
         return questionRepository.findAll((Specification<Question>) (root, criteriaQuery, criteriaBuilder) -> {
             Predicate conjunction = criteriaBuilder.equal(root.get("isEnable").as(Boolean.class), true);
             if (BooleanUtils.isFalse(isPublic)) {
                 conjunction = criteriaBuilder.and(conjunction,
-                        criteriaBuilder.equal(root.get("createUser").as(Long.class), teacher.getName()));
+                        criteriaBuilder.equal(root.get("createUser").as(String.class), oauthHelper.teacher().getName()));
             }
             if (StringUtils.isNoneBlank(name)) {
                 conjunction = criteriaBuilder.and(conjunction,
@@ -71,10 +70,8 @@ public class TeacherServiceImpl implements TeacherService {
                 List<KnowledgeQuestion> knowledgeQuestionList = knowledgeQuestionRepository.findAllByKnowledgeIdIn(knowledgeIds);
                 knowledgeQuestionList.forEach(knowledgeQuestion -> inIds.value(knowledgeQuestion.getQuestionId()));
             }
-            conjunction = criteriaBuilder.and(conjunction,
-                    inIds);
+            conjunction = criteriaBuilder.and(conjunction, inIds);
             return criteriaQuery.where(conjunction).getRestriction();
-
         }, pageable);
     }
 

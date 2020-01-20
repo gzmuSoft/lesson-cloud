@@ -1,6 +1,6 @@
 package cn.edu.gzmu.controller;
 
-import cn.edu.gzmu.auth.helper.OauthHelper;
+import cn.edu.gzmu.service.helper.OauthHelper;
 import cn.edu.gzmu.model.constant.LessonResource;
 import cn.edu.gzmu.model.entity.ExamHistory;
 import cn.edu.gzmu.model.entity.Student;

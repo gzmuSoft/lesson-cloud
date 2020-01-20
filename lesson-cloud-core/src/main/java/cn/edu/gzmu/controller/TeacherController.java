@@ -1,6 +1,6 @@
 package cn.edu.gzmu.controller;
 
-import cn.edu.gzmu.auth.helper.OauthHelper;
+import cn.edu.gzmu.service.helper.OauthHelper;
 import cn.edu.gzmu.model.constant.LessonResource;
 import cn.edu.gzmu.service.TeacherService;
 import lombok.NonNull;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping(LessonResource.TEACHER_SEARCH)
 public class TeacherController {
 
-    private final OauthHelper oauthHelper;
+    private final @NonNull OauthHelper oauthHelper;
     private final @NonNull TeacherService teacherService;
 
     @GetMapping("/test")
@@ -42,7 +42,7 @@ public class TeacherController {
      * @author Soul
      * @date 2020/1/13 22:04
      */
-    @GetMapping("/QuestionBank")
+    @GetMapping("/question")
     public HttpEntity<?> findQuestionBankByCondition(
             @RequestParam(defaultValue = "0") Long passageId,
             @RequestParam(defaultValue = "0") Long sectionId,
@@ -50,6 +50,6 @@ public class TeacherController {
             @RequestParam(defaultValue = "") String name,
             @RequestParam(defaultValue = "true") boolean isPublic,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(teacherService.findQuestionBankCondition(oauthHelper.teacher(), passageId, sectionId, knowledgeId, name, isPublic, pageable));
+        return ResponseEntity.ok(teacherService.findQuestionBankCondition(passageId, sectionId, knowledgeId, name, isPublic, pageable));
     }
 }

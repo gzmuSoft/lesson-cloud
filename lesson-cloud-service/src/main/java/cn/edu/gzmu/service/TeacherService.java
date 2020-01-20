@@ -16,7 +16,6 @@ public interface TeacherService {
     /**
      * 通过不同条件获取题库
      *
-     * @param teacher     当前登录教师
      * @param passageId   章Id
      * @param sectionId   节Id
      * @param knowledgeId 知识点Id
@@ -25,5 +24,5 @@ public interface TeacherService {
      * @author Soul
      * @date 2020/1/12 1:16
      */
-    Page<Question> findQuestionBankCondition(Teacher teacher, Long passageId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable);
+    Page<Question> findQuestionBankCondition(Long passageId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable);
 }

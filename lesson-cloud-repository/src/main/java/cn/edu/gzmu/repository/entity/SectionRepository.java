@@ -46,7 +46,7 @@ public interface SectionRepository extends BaseRepository<Section, Long> {
      * @param id 章 id
      * @return 结果
      */
-    @RestResource(path = "/passage", rel = "byPassage")
+    @RestResource(path = "passage", rel = "byPassage")
     List<Section> findAllByParentId(@Param("passageId") Long id);
 
     /**

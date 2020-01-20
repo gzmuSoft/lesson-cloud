@@ -5,6 +5,7 @@ import cn.edu.gzmu.repository.entity.KnowledgeQuestionRepository;
 import cn.edu.gzmu.repository.entity.KnowledgeRepository;
 import cn.edu.gzmu.repository.entity.QuestionRepository;
 import cn.edu.gzmu.repository.entity.SectionRepository;
+import cn.edu.gzmu.service.helper.OauthHelper;
 import cn.edu.gzmu.service.impl.TeacherServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,10 +37,15 @@ public class TeacherServiceTest {
     @Autowired
     private SectionRepository sectionRepository;
 
+    @MockBean
+    private OauthHelper oauthHelper;
+
     @BeforeEach
     void setUp() {
         teacher.setName("admin");
-        teacherService = new TeacherServiceImpl(questionRepository, knowledgeQuestionRepository, knowledgeRepository, sectionRepository);
+        teacherService = new TeacherServiceImpl(
+                questionRepository, knowledgeQuestionRepository,
+                knowledgeRepository, sectionRepository, oauthHelper);
     }
 
     @Test
@@ -46,7 +53,7 @@ public class TeacherServiceTest {
     @DisplayName("查询所有公开题目")
     void findQuestionBankByConditionWhenPassedIsPublicTrue() {
         assertEquals(14L, teacherService.findQuestionBankCondition(
-                this.teacher, 0L, 0L, 0L, "", true, PageRequest.of(0, 10))
+                0L, 0L, 0L, "", true, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }
@@ -56,7 +63,7 @@ public class TeacherServiceTest {
     @DisplayName("根据 name 查询公开题目")
     void findQuestionBankByConditionWhenPassedIsPublicTrueAndName() {
         assertEquals(3L, teacherService.findQuestionBankCondition(
-                this.teacher, 0L, 0L, 0L, "你是", true, PageRequest.of(0, 10))
+                0L, 0L, 0L, "你是", true, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }
@@ -66,7 +73,7 @@ public class TeacherServiceTest {
     @DisplayName("根据 courseId 查询公开题目")
     void findQuestionBankByConditionWhenPassedIsPublicTrueAndCourseId() {
         assertEquals(5L, teacherService.findQuestionBankCondition(
-                this.teacher, 2L, 0L, 0L, "", true, PageRequest.of(0, 10))
+                2L, 0L, 0L, "", true, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }
@@ -76,7 +83,7 @@ public class TeacherServiceTest {
     @DisplayName("根据 courseId 模糊查询公开题目")
     void findPublicQuestionBankByConditionWhenPassedIsPublicTrueAndCourseIdAndName() {
         assertEquals(1L, teacherService.findQuestionBankCondition(
-                this.teacher, 2L, 0L, 0L, "2+", true, PageRequest.of(0, 10))
+                2L, 0L, 0L, "2+", true, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }
@@ -86,7 +93,7 @@ public class TeacherServiceTest {
     @DisplayName("根据 courseId 和 sectionId 查询公开题目")
     void findQuestionBankByConditionWhenPassedIsPublicTrueAndCourseIdAndSectionId() {
         assertEquals(2L, teacherService.findQuestionBankCondition(
-                this.teacher, 2L, 2L, 0L, "", true, PageRequest.of(0, 10))
+                2L, 2L, 0L, "", true, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }
@@ -96,7 +103,7 @@ public class TeacherServiceTest {
     @DisplayName("根据 courseId 和 sectionId 模糊查询公开题目")
     void findQuestionBankByConditionWhenPassedIsPublicTrueAndCourseIdAndSectionIdAndName() {
         assertEquals(1L, teacherService.findQuestionBankCondition(
-                this.teacher, 2L, 2L, 0L, "公", true, PageRequest.of(0, 10))
+                2L, 2L, 0L, "公", true, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }
@@ -106,7 +113,7 @@ public class TeacherServiceTest {
     @DisplayName("根据 courseId 和 sectionId 和 knowledgeId 查询公开题目")
     void findQuestionBankByConditionWhenPassedIsPublicTrueAndCourseIdAndSectionIdAndKnowledgeId() {
         assertEquals(2L, teacherService.findQuestionBankCondition(
-                this.teacher, 6L, 5L, 2L, "", true, PageRequest.of(0, 10))
+                6L, 5L, 2L, "", true, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }
@@ -116,7 +123,7 @@ public class TeacherServiceTest {
     @DisplayName("根据 courseId 和 sectionId 和 knowledgeId 模糊查询公开题目")
     void findQuestionBankByConditionWhenPassedIsPublicTrueAndCourseIdAndSectionIdAndKnowledgeIdAndName() {
         assertEquals(1L, teacherService.findQuestionBankCondition(
-                this.teacher, 6L, 5L, 2L, "李", true, PageRequest.of(0, 10))
+                6L, 5L, 2L, "李", true, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }
@@ -126,7 +133,7 @@ public class TeacherServiceTest {
     @DisplayName("查询登录教师的私有题目")
     void findQuestionBankByConditionWhenPassedIsPublicFalse() {
         assertEquals(14L, teacherService.findQuestionBankCondition(
-                this.teacher, 0L, 0L, 0L, "", false, PageRequest.of(0, 10))
+                0L, 0L, 0L, "", false, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }
@@ -136,7 +143,7 @@ public class TeacherServiceTest {
     @DisplayName("根据 name 查询登录教师的私有题目")
     void findQuestionBankByConditionWhenPassedIsPublicFalseAndName() {
         assertEquals(3L, teacherService.findQuestionBankCondition(
-                this.teacher, 0L, 0L, 0L, "你是", false, PageRequest.of(0, 10))
+                0L, 0L, 0L, "你是", false, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }
@@ -146,7 +153,7 @@ public class TeacherServiceTest {
     @DisplayName("根据 courseId 查询登录教师的私有题目")
     void findQuestionBankByConditionWhenPassedIsPublicFalseAndCourseId() {
         assertEquals(5L, teacherService.findQuestionBankCondition(
-                this.teacher, 2L, 0L, 0L, "", false, PageRequest.of(0, 10))
+                2L, 0L, 0L, "", false, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }
@@ -156,7 +163,7 @@ public class TeacherServiceTest {
     @DisplayName("根据 courseId 模糊查询登录教师的私有题目")
     void findPublicQuestionBankByConditionWhenPassedIsPublicFalseAndCourseIdAndName() {
         assertEquals(1L, teacherService.findQuestionBankCondition(
-                this.teacher, 2L, 0L, 0L, "2+", false, PageRequest.of(0, 10))
+                2L, 0L, 0L, "2+", false, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }
@@ -166,7 +173,7 @@ public class TeacherServiceTest {
     @DisplayName("根据 courseId 和 sectionId 查询登录教师的私有题目")
     void findQuestionBankByConditionWhenPassedIsPublicFalseAndCourseIdAndSectionId() {
         assertEquals(2L, teacherService.findQuestionBankCondition(
-                this.teacher, 2L, 2L, 0L, "", false, PageRequest.of(0, 10))
+                2L, 2L, 0L, "", false, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }
@@ -176,7 +183,7 @@ public class TeacherServiceTest {
     @DisplayName("根据 courseId 和 sectionId 模糊查询登录教师的私有题目")
     void findQuestionBankByConditionWhenPassedIsPublicFalseAndCourseIdAndSectionIdAndName() {
         assertEquals(1L, teacherService.findQuestionBankCondition(
-                this.teacher, 2L, 2L, 0L, "公", false, PageRequest.of(0, 10))
+                2L, 2L, 0L, "公", false, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }
@@ -186,7 +193,7 @@ public class TeacherServiceTest {
     @DisplayName("根据 courseId 和 sectionId 和 knowledgeId 查询登录教师的私有题目")
     void findQuestionBankByConditionWhenPassedIsPublicFalseAndCourseIdAndSectionIdAndKnowledgeId() {
         assertEquals(2L, teacherService.findQuestionBankCondition(
-                this.teacher, 6L, 5L, 2L, "", false, PageRequest.of(0, 10))
+                6L, 5L, 2L, "", false, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }
@@ -196,7 +203,7 @@ public class TeacherServiceTest {
     @DisplayName("根据 courseId 和 sectionId 和 knowledgeId 模糊查询登录教师的私有题目")
     void findQuestionBankByConditionWhenPassedIsPublicFalseAndCourseIdAndSectionIdAndKnowledgeIdAndName() {
         assertEquals(1L, teacherService.findQuestionBankCondition(
-                this.teacher, 6L, 5L, 2L, "李", false, PageRequest.of(0, 10))
+                6L, 5L, 2L, "李", false, PageRequest.of(0, 10))
                 .getTotalElements()
         );
     }

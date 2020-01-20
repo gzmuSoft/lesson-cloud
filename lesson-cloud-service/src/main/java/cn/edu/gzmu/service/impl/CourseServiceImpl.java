@@ -7,6 +7,7 @@ import cn.edu.gzmu.model.entity.Teacher;
 import cn.edu.gzmu.repository.entity.CourseRepository;
 import cn.edu.gzmu.repository.entity.LogicClassRepository;
 import cn.edu.gzmu.service.CourseService;
+import cn.edu.gzmu.service.helper.OauthHelper;
 import com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ public class CourseServiceImpl extends BaseServiceImpl<CourseRepository, Course,
 
     private @NonNull LogicClassRepository logicClassRepository;
     private @NonNull CourseRepository courseRepository;
-
+    private @NonNull OauthHelper oauthHelper;
 
     private List<Course> searchByStudent(Student student) {
         // 获取当前学生的物理班级信息
@@ -75,13 +76,13 @@ public class CourseServiceImpl extends BaseServiceImpl<CourseRepository, Course,
     }
 
     @Override
-    public Page<Course> searchByNameAndTypeAndSelf(Teacher teacher, String name, String type, Boolean isSelf, Pageable pageable) {
+    public Page<Course> searchByNameAndTypeAndSelf(String name, String type, Boolean isSelf, Pageable pageable) {
         return courseRepository.findAll((Specification<Course>) (root, criteriaQuery, criteriaBuilder) -> {
             Predicate conjunction = criteriaBuilder.equal(root.get("isEnable").as(Boolean.class), true);
             //如果只查询自己管理的班级课程
             if (BooleanUtils.isTrue(isSelf)) {
                 CriteriaBuilder.In<Long> inIds = criteriaBuilder.in(root.get("id").as(Long.class));
-                Set<LogicClass> logicClassSet = logicClassRepository.findDistinctByTeacherId(teacher.getId());
+                Set<LogicClass> logicClassSet = logicClassRepository.findDistinctByTeacherId(oauthHelper.teacher().getId());
                 //查询出自己管理的逻辑班级 然后用where in 条件判断
                 logicClassSet.stream().map(LogicClass::getCourseId).forEach(inIds::value);
                 conjunction = criteriaBuilder.and(conjunction, inIds);

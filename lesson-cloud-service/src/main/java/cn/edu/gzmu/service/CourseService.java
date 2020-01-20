@@ -42,5 +42,5 @@ public interface CourseService extends BaseService<Course, Long> {
      * @param pageable 分页信息
      * @return 课程信息
      */
-    Page<Course> searchByNameAndTypeAndSelf(Teacher teacher, String name, String type, Boolean isSelf, Pageable pageable);
+    Page<Course> searchByNameAndTypeAndSelf(String name, String type, Boolean isSelf, Pageable pageable);
 }
