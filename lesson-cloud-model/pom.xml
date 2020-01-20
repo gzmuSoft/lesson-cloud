@@ -30,6 +30,12 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+<!--        hibername mysql json convert-->
+        <dependency>
+            <groupId>com.vladmihalcea</groupId>
+            <artifactId>hibernate-types-52</artifactId>
+            <version>2.9.2</version>
+        </dependency>
         <!--hibernate核心依赖-->
 <!--        <dependency>-->
 <!--            <groupId>org.hibernate</groupId>-->

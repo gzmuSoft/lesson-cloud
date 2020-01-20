@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Paper Controller
  *
  * @author echo
+ * @author YMS
  * @version 1.0
  * @date 2019-5-28 17:24:38
- *
- * @author YMS
  * @date 2019-8-8
  */
 @RequiredArgsConstructor
@@ -34,4 +33,9 @@ public class PaperController extends BaseController<Paper, PaperService, Long> {
         return ResponseEntity.ok(paperService.searchByExamId(id));
     }
 
+
+    @GetMapping("/exam/{id}/generate/")
+    public HttpEntity<?> generateByExamId(@PathVariable Long id) {
+        return null;
+    }
 }

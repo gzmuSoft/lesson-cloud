@@ -4,6 +4,8 @@ import cn.edu.gzmu.model.entity.Question;
 import cn.edu.gzmu.repository.base.BaseRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import java.util.List;
+
 /**
  * question.
  *
@@ -12,4 +14,11 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  */
 @RepositoryRestResource(path = "question")
 public interface QuestionRepository extends BaseRepository<Question, Long> {
+    /**
+     * 根据ids  查出所有的question
+     *
+     * @param ids
+     * @return
+     */
+    List<Question> findAllByIdIn(List<Long> ids);
 }

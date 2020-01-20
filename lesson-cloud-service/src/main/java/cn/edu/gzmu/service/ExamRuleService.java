@@ -22,4 +22,7 @@ public interface ExamRuleService extends BaseService<ExamRule, Long> {
      */
     List<ExamRule> searchByExamId(Long id);
 
+
+
+
 }
