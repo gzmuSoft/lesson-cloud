@@ -1,6 +1,7 @@
 package cn.edu.gzmu.service.exam;
 
 import cn.edu.gzmu.model.constant.QuestionType;
+import cn.edu.gzmu.model.dto.QuestionInfo;
 import cn.edu.gzmu.model.entity.Exam;
 import cn.edu.gzmu.model.entity.ExamRule;
 import cn.edu.gzmu.model.entity.Knowledge;
@@ -77,8 +78,7 @@ public class SimpleExamRuleGenerator implements ExamRuleGenerator {
     private final @NonNull KnowledgeRepository knowledgeRepository;
 
     @Override
-    public List<Question> generateQuestion(ExamRule examRule) {
-        Exam exam = examRule.getExam();
+    public List<QuestionInfo> generateQuestion(ExamRule examRule) {
         RuleDetail ruleDetail = RuleDetail.convert(examRule.getRuleDetail());
         List<Long> selectQuestionIds = null;
         if (BooleanUtils.isFalse(ruleDetail.isEmpty())) {
@@ -91,7 +91,23 @@ public class SimpleExamRuleGenerator implements ExamRuleGenerator {
             List<KnowledgeQuestion> knowledgeQuestionList = knowledgeQuestionRepository.findAllByKnowledgeIdIn(knowledgeIds);
             selectQuestionIds = knowledgeQuestionList.stream().map(KnowledgeQuestion::getQuestionId).collect(Collectors.toList());
         }
-        return questionRepository.findAll(specificationQuestionProvide(examRule, ruleDetail.getRequireQuestionIds(), selectQuestionIds));
+        List<Question> questionList = questionRepository.findAll(specificationQuestionProvide(examRule, ruleDetail.getRequireQuestionIds(), selectQuestionIds));
+        //增加必选题
+        questionList.addAll(questionRepository.findAllByIdIn(ruleDetail.getRequireQuestionIds()));
+        //TODO 这里可以增加一下判断 必选题题量超出总题量
+        return questionList.stream().map(question -> modelMapper(question, examRule)).collect(Collectors.toList());
+    }
+
+
+    private QuestionInfo modelMapper(Question question, ExamRule examRule) {
+        QuestionInfo questionInfo = new QuestionInfo();
+        return questionInfo
+                .setId(question.getId())
+                .setName(question.getName())
+                .setSpell(question.getSpell())
+                .setDifficultRate(question.getDifficultRate())
+                .setValue(examRule.getEachValue())
+                .setQuestionType(question.getType());
     }
 
     private <T> Specification<T> specificationQuestionProvide(ExamRule examRule, List<Long> requireIds, List<Long> selectIds) {

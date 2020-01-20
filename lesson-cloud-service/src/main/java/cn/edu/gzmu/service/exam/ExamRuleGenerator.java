@@ -1,5 +1,6 @@
 package cn.edu.gzmu.service.exam;
 
+import cn.edu.gzmu.model.dto.QuestionInfo;
 import cn.edu.gzmu.model.entity.ExamRule;
 import cn.edu.gzmu.model.entity.Question;
 
@@ -17,5 +18,5 @@ public interface ExamRuleGenerator {
      * @param examRule 考试规则
      * @return Question
      */
-    List<Question> generateQuestion(ExamRule examRule);
+    List<QuestionInfo> generateQuestion(ExamRule examRule);
 }

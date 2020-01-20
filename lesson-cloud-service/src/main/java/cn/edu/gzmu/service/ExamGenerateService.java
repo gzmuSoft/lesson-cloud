@@ -1,5 +1,6 @@
 package cn.edu.gzmu.service;
 
+import cn.edu.gzmu.model.dto.PaperInfo;
 import cn.edu.gzmu.model.entity.Paper;
 
 /**
@@ -15,5 +16,5 @@ public interface ExamGenerateService {
      * @param examId 考试id
      * @return paper
      */
-    Paper generatePaper(Long examId);
+    PaperInfo generatePaper(Long examId);
 }
