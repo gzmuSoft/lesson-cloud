@@ -56,53 +56,6 @@ public class Paper extends BaseEntity implements Serializable {
      */
     private java.lang.Float score;
 
-    /**
-     * 单项选择题id列表
-     */
-    @Size(max = 512, message = "singleSelIds 不能大于 512 位")
-    private java.lang.String singleSelIds;
-
-    /**
-     * 单项选择题选项乱序之后的顺序列表（以分号作为分隔符，一个题的多个选项以逗号作为分隔符）
-     */
-    @Size(max = 1024, message = "singleSelOptionIds 不能大于 1024 位")
-    private java.lang.String singleSelOptionIds;
-
-    /**
-     * 多项选择题id列表
-     */
-    @Size(max = 512, message = "multiSelIds 不能大于 512 位")
-    private java.lang.String multiSelIds;
-
-    /**
-     * 多项选择题选项乱序之后的顺序列表（以分号作为分隔符，一个题的多个选项以逗号作为分隔符）
-     */
-    @Size(max = 1024, message = "multiSelOptionIds 不能大于 1024 位")
-    private java.lang.String multiSelOptionIds;
-
-    /**
-     * 判断题id列表
-     */
-    @Size(max = 512, message = "judgementIds 不能大于 512 位")
-    private java.lang.String judgementIds;
-
-    /**
-     * 判断题选项乱序之后的顺序列表（以分号作为分隔符，一个题的多个选项以逗号作为分隔符）
-     */
-    @Size(max = 1024, message = "judgementOptionIds 不能大于 1024 位")
-    private java.lang.String judgementOptionIds;
-
-    /**
-     * 问答题id列表
-     */
-    @Size(max = 512, message = "essayIds 不能大于 512 位")
-    private java.lang.String essayIds;
-
-    /**
-     * 编程题id列表
-     */
-    @Size(max = 512, message = "programIds 不能大于 512 位")
-    private java.lang.String programIds;
 
     /**
      * 测试
