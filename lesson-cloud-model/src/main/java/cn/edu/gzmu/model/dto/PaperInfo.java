@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -17,13 +18,37 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class PaperInfo {
+public class PaperInfo implements Serializable {
+    /**
+     * examId
+     */
     private Long examId;
+    /**
+     * paper Id
+     */
     private Long id;
+    /**
+     * 单选题 info
+     */
     private List<QuestionInfo> singleSel;
+    /**
+     * 多选题info
+     */
     private List<QuestionInfo> multiSel;
+    /**
+     * 判断题info
+     */
     private List<QuestionInfo> judgement;
+    /**
+     * 填空题info
+     */
     private List<QuestionInfo> fillBlank;
+    /**
+     * 简答题info
+     */
     private List<QuestionInfo> essay;
+    /**
+     * 编程题info
+     */
     private List<QuestionInfo> program;
 }

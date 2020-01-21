@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -20,25 +21,41 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class RuleDetailInfo {
+public class ExamRuleDetailInfo implements Serializable {
+    /**
+     * 必选题ids
+     */
     protected List<Long> requireQuestionIds;
+    /**
+     * 节 ids
+     */
     protected List<Long> sectionIds;
+    /**
+     * 章 ids
+     */
     protected List<Long> passageIds;
+    /**
+     * 知识点ids
+     */
+    protected List<Long> knowledgeIds;
 
-    public static RuleDetailInfo convert(JSONObject jsonObject) {
-        RuleDetailInfo ruleDetailInfo = new RuleDetailInfo();
+    public static ExamRuleDetailInfo convert(JSONObject jsonObject) {
+        ExamRuleDetailInfo examRuleDetailInfo = new ExamRuleDetailInfo();
         try {
+            List<Long> knowledgeList = jsonObject.getJSONArray("knowledgeIds")
+                    .toJavaList(Long.class);
+            examRuleDetailInfo.setKnowledgeIds(knowledgeList);
             List<Long> sectionList = jsonObject.getJSONArray("sectionIds")
                     .toJavaList(Long.class);
-            ruleDetailInfo.setSectionIds(sectionList);
+            examRuleDetailInfo.setSectionIds(sectionList);
             List<Long> passageList = jsonObject.getJSONArray("passageIds")
                     .toJavaList(Long.class);
-            ruleDetailInfo.setSectionIds(passageList);
+            examRuleDetailInfo.setSectionIds(passageList);
             List<Long> requireQuestionList = jsonObject.getJSONArray("requireQuestionIds")
                     .toJavaList(Long.class);
-            ruleDetailInfo.setSectionIds(requireQuestionList);
+            examRuleDetailInfo.setSectionIds(requireQuestionList);
         } catch (Exception ignored) {
         }
-        return ruleDetailInfo;
+        return examRuleDetailInfo;
     }
 }

@@ -2,8 +2,7 @@ package cn.edu.gzmu.service.exam;
 
 import cn.edu.gzmu.model.constant.QuestionType;
 import cn.edu.gzmu.model.dto.QuestionInfo;
-import cn.edu.gzmu.model.dto.RuleDetailInfo;
-import cn.edu.gzmu.model.entity.Exam;
+import cn.edu.gzmu.model.dto.ExamRuleDetailInfo;
 import cn.edu.gzmu.model.entity.ExamRule;
 import cn.edu.gzmu.model.entity.Knowledge;
 import cn.edu.gzmu.model.entity.KnowledgeQuestion;
@@ -19,17 +18,15 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
-import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -42,16 +39,19 @@ public class SimpleExamRuleGenerator implements ExamRuleGenerator {
 
     @Data
     @EqualsAndHashCode(callSuper = true)
-    private static class RuleDetail extends RuleDetailInfo {
-        private RuleDetail() {
+    private static class ExamRuleDetail extends ExamRuleDetailInfo {
+        private ExamRuleDetail() {
         }
 
         public boolean isEmpty() {
-            return CollectionUtils.isEmpty(requireQuestionIds) && CollectionUtils.isEmpty(sectionIds) && CollectionUtils.isEmpty(passageIds);
+            return CollectionUtils.isEmpty(requireQuestionIds)
+                    && CollectionUtils.isEmpty(sectionIds)
+                    && CollectionUtils.isEmpty(passageIds)
+                    && CollectionUtils.isEmpty(knowledgeIds);
         }
 
-        public static RuleDetail convert(JSONObject jsonObject) {
-            return (RuleDetail) RuleDetailInfo.convert(jsonObject);
+        public static ExamRuleDetail convert(JSONObject jsonObject) {
+            return (ExamRuleDetail) ExamRuleDetailInfo.convert(jsonObject);
         }
     }
 
@@ -65,16 +65,17 @@ public class SimpleExamRuleGenerator implements ExamRuleGenerator {
 
     @Override
     public List<QuestionInfo> generateQuestion(ExamRule examRule) {
-        RuleDetail ruleDetail = RuleDetail.convert(examRule.getRuleDetail());
+        ExamRuleDetail ruleDetail = ExamRuleDetail.convert(examRule.getRuleDetail());
         List<Long> selectQuestionIds = null;
         if (BooleanUtils.isFalse(ruleDetail.isEmpty())) {
             //查询出符合条件的待选择的selectQuestionIds
             List<Section> sectionList = sectionRepository.findAllByParentIdIn(ruleDetail.getPassageIds());
-            List<Long> sectionIds = sectionList.stream().map(Section::getId).collect(Collectors.toList());
+            Set<Long> sectionIds = sectionList.stream().map(Section::getId).collect(Collectors.toSet());
             sectionIds.addAll(ruleDetail.getSectionIds());
-            List<Knowledge> knowledgeList = knowledgeRepository.findAllBySectionIdIn(sectionIds);
-            List<Long> knowledgeIds = knowledgeList.stream().map(Knowledge::getId).collect(Collectors.toList());
-            List<KnowledgeQuestion> knowledgeQuestionList = knowledgeQuestionRepository.findAllByKnowledgeIdIn(knowledgeIds);
+            List<Knowledge> knowledgeList = knowledgeRepository.findAllBySectionIdIn(new ArrayList<>(sectionIds));
+            Set<Long> knowledgeIds = knowledgeList.stream().map(Knowledge::getId).collect(Collectors.toSet());
+            knowledgeIds.addAll(ruleDetail.getKnowledgeIds());
+            List<KnowledgeQuestion> knowledgeQuestionList = knowledgeQuestionRepository.findAllByKnowledgeIdIn(new ArrayList<>(knowledgeIds));
             selectQuestionIds = knowledgeQuestionList.stream().map(KnowledgeQuestion::getQuestionId).collect(Collectors.toList());
         }
         List<Question> questionList = questionRepository.findAll(specificationQuestionProvide(examRule, ruleDetail.getRequireQuestionIds(), selectQuestionIds));
