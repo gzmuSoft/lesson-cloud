@@ -1,7 +1,6 @@
 package cn.edu.gzmu.repository.entity;
 
 
-import cn.edu.gzmu.model.constant.SectionType;
 import cn.edu.gzmu.model.entity.Section;
 import cn.edu.gzmu.repository.base.BaseRepository;
 import org.springframework.data.repository.query.Param;
@@ -34,11 +33,11 @@ public interface SectionRepository extends BaseRepository<Section, Long> {
      * 更具课程 id 和类型查询
      *
      * @param courseId 课程 id
-     * @param type     类型
+     * @param parentId 父 id
      * @return 结果
      */
-    @RestResource(path = "courseAndType", rel = "byCourseIdAndType")
-    List<Section> findAllByCourseIdAndType(@Param("courseId") Long courseId, @Param("type") SectionType type);
+    @RestResource(path = "courseAndPassage", rel = "byCourseAndPassage")
+    List<Section> findAllByCourseIdAndParentId(@Param("courseId") Long courseId, @Param("passageId") Long parentId);
 
     /**
      * 根据章id 查询所有的节
@@ -57,17 +56,4 @@ public interface SectionRepository extends BaseRepository<Section, Long> {
      */
     List<Section> findAllByParentIdIn(List<Long> ids);
 
-    /**
-     * 更具课程 id 和类型查询
-     *
-     * @param courseId 课程 id
-     * @param parentId 父级 id
-     * @param type     类型
-     * @return 结果
-     */
-    @RestResource(path = "courseAndParentAndType", rel = "byCourseIdAndType")
-    List<Section> findAllByCourseIdAndParentIdAndType(
-            @Param("courseId") Long courseId,
-            @Param("parentId") Long parentId,
-            @Param("type") SectionType type);
 }
