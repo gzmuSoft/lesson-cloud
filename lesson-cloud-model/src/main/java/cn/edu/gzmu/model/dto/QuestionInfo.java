@@ -21,16 +21,28 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class QuestionInfo implements Serializable {
-
+    /**
+     * question id
+     */
     private Long id;
-
+    /**
+     * question name
+     */
     private String name;
-
+    /**
+     * question spell
+     */
     private String spell;
-
+    /**
+     * 难度系数
+     */
     private Integer difficultRate;
-
+    /**
+     * question 类型
+     */
     private QuestionType questionType;
-
+    /**
+     * 分值
+     */
     private Float value;
 }
