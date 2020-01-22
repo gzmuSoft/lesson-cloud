@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -42,7 +41,9 @@ public class CourseServiceImpl extends BaseServiceImpl<CourseRepository, Course,
     private @NonNull CourseRepository courseRepository;
     private @NonNull OauthHelper oauthHelper;
 
-    private List<Course> searchByStudent(Student student) {
+    @Override
+    public Page<Course> searchByStudent(Pageable pageable) {
+        Student student = oauthHelper.student();
         // 获取当前学生的物理班级信息
         Long classesId = student.getClassesId();
         // 查找当前学生所在物理班级的逻辑班级
@@ -56,13 +57,7 @@ public class CourseServiceImpl extends BaseServiceImpl<CourseRepository, Course,
                 .map(LogicClass::getCourseId)
                 .collect(Collectors.toList());
         // 通过 id 得到课程
-        return courseRepository.searchAllByIds(courseIds);
-    }
-
-    @Override
-    public Page<Course> searchByStudent(Student student, Pageable pageable) {
-        List<Course> courses = searchByStudent(student);
-        return new PageImpl<>(courses, pageable, courses.size());
+        return courseRepository.findByIdIn(courseIds, pageable);
     }
 
     @Override

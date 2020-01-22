@@ -39,7 +39,7 @@ public class CourseController extends BaseController<Course, CourseService, Long
      */
     @GetMapping(LessonResource.STUDENT)
     public HttpEntity<?> coursesPageFromStuDent(@PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(courseService.searchByStudent(oauthHelper.student(), pageable));
+        return ResponseEntity.ok(courseService.searchByStudent(pageable));
     }
 
     /**

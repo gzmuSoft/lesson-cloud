@@ -1,6 +1,7 @@
 package cn.edu.gzmu.repository.base;
 
 import cn.edu.gzmu.model.BaseEntity;
+import cn.edu.gzmu.model.entity.Course;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,9 +54,7 @@ public interface BaseRepository<T extends BaseEntity, ID> extends JpaRepository<
      * @param ids id 列表
      * @return 结果
      */
-    @RestResource(exported = false)
-    @Query(value = "select * from #{#entityName}  where id in (:ids) and is_enable = 1 ", nativeQuery = true)
-    List<T> searchAllByIds(@Param("ids") List<ID> ids);
+    Page<Course> findByIdIn(@Param("ids") List<Long> ids, Pageable pageable);
 
     /**
      * 通过 id 列表查询

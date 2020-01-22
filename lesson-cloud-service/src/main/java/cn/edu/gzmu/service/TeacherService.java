@@ -21,7 +21,9 @@ public interface TeacherService {
      * @param knowledgeId 知识点Id
      * @param isPublic    是否公开
      * @param pageable    分页
+     * @param name        名称
      * @author Soul
+     * @return 结果
      * @date 2020/1/12 1:16
      */
     Page<Question> findQuestionBankCondition(Long passageId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable);
