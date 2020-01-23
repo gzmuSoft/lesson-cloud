@@ -21,17 +21,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class SysUserServiceImpl implements SysUserService {
 
 //    @Override
-//    public SysUser searchByAll(String user) {
-//        return
-//                sysUserRepository.findOne((Specification<SysUser>)
-//                        (root, query, criteriaBuilder) ->
-//                                criteriaBuilder.or(
-//                                        criteriaBuilder.equal(root.get("name"), user),
-//                                        criteriaBuilder.equal(root.get("email"), user),
-//                                        criteriaBuilder.equal(root.get("phone"), user)
-//                                )).orElseThrow(() ->
-//                        new UserNotFoundException(String.format("用户 %s 不存在", user)));
-//    }
+////    public SysUser searchByAll(String user) {
+////        return
+////                sysUserRepository.findOne((Specification<SysUser>)
+////                        (root, query, criteriaBuilder) ->
+////                                criteriaBuilder.or(
+////                                        criteriaBuilder.equal(root.get("name"), user),
+////                                        criteriaBuilder.equal(root.get("email"), user),
+////                                        criteriaBuilder.equal(root.get("phone"), user)
+////                                )).orElseThrow(() ->
+////                        new UserNotFoundException(String.format("用户 %s 不存在", user)));
+////    }
 
 
     @Override

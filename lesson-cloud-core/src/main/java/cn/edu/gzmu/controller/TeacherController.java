@@ -35,21 +35,27 @@ public class TeacherController {
     }
 
     /**
-     * 通过不同条件获取题库
+     * 通过不同条件获取题库.
      *
      * @param pageable 分页
      * @return org.springframework.http.HttpEntity<?>
      * @author Soul
      * @date 2020/1/13 22:04
+     *
+     * 添加课程 ID 条件.
+     * @author Japoul
+     * @date 2020/1/23 12:43
+     *
      */
     @GetMapping("/question")
     public HttpEntity<?> findQuestionBankByCondition(
+            @RequestParam Long courseId,
             @RequestParam(defaultValue = "0") Long passageId,
             @RequestParam(defaultValue = "0") Long sectionId,
             @RequestParam(defaultValue = "0") Long knowledgeId,
             @RequestParam(defaultValue = "") String name,
             @RequestParam(defaultValue = "true") boolean isPublic,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(teacherService.findQuestionBankCondition(passageId, sectionId, knowledgeId, name, isPublic, pageable));
+        return ResponseEntity.ok(teacherService.findQuestionBankCondition(courseId, passageId, sectionId, knowledgeId, name, isPublic, pageable));
     }
 }

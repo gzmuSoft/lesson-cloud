@@ -1,5 +1,6 @@
 package cn.edu.gzmu.service.impl;
 
+import cn.edu.gzmu.model.BaseEntity;
 import cn.edu.gzmu.model.entity.*;
 import cn.edu.gzmu.repository.entity.KnowledgeQuestionRepository;
 import cn.edu.gzmu.repository.entity.KnowledgeRepository;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -39,7 +40,7 @@ public class TeacherServiceImpl implements TeacherService {
     private final @NonNull OauthHelper oauthHelper;
 
     @Override
-    public Page<Question> findQuestionBankCondition(Long passageId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable) {
+    public Page<Question> findQuestionBankCondition(Long courseId, Long passageId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable) {
         return questionRepository.findAll((Specification<Question>) (root, criteriaQuery, criteriaBuilder) -> {
             Predicate conjunction = criteriaBuilder.equal(root.get("isEnable").as(Boolean.class), true);
             if (BooleanUtils.isFalse(isPublic)) {
@@ -51,7 +52,20 @@ public class TeacherServiceImpl implements TeacherService {
                         criteriaBuilder.like(root.get("name").as(String.class), "%" + name + "%"));
             }
             CriteriaBuilder.In<Long> inIds = criteriaBuilder.in(root.get("id").as(Long.class));
-            if (knowledgeId != 0) {
+
+            if (courseId > 0 && knowledgeId == 0 && sectionId == 0 && passageId == 0) {
+                // 注意知识点和节对应，过滤掉章
+                List<Long> sectionIds = sectionRepository.findAllByCourseId(courseId)
+                        .stream().filter(section -> section.getParentId() != 0)
+                        .map(Section::getId).collect(Collectors.toList());
+                List<Long> knowledgeIds = knowledgeRepository.findAllBySectionIdIn(sectionIds)
+                        .stream().map(Knowledge::getId)
+                        .collect(Collectors.toList());
+                Set<Long> questionIdSet = new HashSet<>(knowledgeQuestionRepository.findAllByKnowledgeIdIn(knowledgeIds))
+                        .stream().map(KnowledgeQuestion::getQuestionId)
+                        .collect(Collectors.toSet());
+                questionIdSet.forEach(inIds::value);
+            } else if (knowledgeId != 0) {
                 List<KnowledgeQuestion> knowledgeQuestions = knowledgeQuestionRepository.findAllByKnowledgeId(knowledgeId);
                 knowledgeQuestions.forEach(knowledgeQuestion -> inIds.value(knowledgeQuestion.getQuestionId()));
             } else if (sectionId != 0) {

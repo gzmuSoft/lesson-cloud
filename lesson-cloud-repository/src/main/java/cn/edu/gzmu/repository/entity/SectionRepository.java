@@ -21,7 +21,7 @@ import java.util.List;
 public interface SectionRepository extends BaseRepository<Section, Long> {
 
     /**
-     * 根据 exam id 查询所有
+     * 根据 courseId 查询所有
      *
      * @param id CourseId
      * @return 结果
@@ -33,14 +33,14 @@ public interface SectionRepository extends BaseRepository<Section, Long> {
      * 更具课程 id 和类型查询
      *
      * @param courseId 课程 id
-     * @param parentId 父 id
+     * @param parentId 父(章) id
      * @return 结果
      */
     @RestResource(path = "courseAndPassage", rel = "byCourseAndPassage")
     List<Section> findAllByCourseIdAndParentId(@Param("courseId") Long courseId, @Param("passageId") Long parentId);
 
     /**
-     * 根据章id 查询所有的节
+     * 根据 章id 查询所有的节
      *
      * @param id 章 id
      * @return 结果

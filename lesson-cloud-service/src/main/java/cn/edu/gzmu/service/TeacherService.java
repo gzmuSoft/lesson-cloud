@@ -16,6 +16,7 @@ public interface TeacherService {
     /**
      * 通过不同条件获取题库
      *
+     * @param courseId   课程Id
      * @param passageId   章Id
      * @param sectionId   节Id
      * @param knowledgeId 知识点Id
@@ -26,5 +27,5 @@ public interface TeacherService {
      * @return 结果
      * @date 2020/1/12 1:16
      */
-    Page<Question> findQuestionBankCondition(Long passageId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable);
+    Page<Question> findQuestionBankCondition(Long courseId, Long passageId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable);
 }

@@ -27,9 +27,9 @@ import java.io.Serializable;
 public class KnowledgeQuestion extends BaseEntity implements Serializable {
 
     /**
-     * 章节编号
+     * 知识点编号
      */
-    @javax.validation.constraints.NotNull(message = "sectionId 章节编号 为必填项")
+    @javax.validation.constraints.NotNull(message = "questionId 知识点编号 为必填项")
     private java.lang.Long questionId;
 
     /**
