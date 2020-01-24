@@ -20,6 +20,7 @@ import java.util.List;
  * @author Japoul
  * @author ljq
  * @author lxy
+ * @author hzl
  * @version 1.0
  * @date 2019-5-23 17:38:13
  * <p>
@@ -30,7 +31,6 @@ import java.util.List;
  * <p>
  *
  * <p>
- * @author hzl
  * @date 2019-8-13 23:48:10
  * 获取到当前教师未发布的考试信息
  * </p>
@@ -54,6 +54,15 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
      * @return 结果
      */
     List<Exam> findAllByCourseId(Long courseId);
+
+    /**
+     * 根据课程id查询考试 分页
+     *
+     * @param courseId 课程id
+     * @param pageable 分页信息
+     * @return 结果
+     */
+    Page<Exam> findAllByCourseId(Long courseId, Pageable pageable);
 
     /**
      * 根据逻辑班级分页查询考试信息
@@ -88,7 +97,7 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
     /**
      * 通过课程id找所有未发布的考试信息
      *
-     * @param id 课程id
+     * @param id      课程id
      * @param publish 是否发布
      * @return 考试信息
      */
@@ -97,7 +106,7 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
     /**
      * 通过考试信息ids 查找出不包含考试信息id的记录
      *
-     * @param examIds 考试信息ids
+     * @param examIds         考试信息ids
      * @param logicClassesIds 逻辑班级ids
      * @return 考试信息
      */
@@ -108,7 +117,7 @@ public interface ExamRepository extends BaseRepository<Exam, Long> {
     /**
      * 通过考试信息ids 查找出包含考试信息的记录
      *
-     * @param examIds 考试信息ids
+     * @param examIds         考试信息ids
      * @param logicClassesIds 逻辑班级ids
      * @return 考试信息
      */
