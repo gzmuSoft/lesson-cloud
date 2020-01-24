@@ -53,15 +53,13 @@ public class TeacherServiceImpl implements TeacherService {
             }
             CriteriaBuilder.In<Long> inIds = criteriaBuilder.in(root.get("id").as(Long.class));
 
-            if (courseId > 0 && knowledgeId == 0 && sectionId == 0 && passageId == 0) {
+            if (courseId != 0) {
                 // 注意知识点和节对应，过滤掉章
-                List<Long> sectionIds = sectionRepository.findAllByCourseId(courseId)
-                        .stream().filter(section -> section.getParentId() != 0)
-                        .map(Section::getId).collect(Collectors.toList());
+                List<Long> sectionIds = sectionRepository.findAllByCourseId(courseId).stream().map(Section::getId).collect(Collectors.toList());
                 List<Long> knowledgeIds = knowledgeRepository.findAllBySectionIdIn(sectionIds)
                         .stream().map(Knowledge::getId)
                         .collect(Collectors.toList());
-                Set<Long> questionIdSet = new HashSet<>(knowledgeQuestionRepository.findAllByKnowledgeIdIn(knowledgeIds))
+                Set<Long> questionIdSet = knowledgeQuestionRepository.findAllByKnowledgeIdIn(knowledgeIds)
                         .stream().map(KnowledgeQuestion::getQuestionId)
                         .collect(Collectors.toSet());
                 questionIdSet.forEach(inIds::value);
