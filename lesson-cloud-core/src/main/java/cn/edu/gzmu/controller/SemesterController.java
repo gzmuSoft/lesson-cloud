@@ -1,8 +1,12 @@
 package cn.edu.gzmu.controller;
 
 import cn.edu.gzmu.model.constant.LessonResource;
+import cn.edu.gzmu.service.SemesterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -16,5 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RepositoryRestController
 @RequestMapping(LessonResource.SEMESTER_SEARCH)
 public class SemesterController {
+
+    private final SemesterService semesterService;
+
+    @GetMapping("all")
+    public HttpEntity<?> all() {
+        return ResponseEntity.ok(semesterService.searchAll());
+    }
 
 }

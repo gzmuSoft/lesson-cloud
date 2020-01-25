@@ -3,6 +3,7 @@ package cn.edu.gzmu.repository.auth;
 
 import cn.edu.gzmu.model.entity.Semester;
 import cn.edu.gzmu.repository.interceptor.BearerRequestInterceptor;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,4 +26,13 @@ public interface SemesterRepository {
      */
     @GetMapping("/api/semester/{id}")
     Semester findById(@PathVariable("id") Long id);
+
+    /**
+     * 查询所有
+     *
+     * @return 结果
+     */
+    @GetMapping("/api/semester/search/all")
+    JSONObject searchAll();
+
 }
