@@ -26,19 +26,19 @@ public class ExamRuleDetailInfo implements Serializable {
     /**
      * 必选题ids
      */
-    protected List<Long> requireQuestionIds;
+    protected List<Long> requireQuestionIds = Collections.emptyList();
     /**
      * 节 ids
      */
-    protected List<Long> sectionIds;
+    protected List<Long> sectionIds = Collections.emptyList();
     /**
      * 章 ids
      */
-    protected List<Long> passageIds;
+    protected List<Long> passageIds = Collections.emptyList();
     /**
      * 知识点ids
      */
-    protected List<Long> knowledgeIds;
+    protected List<Long> knowledgeIds = Collections.emptyList();
 
     public static ExamRuleDetailInfo convert(ExamRuleDetailInfo examRuleDetailInfo, JSONObject jsonObject) {
         examRuleDetailInfo.setKnowledgeIds(getList(jsonObject, "knowledgeIds", Long.class));

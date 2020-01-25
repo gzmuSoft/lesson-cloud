@@ -7,6 +7,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -36,5 +37,13 @@ public interface KnowledgeRepository extends BaseRepository<Knowledge, Long> {
      * @return 结果
      */
     List<Knowledge> findAllBySectionIdIn(List<Long> ids);
+
+    /**
+     * 通过ids查询已存在的knowledge
+     *
+     * @param ids id list
+     * @return 结果
+     */
+    Set<Knowledge> findDistinctByIdIn(List<Long> ids);
 
 }

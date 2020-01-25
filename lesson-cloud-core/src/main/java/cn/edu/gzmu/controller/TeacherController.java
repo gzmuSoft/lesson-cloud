@@ -1,11 +1,13 @@
 package cn.edu.gzmu.controller;
 
+import cn.edu.gzmu.model.dto.ExamInfo;
 import cn.edu.gzmu.service.ExamGenerateService;
 import cn.edu.gzmu.service.helper.OauthHelper;
 import cn.edu.gzmu.model.constant.LessonResource;
 import cn.edu.gzmu.service.TeacherService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.data.web.PageableDefault;
@@ -13,8 +15,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * Teacher Controller
@@ -71,5 +77,11 @@ public class TeacherController {
     @GetMapping("/exam/{id}/test")
     public HttpEntity<?> generate(@PathVariable("id") Long examId) {
         return ResponseEntity.ok(examGenerateService.generatePaper(examId));
+    }
+
+    @PostMapping("/exam")
+    public HttpEntity<?> createExam(@RequestBody ExamInfo examInfo) {
+        examGenerateService.createExam(examInfo);
+        return ResponseEntity.ok().build();
     }
 }

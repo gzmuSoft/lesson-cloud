@@ -1,6 +1,7 @@
 package cn.edu.gzmu.model.dto;
 
 import cn.edu.gzmu.model.entity.Exam;
+import cn.edu.gzmu.model.entity.ExamRule;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +24,8 @@ public class ExamInfo implements Serializable {
     /**
      * 具体考试规则
      */
-    private List<ExamRuleDetailInfo> ruleList;
+    @javax.validation.constraints.NotEmpty(message = "组卷规则list不能为空")
+    private List<ExamRule> ruleList;
     /**
      * 考试信息
      */

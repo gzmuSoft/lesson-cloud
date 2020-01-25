@@ -33,16 +33,19 @@ public class Exam extends BaseEntity implements Serializable {
     /**
      * 开始时间
      */
+    @javax.validation.constraints.NotNull(message = "开始时间不能为空")
     private java.time.LocalDateTime startTime;
 
     /**
      * 结束时间
      */
+    @javax.validation.constraints.NotNull(message = "结束时间不能为空")
     private java.time.LocalDateTime endTime;
 
     /**
      * 考试总用时限制（正数，如：60分钟）
      */
+    @javax.validation.constraints.NotNull(message = "限时时间不能为空")
     private java.lang.Integer totalUseTime;
 
     /**
@@ -53,21 +56,25 @@ public class Exam extends BaseEntity implements Serializable {
     /**
      * 课程编号
      */
+    @javax.validation.constraints.NotNull(message = "课程编号不能为空")
     private java.lang.Long courseId;
 
     /**
      * 是否发布
      */
+    @javax.validation.constraints.NotNull(message = "是否发布不能为空")
     private java.lang.Boolean isPublish;
 
     /**
      * 出题类型：1指定题目、2顺序练习、3指定范围、4随机抽题
      */
+    @javax.validation.constraints.NotNull(message = "出题类型不能为空")
     private java.lang.Integer method;
 
     /**
      * 成绩公布时间
      */
+    @javax.validation.constraints.NotNull(message = "成绩公布时间不能为空")
     private java.time.LocalDateTime publicationTime;
 
     /**
@@ -79,11 +86,12 @@ public class Exam extends BaseEntity implements Serializable {
     /**
      * 可以考试的次数限制（正数，0代表可以无限次考试）
      */
+    @javax.validation.constraints.NotNull(message = "可考试次数不能为空")
     private java.lang.Integer allowTimes;
 
     /**
      * 课程实体
-     * */
+     */
     @Transient
     private Course course;
 

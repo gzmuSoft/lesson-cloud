@@ -1,9 +1,7 @@
 package cn.edu.gzmu.repository.entity;
 
 import cn.edu.gzmu.model.entity.LogicClass;
-import cn.edu.gzmu.model.entity.Student;
 import cn.edu.gzmu.repository.base.BaseRepository;
-import org.springframework.data.domain.Page;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
@@ -62,5 +60,6 @@ public interface LogicClassRepository extends BaseRepository<LogicClass, Long> {
      * @return 重修的logicClass（ 重修）
      */
     List<LogicClass> findAllByTypeAndStudentIdAndSemesterId(Boolean type, Long studentId, Long semesterId);
+
 
 }

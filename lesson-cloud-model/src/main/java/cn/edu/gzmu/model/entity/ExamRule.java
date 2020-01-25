@@ -50,16 +50,21 @@ public class ExamRule extends BaseEntity implements Serializable {
     /**
      * 题量
      */
+    @javax.validation.constraints.NotNull(message = "题量不能为空")
     private java.lang.Integer questionCount;
 
     /**
      * 起始难度系数
      */
+    @javax.validation.constraints.Min(value = 0, message = "起始难度不能小于0")
+    @javax.validation.constraints.Max(value = 100, message = "起始难度不能大于100")
     private java.lang.Integer startDifficultRate;
 
     /**
      * 终止难度系数
      */
+    @javax.validation.constraints.Min(value = 0, message = "终止难度不能小于0")
+    @javax.validation.constraints.Max(value = 100, message = "终止难度不能大于100")
     private java.lang.Integer endDifficultRate;
 
     /**

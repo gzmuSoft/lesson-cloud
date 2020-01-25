@@ -8,6 +8,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -56,4 +57,21 @@ public interface SectionRepository extends BaseRepository<Section, Long> {
      */
     List<Section> findAllByParentIdIn(List<Long> ids);
 
+    /**
+     * 查询section
+     *
+     * @param ids      id list
+     * @param parentId 父章节 =0
+     * @return 结果
+     */
+    Set<Section> findDistinctByIdInAndParentId(List<Long> ids, Long parentId);
+
+    /**
+     * 查询section
+     *
+     * @param ids      id list
+     * @param parentId 父章节 !=0
+     * @return 结果
+     */
+    Set<Section> findDistinctByIdInAndParentIdNot(List<Long> ids, Long parentId);
 }

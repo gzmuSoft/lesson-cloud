@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * question.
@@ -24,6 +25,14 @@ public interface QuestionRepository extends BaseRepository<Question, Long> {
      * @return question list
      */
     List<Question> findAllByIdIn(List<Long> ids);
+
+    /**
+     * 根据ids 查出Set
+     *
+     * @param ids id list
+     * @return 结果
+     */
+    Set<Question> findDistinctByIdIn(List<Long> ids);
 
     /**
      * 随机简单生成试题

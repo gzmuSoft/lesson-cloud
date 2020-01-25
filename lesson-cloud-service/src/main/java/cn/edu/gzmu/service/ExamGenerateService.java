@@ -1,5 +1,6 @@
 package cn.edu.gzmu.service;
 
+import cn.edu.gzmu.model.dto.ExamInfo;
 import cn.edu.gzmu.model.dto.PaperInfo;
 import cn.edu.gzmu.model.entity.Paper;
 
@@ -17,4 +18,11 @@ public interface ExamGenerateService {
      * @return paper
      */
     PaperInfo generatePaper(Long examId);
+
+    /**
+     * 创建一场考试
+     *
+     * @param examInfo exam dto
+     */
+    void createExam(ExamInfo examInfo);
 }
