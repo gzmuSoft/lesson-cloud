@@ -51,7 +51,7 @@ public class SimpleExamRuleGenerator implements ExamRuleGenerator {
         }
 
         public static ExamRuleDetail convert(JSONObject jsonObject) {
-            return (ExamRuleDetail) ExamRuleDetailInfo.convert(jsonObject);
+            return (ExamRuleDetail) ExamRuleDetailInfo.convert(new ExamRuleDetail(), jsonObject);
         }
     }
 
@@ -78,10 +78,12 @@ public class SimpleExamRuleGenerator implements ExamRuleGenerator {
             List<KnowledgeQuestion> knowledgeQuestionList = knowledgeQuestionRepository.findAllByKnowledgeIdIn(new ArrayList<>(knowledgeIds));
             selectQuestionIds = knowledgeQuestionList.stream().map(KnowledgeQuestion::getQuestionId).collect(Collectors.toList());
         }
-        List<Question> questionList = questionRepository.findAll(specificationQuestionProvide(examRule, ruleDetail.getRequireQuestionIds(), selectQuestionIds));
-        //增加必选题
-        questionList.addAll(questionRepository.findAllByIdIn(ruleDetail.getRequireQuestionIds()));
-        //TODO 这里可以增加一下判断 必选题题量超出总题量
+        //简单生成试题
+        List<Question> questionList = questionRepository.simpleGenerateQuestion(selectQuestionIds,
+                examRule.getQuestionCount() - ruleDetail.getRequireQuestionIds().size(),
+                ruleDetail.getRequireQuestionIds(), examRule.getQuestionType().ordinal(),
+                examRule.getStartDifficultRate(), examRule.getEndDifficultRate());
+        //TODO 这里可以增加一下判断  由于json存储 id没有强关联  选出的问题数量可能不准确
         return questionList.stream().map(question -> modelMapper(question, examRule)).collect(Collectors.toList());
     }
 
@@ -95,30 +97,6 @@ public class SimpleExamRuleGenerator implements ExamRuleGenerator {
                 .setDifficultRate(question.getDifficultRate())
                 .setValue(examRule.getEachValue())
                 .setQuestionType(question.getType());
-    }
-
-    private <T> Specification<T> specificationQuestionProvide(ExamRule examRule, List<Long> requireIds, List<Long> selectIds) {
-        return (root, criteriaQuery, criteriaBuilder) -> {
-            Predicate conjunction = criteriaBuilder.equal(root.get("isEnable").as(Boolean.class), true);
-            if (CollectionUtils.isNotEmpty(selectIds)) {
-                CriteriaBuilder.In<Long> inIds = criteriaBuilder.in(root.get("id").as(Long.class));
-                selectIds.forEach(inIds::value);
-                conjunction = criteriaBuilder.and(conjunction, inIds);
-            }
-            if (CollectionUtils.isNotEmpty(requireIds)) {
-                CriteriaBuilder.In<Long> notInIds = criteriaBuilder.in(root.get("id").as(Long.class));
-                requireIds.forEach(notInIds::value);
-                conjunction = criteriaBuilder.and(conjunction, notInIds.not());
-            }
-            conjunction = criteriaBuilder.and(conjunction,
-                    criteriaBuilder.equal(root.get("questionType").as(QuestionType.class), examRule.getQuestionType()));
-            conjunction = criteriaBuilder.and(conjunction,
-                    criteriaBuilder.between(root.get("difficultRate").as(Integer.class),
-                            examRule.getStartDifficultRate(), examRule.getEndDifficultRate()));
-            return criteriaQuery.where(conjunction).
-                    orderBy(criteriaBuilder.asc(criteriaBuilder.currentDate())).
-                    getRestriction();
-        };
     }
 
 

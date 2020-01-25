@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,23 +40,19 @@ public class ExamRuleDetailInfo implements Serializable {
      */
     protected List<Long> knowledgeIds;
 
-    public static ExamRuleDetailInfo convert(JSONObject jsonObject) {
-        ExamRuleDetailInfo examRuleDetailInfo = new ExamRuleDetailInfo();
-        try {
-            List<Long> knowledgeList = jsonObject.getJSONArray("knowledgeIds")
-                    .toJavaList(Long.class);
-            examRuleDetailInfo.setKnowledgeIds(knowledgeList);
-            List<Long> sectionList = jsonObject.getJSONArray("sectionIds")
-                    .toJavaList(Long.class);
-            examRuleDetailInfo.setSectionIds(sectionList);
-            List<Long> passageList = jsonObject.getJSONArray("passageIds")
-                    .toJavaList(Long.class);
-            examRuleDetailInfo.setSectionIds(passageList);
-            List<Long> requireQuestionList = jsonObject.getJSONArray("requireQuestionIds")
-                    .toJavaList(Long.class);
-            examRuleDetailInfo.setSectionIds(requireQuestionList);
-        } catch (Exception ignored) {
-        }
+    public static ExamRuleDetailInfo convert(ExamRuleDetailInfo examRuleDetailInfo, JSONObject jsonObject) {
+        examRuleDetailInfo.setKnowledgeIds(getList(jsonObject, "knowledgeIds", Long.class));
+        examRuleDetailInfo.setSectionIds(getList(jsonObject, "sectionIds", Long.class));
+        examRuleDetailInfo.setRequireQuestionIds(getList(jsonObject, "requireQuestionIds", Long.class));
+        examRuleDetailInfo.setPassageIds(getList(jsonObject, "passageIds", Long.class));
         return examRuleDetailInfo;
+    }
+
+    private static <T> List<T> getList(JSONObject jsonObject, String key, Class<T> clazz) {
+        try {
+            return jsonObject.getJSONArray(key).toJavaList(clazz);
+        } catch (Exception ignored) {
+            return Collections.emptyList();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package cn.edu.gzmu.controller;
 
+import cn.edu.gzmu.service.ExamGenerateService;
 import cn.edu.gzmu.service.helper.OauthHelper;
 import cn.edu.gzmu.model.constant.LessonResource;
 import cn.edu.gzmu.service.TeacherService;
@@ -11,6 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -29,6 +31,8 @@ public class TeacherController {
     private final @NonNull OauthHelper oauthHelper;
     private final @NonNull TeacherService teacherService;
 
+    private final @NonNull ExamGenerateService examGenerateService;
+
     @GetMapping("/test")
     public HttpEntity<?> teacherTest() {
         return ResponseEntity.ok(oauthHelper.teacher());
@@ -41,11 +45,10 @@ public class TeacherController {
      * @return org.springframework.http.HttpEntity<?>
      * @author Soul
      * @date 2020/1/13 22:04
-     *
+     * <p>
      * 添加课程 ID 条件.
      * @author Japoul
      * @date 2020/1/23 12:43
-     *
      */
     @GetMapping("/question")
     public HttpEntity<?> findQuestionBankByCondition(
@@ -57,5 +60,16 @@ public class TeacherController {
             @RequestParam(defaultValue = "true") boolean isPublic,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
         return ResponseEntity.ok(teacherService.findQuestionBankCondition(courseId, passageId, sectionId, knowledgeId, name, isPublic, pageable));
+    }
+
+    /**
+     * 测试考试生成试卷情况
+     *
+     * @param examId 考试id
+     * @return httpEntity
+     */
+    @GetMapping("/exam/{id}/test")
+    public HttpEntity<?> generate(@PathVariable("id") Long examId) {
+        return ResponseEntity.ok(examGenerateService.generatePaper(examId));
     }
 }
