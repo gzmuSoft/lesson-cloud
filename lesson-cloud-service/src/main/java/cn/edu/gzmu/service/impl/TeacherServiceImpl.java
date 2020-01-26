@@ -40,7 +40,7 @@ public class TeacherServiceImpl implements TeacherService {
     private final @NonNull OauthHelper oauthHelper;
 
     @Override
-    public Page<Question> findQuestionBankCondition(Long courseId, Long passageId, Long sectionId, Long knowledgeId, String name, QuestionType type, boolean isPublic, Pageable pageable) {
+    public Page<Question> findQuestionBankCondition(Long courseId, Long passageId, Long sectionId, Long knowledgeId, String name, List<QuestionType> type, boolean isPublic, Pageable pageable) {
         return questionRepository.findAll((Specification<Question>) (root, criteriaQuery, criteriaBuilder) -> {
             Predicate conjunction = criteriaBuilder.equal(root.get("isEnable").as(Boolean.class), true);
             conjunction = criteriaBuilder.and(conjunction,
@@ -53,9 +53,10 @@ public class TeacherServiceImpl implements TeacherService {
                 conjunction = criteriaBuilder.and(conjunction,
                         criteriaBuilder.like(root.get("name").as(String.class), "%" + name + "%"));
             }
-            if (Objects.nonNull(type)) {
-                conjunction = criteriaBuilder.and(conjunction,
-                        criteriaBuilder.equal(root.get("type").as(Long.class), type.ordinal()));
+            if (type.size() > 0) {
+                CriteriaBuilder.In<Integer> types = criteriaBuilder.in(root.get("type").as(Integer.class));
+                type.forEach(t -> types.value(t.ordinal()));
+                conjunction = criteriaBuilder.and(conjunction, types);
             }
             CriteriaBuilder.In<Long> inIds = criteriaBuilder.in(root.get("id").as(Long.class));
             if (knowledgeId != 0) {
