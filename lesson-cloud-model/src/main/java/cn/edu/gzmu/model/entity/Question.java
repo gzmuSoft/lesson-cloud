@@ -2,10 +2,14 @@ package cn.edu.gzmu.model.entity;
 
 import cn.edu.gzmu.model.BaseEntity;
 import cn.edu.gzmu.model.constant.QuestionType;
+import com.alibaba.fastjson.JSONObject;
+import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
@@ -27,6 +31,7 @@ import java.io.Serializable;
 @Where(clause = "is_enable = 1")
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
+@TypeDef(name = "json", typeClass = JsonStringType.class)
 public class Question extends BaseEntity implements Serializable {
 
     /**
@@ -58,5 +63,8 @@ public class Question extends BaseEntity implements Serializable {
      */
     @Enumerated
     private QuestionType type;
+
+    @Type(type = "json")
+    private JSONObject questionDetail;
 
 }

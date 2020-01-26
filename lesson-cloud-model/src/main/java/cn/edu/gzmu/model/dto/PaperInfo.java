@@ -1,5 +1,6 @@
 package cn.edu.gzmu.model.dto;
 
+import cn.edu.gzmu.model.entity.PaperQuestion;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author BugRui
@@ -51,4 +54,44 @@ public class PaperInfo implements Serializable {
      * 编程题info
      */
     private List<QuestionInfo> program;
+
+    public List<PaperQuestion> createPaperQuestionList(Long paperId) {
+        List<PaperQuestion> paperQuestionList = new ArrayList<>();
+        addPaperQuestionList(paperQuestionList, singleSel, paperId);
+        addPaperQuestionList(paperQuestionList, multiSel, paperId);
+        addPaperQuestionList(paperQuestionList, judgement, paperId);
+        addPaperQuestionList(paperQuestionList, fillBlank, paperId);
+        addPaperQuestionList(paperQuestionList, essay, paperId);
+        addPaperQuestionList(paperQuestionList, program, paperId);
+        return paperQuestionList;
+    }
+
+    public void clearAnswer() {
+        //清除答案
+        singleSel.forEach(item -> {
+            item.getQuestionDetail().clearAnswer();
+        });
+        multiSel.forEach(item -> {
+            item.getQuestionDetail().clearAnswer();
+        });
+        judgement.forEach(item -> {
+            item.getQuestionDetail().clearAnswer();
+        });
+        fillBlank.forEach(item -> {
+            item.getQuestionDetail().clearAnswer();
+        });
+        essay.forEach(item -> {
+            item.getQuestionDetail().clearAnswer();
+        });
+        program.forEach(item -> {
+            item.getQuestionDetail().clearAnswer();
+        });
+    }
+
+
+    private void addPaperQuestionList(List<PaperQuestion> paperQuestionList, List<QuestionInfo> questionInfoList, Long paperId) {
+        questionInfoList.forEach(questionInfo -> {
+            paperQuestionList.add(questionInfo.modelMapperPaperQuestion(paperId));
+        });
+    }
 }

@@ -25,4 +25,13 @@ public interface PaperRepository extends BaseRepository<Paper, Long> {
      */
     List<Paper> findAllByExamId(Long examId);
 
+    /**
+     * 获取学生考试的paper
+     *
+     * @param examId    考试id
+     * @param studentId 学生id
+     * @return 结果
+     */
+    List<Paper> findAllByExamIdAndStudentId(Long examId, Long studentId);
+
 }

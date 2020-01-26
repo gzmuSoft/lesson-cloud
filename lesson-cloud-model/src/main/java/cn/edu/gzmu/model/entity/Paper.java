@@ -69,16 +69,4 @@ public class Paper extends BaseEntity implements Serializable {
     @Transient
     private Student student;
 
-    @Transient
-    @FieldRepository("selOptionsRepository")
-    private List<SelOptions> singleSelOption;
-
-    @Transient
-    @FieldRepository("selOptionsRepository")
-    private List<SelOptions> multiSelOption;
-
-    @Transient
-    @FieldRepository("selOptionsRepository")
-    private List<SelOptions> judgementOption;
-
 }

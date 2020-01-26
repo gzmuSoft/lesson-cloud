@@ -11,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -42,4 +43,26 @@ public class StudentController {
     ) {
         return ResponseEntity.ok(studentService.findExamByCourseId(semesterId, pageable));
     }
+
+//    /**
+//     * 开始一场考试
+//     *
+//     * @param examId examId
+//     * @return 结果
+//     */
+//    @GetMapping("/exam/{id}")
+//    public HttpEntity<?> startExam(@PathVariable("id") Long examId) {
+//
+//    }
+//
+//    /**
+//     * 结束一场考试
+//     *
+//     * @param examId 考试id
+//     * @return 结果
+//     */
+//    @PostMapping("/exam/{id}")
+//    public HttpEntity<?> stopExam(@PathVariable("id") Long examId) {
+//
+//    }
 }

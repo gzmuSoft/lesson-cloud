@@ -40,8 +40,9 @@ public class PaperQuestion extends BaseEntity implements Serializable {
     /**
      * 知识点编号
      */
-    @javax.validation.constraints.NotNull(message = "knowledgeId 知识点编号 为必填项")
-    private java.lang.Long knowledgeId;
+    @javax.validation.constraints.NotNull(message = "paperId  试卷id 为必填项")
+    private java.lang.Long paperId;
+
     @Type(type = "json")
     private JSONObject questionDetail;
 

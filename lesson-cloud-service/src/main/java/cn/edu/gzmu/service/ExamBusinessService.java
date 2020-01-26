@@ -10,7 +10,7 @@ import cn.edu.gzmu.model.entity.Paper;
  * @author BugRui
  * @date 2020/1/19 下午11:09
  **/
-public interface ExamGenerateService {
+public interface ExamBusinessService {
     /**
      * 根据组卷规则 生成一个Paper
      *

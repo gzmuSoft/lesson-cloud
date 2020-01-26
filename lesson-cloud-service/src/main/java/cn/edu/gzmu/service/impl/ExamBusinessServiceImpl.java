@@ -11,8 +11,11 @@ import cn.edu.gzmu.model.entity.ExamRule;
 import cn.edu.gzmu.model.entity.Knowledge;
 import cn.edu.gzmu.model.entity.LogicClass;
 import cn.edu.gzmu.model.entity.Paper;
+import cn.edu.gzmu.model.entity.PaperQuestion;
 import cn.edu.gzmu.model.entity.Question;
 import cn.edu.gzmu.model.entity.Section;
+import cn.edu.gzmu.model.entity.Student;
+import cn.edu.gzmu.model.exception.BadRequestException;
 import cn.edu.gzmu.model.exception.ResourceNotFoundException;
 import cn.edu.gzmu.model.exception.ValidateException;
 import cn.edu.gzmu.repository.entity.CourseRepository;
@@ -20,10 +23,13 @@ import cn.edu.gzmu.repository.entity.ExamRepository;
 import cn.edu.gzmu.repository.entity.ExamRuleRepository;
 import cn.edu.gzmu.repository.entity.KnowledgeRepository;
 import cn.edu.gzmu.repository.entity.LogicClassRepository;
+import cn.edu.gzmu.repository.entity.PaperQuestionRepository;
+import cn.edu.gzmu.repository.entity.PaperRepository;
 import cn.edu.gzmu.repository.entity.QuestionRepository;
 import cn.edu.gzmu.repository.entity.SectionRepository;
-import cn.edu.gzmu.service.ExamGenerateService;
+import cn.edu.gzmu.service.ExamBusinessService;
 import cn.edu.gzmu.service.exam.ExamRuleGenerator;
+import cn.edu.gzmu.service.helper.OauthHelper;
 import com.google.common.base.Splitter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +39,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -46,7 +52,7 @@ import java.util.stream.Collectors;
  **/
 @Service
 @RequiredArgsConstructor
-public class ExamGenerateServiceImpl implements ExamGenerateService {
+public class ExamBusinessServiceImpl implements ExamBusinessService {
     @Qualifier("SimpleExamRuleGenerator")
     private final @NonNull ExamRuleGenerator examRuleGenerator;
 
@@ -64,6 +70,12 @@ public class ExamGenerateServiceImpl implements ExamGenerateService {
 
     private final @NonNull QuestionRepository questionRepository;
 
+    private final @NonNull PaperRepository paperRepository;
+
+    private final @NonNull PaperQuestionRepository paperQuestionRepository;
+
+    private final @NonNull OauthHelper oauthHelper;
+
     private PaperInfo modelMapper(HashMap<QuestionType, List<QuestionInfo>> questionMap, Exam exam) {
         PaperInfo paperInfo = new PaperInfo();
         return paperInfo.setExamId(exam.getId())
@@ -77,7 +89,6 @@ public class ExamGenerateServiceImpl implements ExamGenerateService {
 
     @Override
     public PaperInfo generatePaper(Long examId) {
-        Paper paper = new Paper();
         Exam exam = examRepository.findById(examId).orElseThrow(ResourceNotFoundException::new);
         List<ExamRule> examRuleList = examRuleRepository.findAllByExamId(exam.getId());
         HashMap<QuestionType, List<QuestionInfo>> questionMap = new HashMap<>();
@@ -92,6 +103,7 @@ public class ExamGenerateServiceImpl implements ExamGenerateService {
         });
         return modelMapper(questionMap, exam);
     }
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -165,6 +177,36 @@ public class ExamGenerateServiceImpl implements ExamGenerateService {
         }
         examRuleRepository.saveAll(examRuleList);
     }
+
+
+    /**
+     * 开始一场考试
+     *
+     * @param examId 考试id
+     * @return 结果
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public PaperInfo startExam(Long examId) {
+        //当前学生
+        Student student = oauthHelper.student();
+        Exam exam = examRepository.findById(examId).orElseThrow(ResourceNotFoundException::new);
+        List<Paper> paperList = paperRepository.findAllByExamIdAndStudentId(examId, student.getId());
+        if (exam.getTotalUseTime() != 0 && exam.getTotalUseTime() <= paperList.size()) {
+            throw new BadRequestException("考试已达上限");
+        }
+        PaperInfo paperInfo = generatePaper(examId);
+        Paper paper = new Paper();
+        paper.setExamId(examId);
+        paper.setStudentId(student.getId());
+        paper.setStartTime(LocalDateTime.now());
+        paper = paperRepository.save(paper);
+        List<PaperQuestion> paperQuestionList = paperInfo.createPaperQuestionList(paper.getId());
+        paperQuestionRepository.saveAll(paperQuestionList);
+        //清除答案
+        paperInfo.clearAnswer();
+        return paperInfo;
+    }
+
 
 
 }

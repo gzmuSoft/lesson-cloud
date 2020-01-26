@@ -1,6 +1,6 @@
 package cn.edu.gzmu.service.exam;
 
-import cn.edu.gzmu.model.constant.QuestionType;
+import cn.edu.gzmu.model.dto.QuestionDetail;
 import cn.edu.gzmu.model.dto.QuestionInfo;
 import cn.edu.gzmu.model.dto.ExamRuleDetailInfo;
 import cn.edu.gzmu.model.entity.ExamRule;
@@ -19,11 +19,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -63,6 +60,7 @@ public class SimpleExamRuleGenerator implements ExamRuleGenerator {
 
     private final @NonNull KnowledgeRepository knowledgeRepository;
 
+
     @Override
     public List<QuestionInfo> generateQuestion(ExamRule examRule) {
         ExamRuleDetail ruleDetail = ExamRuleDetail.convert(examRule.getRuleDetail());
@@ -90,13 +88,16 @@ public class SimpleExamRuleGenerator implements ExamRuleGenerator {
 
     private QuestionInfo modelMapper(Question question, ExamRule examRule) {
         QuestionInfo questionInfo = new QuestionInfo();
+        QuestionDetail questionDetail = QuestionDetail.convert(new QuestionDetail(), question.getQuestionDetail());
+        questionDetail.randomAnswer();
         return questionInfo
                 .setId(question.getId())
                 .setName(question.getName())
                 .setSpell(question.getSpell())
                 .setDifficultRate(question.getDifficultRate())
                 .setValue(examRule.getEachValue())
-                .setQuestionType(question.getType());
+                .setQuestionType(question.getType())
+                .setQuestionDetail(questionDetail);
     }
 
 
