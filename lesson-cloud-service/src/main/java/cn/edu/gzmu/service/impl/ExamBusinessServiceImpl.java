@@ -41,8 +41,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -76,17 +78,6 @@ public class ExamBusinessServiceImpl implements ExamBusinessService {
 
     private final @NonNull OauthHelper oauthHelper;
 
-    private PaperInfo modelMapper(HashMap<QuestionType, List<QuestionInfo>> questionMap, Exam exam) {
-        PaperInfo paperInfo = new PaperInfo();
-        return paperInfo.setExamId(exam.getId())
-                .setSingleSel(questionMap.get(QuestionType.SINGLE_SEL))
-                .setMultiSel(questionMap.get(QuestionType.MULTI_SEL))
-                .setJudgement(questionMap.get(QuestionType.JUDGEMENT))
-                .setFillBlank(questionMap.get(QuestionType.FILL_BLANK))
-                .setEssay(questionMap.get(QuestionType.ESSAY))
-                .setProgram(questionMap.get(QuestionType.PROGRAM));
-    }
-
     @Override
     public PaperInfo generatePaper(Long examId) {
         Exam exam = examRepository.findById(examId).orElseThrow(ResourceNotFoundException::new);
@@ -101,7 +92,9 @@ public class ExamBusinessServiceImpl implements ExamBusinessService {
         examRuleList.forEach(examRule -> {
             questionMap.get(examRule.getQuestionType()).addAll(examRuleGenerator.generateQuestion(examRule));
         });
-        return modelMapper(questionMap, exam);
+        return PaperInfo.convert(examId, questionMap.get(QuestionType.SINGLE_SEL), questionMap.get(QuestionType.MULTI_SEL),
+                questionMap.get(QuestionType.JUDGEMENT), questionMap.get(QuestionType.FILL_BLANK),
+                questionMap.get(QuestionType.ESSAY), questionMap.get(QuestionType.PROGRAM));
     }
 
 
@@ -179,18 +172,19 @@ public class ExamBusinessServiceImpl implements ExamBusinessService {
     }
 
 
-    /**
-     * 开始一场考试
-     *
-     * @param examId 考试id
-     * @return 结果
-     */
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public PaperInfo startExam(Long examId) {
         //当前学生
         Student student = oauthHelper.student();
         Exam exam = examRepository.findById(examId).orElseThrow(ResourceNotFoundException::new);
-        List<Paper> paperList = paperRepository.findAllByExamIdAndStudentId(examId, student.getId());
+        List<Paper> paperList = paperRepository.findAllByExamIdAndStudentIdOrderByStartTimeAsc(examId, student.getId());
+        if (paperList.size() != 0) {
+            Paper paper = paperList.get(0);
+            if (paper.getSubmitTime() == null) {
+                return recoveryExam(examId);
+            }
+        }
         if (exam.getTotalUseTime() != 0 && exam.getTotalUseTime() <= paperList.size()) {
             throw new BadRequestException("考试已达上限");
         }
@@ -208,5 +202,27 @@ public class ExamBusinessServiceImpl implements ExamBusinessService {
     }
 
 
+    @Override
+    public PaperInfo recoveryExam(Long examId) {
+        //当前学生
+        Student student = oauthHelper.student();
+        List<Paper> paperList = paperRepository.findAllByExamIdAndStudentIdOrderByStartTimeAsc(examId, student.getId());
+        //恢复一场考试
+        Paper paper = paperList.get(0);
+        List<PaperQuestion> paperQuestionList = paperQuestionRepository.findAllByPaperId(paper.getId());
+        Map<QuestionType, List<PaperQuestion>> paperQuestionMap = paperQuestionList.stream().collect(Collectors.groupingBy(PaperQuestion::getQuestionType));
+        PaperInfo paperInfo = PaperInfo.convert(paper.getExamId(), paper.getId(),
+                paperQuestionMap.getOrDefault(QuestionType.SINGLE_SEL, Collections.emptyList()), paperQuestionMap.getOrDefault(QuestionType.MULTI_SEL, Collections.emptyList()),
+                paperQuestionMap.getOrDefault(QuestionType.JUDGEMENT, Collections.emptyList()), paperQuestionMap.getOrDefault(QuestionType.FILL_BLANK, Collections.emptyList()),
+                paperQuestionMap.getOrDefault(QuestionType.ESSAY, Collections.emptyList()), paperQuestionMap.getOrDefault(QuestionType.PROGRAM, Collections.emptyList()));
+        paperInfo.clearAnswer();
+        return paperInfo;
+
+    }
+
+    @Override
+    public void stopExam(PaperInfo paperInfo) {
+
+    }
 
 }

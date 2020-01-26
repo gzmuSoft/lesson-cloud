@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +34,16 @@ public class QuestionDetail {
      */
     List<Integer> answer = Collections.emptyList();
 
+
+    /**
+     * 客观题用户答案
+     */
+    List<Integer> objectiveAnswer = Collections.emptyList();
+    /**
+     * 主观题用户答案
+     */
+    String subjectiveAnswer = "";
+
     /**
      * 在传输给学生的时候清空答案
      */
@@ -56,6 +67,8 @@ public class QuestionDetail {
     public static QuestionDetail convert(QuestionDetail questionDetail, JSONObject jsonObject) {
         questionDetail.setOption(getList(jsonObject, "option", String.class));
         questionDetail.setAnswer(getList(jsonObject, "answer", Integer.class));
+        questionDetail.setObjectiveAnswer(getList(jsonObject, "objectiveAnswer", Integer.class));
+        questionDetail.setSubjectiveAnswer(getObjectOrDefault(jsonObject, "subjectiveAnswer", String.class, ""));
         return questionDetail;
     }
 
@@ -65,6 +78,14 @@ public class QuestionDetail {
             return jsonObject.getJSONArray(key).toJavaList(clazz);
         } catch (Exception ignored) {
             return Collections.emptyList();
+        }
+    }
+
+    private static <T> T getObjectOrDefault(JSONObject jsonObject, String key, Class<T> clazz, Object o) {
+        try {
+            return jsonObject.getJSONObject(key).toJavaObject(clazz);
+        } catch (Exception ignored) {
+            return (T) o;
         }
     }
 }

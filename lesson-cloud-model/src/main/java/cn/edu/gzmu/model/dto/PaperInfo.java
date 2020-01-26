@@ -66,6 +66,34 @@ public class PaperInfo implements Serializable {
         return paperQuestionList;
     }
 
+    public static PaperInfo convert(Long examId, Long id, List<PaperQuestion> singleSelList, List<PaperQuestion> multiSelList,
+                                    List<PaperQuestion> judgementList, List<PaperQuestion> fillBlankList,
+                                    List<PaperQuestion> essayList, List<PaperQuestion> programList) {
+        return new PaperInfo().setId(id)
+                .setExamId(examId)
+                .setSingleSel(QuestionInfo.convert(singleSelList))
+                .setMultiSel(QuestionInfo.convert(multiSelList))
+                .setJudgement(QuestionInfo.convert(judgementList))
+                .setFillBlank(QuestionInfo.convert(fillBlankList))
+                .setEssay(QuestionInfo.convert(essayList))
+                .setProgram(QuestionInfo.convert(programList));
+
+    }
+
+    public static PaperInfo convert(Long examId, List<QuestionInfo> singleSel, List<QuestionInfo> multiSel,
+                                    List<QuestionInfo> judgement, List<QuestionInfo> fillBlank,
+                                    List<QuestionInfo> essay, List<QuestionInfo> program) {
+        return new PaperInfo()
+                .setExamId(examId)
+                .setSingleSel(singleSel)
+                .setMultiSel(multiSel)
+                .setJudgement(judgement)
+                .setFillBlank(fillBlank)
+                .setEssay(essay)
+                .setProgram(program);
+
+    }
+
     public void clearAnswer() {
         //清除答案
         singleSel.forEach(item -> {

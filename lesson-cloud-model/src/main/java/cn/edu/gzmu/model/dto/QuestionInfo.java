@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 传输给前端的考试试题
@@ -63,7 +64,24 @@ public class QuestionInfo implements Serializable {
         paperQuestion.setQuestionId(id)
                 .setPaperId(paperId)
                 .setQuestionDetail(JSON.parseObject(
-                        JSONObject.toJSONString(questionDetail)));
+                        JSONObject.toJSONString(questionDetail)))
+                .setQuestionType(questionType)
+                .setDifficultRate(difficultRate)
+                .setValue(value);
         return paperQuestion;
+    }
+
+    public static QuestionInfo convert(PaperQuestion paperQuestion) {
+        return new QuestionInfo().setId(paperQuestion.getQuestionId())
+                .setQuestionDetail(QuestionDetail.convert(new QuestionDetail(), paperQuestion.getQuestionDetail()))
+                .setQuestionType(paperQuestion.getQuestionType())
+                .setValue(paperQuestion.getValue())
+                .setDifficultRate(paperQuestion.getDifficultRate())
+                .setSpell(paperQuestion.getSpell())
+                .setName(paperQuestion.getName());
+    }
+
+    public static List<QuestionInfo> convert(List<PaperQuestion> paperQuestionList) {
+        return paperQuestionList.stream().map(QuestionInfo::convert).collect(Collectors.toList());
     }
 }

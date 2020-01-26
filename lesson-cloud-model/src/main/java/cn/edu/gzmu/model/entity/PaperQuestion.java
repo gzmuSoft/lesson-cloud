@@ -1,6 +1,7 @@
 package cn.edu.gzmu.model.entity;
 
 import cn.edu.gzmu.model.BaseEntity;
+import cn.edu.gzmu.model.constant.QuestionType;
 import com.alibaba.fastjson.JSONObject;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.Data;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -42,6 +44,20 @@ public class PaperQuestion extends BaseEntity implements Serializable {
      */
     @javax.validation.constraints.NotNull(message = "paperId  试卷id 为必填项")
     private java.lang.Long paperId;
+
+
+    /**
+     * 0.单选题 1.多选题 2.判断题 3.填空题 4.问答题 5.编程
+     */
+    @Enumerated
+    private QuestionType questionType;
+
+    @javax.validation.constraints.NotNull(message = "分值 为必填项")
+    private java.lang.Float value;
+
+    @javax.validation.constraints.NotNull(message = "difficultRate 难度系数，介于0-100之间 为必填项")
+    private java.lang.Integer difficultRate;
+
 
     @Type(type = "json")
     private JSONObject questionDetail;

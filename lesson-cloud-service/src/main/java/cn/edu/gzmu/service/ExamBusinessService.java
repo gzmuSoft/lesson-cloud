@@ -3,6 +3,7 @@ package cn.edu.gzmu.service;
 import cn.edu.gzmu.model.dto.ExamInfo;
 import cn.edu.gzmu.model.dto.PaperInfo;
 import cn.edu.gzmu.model.entity.Paper;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 生成试卷的Service
@@ -25,4 +26,27 @@ public interface ExamBusinessService {
      * @param examInfo exam dto
      */
     void createExam(ExamInfo examInfo);
+
+    /**
+     * 开始一场考试
+     *
+     * @param examId 考试id
+     * @return 结果
+     */
+    PaperInfo startExam(Long examId);
+
+    /**
+     * 恢复一场考试
+     *
+     * @param examId 考试id
+     * @return paperInfo
+     */
+    PaperInfo recoveryExam(Long examId);
+
+    /**
+     * 结束一场考试
+     *
+     * @param paperInfo 试卷详情
+     */
+    void stopExam(PaperInfo paperInfo);
 }
