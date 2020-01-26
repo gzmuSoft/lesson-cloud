@@ -1,6 +1,7 @@
 package cn.edu.gzmu.controller;
 
 import cn.edu.gzmu.model.constant.LessonResource;
+import cn.edu.gzmu.model.constant.QuestionType;
 import cn.edu.gzmu.model.dto.ExamInfo;
 import cn.edu.gzmu.service.ExamBusinessService;
 import cn.edu.gzmu.service.TeacherService;
@@ -60,9 +61,10 @@ public class TeacherController {
             @RequestParam(defaultValue = "0") Long sectionId,
             @RequestParam(defaultValue = "0") Long knowledgeId,
             @RequestParam(defaultValue = "") String name,
+            @RequestParam(required = false) QuestionType type,
             @RequestParam(defaultValue = "true") boolean isPublic,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
-        return ResponseEntity.ok(teacherService.findQuestionBankCondition(courseId, passageId, sectionId, knowledgeId, name, isPublic, pageable));
+        return ResponseEntity.ok(teacherService.findQuestionBankCondition(courseId, passageId, sectionId, knowledgeId, name, type, isPublic, pageable));
     }
 
     /**

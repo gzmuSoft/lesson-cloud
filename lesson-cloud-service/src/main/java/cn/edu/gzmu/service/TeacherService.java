@@ -1,5 +1,6 @@
 package cn.edu.gzmu.service;
 
+import cn.edu.gzmu.model.constant.QuestionType;
 import cn.edu.gzmu.model.entity.Question;
 import cn.edu.gzmu.model.entity.Teacher;
 import org.springframework.data.domain.Page;
@@ -27,5 +28,5 @@ public interface TeacherService {
      * @return 结果
      * @date 2020/1/12 1:16
      */
-    Page<Question> findQuestionBankCondition(Long courseId, Long passageId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable);
+    Page<Question> findQuestionBankCondition(Long courseId, Long passageId, Long sectionId, Long knowledgeId, String name, QuestionType type, boolean isPublic, Pageable pageable);
 }
