@@ -9,4 +9,5 @@ import cn.edu.gzmu.model.entity.KnowledgeQuestion;
  * @date 2020/1/19 下午4:26
  */
 public interface KnowledgeQuestionService extends BaseService<KnowledgeQuestion, Long> {
+
 }

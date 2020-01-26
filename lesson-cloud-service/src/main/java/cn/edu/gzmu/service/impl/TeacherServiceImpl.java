@@ -1,6 +1,5 @@
 package cn.edu.gzmu.service.impl;
 
-import cn.edu.gzmu.model.BaseEntity;
 import cn.edu.gzmu.model.entity.*;
 import cn.edu.gzmu.repository.entity.KnowledgeQuestionRepository;
 import cn.edu.gzmu.repository.entity.KnowledgeRepository;
@@ -54,7 +53,6 @@ public class TeacherServiceImpl implements TeacherService {
                         criteriaBuilder.like(root.get("name").as(String.class), "%" + name + "%"));
             }
             CriteriaBuilder.In<Long> inIds = criteriaBuilder.in(root.get("id").as(Long.class));
-
             if (knowledgeId != 0) {
                 List<KnowledgeQuestion> knowledgeQuestions = knowledgeQuestionRepository.findAllByKnowledgeId(knowledgeId);
                 knowledgeQuestions.forEach(knowledgeQuestion -> inIds.value(knowledgeQuestion.getQuestionId()));
