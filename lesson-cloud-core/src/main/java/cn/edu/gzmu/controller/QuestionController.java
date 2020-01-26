@@ -33,8 +33,8 @@ public class QuestionController extends BaseController<Question, QuestionService
      * @param ids 知识点 id 列表
      * @return .
      */
-    @GetMapping("/knowledgeIds")
-    public HttpEntity<?> getQuestionIdByKnowledgeId(@RequestParam("ids") List<Long> ids) {
+    @GetMapping("/knowledge")
+    public HttpEntity<?> getQuestionIdByKnowledgeId(@RequestParam("id") List<Long> ids) {
         return ResponseEntity.ok(questionService.getQuestionIdByKnowledgeId(ids));
     }
 }
