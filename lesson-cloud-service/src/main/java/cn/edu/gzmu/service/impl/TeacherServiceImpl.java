@@ -1,6 +1,5 @@
 package cn.edu.gzmu.service.impl;
 
-import cn.edu.gzmu.model.BaseEntity;
 import cn.edu.gzmu.model.entity.*;
 import cn.edu.gzmu.repository.entity.KnowledgeQuestionRepository;
 import cn.edu.gzmu.repository.entity.KnowledgeRepository;
@@ -43,6 +42,8 @@ public class TeacherServiceImpl implements TeacherService {
     public Page<Question> findQuestionBankCondition(Long courseId, Long passageId, Long sectionId, Long knowledgeId, String name, boolean isPublic, Pageable pageable) {
         return questionRepository.findAll((Specification<Question>) (root, criteriaQuery, criteriaBuilder) -> {
             Predicate conjunction = criteriaBuilder.equal(root.get("isEnable").as(Boolean.class), true);
+            conjunction = criteriaBuilder.and(conjunction,
+                    criteriaBuilder.equal(root.get("isPublic").as(Boolean.class), isPublic));
             if (BooleanUtils.isFalse(isPublic)) {
                 conjunction = criteriaBuilder.and(conjunction,
                         criteriaBuilder.equal(root.get("createUser").as(String.class), oauthHelper.teacher().getName()));
@@ -52,18 +53,7 @@ public class TeacherServiceImpl implements TeacherService {
                         criteriaBuilder.like(root.get("name").as(String.class), "%" + name + "%"));
             }
             CriteriaBuilder.In<Long> inIds = criteriaBuilder.in(root.get("id").as(Long.class));
-
-            if (courseId != 0) {
-                // 注意知识点和节对应，过滤掉章
-                List<Long> sectionIds = sectionRepository.findAllByCourseId(courseId).stream().map(Section::getId).collect(Collectors.toList());
-                List<Long> knowledgeIds = knowledgeRepository.findAllBySectionIdIn(sectionIds)
-                        .stream().map(Knowledge::getId)
-                        .collect(Collectors.toList());
-                Set<Long> questionIdSet = knowledgeQuestionRepository.findAllByKnowledgeIdIn(knowledgeIds)
-                        .stream().map(KnowledgeQuestion::getQuestionId)
-                        .collect(Collectors.toSet());
-                questionIdSet.forEach(inIds::value);
-            } else if (knowledgeId != 0) {
+            if (knowledgeId != 0) {
                 List<KnowledgeQuestion> knowledgeQuestions = knowledgeQuestionRepository.findAllByKnowledgeId(knowledgeId);
                 knowledgeQuestions.forEach(knowledgeQuestion -> inIds.value(knowledgeQuestion.getQuestionId()));
             } else if (sectionId != 0) {
@@ -81,6 +71,16 @@ public class TeacherServiceImpl implements TeacherService {
                 List<Long> knowledgeIds = knowledgeList.stream().map(Knowledge::getId).collect(Collectors.toList());
                 List<KnowledgeQuestion> knowledgeQuestionList = knowledgeQuestionRepository.findAllByKnowledgeIdIn(knowledgeIds);
                 knowledgeQuestionList.forEach(knowledgeQuestion -> inIds.value(knowledgeQuestion.getQuestionId()));
+            } else if (courseId != 0) {
+                // 注意知识点和节对应，过滤掉章
+                List<Long> sectionIds = sectionRepository.findAllByCourseId(courseId).stream().map(Section::getId).collect(Collectors.toList());
+                List<Long> knowledgeIds = knowledgeRepository.findAllBySectionIdIn(sectionIds)
+                        .stream().map(Knowledge::getId)
+                        .collect(Collectors.toList());
+                Set<Long> questionIdSet = knowledgeQuestionRepository.findAllByKnowledgeIdIn(knowledgeIds)
+                        .stream().map(KnowledgeQuestion::getQuestionId)
+                        .collect(Collectors.toSet());
+                questionIdSet.forEach(inIds::value);
             }
             conjunction = criteriaBuilder.and(conjunction, inIds);
             return criteriaQuery.where(conjunction).getRestriction();

@@ -14,4 +14,5 @@ import org.springframework.stereotype.Service;
 @Service
 public class KnowledgeQuestionServiceImpl extends BaseServiceImpl<KnowledgeQuestionRepository, KnowledgeQuestion, Long>
         implements KnowledgeQuestionService {
+
 }
