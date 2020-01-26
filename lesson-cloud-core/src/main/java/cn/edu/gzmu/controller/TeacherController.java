@@ -63,7 +63,7 @@ public class TeacherController {
             @RequestParam(defaultValue = "0") Long sectionId,
             @RequestParam(defaultValue = "0") Long knowledgeId,
             @RequestParam(defaultValue = "") String name,
-            @RequestParam(defaultValue = "[]") List<QuestionType> type,
+            @RequestParam(defaultValue = "") List<QuestionType> type,
             @RequestParam(defaultValue = "true") boolean isPublic,
             @PageableDefault(sort = {"sort", "id"}) Pageable pageable) {
         return ResponseEntity.ok(teacherService.findQuestionBankCondition(courseId, passageId, sectionId, knowledgeId, name, type, isPublic, pageable));
