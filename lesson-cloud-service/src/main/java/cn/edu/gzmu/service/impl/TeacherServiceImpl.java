@@ -78,7 +78,6 @@ public class TeacherServiceImpl implements TeacherService {
                 List<KnowledgeQuestion> knowledgeQuestionList = knowledgeQuestionRepository.findAllByKnowledgeIdIn(knowledgeIds);
                 knowledgeQuestionList.forEach(knowledgeQuestion -> inIds.value(knowledgeQuestion.getQuestionId()));
             } else if (courseId != 0) {
-                // 注意知识点和节对应，过滤掉章
                 List<Long> sectionIds = sectionRepository.findAllByCourseId(courseId).stream().map(Section::getId).collect(Collectors.toList());
                 List<Long> knowledgeIds = knowledgeRepository.findAllBySectionIdIn(sectionIds)
                         .stream().map(Knowledge::getId)
