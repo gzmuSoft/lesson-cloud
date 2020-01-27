@@ -32,6 +32,6 @@ public interface PaperRepository extends BaseRepository<Paper, Long> {
      * @param studentId 学生id
      * @return 结果
      */
-    List<Paper> findAllByExamIdAndStudentIdOrderByStartTimeAsc(Long examId, Long studentId);
+    List<Paper> findAllByExamIdAndStudentIdOrderByStartTimeDesc(Long examId, Long studentId);
 
 }

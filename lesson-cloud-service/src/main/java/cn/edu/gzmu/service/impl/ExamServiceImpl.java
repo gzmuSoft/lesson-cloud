@@ -421,11 +421,7 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
         for (Exam exam : exams) {
             int count = examRuleRepository.findAllByExamId(exam.getId()).stream()
                     .mapToInt(ExamRule::getQuestionCount).sum();
-            Set<LogicClass> logicClasses = logicClassRepository.findDistinctByIdIn(
-                    Splitter.on(",").splitToList(exam.getLogicClassIds())
-                            .stream().map(Long::parseLong)
-                            .collect(Collectors.toList())
-            );
+            Set<LogicClass> logicClasses = logicClassRepository.findDistinctByIdIn(exam.getLogicClassIds());
             String logicClassNames = logicClasses.stream().map(BaseEntity::getName).collect(Collectors.joining(","));
             // 重修人数
             long studentNum = logicClasses.stream().filter(LogicClass::getType).count();
@@ -446,8 +442,7 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, Exam, Long>
         // 过滤
         List<Exam> result = listCourse.stream().filter(exam -> {
             // 获取当前 exam 的逻辑班级 id 的set
-            Set<Long> ids = Splitter.on(",").splitToList(exam.getLogicClassIds())
-                    .stream().map(Long::parseLong).collect(Collectors.toSet());
+            Set<Long> ids = new HashSet<>(exam.getLogicClassIds());
             // 与需要的进行取交集，如果大于 0 表示符合条件，取出。
             return Sets.union(logicIds, ids).size() > 0;
         }).collect(Collectors.toList());

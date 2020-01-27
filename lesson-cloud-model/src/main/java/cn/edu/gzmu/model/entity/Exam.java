@@ -1,6 +1,7 @@
 package cn.edu.gzmu.model.entity;
 
 import cn.edu.gzmu.model.BaseEntity;
+import com.google.common.base.Splitter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -13,6 +14,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * exam
@@ -100,4 +102,10 @@ public class Exam extends BaseEntity implements Serializable {
      */
     @Transient
     private List<LogicClass> logicClasses;
+
+    public List<Long> getLogicClassIds() {
+        return Splitter.on(",").splitToList(logicClassIds)
+                .stream().map(Long::parseLong)
+                .collect(Collectors.toList());
+    }
 }

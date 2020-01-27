@@ -2,7 +2,6 @@ package cn.edu.gzmu.service.exam;
 
 import cn.edu.gzmu.model.dto.QuestionInfo;
 import cn.edu.gzmu.model.entity.ExamRule;
-import cn.edu.gzmu.model.entity.Question;
 
 import java.util.List;
 

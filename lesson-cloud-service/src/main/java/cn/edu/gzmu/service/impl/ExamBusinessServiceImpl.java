@@ -29,15 +29,20 @@ import cn.edu.gzmu.repository.entity.QuestionRepository;
 import cn.edu.gzmu.repository.entity.SectionRepository;
 import cn.edu.gzmu.service.ExamBusinessService;
 import cn.edu.gzmu.service.exam.ExamRuleGenerator;
+import cn.edu.gzmu.service.exam.maker.QuestionMaker;
 import cn.edu.gzmu.service.helper.OauthHelper;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Splitter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -78,6 +83,8 @@ public class ExamBusinessServiceImpl implements ExamBusinessService {
 
     private final @NonNull OauthHelper oauthHelper;
 
+    private final @NonNull Map<String, QuestionMaker> questionMakerMap;
+
     @Override
     public PaperInfo generatePaper(Long examId) {
         Exam exam = examRepository.findById(examId).orElseThrow(ResourceNotFoundException::new);
@@ -110,8 +117,7 @@ public class ExamBusinessServiceImpl implements ExamBusinessService {
             throw new ValidateException("成绩公布时间不能小于结束时间");
         }
         Course course = courseRepository.findById(exam.getCourseId()).orElseThrow(() -> new ValidateException("课程不存在"));
-        List<Long> sourceLogicClassIds = Splitter.on(",").omitEmptyStrings().splitToList(exam.getLogicClassIds())
-                .stream().map(Long::parseLong).collect(Collectors.toList());
+        List<Long> sourceLogicClassIds = exam.getLogicClassIds();
         Set<LogicClass> logicClassSet = logicClassRepository.findDistinctByIdIn(sourceLogicClassIds);
         List<Long> logicClassIds = logicClassSet.stream().map(LogicClass::getId).collect(Collectors.toList());
         sourceLogicClassIds.removeAll(logicClassIds);
@@ -178,8 +184,13 @@ public class ExamBusinessServiceImpl implements ExamBusinessService {
         //当前学生
         Student student = oauthHelper.student();
         Exam exam = examRepository.findById(examId).orElseThrow(ResourceNotFoundException::new);
-        List<Paper> paperList = paperRepository.findAllByExamIdAndStudentIdOrderByStartTimeAsc(examId, student.getId());
-        if (paperList.size() != 0) {
+        List<Long> logicClassIds = exam.getLogicClassIds();
+        List<LogicClass> logicClassList = logicClassRepository.findAllByStudentInLogicClasses(logicClassIds, student.getClassesId(), student.getId());
+        if (CollectionUtils.isEmpty(logicClassList)) {
+            throw new BadRequestException("不能参加此考试");
+        }
+        List<Paper> paperList = paperRepository.findAllByExamIdAndStudentIdOrderByStartTimeDesc(examId, student.getId());
+        if (CollectionUtils.isNotEmpty(paperList)) {
             Paper paper = paperList.get(0);
             if (paper.getSubmitTime() == null) {
                 return recoveryExam(examId);
@@ -197,6 +208,7 @@ public class ExamBusinessServiceImpl implements ExamBusinessService {
         List<PaperQuestion> paperQuestionList = paperInfo.createPaperQuestionList(paper.getId());
         paperQuestionRepository.saveAll(paperQuestionList);
         //清除答案
+        paperInfo.setId(paper.getId());
         paperInfo.clearAnswer();
         return paperInfo;
     }
@@ -206,7 +218,7 @@ public class ExamBusinessServiceImpl implements ExamBusinessService {
     public PaperInfo recoveryExam(Long examId) {
         //当前学生
         Student student = oauthHelper.student();
-        List<Paper> paperList = paperRepository.findAllByExamIdAndStudentIdOrderByStartTimeAsc(examId, student.getId());
+        List<Paper> paperList = paperRepository.findAllByExamIdAndStudentIdOrderByStartTimeDesc(examId, student.getId());
         //恢复一场考试
         Paper paper = paperList.get(0);
         List<PaperQuestion> paperQuestionList = paperQuestionRepository.findAllByPaperId(paper.getId());
@@ -221,7 +233,41 @@ public class ExamBusinessServiceImpl implements ExamBusinessService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void stopExam(PaperInfo paperInfo) {
+        Exam exam = examRepository.findById(paperInfo.getExamId()).orElseThrow(ResourceNotFoundException::new);
+        Paper paper = paperRepository.findById(paperInfo.getId()).orElseThrow(ResourceNotFoundException::new);
+        if (ObjectUtils.isNotEmpty(paper.getSubmitTime())) {
+            throw new BadRequestException("不可重复提交");
+        }
+        if (paper.getStartTime().plusHours(exam.getTotalUseTime()).isBefore(LocalDateTime.now())) {
+            throw new BadRequestException("交卷时间已过");
+        }
+        paper.setSubmitTime(LocalDateTime.now());
+        List<PaperQuestion> sourcePaperQuestionList = paperInfo.createPaperQuestionList(paper.getId());
+        Map<Long, PaperQuestion> sourcePaperQuestionMap =
+                sourcePaperQuestionList.stream().collect(Collectors.toMap(PaperQuestion::getQuestionId, paperQuestion -> paperQuestion, (k1, k2) -> k1));
+        List<PaperQuestion> paperQuestionList = paperQuestionRepository.findAllByPaperId(paper.getId());
+        //合并前端传递过来的paperQuestion
+        paperQuestionList.forEach(paperQuestion -> {
+            PaperQuestion sourcePaperQuestion = sourcePaperQuestionMap.get(paperQuestion.getQuestionId());
+            if (ObjectUtils.isEmpty(sourcePaperQuestion)) {
+                throw new BadRequestException("错误的题目提交");
+            }
+            JSONObject sourcePaperQuestionQuestionDetail = sourcePaperQuestion.getQuestionDetail();
+            JSONObject questionDetail = paperQuestion.getQuestionDetail();
+            //只合并前端传递的答案
+            questionDetail.put("objectiveAnswer", sourcePaperQuestionQuestionDetail.get("objectiveAnswer"));
+            questionDetail.put("subjectiveAnswer", sourcePaperQuestionQuestionDetail.get("subjectiveAnswer"));
+        });
+        Map<QuestionType, List<PaperQuestion>> paperQuestionMap = paperQuestionList.stream().collect(Collectors.groupingBy(PaperQuestion::getQuestionType));
+        //计算出总分 请自行补充maker
+        BigDecimal totalScore =
+                paperQuestionMap.entrySet().stream().map(questionTypeListEntry ->
+                        questionMakerMap.get(questionTypeListEntry.getKey().toString()).make(questionTypeListEntry.getValue())).reduce(BigDecimal.ZERO, BigDecimal::add);
+        paper.setScore(totalScore.floatValue());
+        paperRepository.save(paper);
+        paperQuestionRepository.saveAll(paperQuestionList);
 
     }
 

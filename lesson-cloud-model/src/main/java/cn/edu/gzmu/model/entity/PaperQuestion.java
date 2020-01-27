@@ -58,6 +58,10 @@ public class PaperQuestion extends BaseEntity implements Serializable {
     @javax.validation.constraints.NotNull(message = "difficultRate 难度系数，介于0-100之间 为必填项")
     private java.lang.Integer difficultRate;
 
+    /**
+     * 用户得分
+     */
+    private java.lang.Float obtainValue;
 
     @Type(type = "json")
     private JSONObject questionDetail;

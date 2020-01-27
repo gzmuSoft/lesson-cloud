@@ -30,4 +30,5 @@ public interface PaperQuestionRepository extends BaseRepository<PaperQuestion, L
      * @return 结果
      */
     List<PaperQuestion> findAllByPaperId(Long paperId);
+
 }
