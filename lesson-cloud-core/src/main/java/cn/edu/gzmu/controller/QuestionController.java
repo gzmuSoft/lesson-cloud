@@ -31,10 +31,32 @@ public class QuestionController extends BaseController<Question, QuestionService
      * 根据知识点 ids 和 ids 的数量查询含有这些知识点的题目的 id.
      *
      * @param ids 知识点 id 列表
-     * @return .
+     * @return 包含这些知识点的题目.
      */
     @GetMapping("/knowledge")
-    public HttpEntity<?> getQuestionIdByKnowledgeId(@RequestParam("id") List<Long> ids) {
-        return ResponseEntity.ok(questionService.getQuestionIdByKnowledgeId(ids));
+    public HttpEntity<?> getQuestionByKnowledgeIds(@RequestParam() List<Long> ids) {
+        return ResponseEntity.ok(questionService.getQuestionIdByKnowledgeIds(ids));
+    }
+
+    /**
+     * 根据章 ids 查询属于这些章的题目.
+     *
+     * @param ids 知识点 id 列表
+     * @return 属于这些章的题目.
+     */
+    @GetMapping("/section")
+    public HttpEntity<?> getQuestionBySectionIds(@RequestParam() List<Long> ids) {
+        return ResponseEntity.ok(questionService.getQuestionBySectionIds(ids));
+    }
+
+    /**
+     * 根据节 ids 查询属于这些节的题目.
+     *
+     * @param ids 知识点 id 列表
+     * @return 属于这些节的题目.
+     */
+    @GetMapping("/passage")
+    public HttpEntity<?> getQuestionByPassageIds(@RequestParam() List<Long> ids) {
+        return ResponseEntity.ok(questionService.getQuestionByPassageIds(ids));
     }
 }
