@@ -1,6 +1,7 @@
 package cn.edu.gzmu.service;
 
 import cn.edu.gzmu.model.entity.Question;
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
@@ -35,4 +36,12 @@ public interface QuestionService extends BaseService<Question, Long> {
      * @return 属于这些节的题目
      */
     List<Question> getQuestionByPassageIds(List<Long> ids);
+
+    /**
+     * 根据题目 id 查询关联的章、节、知识点 ids
+     *
+     * @param id 题目id
+     * @return 结果.
+     */
+    JSONObject getQuestionCorrelationById(Long id);
 }

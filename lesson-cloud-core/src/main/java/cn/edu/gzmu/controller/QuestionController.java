@@ -59,4 +59,15 @@ public class QuestionController extends BaseController<Question, QuestionService
     public HttpEntity<?> getQuestionByPassageIds(@RequestParam() List<Long> ids) {
         return ResponseEntity.ok(questionService.getQuestionByPassageIds(ids));
     }
+
+    /**
+     * 根据题目 id  查询关联的章、节、知识点 ids.
+     *
+     * @param id 题目id
+     * @return 结果.
+     */
+    @GetMapping("/correlation")
+    public HttpEntity<?> getQuestionCorrelationById(@RequestParam() Long id) {
+        return ResponseEntity.ok(questionService.getQuestionCorrelationById(id));
+    }
 }

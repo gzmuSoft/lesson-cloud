@@ -74,4 +74,12 @@ public interface SectionRepository extends BaseRepository<Section, Long> {
      * @return 结果
      */
     Set<Section> findDistinctByIdInAndParentIdNot(List<Long> ids, Long parentId);
+
+    /**
+     * 根据 ids 查询 section
+     *
+     * @param ids 章节 id 列表
+     * @return 章节列表
+     */
+    Set<Section> findDistinctByIdIn(List<Long> ids);
 }

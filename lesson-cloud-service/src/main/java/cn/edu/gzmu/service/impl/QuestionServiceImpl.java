@@ -4,11 +4,13 @@ import cn.edu.gzmu.model.entity.Knowledge;
 import cn.edu.gzmu.model.entity.KnowledgeQuestion;
 import cn.edu.gzmu.model.entity.Question;
 import cn.edu.gzmu.model.entity.Section;
+import cn.edu.gzmu.model.exception.ResourceNotFoundException;
 import cn.edu.gzmu.repository.entity.KnowledgeQuestionRepository;
 import cn.edu.gzmu.repository.entity.KnowledgeRepository;
 import cn.edu.gzmu.repository.entity.QuestionRepository;
 import cn.edu.gzmu.repository.entity.SectionRepository;
 import cn.edu.gzmu.service.QuestionService;
+import com.alibaba.fastjson.JSONObject;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
@@ -37,7 +39,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<QuestionRepository, Que
      * 根据知识点 ids 和 ids 的数量查询含有这些知识点的题目的 id.
      *
      * @param ids 知识点 id 列表
-     * @return .
+     * @return 包含这些知识点的题目.
      */
     @Override
     public List<Question> getQuestionIdByKnowledgeIds(List<Long> ids) {
@@ -107,5 +109,46 @@ public class QuestionServiceImpl extends BaseServiceImpl<QuestionRepository, Que
         return questionRepository.findAllByIdIn(questionIds);
     }
 
+    /**
+     * 根据题目 id 查询关联的章、节、知识点 ids
+     *
+     * @param id 题目id
+     * @return 结果.
+     */
+    @Override
+    public JSONObject getQuestionCorrelationById(Long id) {
+        JSONObject result = new JSONObject();
+        // 获得知识点 ids
+        List<Long> knowledgeIds = knowledgeQuestionRepository.findAllByQuestionId(id)
+                .stream().map(KnowledgeQuestion::getKnowledgeId).collect(Collectors.toList());
+        // 获得章和节的 ids 集合
+        Set<Long> spSet = knowledgeRepository.findDistinctByIdIn(knowledgeIds)
+                .stream().map(Knowledge::getSectionId).collect(Collectors.toSet());
+        Set<Section> sections = sectionRepository.findDistinctByIdIn(new ArrayList<>(spSet));
+        // 分离节 ids
+        Set<Long> passageIdSet = sections.stream()
+                .filter(section -> section.getParentId() != 0)
+                .map(Section::getId).collect(Collectors.toSet());
+        // 得到节的关联章 ids
+        Set<Long> sectionIdSet = sections.stream()
+                .filter(section -> section.getParentId() != 0)
+                .map(Section::getParentId).collect(Collectors.toSet());
+        // 补充章 ids
+        spSet.removeAll(passageIdSet);
+        sectionIdSet.addAll(spSet);
+        // 获得课程 id （一个题目只有一个课程情况）
+        Long courseId = 0L;
+        if (sectionIdSet.size() > 0) {
+            // 一个题目只有一个课程的情况
+            courseId = sectionRepository.findById(new ArrayList<>(sectionIdSet).get(1))
+                    .orElseThrow(() -> new ResourceNotFoundException("该题目的课程查询失败")).getCourseId();
+        }
+        // 压入 JSON 对象
+        result.put("knowledgeIds", knowledgeIds);
+        result.put("sectionIds", sectionIdSet);
+        result.put("passageIds", passageIdSet);
+        result.put("courseId", courseId);
+        return result;
+    }
 
 }
