@@ -1,6 +1,7 @@
 package cn.edu.gzmu.repository.entity;
 
 import cn.edu.gzmu.model.entity.KnowledgeQuestion;
+import cn.edu.gzmu.model.entity.Question;
 import cn.edu.gzmu.repository.base.BaseRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -52,5 +53,13 @@ public interface KnowledgeQuestionRepository extends BaseRepository<KnowledgeQue
             "where knowledge_id in (:ids) group by question_id " +
             "HAVING COUNT(question_id)=(:num)", nativeQuery = true)
     List<Long> getQuestionIdByKnowledgeId(@Param("ids") List<Long> ids, @Param("num") Integer num);
+
+    /**
+     * 根据ids  查出所有的KnowledgeQuestion
+     *
+     * @param ids KnowledgeQuestion ids
+     * @return KnowledgeQuestion list
+     */
+    List<KnowledgeQuestion> findAllByIdIn(List<Long> ids);
 
 }

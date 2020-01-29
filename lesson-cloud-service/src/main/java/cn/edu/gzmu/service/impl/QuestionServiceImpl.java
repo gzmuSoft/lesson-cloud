@@ -11,11 +11,13 @@ import cn.edu.gzmu.repository.entity.QuestionRepository;
 import cn.edu.gzmu.repository.entity.SectionRepository;
 import cn.edu.gzmu.service.QuestionService;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Sets;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -65,7 +67,6 @@ public class QuestionServiceImpl extends BaseServiceImpl<QuestionRepository, Que
      */
     @Override
     public List<Question> getQuestionByPassageIds(List<Long> ids) {
-
         return getQuestionDecision(null, ids, null);
     }
 
@@ -150,5 +151,107 @@ public class QuestionServiceImpl extends BaseServiceImpl<QuestionRepository, Que
         result.put("courseId", courseId);
         return result;
     }
+
+    /**
+     * 根据题目 id 查询关联的知识点
+     *
+     * @param id 题目id
+     * @return 结果.
+     */
+    @Override
+    public Set<Knowledge> getKnowledgeSetById(Long id) {
+        return knowledgeRepository.findDistinctByIdIn(
+                knowledgeQuestionRepository.findAllByQuestionId(id)
+                        .stream().map(KnowledgeQuestion::getKnowledgeId)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    /**
+     * 保存/修改题目入口.
+     *
+     * @param ids      知识点 ids
+     * @param question 题目对象
+     */
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void saveOrUpdateQuestion(List<Long> ids, Question question) {
+        //判断如果是更新则调用更新方法
+        if (Objects.nonNull(question.getId())) {
+            // 删除废弃的知识点关联并返回需要增加的知识点 ids
+            ids = updateQuestion(ids, question);
+        }
+        // 保存题目
+        questionRepository.save(question);
+        // 更新知识点与题目的关联
+        List<KnowledgeQuestion> knowledgeQuestions = new LinkedList<>();
+        if (ids.size() != 0) {
+            ids.forEach(id -> {
+                KnowledgeQuestion knowledgeQuestion = new KnowledgeQuestion();
+                knowledgeQuestion.setKnowledgeId(id).setQuestionId(question.getId());
+                knowledgeQuestions.add(knowledgeQuestion);
+            });
+            knowledgeQuestionRepository.saveAll(knowledgeQuestions);
+        }
+
+    }
+
+    /**
+     * 删除题目并解除关联.
+     *
+     * @param id 题目 id
+     */
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void deleteQuestion(Long id) {
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("此题目不存在"));
+        question.setIsEnable(false);
+        questionRepository.save(question);
+        List<KnowledgeQuestion> deleteCorrelation =
+                knowledgeQuestionRepository.findAllByQuestionId(id);
+        deleteCorrelation.forEach(model -> model.setIsEnable(false));
+        knowledgeQuestionRepository.saveAll(deleteCorrelation);
+    }
+
+    /**
+     * 更新题目解除关联.
+     *
+     * @param ids      知识点 ids
+     * @param question 题目对象
+     */
+    private List<Long> updateQuestion(List<Long> ids, Question question) {
+        // 修改题目
+        questionRepository.save(question);
+        // 获取数据库待采购物料数据进行对比
+        List<KnowledgeQuestion> knowledgeQuestionsDb = knowledgeQuestionRepository
+                .findAllByQuestionId(question.getId());
+        // 用于根据待删除的知识点 ids 获取待删除的关联表 ids
+        Map<Long, Long> collect = knowledgeQuestionsDb.stream()
+                .collect(Collectors.toMap(KnowledgeQuestion::getKnowledgeId, KnowledgeQuestion::getId));
+        // set1 存放为数据库数据.
+        HashSet set1 = (HashSet) knowledgeQuestionsDb
+                .stream().map(KnowledgeQuestion::getKnowledgeId)
+                .collect(Collectors.toSet());
+        // set2 存放更新后的数据.
+        HashSet<Long> set2 = new HashSet<>(ids);
+        // 做差集得到新增和被删除的知识点 ids
+        Sets.SetView deletedKnowledgeIds = Sets.difference(set1, set2);
+        // 待删除的 ids 与前端的 ids 的并集
+        Sets.SetView unionIds = Sets.union(deletedKnowledgeIds, set2);
+        // 得到的并集与数据库中的 ids 做差集得到出需要新增的知识点 ids
+        Sets.SetView addKnowledgeIds = Sets.difference(unionIds, set1);
+        // 获取待删除的关联表的 ids
+        Set<Long> deletedIds = new HashSet<>();
+        deletedKnowledgeIds.forEach(id -> deletedIds.add(collect.get((Long) id)));
+        // 执行删除
+        List<KnowledgeQuestion> deleteCorrelation =
+                knowledgeQuestionRepository.findAllByIdIn(new ArrayList<>(deletedIds));
+        deleteCorrelation.forEach(model -> model.setIsEnable(false));
+        knowledgeQuestionRepository.saveAll(deleteCorrelation);
+        // 返回新增的知识点 ids
+        return new ArrayList<>(addKnowledgeIds);
+    }
+
 
 }

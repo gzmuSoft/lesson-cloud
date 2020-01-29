@@ -1,6 +1,5 @@
 package cn.edu.gzmu.repository.entity;
 
-import cn.edu.gzmu.model.constant.QuestionType;
 import cn.edu.gzmu.model.entity.Question;
 import cn.edu.gzmu.repository.base.BaseRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -45,10 +44,17 @@ public interface QuestionRepository extends BaseRepository<Question, Long> {
      * @param endDifficultRate   选题终止难度
      * @return question List
      */
-
-    @Query(value = "(select * from question  where ( is_enable = 1) and (id in (:ids)) and (id not in  (:requireIds)) and type=:questionType and (difficult_rate between :startDifficultRate and :endDifficultRate) limit :lim) union all (select * from question  where id in (:requireIds))  order by rand()", nativeQuery = true)
-    List<Question> simpleGenerateQuestion(@Param("ids") List<Long> ids, @Param("lim") Integer lim, @Param("requireIds") List<Long> requireIds, @Param("questionType") Integer questionType,
-                                          @Param("startDifficultRate") Integer startDifficultRate, @Param("endDifficultRate") Integer endDifficultRate);
+    @Query(value = "(select * from question  where ( is_enable = 1) and (id in (:ids)) " +
+            "and (id not in  (:requireIds)) and type=:questionType " +
+            "and (difficult_rate between :startDifficultRate and :endDifficultRate) limit :lim) " +
+            "union all (select * from question where id in (:requireIds)) order by rand()"
+            , nativeQuery = true)
+    List<Question> simpleGenerateQuestion(@Param("ids") List<Long> ids,
+                                          @Param("lim") Integer lim,
+                                          @Param("requireIds") List<Long> requireIds,
+                                          @Param("questionType") Integer questionType,
+                                          @Param("startDifficultRate") Integer startDifficultRate,
+                                          @Param("endDifficultRate") Integer endDifficultRate);
 
     /**
      * 随机简单生成试题
@@ -60,7 +66,14 @@ public interface QuestionRepository extends BaseRepository<Question, Long> {
      * @param endDifficultRate   终止难度
      * @return 结果
      */
-    @Query(value = "(select * from question  where ( is_enable = 1) and (id in (:ids)) and type=:questionType and (difficult_rate between :startDifficultRate and :endDifficultRate) limit :lim)order by rand()", nativeQuery = true)
-    List<Question> simpleGenerateQuestion(@Param("ids") List<Long> ids, @Param("lim") Integer lim, @Param("questionType") Integer questionType,
-                                          @Param("startDifficultRate") Integer startDifficultRate, @Param("endDifficultRate") Integer endDifficultRate);
+    @Query(value = "(select * from question  where ( is_enable = 1) " +
+            "and (id in (:ids)) and type=:questionType " +
+            "and (difficult_rate between :startDifficultRate " +
+            "and :endDifficultRate) limit :lim)order by rand()"
+            , nativeQuery = true)
+    List<Question> simpleGenerateQuestion(@Param("ids") List<Long> ids,
+                                          @Param("lim") Integer lim,
+                                          @Param("questionType") Integer questionType,
+                                          @Param("startDifficultRate") Integer startDifficultRate,
+                                          @Param("endDifficultRate") Integer endDifficultRate);
 }

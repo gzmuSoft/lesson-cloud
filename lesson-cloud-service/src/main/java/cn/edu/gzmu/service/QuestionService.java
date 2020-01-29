@@ -1,9 +1,11 @@
 package cn.edu.gzmu.service;
 
+import cn.edu.gzmu.model.entity.Knowledge;
 import cn.edu.gzmu.model.entity.Question;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * .
@@ -44,4 +46,27 @@ public interface QuestionService extends BaseService<Question, Long> {
      * @return 结果.
      */
     JSONObject getQuestionCorrelationById(Long id);
+
+    /**
+     * 根据题目 id 查询关联的知识点
+     *
+     * @param id 题目id
+     * @return 结果.
+     */
+    Set<Knowledge> getKnowledgeSetById(Long id);
+
+    /**
+     * 保存/修改题目.
+     *
+     * @param ids      知识点 ids
+     * @param question 题目对象
+     */
+    void saveOrUpdateQuestion(List<Long> ids, Question question);
+
+    /**
+     * 删除题目并解除关联.
+     *
+     * @param id 题目 id
+     */
+    void deleteQuestion(Long id);
 }
