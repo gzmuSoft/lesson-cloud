@@ -60,8 +60,9 @@ public interface QuestionService extends BaseService<Question, Long> {
      *
      * @param ids      知识点 ids
      * @param question 题目对象
+     * @return question
      */
-    void saveOrUpdateQuestion(List<Long> ids, Question question);
+    Question saveOrUpdateQuestion(List<Long> ids, Question question);
 
     /**
      * 删除题目并解除关联.

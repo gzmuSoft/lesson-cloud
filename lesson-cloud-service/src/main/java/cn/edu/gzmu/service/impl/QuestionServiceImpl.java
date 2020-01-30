@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -175,7 +174,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<QuestionRepository, Que
      */
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void saveOrUpdateQuestion(List<Long> ids, Question question) {
+    public Question saveOrUpdateQuestion(List<Long> ids, Question question) {
         //判断如果是更新则调用更新方法
         if (Objects.nonNull(question.getId())) {
             // 删除废弃的知识点关联并返回需要增加的知识点 ids
@@ -193,7 +192,7 @@ public class QuestionServiceImpl extends BaseServiceImpl<QuestionRepository, Que
             });
             knowledgeQuestionRepository.saveAll(knowledgeQuestions);
         }
-
+        return question;
     }
 
     /**
@@ -230,17 +229,17 @@ public class QuestionServiceImpl extends BaseServiceImpl<QuestionRepository, Que
         Map<Long, Long> collect = knowledgeQuestionsDb.stream()
                 .collect(Collectors.toMap(KnowledgeQuestion::getKnowledgeId, KnowledgeQuestion::getId));
         // set1 存放为数据库数据.
-        HashSet set1 = (HashSet) knowledgeQuestionsDb
+        HashSet<Long> set1 = (HashSet<Long>) knowledgeQuestionsDb
                 .stream().map(KnowledgeQuestion::getKnowledgeId)
                 .collect(Collectors.toSet());
         // set2 存放更新后的数据.
         HashSet<Long> set2 = new HashSet<>(ids);
         // 做差集得到新增和被删除的知识点 ids
-        Sets.SetView deletedKnowledgeIds = Sets.difference(set1, set2);
+        Sets.SetView<Long> deletedKnowledgeIds = Sets.difference(set1, set2);
         // 待删除的 ids 与前端的 ids 的并集
-        Sets.SetView unionIds = Sets.union(deletedKnowledgeIds, set2);
+        Sets.SetView<Long> unionIds = Sets.union(deletedKnowledgeIds, set2);
         // 得到的并集与数据库中的 ids 做差集得到出需要新增的知识点 ids
-        Sets.SetView addKnowledgeIds = Sets.difference(unionIds, set1);
+        Sets.SetView<Long> addKnowledgeIds = Sets.difference(unionIds, set1);
         // 获取待删除的关联表的 ids
         Set<Long> deletedIds = new HashSet<>();
         deletedKnowledgeIds.forEach(id -> deletedIds.add(collect.get((Long) id)));

@@ -36,13 +36,13 @@ public class BaseEntity {
     /**
      * 名称
      */
-    @Size(max = 30, message = "name 长度不能超过 30")
+    @Size(max = 255, message = "name 长度不能超过 30")
     private String name;
 
     /**
      * 全称
      */
-    @Size(max = 55, message = "spell 长度不能超过 55")
+    @Size(max = 255, message = "spell 长度不能超过 55")
     private String spell;
 
     /**

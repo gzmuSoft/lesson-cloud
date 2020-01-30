@@ -92,10 +92,11 @@ public class QuestionController extends BaseController<Question, QuestionService
     @PostMapping("/question")
     @VerifyParameter(required = {"ids#知识点id列表为必填项", "question#题目为必填项"})
     public HttpEntity<?> saveOrUpdateQuestion(@NotNull @RequestBody JSONObject data) {
-        questionService.saveOrUpdateQuestion(
+        Question question = data.getObject("question", Question.class);
+        question.setQuestionDetail(data.getJSONObject("questionDetail"));
+        return ResponseEntity.ok(questionService.saveOrUpdateQuestion(
                 data.getJSONArray("ids").toJavaList(Long.class),
-                data.getObject("question", Question.class));
-        return ResponseEntity.ok().build();
+                question));
     }
 
     /**
@@ -106,7 +107,7 @@ public class QuestionController extends BaseController<Question, QuestionService
     @PatchMapping("/question/{id}")
     public HttpEntity<?> deleteQuestion(@PathVariable Long id) {
         questionService.deleteQuestion(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }
